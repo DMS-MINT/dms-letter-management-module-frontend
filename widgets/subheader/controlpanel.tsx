@@ -3,13 +3,12 @@
 import { UserTypeEnum } from "@/typing/enum";
 import StatusEnum from "@/typing/enum/StatusEnum";
 import React from "react";
-import { Badge } from "@/components/ui/badge";
-import Edited from "@/widgets/subheader/edited";
-import Draft from "@/widgets/subheader/draft";
-import Delivered from "@/widgets/subheader/delivered";
-import Pending from "@/widgets/subheader/pending";
-import Approved from "@/widgets/subheader/approved";
-import Cancelled from "@/widgets/subheader/cancelled";
+import Edited from "@/widgets/subheader/standarduser/Edited";
+import Draft from "@/widgets/subheader/standarduser/Draft";
+import Delivered from "@/widgets/subheader/standarduser/Delivered";
+import Pending from "@/widgets/subheader/standarduser/Pending";
+import Approved from "@/widgets/subheader/standarduser/Approved";
+import Cancelled from "@/widgets/subheader/standarduser/Cancelled";
 
 interface IPanel {
   edited: boolean;

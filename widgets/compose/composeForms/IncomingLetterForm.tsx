@@ -5,11 +5,9 @@ import { useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Ghost, Plus } from "lucide-react";
+
+import { Plus } from "lucide-react";
 import React, { useState, useMemo } from "react";
-import Letter1 from "@/app/(root)/letters/print/print1";
-import Letter2 from "@/app/(root)/letters/print/print2";
 
 export default function InternalLetterForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);

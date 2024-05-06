@@ -12,23 +12,7 @@ import {
   WebhookIcon,
 } from "lucide-react";
 
-interface LetterProps {
-  recipientName: string;
-  recipientTitle: string;
-  recipientAddress: string;
-  yourName: string;
-  yourTitle: string;
-  referenceNumber: string; // Prop for reference number
-}
-
-const Letter2: React.FC<LetterProps> = ({
-  recipientName,
-  recipientTitle,
-  recipientAddress,
-  yourName,
-  yourTitle,
-  referenceNumber,
-}) => {
+export default function Letter2() {
   // Create a Date object from the provided string
   const date = new Date("2016-09-04");
 
@@ -128,6 +112,4 @@ const Letter2: React.FC<LetterProps> = ({
       </div>
     </div>
   );
-};
-
-export default Letter2;
+}
