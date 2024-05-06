@@ -1,6 +1,6 @@
 /** @format */
 "use client";
-import Editor from "./editor";
+// import Editor from "./editor";
 import { useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -150,22 +150,6 @@ export default function InternalLetterForm() {
           ፋይል አያይዝ
         </Button>
       </form>
-      {/* <Letter1
-        recipientName={""}
-        recipientTitle={""}
-        recipientAddress={""}
-        yourName={""}
-        yourTitle={""}
-        referenceNumber={""}
-      />
-      <Letter2
-        recipientName={""}
-        recipientTitle={""}
-        recipientAddress={""}
-        yourName={""}
-        yourTitle={""}
-        referenceNumber={""}
-      /> */}
     </div>
   );
 }

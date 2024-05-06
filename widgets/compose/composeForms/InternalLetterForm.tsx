@@ -1,6 +1,6 @@
 /** @format */
 "use client";
-import Editor from "./editor";
+// import Editor from "./editor";
 import { useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -139,7 +139,7 @@ export default function InternalLetterForm() {
         <Input type="file" ref={fileInputRef} className="hidden" />
 
         <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
-          <Editor />
+          {/* <Editor /> */}
         </div>
         <Seal />
         <Button
