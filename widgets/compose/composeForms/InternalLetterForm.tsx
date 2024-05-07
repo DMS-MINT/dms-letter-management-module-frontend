@@ -10,6 +10,8 @@ import { Ghost, Plus } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Comment from "./comment";
 import Seal from "./seal";
+import TagInput from "@/components/taginput/TagInput";
+import { Main } from "next/document";
 
 export default function InternalLetterForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,10 +74,11 @@ export default function InternalLetterForm() {
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12 pr-14" htmlFor="ለ">
+          <Label className="w-20 pr-14" htmlFor="ለ">
             ለ
           </Label>
-          <Input type="text" id="ለ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ለ" className="w-full" /> */}
           <div className="flex px-0 pr-0 w-relative">
             <Button
               variant="ghost"
@@ -102,10 +105,11 @@ export default function InternalLetterForm() {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ግልባጭ">
+          <Label className="w-20" htmlFor="ግልባጭ">
             ግልባጭ
           </Label>
-          <Input type="text" id="ግልባጭ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
         </div>
         <div className="flex items-center gap-1.5">
           <Label className="w-1/12" htmlFor="እንዲያውቁት">
@@ -119,6 +123,7 @@ export default function InternalLetterForm() {
           </Label>
           <Input type="text" id="ጉዳይ" className="w-full" />
         </div>
+
         {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
         {inputFields.map((field, index) => (
           <div key={index} className="flex items-center gap-1.5">
@@ -141,7 +146,7 @@ export default function InternalLetterForm() {
         <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
           {/* <Editor /> */}
         </div>
-        <Seal />
+        {/* <Seal /> */}
         <Button
           variant="outline"
           className="flex gap-2 w-fit mt-32"
@@ -150,8 +155,9 @@ export default function InternalLetterForm() {
           <Plus size={19} />
           ፋይል አያይዝ
         </Button>
-        <Comment comments={[]} />
       </form>
+
+      <Comment comments={[]} />
     </div>
   );
 }

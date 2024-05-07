@@ -142,7 +142,7 @@ export default function OutgoingLetterForm() {
         <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
           {/* <Editor /> */}
         </div>
-        <Seal />
+        {/* <Seal /> */}
         <Button
           variant="outline"
           className="flex gap-2 w-fit mt-32"
