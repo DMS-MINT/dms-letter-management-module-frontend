@@ -96,9 +96,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .react-tags {
   position: relative;
   padding: 0.25rem 0 0 0.25rem;
-  border: 2px solid #afb8c1;
+
   border-radius: 6px;
-  background: #ffffff;
+  background: #f3f4f6;
   /* shared font styles */
   font-size: 1rem;
   line-height: 1.2;
@@ -108,7 +108,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .react-tags.is-active {
-  border-color: #7c7d86;
+  border-width: 1.4px; /* Equivalent to ring-2 */
+  border-style: solid;
+  border-color: #9ca38f;
+  outline-offset: 4px;
 }
 
 .react-tags.is-disabled {

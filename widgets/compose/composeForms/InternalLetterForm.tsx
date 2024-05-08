@@ -83,21 +83,21 @@ export default function InternalLetterForm() {
             <Button
               variant="ghost"
               onClick={() => addInputField("አድራሻ", 1)}
-              // disabled={!isAddFieldEnabled1}
+              disabled={!isAddFieldEnabled1}
             >
               አድራሻ
             </Button>
             <Button
               variant="ghost"
               onClick={() => addInputField("ስልክ ቁጥር", 2)}
-              // disabled={!isAddFieldEnabled2}
+              disabled={!isAddFieldEnabled2}
             >
               ስልክ ቁጥር
             </Button>
             <Button
               variant="ghost"
               onClick={() => addInputField("የፖስታ ቁጥር", 3)}
-              // disabled={!isAddFieldEnabled3}
+              disabled={!isAddFieldEnabled3}
             >
               የፖስታ ቁጥር
             </Button>
@@ -112,13 +112,14 @@ export default function InternalLetterForm() {
           {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="እንዲያውቁት">
+          <Label className="w-20" htmlFor="እንዲያውቁት">
             እንዲያውቁት
           </Label>
-          <Input type="text" id="እንዲያውቁት" className="w-full " />
+          <TagInput />
+          {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ጉዳይ">
+          <Label className="w-20" htmlFor="ጉዳይ">
             ጉዳይ
           </Label>
           <Input type="text" id="ጉዳይ" className="w-full" />
@@ -127,7 +128,7 @@ export default function InternalLetterForm() {
         {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
         {inputFields.map((field, index) => (
           <div key={index} className="flex items-center gap-1.5">
-            <Label className="w-1/12" htmlFor={`inputField-${index}`}>
+            <Label className="w-20" htmlFor={`inputField-${index}`}>
               {field.label}
             </Label>
             <Input
@@ -142,21 +143,23 @@ export default function InternalLetterForm() {
         ))}
 
         <Input type="file" ref={fileInputRef} className="hidden" />
-        <section className="flex flex-col gap-5 mt-12 box-border shadow-lg  p-4">
+        <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
           <section className="flex flex-col gap-1.5">
-            {/* <h2 className="font-semibold text-lg">ደብዳቤ</h2> */}
+            <h2 className="font-semibold text-lg">ደብዳቤ</h2>
 
             <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
           </section>
-          <Button
-            variant="outline"
-            className="flex gap-2 w-fit mt-32"
-            onClick={handleClick}
-          >
-            <Plus size={19} />
-            ፋይል አያይዝ
-          </Button>
-        </section>
+          {/* <Editor /> */}
+        </div>
+        <Button
+          variant="outline"
+          className="flex gap-2 w-fit mt-32"
+          onClick={handleClick}
+        >
+          <Plus size={19} />
+          ፋይል አያይዝ
+        </Button>
+
         {/* <Comment comments={[]} /> */}
       </form>
     </div>

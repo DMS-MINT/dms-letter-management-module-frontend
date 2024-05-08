@@ -10,6 +10,7 @@ import { Ghost, Plus } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Comment from "./comment";
 import Seal from "./seal";
+import TagInput from "@/components/taginput/TagInput";
 // import Editor from "./editor";
 
 export default function OutgoingLetterForm() {
@@ -73,29 +74,30 @@ export default function OutgoingLetterForm() {
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12 pr-14" htmlFor="ለ">
+          <Label className="w-20 pr-14" htmlFor="ለ">
             ለ
           </Label>
-          <Input type="text" id="ለ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ለ" className="w-full" /> */}
           <div className="flex px-0 pr-0 w-relative">
             <Button
               variant="ghost"
               onClick={() => addInputField("አድራሻ", 1)}
-              // disabled={!isAddFieldEnabled1}
+              disabled={!isAddFieldEnabled1}
             >
               አድራሻ
             </Button>
             <Button
               variant="ghost"
               onClick={() => addInputField("ስልክ ቁጥር", 2)}
-              // disabled={!isAddFieldEnabled2}
+              disabled={!isAddFieldEnabled2}
             >
               ስልክ ቁጥር
             </Button>
             <Button
               variant="ghost"
               onClick={() => addInputField("የፖስታ ቁጥር", 3)}
-              // disabled={!isAddFieldEnabled3}
+              disabled={!isAddFieldEnabled3}
             >
               የፖስታ ቁጥር
             </Button>
@@ -103,19 +105,21 @@ export default function OutgoingLetterForm() {
         </div>
 
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ግልባጭ">
+          <Label className="w-20" htmlFor="ግልባጭ">
             ግልባጭ
           </Label>
-          <Input type="text" id="ግልባጭ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="እንዲያውቁት">
+          <Label className="w-20" htmlFor="እንዲያውቁት">
             እንዲያውቁት
           </Label>
-          <Input type="text" id="እንዲያውቁት" className="w-full " />
+          <TagInput />
+          {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ጉዳይ">
+          <Label className="w-20" htmlFor="ጉዳይ">
             ጉዳይ
           </Label>
           <Input type="text" id="ጉዳይ" className="w-full" />
@@ -123,7 +127,7 @@ export default function OutgoingLetterForm() {
         {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
         {inputFields.map((field, index) => (
           <div key={index} className="flex items-center gap-1.5">
-            <Label className="w-1/12" htmlFor={`inputField-${index}`}>
+            <Label className="w-20" htmlFor={`inputField-${index}`}>
               {field.label}
             </Label>
             <Input
@@ -141,7 +145,7 @@ export default function OutgoingLetterForm() {
 
         <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
           <section className="flex flex-col gap-1.5">
-            {/* <h2 className="font-semibold text-lg">ደብዳቤ</h2> */}
+            <h2 className="font-semibold text-lg">ደብዳቤ</h2>
 
             <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
           </section>
