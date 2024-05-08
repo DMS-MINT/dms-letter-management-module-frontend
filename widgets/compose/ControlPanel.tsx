@@ -58,15 +58,11 @@ export default function ControlPanel() {
                   <div className="grid gap-5">
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
-                      <Input type="text" id="የተቀባይ ስም" value="አማረ ተፈሪ " />
+                      <Input type="text" id="የተቀባይ ስም" />
                     </div>
                     <div className="grid items-center gap-1.5"></div>
                     <Label htmlFor="የተቀባይ ስም">መልክት ማስቀመጫ</Label>
-                    <Textarea
-                      id="ደብዳቤ"
-                      className="bg-gray-100 h-[100px]"
-                      value="ከሰላምታ ጋር"
-                    />
+                    <Textarea id="ደብዳቤ" className="bg-gray-100 h-[100px]" />
                   </div>
                   <Label htmlFor="የተቀባይ ስም" className="mt-7">
                     ፊርማ
@@ -76,20 +72,28 @@ export default function ControlPanel() {
                       እባክዎን የፊርማ ሰሌዳውን እዚህ ጠቅ ያድርጉ ፊርማዎን ለማስገባት
                       <br /> ወይም
                     </p>
-                    <Button className="h-[35px] w-[200px] bg-gray-700 mt-3 mr-3">
+                    <Button
+                      className="ml-3 mr-5 border-gray-300 rounded-md"
+                      variant="outline"
+                    >
                       ቀድሞ የተቀዳ ፊርማ ይጠቀሙ
                     </Button>
                   </section>
                   <div className="flex justify-end">
                     {" "}
                     <Button
-                      className="h-[45px] w-20 ml-4 mr-3 "
-                      variant="secondary"
+                      className="ml-3 mr-5 border-gray-300 rounded-md"
+                      variant="outline"
                     >
                       {" "}
                       ሰርዝ
                     </Button>
-                    <Button className="h-[45px] w-20 mr-0">ምራ</Button>
+                    <Button
+                      className="ml-3 mr-5 border-gray-300 rounded-md"
+                      variant="outline"
+                    >
+                      ምራ
+                    </Button>
                   </div>
                 </section>
               </DialogDescription>
