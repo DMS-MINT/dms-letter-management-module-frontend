@@ -1,5 +1,5 @@
 /** @format */
-
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Baseline, Printer, Dot } from "lucide-react";
@@ -17,6 +17,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import TagInput from "@/components/taginput/TagInput";
 
 export default function ControlPanel() {
   return (
@@ -58,7 +59,8 @@ export default function ControlPanel() {
                   <div className="grid gap-5">
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
-                      <Input type="text" id="የተቀባይ ስም" />
+                      <TagInput />
+                      {/* <Input type="text" id="የተቀባይ ስም" /> */}
                     </div>
                     <div className="grid items-center gap-1.5"></div>
                     <Label htmlFor="የተቀባይ ስም">መልክት ማስቀመጫ</Label>

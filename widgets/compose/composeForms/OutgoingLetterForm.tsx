@@ -68,100 +68,99 @@ export default function OutgoingLetterForm() {
   };
 
   return (
-    <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
-      <form
-        className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
-        onSubmit={(e) => e.preventDefault()}
+    // <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
+    <form
+      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <div className="flex items-center gap-1.5">
+        <Label className="w-20 pr-14" htmlFor="ለ">
+          ለ
+        </Label>
+        <TagInput />
+        {/* <Input type="text" id="ለ" className="w-full" /> */}
+        <div className="flex px-0 pr-0 w-relative">
+          <Button
+            variant="ghost"
+            onClick={() => addInputField("አድራሻ", 1)}
+            disabled={!isAddFieldEnabled1}
+          >
+            አድራሻ
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => addInputField("ስልክ ቁጥር", 2)}
+            disabled={!isAddFieldEnabled2}
+          >
+            ስልክ ቁጥር
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => addInputField("የፖስታ ቁጥር", 3)}
+            disabled={!isAddFieldEnabled3}
+          >
+            የፖስታ ቁጥር
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <Label className="w-20" htmlFor="ግልባጭ">
+          ግልባጭ
+        </Label>
+        <TagInput />
+        {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <Label className="w-20" htmlFor="እንዲያውቁት">
+          እንዲያውቁት
+        </Label>
+        <TagInput />
+        {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <Label className="w-20" htmlFor="ጉዳይ">
+          ጉዳይ
+        </Label>
+        <Input type="text" id="ጉዳይ" className="w-full" />
+      </div>
+      {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
+      {inputFields.map((field, index) => (
+        <div key={index} className="flex items-center gap-1.5">
+          <Label className="w-20" htmlFor={`inputField-${index}`}>
+            {field.label}
+          </Label>
+          <Input
+            type="text"
+            id={`inputField-${index}`}
+            className="w-full"
+            value={field.value}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+          />
+          <button onClick={() => removeInputField(index)}>ሰርዝ</button>
+        </div>
+      ))}
+
+      <Input type="file" ref={fileInputRef} className="hidden" />
+
+      <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
+        <section className="flex flex-col gap-1.5">
+          <h2 className="font-semibold text-lg">ደብዳቤ</h2>
+
+          <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+        </section>
+        {/* <Editor /> */}
+      </div>
+      {/* <Seal /> */}
+      <Button
+        variant="outline"
+        className="flex gap-2 w-fit mt-32"
+        onClick={handleClick}
       >
-        <div className="flex items-center gap-1.5">
-          <Label className="w-20 pr-14" htmlFor="ለ">
-            ለ
-          </Label>
-          <TagInput />
-          {/* <Input type="text" id="ለ" className="w-full" /> */}
-          <div className="flex px-0 pr-0 w-relative">
-            <Button
-              variant="ghost"
-              onClick={() => addInputField("አድራሻ", 1)}
-              disabled={!isAddFieldEnabled1}
-            >
-              አድራሻ
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => addInputField("ስልክ ቁጥር", 2)}
-              disabled={!isAddFieldEnabled2}
-            >
-              ስልክ ቁጥር
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => addInputField("የፖስታ ቁጥር", 3)}
-              disabled={!isAddFieldEnabled3}
-            >
-              የፖስታ ቁጥር
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          <Label className="w-20" htmlFor="ግልባጭ">
-            ግልባጭ
-          </Label>
-          <TagInput />
-          {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Label className="w-20" htmlFor="እንዲያውቁት">
-            እንዲያውቁት
-          </Label>
-          <TagInput />
-          {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Label className="w-20" htmlFor="ጉዳይ">
-            ጉዳይ
-          </Label>
-          <Input type="text" id="ጉዳይ" className="w-full" />
-        </div>
-        {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
-        {inputFields.map((field, index) => (
-          <div key={index} className="flex items-center gap-1.5">
-            <Label className="w-20" htmlFor={`inputField-${index}`}>
-              {field.label}
-            </Label>
-            <Input
-              type="text"
-              id={`inputField-${index}`}
-              className="w-full"
-              value={field.value}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-            <button onClick={() => removeInputField(index)}>ሰርዝ</button>
-          </div>
-        ))}
-
-        <Input type="file" ref={fileInputRef} className="hidden" />
-
-        <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
-          <section className="flex flex-col gap-1.5">
-            <h2 className="font-semibold text-lg">ደብዳቤ</h2>
-
-            <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
-          </section>
-          {/* <Editor /> */}
-        </div>
-        {/* <Seal /> */}
-        <Button
-          variant="outline"
-          className="flex gap-2 w-fit mt-32"
-          onClick={handleClick}
-        >
-          <Plus size={19} />
-          ፋይል አያይዝ
-        </Button>
-        {/* <Comment comments={[]} /> */}
-      </form>
-    </div>
+        <Plus size={19} />
+        ፋይል አያይዝ
+      </Button>
+      {/* <Comment comments={[]} /> */}
+    </form>
   );
 }
