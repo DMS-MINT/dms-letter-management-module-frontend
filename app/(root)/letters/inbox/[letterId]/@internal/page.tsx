@@ -100,7 +100,13 @@ export default function LetterDetail() {
                 id="ደብዳቤ"
                 disabled={readOnly}
                 className="bg-gray-100 h-[500px]"
-                value="jbdsncsndcjsknsachjbsnbhjnsjdcbnhjdsbjdsbcnhjdbjhdncvhsdbvdshbvsdjvbndjdskvnskjdvdscnsjdsjskdcnjksdcdcnskdskcnsjdcnjdskcskjcnksjdcnjkdcnsdcbjknddkjs"
+                value="ሰላም እና ለማንኛውም ወቅታዊ ተሸላሚ ውጤት ከአማርኛ እና ከቋንቋ በላይ ተጠቃሚ ያለው ይሆናል። ስለዚህም እኔ አባልነትህን ለመስራት በእርስዎ የምንለውን ልጆች ላይ በአንድ ላይ የሚደረገውን ሰው ማስተካከል ይችላል።
+
+                በመንግሥትና በቅናሽ በኢንተርቨት ወቅታዊ እና በምሳሌው የተደረገ መረጃ ላይ እንደሚመለከተው ይጠቀምናል። እኔም ያስችላል።
+                
+                በዚህ ትምህርት በትክክል የተደረገውን የልጆችህን እንቅስቃሴና ቅርበት እንድታደርግ በመሆኑ እኔና የአባልነትህ አባል በሆነችው ጉዳይ ላይ በድምፅ ተከትለው አንዱ እንዲያስቀምጥ ነው። ስለዚህ እናም በምንጊዜም በእኔና በአንድ ላይ የሚቀመጡ መረጃዎችን ከመዝጋት የመዘጋጀውን ማሻሻል እንችላለን።
+                
+                በመሆኑም እኔና የአባልነትህ አባል እንደሆነች የምንመለከተውን አባል በማስመልከት ከእኔ የሚሰበስበውን እንደሚረዳ እንደወዳድር እንድማለፍ በመከታተል ላይ እንደሚያስችል ይገኛል።"
               />
             </section>
           </section>
