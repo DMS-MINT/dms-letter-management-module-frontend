@@ -140,6 +140,11 @@ export default function OutgoingLetterForm() {
         <Input type="file" ref={fileInputRef} className="hidden" />
 
         <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
+          <section className="flex flex-col gap-1.5">
+            {/* <h2 className="font-semibold text-lg">ደብዳቤ</h2> */}
+
+            <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+          </section>
           {/* <Editor /> */}
         </div>
         {/* <Seal /> */}
@@ -151,7 +156,7 @@ export default function OutgoingLetterForm() {
           <Plus size={19} />
           ፋይል አያይዝ
         </Button>
-        <Comment comments={[]} />
+        {/* <Comment comments={[]} /> */}
       </form>
     </div>
   );

@@ -108,7 +108,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .react-tags.is-active {
-  border-color: #4f46e5;
+  border-color: #7c7d86;
 }
 
 .react-tags.is-disabled {
@@ -157,7 +157,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .react-tags__tag:hover {
   color: #ffffff;
-  background-color: #4f46e5;
+  background-color: #afb8c1;
 }
 
 .react-tags__tag::after {
@@ -212,7 +212,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .react-tags__combobox-input::placeholder {
-  color: #7c7d86;
+  color: #718096;
   opacity: 1;
 }
 
@@ -226,7 +226,7 @@ input[type="number"]::-webkit-inner-spin-button {
   max-height: 12.5rem;
   overflow-y: auto;
   background: #f3f4f6;
-  border: 1px solid #afb8c1;
+  border: 3px solid #afb8c1;
   border-radius: 6px;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -4px,
@@ -243,12 +243,12 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .react-tags__listbox-option:not([aria-disabled="true"]).is-active {
-  background: #4f46e5;
+  background: #afb8c1;
   color: #ffffff;
 }
 
 .react-tags__listbox-option[aria-disabled="true"] {
-  color: #7c7d86;
+  color: #ffff;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -259,7 +259,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .react-tags__listbox-option[aria-selected="true"]:not(.is-active)::after {
-  color: #4f46e5;
+  color: #afb8c1;
 }
 
 .react-tags__listbox-option-highlight {

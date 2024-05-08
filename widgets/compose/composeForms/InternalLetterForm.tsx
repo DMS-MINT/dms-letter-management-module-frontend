@@ -142,22 +142,23 @@ export default function InternalLetterForm() {
         ))}
 
         <Input type="file" ref={fileInputRef} className="hidden" />
+        <section className="flex flex-col gap-5 mt-12 box-border shadow-lg  p-4">
+          <section className="flex flex-col gap-1.5">
+            {/* <h2 className="font-semibold text-lg">ደብዳቤ</h2> */}
 
-        <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
-          {/* <Editor /> */}
-        </div>
-        {/* <Seal /> */}
-        <Button
-          variant="outline"
-          className="flex gap-2 w-fit mt-32"
-          onClick={handleClick}
-        >
-          <Plus size={19} />
-          ፋይል አያይዝ
-        </Button>
+            <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+          </section>
+          <Button
+            variant="outline"
+            className="flex gap-2 w-fit mt-32"
+            onClick={handleClick}
+          >
+            <Plus size={19} />
+            ፋይል አያይዝ
+          </Button>
+        </section>
+        {/* <Comment comments={[]} /> */}
       </form>
-
-      <Comment comments={[]} />
     </div>
   );
 }
