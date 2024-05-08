@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 import { Plus } from "lucide-react";
 import React, { useState, useMemo } from "react";
+import TagInput from "@/components/taginput/TagInput";
 
 export default function InternalLetterForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -70,35 +71,38 @@ export default function InternalLetterForm() {
         onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ግልባጭ">
+          <Label className="w-20" htmlFor="ግልባጭ">
             ለ
           </Label>
-
-          <Input type="text" id="ግልባጭ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ግልባጭ">
+          <Label className="w-20" htmlFor="ግልባጭ">
             ግልባጭ
           </Label>
-          <Input type="text" id="ግልባጭ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="እንዲያውቁት">
+          <Label className="w-20" htmlFor="እንዲያውቁት">
             እንዲያውቁት
           </Label>
-          <Input type="text" id="እንዲያውቁት" className="w-full " />
+          <TagInput />
+          {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12" htmlFor="ጉዳይ">
+          <Label className="w-20" htmlFor="ጉዳይ">
             ጉዳይ
           </Label>
           <Input type="text" id="ጉዳይ" className="w-full" />
         </div>
         <div className="flex items-center gap-1.5">
-          <Label className="w-1/12 pr-14" htmlFor="ለ">
+          <Label className="w-20 pr-14" htmlFor="ለ">
             ከ
           </Label>
-          <Input type="text" id="ለ" className="w-full" />
+          <TagInput />
+          {/* <Input type="text" id="ለ" className="w-full" /> */}
           <div className="flex px-0 pr-0 w-relative">
             <Button
               variant="ghost"
@@ -127,7 +131,7 @@ export default function InternalLetterForm() {
         {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
         {inputFields.map((field, index) => (
           <div key={index} className="flex items-center gap-1.5">
-            <Label className="w-1/12" htmlFor={`inputField-${index}`}>
+            <Label className="w-20" htmlFor={`inputField-${index}`}>
               {field.label}
             </Label>
             <Input

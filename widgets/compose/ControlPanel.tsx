@@ -90,7 +90,7 @@ export default function ControlPanel() {
                     </Button>
                     <Button
                       className="ml-3 mr-5 border-gray-300 rounded-md"
-                      variant="outline"
+                      variant="default"
                     >
                       ምራ
                     </Button>
