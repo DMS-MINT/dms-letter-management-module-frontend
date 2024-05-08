@@ -58,7 +58,8 @@ export default function ControlPanel() {
                   <div className="grid gap-5">
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
-                      <Input type="text" id="የተቀባይ ስም" />
+                        <TagInput />
+                      {/* <Input type="text" id="የተቀባይ ስም" /> */}
                     </div>
                     <div className="grid items-center gap-1.5"></div>
                     <Label htmlFor="የተቀባይ ስም">መልክት ማስቀመጫ</Label>
