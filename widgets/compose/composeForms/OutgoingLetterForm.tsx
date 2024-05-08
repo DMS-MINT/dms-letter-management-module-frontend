@@ -68,7 +68,7 @@ export default function OutgoingLetterForm() {
   };
 
   return (
-    <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
+  
       <form
         className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
         onSubmit={(e) => e.preventDefault()}
@@ -162,6 +162,6 @@ export default function OutgoingLetterForm() {
         </Button>
         {/* <Comment comments={[]} /> */}
       </form>
-    </div>
+  
   );
 }
