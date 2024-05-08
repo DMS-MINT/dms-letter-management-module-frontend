@@ -1,5 +1,5 @@
 /** @format */
-
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Baseline, Printer, Dot } from "lucide-react";
