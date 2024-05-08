@@ -23,7 +23,7 @@ export default function ControlPanel() {
   return (
     <section className="flex items-center justify-between w-full">
       <div className="flex gap-2">
-        <h1 className="page-title">ደብዳቤ መፃፊያ</h1>
+        <h1 className="page-title">አዲስ ደብዳቤ </h1>
         <Badge
           variant="destructive"
           className="rounded-md flex items-center justify-between pl-0 "
