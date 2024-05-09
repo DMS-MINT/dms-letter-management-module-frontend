@@ -12,7 +12,7 @@ export default function RootLayout({
   outgoing: React.ReactNode;
   incoming: React.ReactNode;
 }>) {
-  const letterType: LetterTypeEnum = LetterTypeEnum.INTERNAL;
+  const letterType: LetterTypeEnum = LetterTypeEnum.OUTGOING;
 
   const main: React.ReactNode =
     letterType.valueOf() == LetterTypeEnum.INTERNAL.valueOf()

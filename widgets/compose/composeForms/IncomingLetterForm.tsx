@@ -103,7 +103,7 @@ export default function InternalLetterForm() {
         </Label>
         <TagInput />
         {/* <Input type="text" id="ለ" className="w-full" /> */}
-        <div className="flex px-0 pr-0 w-relative">
+        <div className="flex px-3 pr-0 w-relative">
           <Button
             variant="ghost"
             onClick={() => addInputField("አድራሻ", 1)}
@@ -147,7 +147,7 @@ export default function InternalLetterForm() {
 
       <Button
         variant="outline"
-        className="flex gap-2 w-fit mt-32"
+        className="flex gap-2 w-fit mt-4"
         onClick={handleClick}
       >
         <Plus size={19} />

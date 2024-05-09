@@ -11,9 +11,9 @@ import React, { useState, useMemo } from "react";
 import Comment from "./comment";
 import Seal from "./seal";
 import TagInput from "@/components/taginput/TagInput";
-import { Main } from "next/document";
+// import Editor from "./editor";
 
-export default function InternalLetterForm() {
+export default function OutgoingLetterForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -68,8 +68,9 @@ export default function InternalLetterForm() {
   };
 
   return (
+    // <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
     <form
-      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
+      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-28"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="flex items-center gap-1.5">
@@ -78,7 +79,7 @@ export default function InternalLetterForm() {
         </Label>
         <TagInput />
         {/* <Input type="text" id="ለ" className="w-full" /> */}
-        <div className="flex px-0 pr-0 w-relative">
+        <div className="flex px-3 pr-0 w-relative">
           <Button
             variant="ghost"
             onClick={() => addInputField("አድራሻ", 1)}
@@ -123,7 +124,6 @@ export default function InternalLetterForm() {
         </Label>
         <Input type="text" id="ጉዳይ" className="w-full" />
       </div>
-
       {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
       {inputFields.map((field, index) => (
         <div key={index} className="flex items-center gap-1.5">
@@ -142,22 +142,24 @@ export default function InternalLetterForm() {
       ))}
 
       <Input type="file" ref={fileInputRef} className="hidden" />
+
       <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
         <section className="flex flex-col gap-1.5">
           <h2 className="font-semibold text-lg">ደብዳቤ</h2>
 
           <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+          <Button
+            variant="outline"
+            className="flex gap-2 w-fit mt-3"
+            onClick={handleClick}
+          >
+            <Plus size={19} />
+            ፋይል አያይዝ
+          </Button>
         </section>
         {/* <Editor /> */}
       </div>
-      <Button
-        variant="outline"
-        className="flex gap-2 w-fit mt-32"
-        onClick={handleClick}
-      >
-        <Plus size={19} />
-        ፋይል አያይዝ
-      </Button>
+      {/* <Seal /> */}
 
       {/* <Comment comments={[]} /> */}
     </form>

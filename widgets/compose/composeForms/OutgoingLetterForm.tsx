@@ -70,7 +70,7 @@ export default function OutgoingLetterForm() {
   return (
     // <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
     <form
-      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
+      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-28"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="flex items-center gap-1.5">
@@ -79,7 +79,7 @@ export default function OutgoingLetterForm() {
         </Label>
         <TagInput />
         {/* <Input type="text" id="ለ" className="w-full" /> */}
-        <div className="flex px-0 pr-0 w-relative">
+        <div className="flex px-3 pr-0 w-relative">
           <Button
             variant="ghost"
             onClick={() => addInputField("አድራሻ", 1)}
@@ -148,18 +148,19 @@ export default function OutgoingLetterForm() {
           <h2 className="font-semibold text-lg">ደብዳቤ</h2>
 
           <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+          <Button
+            variant="outline"
+            className="flex gap-2 w-fit mt-3"
+            onClick={handleClick}
+          >
+            <Plus size={19} />
+            ፋይል አያይዝ
+          </Button>
         </section>
         {/* <Editor /> */}
       </div>
       {/* <Seal /> */}
-      <Button
-        variant="outline"
-        className="flex gap-2 w-fit mt-32"
-        onClick={handleClick}
-      >
-        <Plus size={19} />
-        ፋይል አያይዝ
-      </Button>
+
       {/* <Comment comments={[]} /> */}
     </form>
   );
