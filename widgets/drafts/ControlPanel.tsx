@@ -18,7 +18,7 @@ export default function ControlPanel() {
         <Link href="/compose">
           <Button className="flex gap-1 w-fit items-center">
             <Plus size={19} />
-          አዲስ ደብዳቤ 
+            አዲስ ደብዳቤ
           </Button>
         </Link>
       </div>

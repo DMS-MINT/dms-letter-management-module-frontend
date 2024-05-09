@@ -1,6 +1,5 @@
-import { Subheader, Drawer, Main } from "@/components/layouts";
-import { ControlPanel } from "@/widgets/compose";
-import { NavigationPanel } from "@/widgets/common";
+import { Subheader } from "@/components/layouts";
+import { ControlPanel } from "@/widgets/print";
 
 export default function RootLayout({
   children,
@@ -9,14 +8,11 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      {/* <Subheader>
+      <Subheader>
         <ControlPanel />
-      </Subheader> */}
-      <section className="flex px-8 gap-6 mt-2 h-full">
-        <Drawer>
-          <NavigationPanel />
-        </Drawer>
-        <Main>{children}</Main>
+      </Subheader>
+      <section className="flex py-12 gap-6 mt-2 h-fit bg-gray-200 justify-center">
+        {children}
       </section>
     </>
   );

@@ -1,18 +1,6 @@
-import {
-  LaptopMinimal,
-  Locate,
-  LocateFixedIcon,
-  LocateIcon,
-  Mail,
-  Map,
-  MapPin,
-  Phone,
-  Scan,
-  ScanSearch,
-  WebhookIcon,
-} from "lucide-react";
+import { LaptopMinimal, Mail, MapPin, Phone, ScanSearch } from "lucide-react";
 
-export default function Letter1() {
+export default function OutgoingLetterPreview() {
   // Create a Date object from the provided string
   const date = new Date("2016-09-04");
 

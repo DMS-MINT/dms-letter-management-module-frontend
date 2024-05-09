@@ -66,103 +66,99 @@ export default function LetterDetail() {
   return (
     <section className="grid gap-5 h-fit pb-5 flex-1">
       <Main>
-        <section className="flex flex-col gap-5">
-          <section className="flex flex-col gap-5">
-            <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
-            <div className="grid-flow-row grid-cols-1 gap-5 box-border shadow-lg  p-4">
-              <div className="flex items-center gap-1.5">
-                <Label className="w-1/12" htmlFor="የተቀባይ ስም">
-                  ከ
-                </Label>
-                <Input
-                  disabled={readOnly}
-                  type="text"
-                  id="የተቀባይ ስም"
-                  value="አማረ ተፈሪ "
-                  className="w-full mb-2"
-                />
-              </div>
+        <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
+        <div className="grid-flow-row grid-cols-1 gap-5 box-border shadow-lg  p-4">
+          <div className="flex items-center gap-1.5">
+            <Label className="w-20" htmlFor="የተቀባይ ስም">
+              ከ
+            </Label>
+            <Input
+              disabled={readOnly}
+              type="text"
+              id="የተቀባይ ስም"
+              value="አማረ ተፈሪ "
+              className="w-full mb-2"
+            />
+          </div>
 
-              <div className="flex items-center gap-1.5">
-                <Label className="w-1/12" htmlFor="የተቀባይ ስም">
-                  ለ
-                </Label>
-                <Input
-                  disabled={readOnly}
-                  type="text"
-                  id="የተቀባይ ስም"
-                  value="የገበያ ስራ አስኪያጅ"
-                  className="w-full mb-2"
-                />
+          <div className="flex items-center gap-1.5">
+            <Label className="w-24" htmlFor="የተቀባይ ስም">
+              ለ
+            </Label>
+            <Input
+              disabled={readOnly}
+              type="text"
+              id="የተቀባይ ስም"
+              value="የገበያ ስራ አስኪያጅ"
+              className="w-full mb-2"
+            />
 
-                <div className="flex px-0 pr-0 w-relative">
-                  <Button
-                    variant="ghost"
-                    onClick={() => addInputField("አድራሻ", 1)}
-                    disabled={!isAddFieldEnabled1}
-                  >
-                    አድራሻ
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => addInputField("ስልክ ቁጥር", 2)}
-                    disabled={!isAddFieldEnabled2}
-                  >
-                    ስልክ ቁጥር
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => addInputField("የፖስታ ቁጥር", 3)}
-                    disabled={!isAddFieldEnabled3}
-                  >
-                    የፖስታ ቁጥር
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Label className="w-1/12" htmlFor="ግልባጭ">
-                  ግልባጭ
-                </Label>
-                <Input
-                  disabled={readOnly}
-                  type="text"
-                  value="የዲጂታል ኢኮኖሚ ልማት ክፍል"
-                  id="ግልባጭ"
-                  className="w-full mb-2"
-                />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Label className="w-1/12" htmlFor="እንዲያውቁት">
-                  እንዲያውቁት
-                </Label>
-                <Input
-                  disabled={readOnly}
-                  type="text"
-                  value="ሚኒስቴር መስሪያ ቤት"
-                  id="እንዲያውቁት"
-                  className="w-full mb-2"
-                />
-              </div>
-              <div className="items-center gap-6 ">
-                {inputFields.map((field, index) => (
-                  <div key={index} className="flex items-center gap-5">
-                    <Label className="w-1/12" htmlFor={`inputField-${index}`}>
-                      {field.label}
-                    </Label>
-                    <Input
-                      type="text"
-                      id={`inputField-${index}`}
-                      className="w-full"
-                      value={field.value}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                    />
-                    <button onClick={() => removeInputField(index)}>ሰርዝ</button>
-                  </div>
-                ))}
-              </div>
+            <div className="flex px-0 pr-0 w-relative">
+              <Button
+                variant="ghost"
+                // onClick={() => addInputField("አድራሻ", 1)}
+                disabled={!isAddFieldEnabled1}
+              >
+                አድራሻ
+              </Button>
+              <Button
+                variant="ghost"
+                // onClick={() => addInputField("ስልክ ቁጥር", 2)}
+                disabled={!isAddFieldEnabled2}
+              >
+                ስልክ ቁጥር
+              </Button>
+              <Button
+                variant="ghost"
+                // onClick={() => addInputField("የፖስታ ቁጥር", 3)}
+                disabled={!isAddFieldEnabled3}
+              >
+                የፖስታ ቁጥር
+              </Button>
             </div>
-          </section>
-        </section>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Label className="w-20" htmlFor="ግልባጭ">
+              ግልባጭ
+            </Label>
+            <Input
+              disabled={readOnly}
+              type="text"
+              value="የዲጂታል ኢኮኖሚ ልማት ክፍል"
+              id="ግልባጭ"
+              className="w-full mb-2"
+            />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Label className="w-20" htmlFor="እንዲያውቁት">
+              እንዲያውቁት
+            </Label>
+            <Input
+              disabled={readOnly}
+              type="text"
+              value="ሚኒስቴር መስሪያ ቤት"
+              id="እንዲያውቁት"
+              className="w-full mb-2"
+            />
+          </div>
+          <div className="items-center gap-6 ">
+            {inputFields.map((field, index) => (
+              <div key={index} className="flex items-center gap-5">
+                <Label className="w-20" htmlFor={`inputField-${index}`}>
+                  {field.label}
+                </Label>
+                <Input
+                  type="text"
+                  id={`inputField-${index}`}
+                  className="w-full"
+                  value={field.value}
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                />
+                <button onClick={() => removeInputField(index)}>ሰርዝ</button>
+              </div>
+            ))}
+          </div>
+        </div>
       </Main>
 
       <Main>
@@ -197,13 +193,19 @@ export default function LetterDetail() {
               id="ደብዳቤ"
               disabled={readOnly}
               className="bg-gray-100 h-[500px]"
-              value="ውድ [የተቀባዩ ስም]፣ይህ መልእክት በደንብ እንደሚያገኝህ ተስፋ"
+              value="ሰላም እና ለማንኛውም ወቅታዊ ተሸላሚ ውጤት ከአማርኛ እና ከቋንቋ በላይ ተጠቃሚ ያለው ይሆናል። ስለዚህም እኔ አባልነትህን ለመስራት በእርስዎ የምንለውን ልጆች ላይ በአንድ ላይ የሚደረገውን ሰው ማስተካከል ይችላል።
+
+              በመንግሥትና በቅናሽ በኢንተርቨት ወቅታዊ እና በምሳሌው የተደረገ መረጃ ላይ እንደሚመለከተው ይጠቀምናል። እኔም ያስችላል።
+              
+              በዚህ ትምህርት በትክክል የተደረገውን የልጆችህን እንቅስቃሴና ቅርበት እንድታደርግ በመሆኑ እኔና የአባልነትህ አባል በሆነችው ጉዳይ ላይ በድምፅ ተከትለው አንዱ እንዲያስቀምጥ ነው። ስለዚህ እናም በምንጊዜም በእኔና በአንድ ላይ የሚቀመጡ መረጃዎችን ከመዝጋት የመዘጋጀውን ማሻሻል እንችላለን።
+              
+              በመሆኑም እኔና የአባልነትህ አባል እንደሆነች የምንመለከተውን አባል በማስመልከት ከእኔ የሚሰበስበውን እንደሚረዳ እንደወዳድር እንድማለፍ በመከታተል ላይ እንደሚያስችል ይገኛል።"
             />
           </section>
         </section>
       </Main>
 
-      <CommentSection comments={[]} />
+      {/* <CommentSection comments={[]} /> */}
     </section>
   );
 }

@@ -2,7 +2,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Baseline, Printer, Dot } from "lucide-react";
+import { Printer, Dot } from "lucide-react";
 import Link from "next/link";
 import {
   Dialog,
@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+
 import TagInput from "@/components/taginput/TagInput";
 
 export default function ControlPanel() {
   return (
     <section className="flex items-center justify-between w-full">
       <div className="flex gap-2">
-        <h1 className="page-title">ደብዳቤ መፃፊያ</h1>
+        <h1 className="page-title">አዲስ ደብዳቤ </h1>
         <Badge
           variant="destructive"
           className="rounded-md flex items-center justify-between pl-0 "
@@ -32,9 +32,11 @@ export default function ControlPanel() {
         </Badge>
       </div>
       <div className="flex items-center gap-3">
-        <Button variant="outline" size="icon">
-          <Printer size={20} />
-        </Button>
+        <Link href="/letters/print">
+          <Button variant="outline" size="icon">
+            <Printer size={20} />
+          </Button>
+        </Link>
         <Button className="mr-0 border-gray-300 rounded-md" variant="outline">
           ረቂቁን ያስቀምጡ
         </Button>
@@ -59,7 +61,8 @@ export default function ControlPanel() {
                   <div className="grid gap-5">
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
-                        <TagInput />
+
+                      <TagInput />
                       {/* <Input type="text" id="የተቀባይ ስም" /> */}
                     </div>
                     <div className="grid items-center gap-1.5"></div>
