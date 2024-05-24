@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import Logo from "@/public/assets/logo.svg";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -26,7 +27,7 @@ import { useEffect, useState } from "react";
 export default function Topbar() {
   const [route, setRoute] = useState<string>("");
   const pathname = usePathname();
-  console.log(route);
+
   useEffect(() => {
     const currentRoute = primaryRoutes.filter(
       (route) => route.path === pathname

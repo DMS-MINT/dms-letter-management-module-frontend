@@ -18,8 +18,24 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 import TagInput from "@/components/taginput/TagInput";
+import { useDispatch, useSelector } from "react-redux";
+import { LetterStatusEnum, RolesEnum } from "@/typing/enum";
+import { setLetterStatus } from "@/redux/slices/composeSlice";
+import CreatableSelect from "react-select/creatable";
+import { RootState } from "@/redux/store";
 
 export default function ControlPanel() {
+  const letter = useSelector((state: RootState) => state.compose);
+  const dispatch = useDispatch();
+
+  function sendLetter() {
+    if (letter.participants.length > 0) {
+      console.log(letter);
+    } else {
+      console.log("Warning");
+    }
+  }
+
   return (
     <section className="flex items-center justify-between w-full">
       <div className="flex gap-2">
@@ -37,13 +53,19 @@ export default function ControlPanel() {
             <Printer size={20} />
           </Button>
         </Link>
-        <Button className="mr-0 border-gray-300 rounded-md" variant="outline">
+        <Button
+          className="mr-0 RECIPIENTborder-gray-300 rounded-md"
+          variant="outline"
+          onClick={() => {
+            dispatch(setLetterStatus(LetterStatusEnum.DRAFT));
+            sendLetter();
+          }}
+        >
           ረቂቁን ያስቀምጡ
         </Button>
 
         <Dialog>
           <DialogTrigger>
-            {" "}
             <Button
               className="ml-0 border-gray-300 rounded-md"
               variant="outline"
@@ -62,8 +84,12 @@ export default function ControlPanel() {
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
 
-                      <TagInput />
-                      {/* <Input type="text" id="የተቀባይ ስም" /> */}
+                      {/* <CreatableSelect
+                        isMulti
+                        name={String(RolesEnum.FORWARDED_RECIPIENT)}
+                        options={userOptions}
+                        onChange={handleChange}
+                      /> */}
                     </div>
                     <div className="grid items-center gap-1.5"></div>
                     <Label htmlFor="የተቀባይ ስም">መልክት ማስቀመጫ</Label>
@@ -85,12 +111,10 @@ export default function ControlPanel() {
                     </Button>
                   </section>
                   <div className="flex justify-end">
-                    {" "}
                     <Button
                       className="ml-3 mr-5 border-gray-300 rounded-md"
                       variant="outline"
                     >
-                      {" "}
                       ሰርዝ
                     </Button>
                     <Button
@@ -107,7 +131,6 @@ export default function ControlPanel() {
         </Dialog>
         <Dialog>
           <Button variant="default">
-            {" "}
             <DialogTrigger>ላክ</DialogTrigger>
           </Button>
           <DialogContent>
@@ -118,7 +141,15 @@ export default function ControlPanel() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button type="submit">አዎ</Button>
+              <Button
+                type="submit"
+                onClick={() => {
+                  dispatch(setLetterStatus(LetterStatusEnum.PENDING_APPROVAL));
+                  sendLetter();
+                }}
+              >
+                አዎ
+              </Button>
               <Button
                 className="bg-white text-black hover:bg-white"
                 type="submit"

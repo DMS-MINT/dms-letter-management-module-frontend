@@ -1,7 +1,6 @@
-/** @format */
 "use client";
-// import Editor from "./editor";
-import { useRef } from "react";
+
+import { useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -11,10 +10,35 @@ import React, { useState, useMemo } from "react";
 import Comment from "./comment";
 import Seal from "./seal";
 import TagInput from "@/components/taginput/TagInput";
-// import Editor from "./editor";
+import { RolesEnum } from "@/typing/enum";
+import Select, { ActionMeta } from "react-select";
+import { userOptions } from "@/data";
+import { IUserOptions } from "@/typing";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addParticipant,
+  removeParticipant,
+  resetState,
+  updateSubject,
+} from "@/redux/slices/composeSlice";
+import { RootState } from "@/redux/store";
 
 export default function OutgoingLetterForm() {
+  const { content, subject } = useSelector((state: RootState) => state.compose);
+
+  const [sampleSubject, setSubject] = useState<string>("");
+
+  const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    dispatch(resetState());
+  }, []);
+
+  function handelSubject(subj: string) {
+    setSubject(subj);
+    console.log(sampleSubject);
+  }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -22,6 +46,26 @@ export default function OutgoingLetterForm() {
       fileInputRef.current.click();
     }
   };
+
+  function handleChange(
+    option: readonly IUserOptions[],
+    actionMeta: ActionMeta<IUserOptions>
+  ) {
+    const { action, name, option: selectedOption, removedValue } = actionMeta;
+    const role = Number(name);
+
+    if (action === "select-option" && selectedOption) {
+      const { value: id, label: name, user_type } = selectedOption;
+      dispatch(addParticipant({ id, name, role, user_type }));
+    } else if (action === "create-option" && selectedOption) {
+      const user_type = "guest";
+      const { value: id, label: name } = selectedOption;
+      dispatch(addParticipant({ id, name, role, user_type }));
+    } else if (action === "remove-value" && removedValue) {
+      const { value: id, label: name, user_type } = removedValue;
+      dispatch(removeParticipant({ id, name, role, user_type }));
+    }
+  }
 
   const [inputFields, setInputFields] = useState<
     { label: string; value: string }[]
@@ -77,8 +121,13 @@ export default function OutgoingLetterForm() {
         <Label className="w-20 pr-14" htmlFor="ለ">
           ለ
         </Label>
-        <TagInput />
-        {/* <Input type="text" id="ለ" className="w-full" /> */}
+        <Select
+          isMulti
+          name={String(RolesEnum.RECIPIENT)}
+          options={userOptions}
+          onChange={handleChange}
+          className="w-full"
+        />
         <div className="flex px-3 pr-0 w-relative">
           <Button
             variant="ghost"
@@ -108,23 +157,38 @@ export default function OutgoingLetterForm() {
         <Label className="w-20" htmlFor="ግልባጭ">
           ግልባጭ
         </Label>
-        <TagInput />
-        {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
+        <Select
+          isMulti
+          name={String(RolesEnum.CC)}
+          options={userOptions}
+          onChange={handleChange}
+          className="w-full"
+        />
       </div>
       <div className="flex items-center gap-1.5">
         <Label className="w-20" htmlFor="እንዲያውቁት">
           እንዲያውቁት
         </Label>
-        <TagInput />
-        {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
+        <Select
+          isMulti
+          name={String(RolesEnum.BCC)}
+          options={userOptions}
+          onChange={handleChange}
+          className="w-full"
+        />
       </div>
       <div className="flex items-center gap-1.5">
         <Label className="w-20" htmlFor="ጉዳይ">
           ጉዳይ
         </Label>
-        <Input type="text" id="ጉዳይ" className="w-full" />
+        <Input
+          type="text"
+          id="ጉዳይ"
+          className="w-full"
+          value={subject}
+          onChange={(e) => dispatch(updateSubject(e.target.value))}
+        />
       </div>
-      {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
       {inputFields.map((field, index) => (
         <div key={index} className="flex items-center gap-1.5">
           <Label className="w-20" htmlFor={`inputField-${index}`}>
