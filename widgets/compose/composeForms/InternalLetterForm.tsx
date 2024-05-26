@@ -11,7 +11,7 @@ import React, { useState, useMemo } from "react";
 import Comment from "./comment";
 import Seal from "./seal";
 import TagInput from "@/components/taginput/TagInput";
-// import Editor from "./editor";
+import Editor from "./editor";
 
 export default function OutgoingLetterForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -70,32 +70,32 @@ export default function OutgoingLetterForm() {
   return (
     // <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
     <form
-      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-28"
+      className='flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-28'
       onSubmit={(e) => e.preventDefault()}
     >
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20 pr-14" htmlFor="ለ">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20 pr-14' htmlFor='ለ'>
           ለ
         </Label>
         <TagInput />
         {/* <Input type="text" id="ለ" className="w-full" /> */}
-        <div className="flex px-3 pr-0 w-relative">
+        <div className='flex px-3 pr-0 w-relative'>
           <Button
-            variant="ghost"
+            variant='ghost'
             onClick={() => addInputField("አድራሻ", 1)}
             disabled={!isAddFieldEnabled1}
           >
             አድራሻ
           </Button>
           <Button
-            variant="ghost"
+            variant='ghost'
             onClick={() => addInputField("ስልክ ቁጥር", 2)}
             disabled={!isAddFieldEnabled2}
           >
             ስልክ ቁጥር
           </Button>
           <Button
-            variant="ghost"
+            variant='ghost'
             onClick={() => addInputField("የፖስታ ቁጥር", 3)}
             disabled={!isAddFieldEnabled3}
           >
@@ -104,36 +104,36 @@ export default function OutgoingLetterForm() {
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ግልባጭ">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20' htmlFor='ግልባጭ'>
           ግልባጭ
         </Label>
         <TagInput />
         {/* <Input type="text" id="ግልባጭ" className="w-full" /> */}
       </div>
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="እንዲያውቁት">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20' htmlFor='እንዲያውቁት'>
           እንዲያውቁት
         </Label>
         <TagInput />
         {/* <Input type="text" id="እንዲያውቁት" className="w-full " /> */}
       </div>
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ጉዳይ">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20' htmlFor='ጉዳይ'>
           ጉዳይ
         </Label>
-        <Input type="text" id="ጉዳይ" className="w-full" />
+        <Input type='text' id='ጉዳይ' className='w-full' />
       </div>
       {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
       {inputFields.map((field, index) => (
-        <div key={index} className="flex items-center gap-1.5">
-          <Label className="w-20" htmlFor={`inputField-${index}`}>
+        <div key={index} className='flex items-center gap-1.5'>
+          <Label className='w-20' htmlFor={`inputField-${index}`}>
             {field.label}
           </Label>
           <Input
-            type="text"
+            type='text'
             id={`inputField-${index}`}
-            className="w-full"
+            className='w-full'
             value={field.value}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
@@ -141,23 +141,22 @@ export default function OutgoingLetterForm() {
         </div>
       ))}
 
-      <Input type="file" ref={fileInputRef} className="hidden" />
+      <Input type='file' ref={fileInputRef} className='hidden' />
 
-      <div className="flex flex-col mt-4 gap-1.5 w-full h-full">
-        <section className="flex flex-col gap-1.5">
-          <h2 className="font-semibold text-lg">ደብዳቤ</h2>
+      <div className='flex flex-col mt-4 gap-1.5 w-full h-full'>
+        <section className='flex flex-col gap-1.5'>
+          <h2 className='font-semibold text-lg'>ደብዳቤ</h2>
 
-          <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
           <Button
-            variant="outline"
-            className="flex gap-2 w-fit mt-3"
+            variant='outline'
+            className='flex gap-2 w-fit mt-3'
             onClick={handleClick}
           >
             <Plus size={19} />
             ፋይል አያይዝ
           </Button>
         </section>
-        {/* <Editor /> */}
+        <Editor />
       </div>
       {/* <Seal /> */}
 

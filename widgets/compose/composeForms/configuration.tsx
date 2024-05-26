@@ -4,16 +4,11 @@ import Header from "@editorjs/header";
 import Paragraph from "@editorjs/paragraph";
 import List from "@editorjs/list";
 import Table from "@editorjs/table";
-import React from "react";
+
 import { EditorConfig, ToolConstructable } from "@editorjs/editorjs";
-import Marker from "@editorjs/marker";
-import Delimiter from "@editorjs/delimiter";
+
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
-
-// import Undo from "editorjs-undo";
-
-// Rest of your code
 
 const Configuration = (): EditorConfig => {
   return {
@@ -44,10 +39,6 @@ const Configuration = (): EditorConfig => {
         class: SimpleImage as unknown as ToolConstructable,
         inlineToolbar: true,
       },
-
-      // undo: {
-      //   class: Undo as unknown as ToolConstructable,
-      // },
     },
     data: {
       blocks: [],
