@@ -1,18 +1,17 @@
-export interface IMe {
-  id: string;
-  full_name: string;
-}
-
 export interface IMember {
   id: string;
+  full_name: string;
   job_title: string;
-  department: string;
   user_type: "member";
 }
+
 export interface IGuest {
+  id: string;
   name: string;
   user_type: "guest";
 }
+
+export type UserApiInputSerializer = IMember | IGuest;
 
 export interface IUserOptions {
   value: string;

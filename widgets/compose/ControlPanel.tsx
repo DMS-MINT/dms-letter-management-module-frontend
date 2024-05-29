@@ -29,7 +29,7 @@ import {
   resetState,
   updateSubject,
 } from "@/redux/slices/composeSlice";
-import { userOptions } from "@/data";
+
 import { IUserOptions } from "@/typing";
 import Select, { ActionMeta } from "react-select";
 import axios from "axios";
@@ -41,6 +41,7 @@ interface Participant {
     | { name: string; user_type: "guest" };
 }
 export default function ControlPanel() {
+  const { userOptions } = useSelector((state: RootState) => state.user);
   function handleChange(
     option: readonly IUserOptions[],
     actionMeta: ActionMeta<IUserOptions>
@@ -233,6 +234,7 @@ export default function ControlPanel() {
                 type="submit"
                 onClick={() => {
                   dispatch(setLetterStatus(LetterStatusEnum.PENDING_APPROVAL));
+                  // console.log(sendLetter(letter));
                   sendLetter(letter);
                 }}
               >

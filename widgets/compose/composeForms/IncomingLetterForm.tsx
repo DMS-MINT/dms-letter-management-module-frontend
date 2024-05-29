@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
-
 import CreatableSelect from "react-select/creatable";
 import { ActionMeta } from "react-select";
 import { RolesEnum } from "@/typing/enum";
@@ -20,19 +18,23 @@ import {
 } from "@/redux/slices/composeSlice";
 import { RootState } from "@/redux/store";
 import { IUserOptions } from "@/typing";
-import { userOptions } from "@/data";
+import axios from "axios";
 
 export default function IncomingLetterForm() {
+  const { userOptions } = useSelector((state: RootState) => state.user);
   const { participants, content, subject } = useSelector(
     (state: RootState) => state.compose
   );
   const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    dispatch(resetState());
-    console.log(participants);
-  }, []);
+  const [inputFields, setInputFields] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [newlyAddedIndex, setNewlyAddedIndex] = useState(-1);
+  const [isAddFieldEnabled1, setIsAddFieldEnabled1] = useState(true);
+  const [isAddFieldEnabled2, setIsAddFieldEnabled2] = useState(true);
+  const [isAddFieldEnabled3, setIsAddFieldEnabled3] = useState(true);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -43,14 +45,6 @@ export default function IncomingLetterForm() {
       );
     }
   };
-
-  const [inputFields, setInputFields] = useState<
-    { label: string; value: string }[]
-  >([]);
-  const [newlyAddedIndex, setNewlyAddedIndex] = useState(-1);
-  const [isAddFieldEnabled1, setIsAddFieldEnabled1] = useState(true);
-  const [isAddFieldEnabled2, setIsAddFieldEnabled2] = useState(true);
-  const [isAddFieldEnabled3, setIsAddFieldEnabled3] = useState(true);
 
   function handleChange(
     option: readonly IUserOptions[],
@@ -93,6 +87,7 @@ export default function IncomingLetterForm() {
         break;
     }
   };
+
   const removeInputField = (index: number) => {
     setInputFields((prevFields) => {
       const updatedFields = [...prevFields];
@@ -100,6 +95,7 @@ export default function IncomingLetterForm() {
       return updatedFields;
     });
   };
+
   const handleInputChange = (index: number, value: string) => {
     setInputFields((prevFields) => {
       const updatedFields = [...prevFields];
@@ -114,7 +110,7 @@ export default function IncomingLetterForm() {
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ግልባጭ">
+        <Label className="w-20" htmlFor="ለ">
           ለ
         </Label>
         <CreatableSelect
@@ -197,7 +193,6 @@ export default function IncomingLetterForm() {
         </div>
       </div>
 
-      {/* <div className='flex grid-col-3 items-center gap-1.5 '> */}
       {inputFields.map((field, index) => (
         <div key={index} className="flex items-center gap-1.5">
           <Label className="w-20" htmlFor={`inputField-${index}`}>

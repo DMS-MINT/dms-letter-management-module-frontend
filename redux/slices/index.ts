@@ -3,4 +3,4 @@ export * from "./uiSlice";
 export { default as userReducer } from "./userSlice";
 export * from "./userSlice";
 export { default as composeReducer } from "./composeSlice";
-export * from "./uiSlice";
+export * from "./composeSlice";

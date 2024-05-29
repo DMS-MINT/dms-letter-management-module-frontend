@@ -12,18 +12,20 @@ import Seal from "./seal";
 import TagInput from "@/components/taginput/TagInput";
 import { RolesEnum } from "@/typing/enum";
 import Select, { ActionMeta } from "react-select";
-import { userOptions } from "@/data";
+
 import { IUserOptions } from "@/typing";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addParticipant,
   removeParticipant,
   resetState,
+  updateContent,
   updateSubject,
 } from "@/redux/slices/composeSlice";
 import { RootState } from "@/redux/store";
 
 export default function InternalLetterForm() {
+  const { userOptions } = useSelector((state: RootState) => state.user);
   const { content, subject } = useSelector((state: RootState) => state.compose);
 
   const [sampleSubject, setSubject] = useState<string>("");
@@ -188,7 +190,12 @@ export default function InternalLetterForm() {
         <section className="flex flex-col gap-1.5">
           <h2 className="font-semibold text-lg">ደብዳቤ</h2>
 
-          <Textarea id="ደብዳቤ" className="bg-gray-100 h-[500px]" />
+          <Textarea
+            id="ደብዳቤ"
+            className="bg-gray-100 h-[500px]"
+            value={content}
+            onChange={(e) => dispatch(updateContent(e.target.value))}
+          />
           <Button
             variant="outline"
             className="flex gap-2 w-fit mt-3"
