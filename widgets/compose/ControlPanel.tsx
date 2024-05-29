@@ -23,19 +23,106 @@ import { LetterStatusEnum, RolesEnum } from "@/typing/enum";
 import { setLetterStatus } from "@/redux/slices/composeSlice";
 import CreatableSelect from "react-select/creatable";
 import { RootState } from "@/redux/store";
+import {
+  addParticipant,
+  removeParticipant,
+  resetState,
+  updateSubject,
+} from "@/redux/slices/composeSlice";
+import { userOptions } from "@/data";
+import { IUserOptions } from "@/typing";
+import Select, { ActionMeta } from "react-select";
+import axios from "axios";
 
+interface Participant {
+  role: number;
+  user:
+    | { id: string; user_type: "member" }
+    | { name: string; user_type: "guest" };
+}
 export default function ControlPanel() {
+  function handleChange(
+    option: readonly IUserOptions[],
+    actionMeta: ActionMeta<IUserOptions>
+  ) {
+    const { action, name, option: selectedOption, removedValue } = actionMeta;
+    const role = Number(name);
+
+    if (action === "select-option" && selectedOption) {
+      const { value: id, label: name, user_type } = selectedOption;
+      dispatch(addParticipant({ id, name, role, user_type }));
+    } else if (action === "create-option" && selectedOption) {
+      const user_type = "guest";
+      const { value: id, label: name } = selectedOption;
+      dispatch(addParticipant({ id, name, role, user_type }));
+    } else if (action === "remove-value" && removedValue) {
+      const { value: id, label: name, user_type } = removedValue;
+      dispatch(removeParticipant({ id, name, role, user_type }));
+    }
+  }
   const letter = useSelector((state: RootState) => state.compose);
   const dispatch = useDispatch();
 
-  function sendLetter() {
-    if (letter.participants.length > 0) {
-      console.log(letter);
-    } else {
-      console.log("Warning");
-    }
+  interface User {
+    id: string;
+    user_type: "member" | "guest";
+    name?: string; // Optional for guests
   }
 
+  // interface Participant {
+  //   role: number;
+  //   user: User;
+  // }
+
+  interface Letter {
+    subject: string;
+    content: string;
+    status: number;
+    letter_type: string;
+    participants: Participant[];
+  }
+
+  const sendLetter = async (letter: Letter) => {
+    if (!letter) {
+      console.error("Error: No letter object provided");
+      return;
+    }
+
+    if (letter.participants.length > 0) {
+      try {
+        // Log the payload to inspect its structure before sending
+        console.log("Sending letter:", JSON.stringify(letter, null, 2));
+
+        // Make a POST request to your API endpoint
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/letters/create/`,
+          letter,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Letter sent:", response.data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          // Log detailed error information if the request fails
+          if (error.response) {
+            console.error("Error response data:", error.response.data);
+            console.error("Error response status:", error.response.status);
+            console.error("Error response headers:", error.response.headers);
+          } else {
+            console.error("Error message:", error.message);
+          }
+        } else {
+          console.error("Unexpected error:", error);
+        }
+      }
+    } else {
+      console.log("Warning: No participants specified");
+    }
+  };
   return (
     <section className="flex items-center justify-between w-full">
       <div className="flex gap-2">
@@ -58,7 +145,7 @@ export default function ControlPanel() {
           variant="outline"
           onClick={() => {
             dispatch(setLetterStatus(LetterStatusEnum.DRAFT));
-            sendLetter();
+            sendLetter(letter);
           }}
         >
           ረቂቁን ያስቀምጡ
@@ -84,12 +171,13 @@ export default function ControlPanel() {
                     <div className="grid items-center gap-1.5">
                       <Label htmlFor="የተቀባይ ስም">ለ</Label>
 
-                      {/* <CreatableSelect
+                      <Select
                         isMulti
-                        name={String(RolesEnum.FORWARDED_RECIPIENT)}
+                        name={String(RolesEnum.RECIPIENT)}
                         options={userOptions}
                         onChange={handleChange}
-                      /> */}
+                        className="w-full "
+                      />
                     </div>
                     <div className="grid items-center gap-1.5"></div>
                     <Label htmlFor="የተቀባይ ስም">መልክት ማስቀመጫ</Label>
@@ -145,7 +233,7 @@ export default function ControlPanel() {
                 type="submit"
                 onClick={() => {
                   dispatch(setLetterStatus(LetterStatusEnum.PENDING_APPROVAL));
-                  sendLetter();
+                  sendLetter(letter);
                 }}
               >
                 አዎ

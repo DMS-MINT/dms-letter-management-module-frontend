@@ -23,7 +23,7 @@ import {
 } from "@/redux/slices/composeSlice";
 import { RootState } from "@/redux/store";
 
-export default function OutgoingLetterForm() {
+export default function InternalLetterForm() {
   const { content, subject } = useSelector((state: RootState) => state.compose);
 
   const [sampleSubject, setSubject] = useState<string>("");
@@ -126,31 +126,8 @@ export default function OutgoingLetterForm() {
           name={String(RolesEnum.RECIPIENT)}
           options={userOptions}
           onChange={handleChange}
-          className="w-full"
+          className="w-full "
         />
-        <div className="flex px-3 pr-0 w-relative">
-          <Button
-            variant="ghost"
-            onClick={() => addInputField("አድራሻ", 1)}
-            disabled={!isAddFieldEnabled1}
-          >
-            አድራሻ
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => addInputField("ስልክ ቁጥር", 2)}
-            disabled={!isAddFieldEnabled2}
-          >
-            ስልክ ቁጥር
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => addInputField("የፖስታ ቁጥር", 3)}
-            disabled={!isAddFieldEnabled3}
-          >
-            የፖስታ ቁጥር
-          </Button>
-        </div>
       </div>
 
       <div className="flex items-center gap-1.5">
