@@ -7,21 +7,16 @@ import { Circle, Dot } from "lucide-react";
 import { ColumnEnum } from "@/typing/enum";
 import { columnDictionary } from "@/typing/dictionary";
 import { Badge } from "@/components/ui/badge";
-// import { Badge } from "@/widgets/common";
+import {
+  ILetterListInputSerializer,
+  IParticipantInputSerializer,
+} from "@/typing";
+import { format } from "date-fns";
+import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 
-export type Letter = {
-  id: string;
-  is_read: boolean;
-  letter_id: string;
-  sender: string;
-  subject: string;
-  type: string;
-  received_at: string;
-  status: string;
-  sent_to: string;
-};
+const DateFormat: string = "eee MMM dd";
 
-export const columns: ColumnDef<Letter>[] = [
+export const columns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,15 +38,15 @@ export const columns: ColumnDef<Letter>[] = [
     ),
   },
   {
-    accessorKey: "is_read",
+    accessorKey: "has_read",
     header: () => <Circle size={13} className="text-gray-400" />,
     cell: ({ row }) => {
-      const is_read: boolean = row.getValue("is_read");
+      const has_read: boolean = row.getValue("has_read");
       return (
         <Circle
           size={13}
           className={
-            is_read
+            has_read
               ? "bg-primary rounded-full text-transparent"
               : "text-gray-400"
           }
@@ -60,31 +55,42 @@ export const columns: ColumnDef<Letter>[] = [
     },
   },
   {
-    accessorKey: ColumnEnum.LETTER_ID,
+    accessorKey: ColumnEnum.ID,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={columnDictionary[ColumnEnum.LETTER_ID]}
-      />
+      <ColumnHeader column={column} title={columnDictionary[ColumnEnum.ID]} />
     ),
   },
   {
-    accessorKey: ColumnEnum.SENDER,
+    accessorKey: "participants",
     header: ({ column }) => (
       <ColumnHeader
         column={column}
         title={columnDictionary[ColumnEnum.SENDER]}
       />
     ),
+    cell: ({ row }) => {
+      const participants: IParticipantInputSerializer[] =
+        row.getValue("participants");
+
+      const senders = getParticipantInfo("Sender", participants);
+      return <div>{senders}</div>;
+    },
   },
   {
-    accessorKey: ColumnEnum.SENT_TO,
+    accessorKey: "participants",
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={columnDictionary[ColumnEnum.SENT_TO]}
+        title={columnDictionary[ColumnEnum.RECIPIENT]}
       />
     ),
+    cell: ({ row }) => {
+      const participants: IParticipantInputSerializer[] =
+        row.getValue("participants");
+
+      const recipients = getParticipantInfo("Recipient", participants);
+      return <div>{recipients}</div>;
+    },
   },
 
   {
@@ -97,9 +103,12 @@ export const columns: ColumnDef<Letter>[] = [
     ),
   },
   {
-    accessorKey: ColumnEnum.TYPE,
+    accessorKey: ColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
-      <ColumnHeader column={column} title={columnDictionary[ColumnEnum.TYPE]} />
+      <ColumnHeader
+        column={column}
+        title={columnDictionary[ColumnEnum.LETTER_TYPE]}
+      />
     ),
   },
   {
@@ -112,24 +121,36 @@ export const columns: ColumnDef<Letter>[] = [
     ),
     cell: ({ row }) => {
       const status: string = row.getValue(ColumnEnum.STATUS);
+      const { amharicTranslation, badgeVariant } =
+        getTranslatedLetterStatus(status);
       return (
         <Badge
-          variant="destructive"
-          className="rounded-md flex items-center justify-between pl-6 "
+          variant="default"
+          className="rounded-md flex items-center justify-between min-w-fit"
         >
-          አልተቀመጠም
+          {amharicTranslation}
         </Badge>
-        // <Badge
-        // <Dot />
-        //   status={status}
-        //   style={"text-orange-700 bg-orange-50"}
-        //   show_dot={false}
-        // />
-        // <Badge variant="outline">Outline</Badge>
       );
     },
   },
-
+  {
+    accessorKey: ColumnEnum.SENT_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={columnDictionary[ColumnEnum.SENT_AT]}
+        className="w-fit ml-auto"
+      />
+    ),
+    cell: ({ row }) => {
+      const sent_at: string = row.getValue(ColumnEnum.SENT_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1">
+          {sent_at ? format(new Date(sent_at), DateFormat) : ""}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: ColumnEnum.RECEIVED_AT,
     header: ({ column }) => (
@@ -142,7 +163,45 @@ export const columns: ColumnDef<Letter>[] = [
     cell: ({ row }) => {
       const received_at: string = row.getValue(ColumnEnum.RECEIVED_AT);
       return (
-        <div className="text-right font-medium px-4 py-1">{received_at}</div>
+        <div className="text-right font-medium px-4 py-1">
+          {received_at ? format(new Date(received_at), DateFormat) : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: ColumnEnum.CREATED_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={columnDictionary[ColumnEnum.CREATED_AT]}
+        className="w-fit ml-auto"
+      />
+    ),
+    cell: ({ row }) => {
+      const created_at: string = row.getValue(ColumnEnum.CREATED_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1">
+          {created_at ? format(new Date(created_at), DateFormat) : ""}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: ColumnEnum.UPDATED_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={columnDictionary[ColumnEnum.UPDATED_AT]}
+        className="w-fit ml-auto"
+      />
+    ),
+    cell: ({ row }) => {
+      const updated_at: string = row.getValue(ColumnEnum.UPDATED_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1">
+          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
+        </div>
       );
     },
   },
