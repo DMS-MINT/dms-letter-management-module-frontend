@@ -1,15 +1,15 @@
 import { ColumnEnum } from "../enum";
 
-const columnDictionary: Record<ColumnEnum, string> = {
-  [ColumnEnum.IS_READ]: "የንባብ ሁኔታ",
-  [ColumnEnum.LETTER_ID]: "የደብዳቤ ቁጥር",
-  [ColumnEnum.SENDER]: "ከ",
-  [ColumnEnum.SENT_TO]: "ለ",
+export const columnDictionary: Record<ColumnEnum, string> = {
+  [ColumnEnum.ID]: "የደብዳቤ ቁጥር",
+  [ColumnEnum.HAS_READ]: "የንባብ ሁኔታ",
   [ColumnEnum.SUBJECT]: "ጉዳዩ",
-  [ColumnEnum.TYPE]: "የደብዳቤ አይነት",
   [ColumnEnum.STATUS]: "የደብዳቤ ሁኔታ",
-  [ColumnEnum.RECEIVED_AT]: "የደረሰበት ቀን",
+  [ColumnEnum.SENDER]: "ከ",
+  [ColumnEnum.RECIPIENT]: "ለ",
+  [ColumnEnum.LETTER_TYPE]: "የደብዳቤ አይነት",
   [ColumnEnum.SENT_AT]: "የተላከበት ቀን",
+  [ColumnEnum.RECEIVED_AT]: "የደረሰበት ቀን",
+  [ColumnEnum.CREATED_AT]: "የተፈጠረበት ቀን",
+  [ColumnEnum.UPDATED_AT]: "የተቀየረበት ቀን",
 };
-
-export default columnDictionary;

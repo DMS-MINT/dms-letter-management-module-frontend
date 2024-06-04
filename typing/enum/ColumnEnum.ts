@@ -1,13 +1,15 @@
 enum ColumnEnum {
-  IS_READ = "is_read",
-  LETTER_ID = "letter_id",
+  ID = "id",
+  HAS_READ = "has_read",
   SUBJECT = "subject",
   SENDER = "sender",
-  SENT_TO = "sent_to",
-  TYPE = "type",
-  RECEIVED_AT = "received_at",
-  SENT_AT = "sent_at",
+  RECIPIENT = "recipient",
+  LETTER_TYPE = "letter_type",
   STATUS = "status",
+  SENT_AT = "sent_at",
+  RECEIVED_AT = "received_at",
+  CREATED_AT = "created_at",
+  UPDATED_AT = "updated_at",
 }
 
 export default ColumnEnum;

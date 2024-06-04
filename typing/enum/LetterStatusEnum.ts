@@ -1,16 +1,14 @@
-enum LetterStatusEnum {
-  ARCHIVED = 1,
-  CANCELLED = 2,
-  COMPLETED = 3,
-  DRAFT = 4,
-  DRAFT_PENDING_REVIEW = 5,
-  DRAFT_REVIEWED = 6,
-  DRAFT_UNDER_REVIEW = 7,
-  FORWARDED_PENDING_REVIEW = 8,
-  FORWARDED_REVIEWED = 9,
-  FORWARDED_UNDER_REVIEW = 10,
-  PENDING_APPROVAL = 11,
-  PUBLISHED = 12,
+export enum LetterStatusEnum {
+  "Archived" = 1,
+  "Cancelled" = 2,
+  "Completed" = 3,
+  "Draft" = 4,
+  "Draft Pending Review" = 5,
+  "Draft Reviewed" = 6,
+  "Draft Under Review" = 7,
+  "Forwarded Pending Review" = 8,
+  "Forwarded Reviewed" = 9,
+  "Forwarded Under Review" = 10,
+  "Pending Approval" = 11,
+  "Published" = 12,
 }
-
-export default LetterStatusEnum;
