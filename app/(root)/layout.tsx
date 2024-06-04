@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Noto_Serif_Ethiopic } from "next/font/google";
 import "@/app/globals.css";
-import StoreProvider from "@/redux/store/StoreProvider";
+import { StoreProvider } from "@/app/StoreProvider";
 import { Topbar } from "@/components/layouts";
-// import "@/components/tags/style.css";
+import { Toaster } from "sonner";
+
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,6 +21,9 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="am">
         <body className={noto_serif_ethiopic.className}>
+          <div className="absolute">
+            <Toaster richColors position="top-center" />
+          </div>
           <Topbar />
           {children}
         </body>
