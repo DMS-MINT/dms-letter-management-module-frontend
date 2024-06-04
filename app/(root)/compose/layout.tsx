@@ -12,7 +12,7 @@ export default function RootLayout({
       <Subheader>
         <ControlPanel />
       </Subheader>
-      <section className="flex px-8 gap-6 mt-2 h-full">
+      <section className="flex px-8 gap-6 mt-2 h-fit">
         <Drawer>
           <NavigationPanel />
         </Drawer>
