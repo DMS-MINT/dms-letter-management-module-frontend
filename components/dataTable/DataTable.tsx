@@ -28,7 +28,6 @@ import ViewOptions from "./ViewOptions";
 import { useRouter, usePathname } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { ColumnEnum } from "@/typing/enum";
-import { Badge } from "../ui/badge";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,20 +65,16 @@ export default function DataTable<TData, TValue>({
     },
   });
   return (
-    <div className="min-h-full flex flex-col justify-between">
+    <div className="flex flex-col justify-between">
       <div>
         <div className="flex items-center  grid-cols-3 gap-4 mb-2">
           <Input
             placeholder="የደብዳቤ ቁጥር"
             value={
-              (table
-                .getColumn(ColumnEnum.LETTER_ID)
-                ?.getFilterValue() as string) ?? ""
+              (table.getColumn(ColumnEnum.ID)?.getFilterValue() as string) ?? ""
             }
             onChange={(event) =>
-              table
-                .getColumn(ColumnEnum.LETTER_ID)
-                ?.setFilterValue(event.target.value)
+              table.getColumn(ColumnEnum.ID)?.setFilterValue(event.target.value)
             }
             className="max-w-sm py-0 h-9"
           />
@@ -87,12 +82,12 @@ export default function DataTable<TData, TValue>({
             placeholder="ለ"
             value={
               (table
-                .getColumn(ColumnEnum.SENT_TO)
+                .getColumn(ColumnEnum.SENDER)
                 ?.getFilterValue() as string) ?? ""
             }
             onChange={(event) =>
               table
-                .getColumn(ColumnEnum.SENT_TO)
+                .getColumn(ColumnEnum.RECIPIENT)
                 ?.setFilterValue(event.target.value)
             }
             className="max-w-sm py-0 h-9"
