@@ -1,5 +1,5 @@
 import { Subheader, Drawer } from "@/components/layouts";
-import { LetterTypeEnum } from "@/typing/enum";
+import { LetterType } from "@/typing";
 import { Aside, ControlPanel } from "@/widgets/inbox/detail";
 
 export default function RootLayout({
@@ -12,14 +12,14 @@ export default function RootLayout({
   outgoing: React.ReactNode;
   incoming: React.ReactNode;
 }>) {
-  const letterType: LetterTypeEnum = LetterTypeEnum.OUTGOING;
+  const letterType: LetterType = "outgoing";
 
   const main: React.ReactNode =
-    letterType.valueOf() == LetterTypeEnum.INTERNAL.valueOf()
+    letterType.valueOf() === "internal"
       ? internal
-      : letterType.valueOf() == LetterTypeEnum.OUTGOING.valueOf()
-        ? outgoing
-        : incoming;
+      : letterType.valueOf() === "outgoing"
+      ? outgoing
+      : incoming;
 
   return (
     <>

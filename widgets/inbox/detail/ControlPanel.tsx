@@ -16,13 +16,9 @@ interface IPanel {
   userType: UserTypeEnum;
 }
 export default function ControlPanel() {
-  function refreshPage() {
-    window.location.reload();
-  }
-
   const currentPanelStatus: IPanel = {
     edited: false,
-    status: StatusEnum.CANCELLED,
+    status: StatusEnum.DRAFT,
     userType: UserTypeEnum.STANDARD_USER,
   };
 

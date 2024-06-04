@@ -6,11 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  selectLetterDetails,
+  updateLetter,
+  deleteLetter,
+} from "@/lib/features/letter/letterSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { ILetterDetail, ILetterUpdateSerializer } from "@/typing";
 import { RotateCw } from "lucide-react";
 import { useRef, useState } from "react";
 
 export default function LetterDetail() {
+  const letterDetail = useAppSelector(selectLetterDetails);
+  const dispatch = useAppDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [formData, setFormData] = useState<ILetterUpdateSerializer>();
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
+  };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -63,6 +77,7 @@ export default function LetterDetail() {
     });
   };
   const readOnly: boolean = true;
+
   return (
     <section className="grid gap-5 h-fit pb-5 flex-1">
       <Main>
