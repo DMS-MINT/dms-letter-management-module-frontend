@@ -1,54 +1,24 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { setLetterType, resetState, setUserOptions } from "@/redux/slices";
 import {
   InternalLetterForm,
   IncomingLetterForm,
   OutgoingLetterForm,
 } from "@/widgets/compose/composeForms";
-import { useDispatch } from "react-redux";
-import { IUserOptions, UserApiInputSerializer } from "@/typing";
-import axios from "axios";
 import { useEffect } from "react";
+import { useAppDispatch } from "@/lib/hooks";
+import {
+  resetLetterDetail,
+  setLetterType,
+} from "@/lib/features/letter/letterSlice";
+import { getContacts } from "@/lib/features/contact/contactSlice";
 
 export default function Compose() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const API_URL = "http://35.158.66.17:9000/api/users/";
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(API_URL);
-        const data = transformApiResponse(response.data);
-        console.log(data);
-        dispatch(setUserOptions(data));
-      } catch (error) {
-        console.error("Error fetching user options:", error);
-        throw error;
-      }
-    };
-
-    const transformApiResponse = (
-      apiResponse: UserApiInputSerializer[]
-    ): IUserOptions[] => {
-      return apiResponse.map((item) => {
-        let label: string;
-
-        if (item.user_type === "member") {
-          label = item.job_title || item.full_name.trim();
-        } else {
-          label = item.name;
-        }
-
-        return {
-          value: item.id,
-          label: label,
-          user_type: item.user_type,
-        };
-      });
-    };
-    fetchUsers();
+    dispatch(getContacts({}));
   }, []);
 
   return (
@@ -57,7 +27,7 @@ export default function Compose() {
         <TabsTrigger
           value="internal letter form"
           onClick={() => {
-            dispatch(resetState());
+            dispatch(resetLetterDetail());
             dispatch(setLetterType("internal"));
           }}
         >
@@ -66,7 +36,7 @@ export default function Compose() {
         <TabsTrigger
           value="outgoing letter form"
           onClick={() => {
-            dispatch(resetState());
+            dispatch(resetLetterDetail());
             dispatch(setLetterType("outgoing"));
           }}
         >
@@ -75,13 +45,14 @@ export default function Compose() {
         <TabsTrigger
           value="incoming letter form"
           onClick={() => {
-            dispatch(resetState());
+            dispatch(resetLetterDetail());
             dispatch(setLetterType("incoming"));
           }}
         >
           ከውጭ የተላከ ደብዳቤ
         </TabsTrigger>
       </TabsList>
+
       <TabsContent value="internal letter form" className="flex-1">
         <InternalLetterForm />
       </TabsContent>
