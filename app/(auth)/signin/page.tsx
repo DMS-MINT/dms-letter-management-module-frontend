@@ -1,10 +1,45 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
+import React, { use, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import {
+  login,
+  selectStatus,
+  selectError,
+  selectIsAuthenticated,
+  fetchProfile,
+} from "@/lib/features/authentication/authSlice";
+import { ICredentials, RequestStatusEnum } from "@/typing";
 
 export default function SignIn() {
+  const [formData, setFormData] = useState<ICredentials>({
+    email: "",
+    password: "",
+  });
+
+  const status = useAppSelector(selectStatus);
+  const error = useAppSelector(selectError);
+  const is_authenticated = useAppSelector(selectIsAuthenticated);
+  const dispatch = useAppDispatch();
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+
+  const onSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    dispatch(login(formData));
+  };
+
   return (
     <section className="flex flex-col gap-7">
       <div>
@@ -17,29 +52,45 @@ export default function SignIn() {
       </div>
       <form className="flex flex-col gap-5 ">
         <div className="grid items-center gap-1.5">
-          <Label htmlFor="የላኪ ፖስታ ቁጥር">የተጠቃሚ መለያዎን ያስገቡ</Label>
-          <Input type="text" id="የላኪ ፖስታ ቁጥር" />
+          <Label htmlFor="email">የኢሜይል አድራሻዎን ያስገቡ</Label>
+          <Input
+            required
+            disabled={status === RequestStatusEnum.LOADING ? true : false}
+            name="email"
+            type="email"
+            id="email"
+            value={formData.email}
+            onChange={(e) => onChange(e)}
+          />
         </div>
         <div className="grid items-center gap-1.5">
           <div className="flex justify-between items-center h-fit">
-            <Label htmlFor="የላኪ ፖስታ ቁጥር">የይለፍ ቃልዎን ያስገቡ</Label>
+            <Label htmlFor="password">የይለፍ ቃልዎን ያስገቡ</Label>
             <Link href="/forgot-password">
               <Button variant="link" className="py-0 h-fit">
                 የይለፍ ቃልዎን ረስተዋል?
               </Button>
             </Link>
           </div>
-          <Input type="text" id="የላኪ ፖስታ ቁጥር" />
+          <Input
+            required
+            disabled={status === RequestStatusEnum.LOADING ? true : false}
+            name="password"
+            type="password"
+            id="password"
+            value={formData.password}
+            onChange={(e) => onChange(e)}
+          />
         </div>
-        <Link href="/letters/inbox">
-          <Button
-            variant="secondary"
-            className="flex gap-2 items-center w-full"
-          >
-            <LogIn size={20} />
-            ግባ
-          </Button>
-        </Link>
+        <Button
+          disabled={status === RequestStatusEnum.LOADING ? true : false}
+          variant="secondary"
+          className="flex gap-2 items-center w-full"
+          onClick={(e) => onSubmit(e)}
+        >
+          <LogIn size={20} />
+          ግባ
+        </Button>
       </form>
       <div className="flex gap-2 items-center self-center">
         <p className="text-gray-800">የቴክኒክ ድጋፍ ለማግኘት </p>
