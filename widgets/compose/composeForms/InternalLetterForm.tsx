@@ -5,42 +5,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Ghost, Plus } from "lucide-react";
-import React, { useState, useMemo } from "react";
-import Comment from "./comment";
-import Seal from "./seal";
-import TagInput from "@/components/taginput/TagInput";
-import { RolesEnum } from "@/typing/enum";
-import Select, { ActionMeta } from "react-select";
-
-import { IUserOptions } from "@/typing";
-import { useDispatch, useSelector } from "react-redux";
+import { Plus } from "lucide-react";
+import React, { useState } from "react";
+import { ParticipantRolesEnum } from "@/typing";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { selectContacts } from "@/lib/features/contact/contactSlice";
+import { contactToOption } from "@/utils";
+import { IOption } from "@/typing";
+import { SelectableInput } from "@/components/shared";
 import {
-  addParticipant,
-  removeParticipant,
-  resetState,
+  selectLetterDetails,
   updateContent,
   updateSubject,
-} from "@/redux/slices/composeSlice";
-import { RootState } from "@/redux/store";
+} from "@/lib/features/letter/letterSlice";
 
 export default function InternalLetterForm() {
-  const { userOptions } = useSelector((state: RootState) => state.user);
-  const { content, subject } = useSelector((state: RootState) => state.compose);
-
-  const [sampleSubject, setSubject] = useState<string>("");
-
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState<IOption[]>([]);
+  const contacts = useAppSelector(selectContacts);
+  const letterDetails = useAppSelector(selectLetterDetails);
+  const dispatch = useAppDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    dispatch(resetState());
-  }, []);
+    if (contacts.length > 0) {
+      const options: IOption[] = contacts.map((contact) => {
+        return contactToOption(contact);
+      });
 
-  function handelSubject(subj: string) {
-    setSubject(subj);
-    console.log(sampleSubject);
-  }
+      setOptions(options);
+    }
+  }, [contacts]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -48,26 +42,6 @@ export default function InternalLetterForm() {
       fileInputRef.current.click();
     }
   };
-
-  function handleChange(
-    option: readonly IUserOptions[],
-    actionMeta: ActionMeta<IUserOptions>
-  ) {
-    const { action, name, option: selectedOption, removedValue } = actionMeta;
-    const role = Number(name);
-
-    if (action === "select-option" && selectedOption) {
-      const { value: id, label: name, user_type } = selectedOption;
-      dispatch(addParticipant({ id, name, role, user_type }));
-    } else if (action === "create-option" && selectedOption) {
-      const user_type = "guest";
-      const { value: id, label: name } = selectedOption;
-      dispatch(addParticipant({ id, name, role, user_type }));
-    } else if (action === "remove-value" && removedValue) {
-      const { value: id, label: name, user_type } = removedValue;
-      dispatch(removeParticipant({ id, name, role, user_type }));
-    }
-  }
 
   const [inputFields, setInputFields] = useState<
     { label: string; value: string }[]
@@ -114,57 +88,45 @@ export default function InternalLetterForm() {
   };
 
   return (
-    // <div className="rounded-lg bg-card text-card-foreground shadow-sm p-6 h-full">
     <form
-      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-28"
+      className="flex flex-col pl-2 gap-4 h-full"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="flex items-center gap-1.5">
-        <Label className="w-20 pr-14" htmlFor="ለ">
-          ለ
-        </Label>
-        <Select
-          isMulti
-          name={String(RolesEnum.RECIPIENT)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full "
+        <Label className="w-20 pr-14">ለ</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum.Recipient}
+          isCreatable={false}
+          isMulti={true}
         />
       </div>
 
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ግልባጭ">
-          ግልባጭ
-        </Label>
-        <Select
-          isMulti
-          name={String(RolesEnum.CC)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20">ግልባጭ</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum["Carbon Copy Recipient"]}
+          isCreatable={false}
+          isMulti={true}
         />
       </div>
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="እንዲያውቁት">
-          እንዲያውቁት
-        </Label>
-        <Select
-          isMulti
-          name={String(RolesEnum.BCC)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20">እንዲያውቁት</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum["Blind Carbon Copy Recipient"]}
+          isCreatable={false}
+          isMulti={true}
         />
       </div>
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ጉዳይ">
-          ጉዳይ
-        </Label>
+        <Label className="w-20">ጉዳይ</Label>
         <Input
           type="text"
           id="ጉዳይ"
           className="w-full"
-          value={subject}
+          value={letterDetails.subject}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
@@ -193,7 +155,7 @@ export default function InternalLetterForm() {
           <Textarea
             id="ደብዳቤ"
             className="bg-gray-100 h-[500px]"
-            value={content}
+            value={letterDetails.content}
             onChange={(e) => dispatch(updateContent(e.target.value))}
           />
           <Button
@@ -205,11 +167,7 @@ export default function InternalLetterForm() {
             ፋይል አያይዝ
           </Button>
         </section>
-        {/* <Editor /> */}
       </div>
-      {/* <Seal /> */}
-
-      {/* <Comment comments={[]} /> */}
     </form>
   );
 }

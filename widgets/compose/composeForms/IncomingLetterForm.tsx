@@ -1,31 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-
 import { Plus } from "lucide-react";
-import CreatableSelect from "react-select/creatable";
-import { ActionMeta } from "react-select";
-import { RolesEnum } from "@/typing/enum";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { ParticipantRolesEnum } from "@/typing";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { selectContacts } from "@/lib/features/contact/contactSlice";
+import { contactToOption } from "@/utils";
+import { IOption } from "@/typing";
+import { SelectableInput } from "@/components/shared";
 import {
+  selectLetterDetails,
   updateSubject,
-  addParticipant,
-  removeParticipant,
-  resetState,
-} from "@/redux/slices/composeSlice";
-import { RootState } from "@/redux/store";
-import { IUserOptions } from "@/typing";
-import axios from "axios";
+} from "@/lib/features/letter/letterSlice";
 
 export default function IncomingLetterForm() {
-  const { userOptions } = useSelector((state: RootState) => state.user);
-  const { participants, content, subject } = useSelector(
-    (state: RootState) => state.compose
-  );
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState<IOption[]>([]);
+  const contacts = useAppSelector(selectContacts);
+  const letterDetails = useAppSelector(selectLetterDetails);
+  const dispatch = useAppDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [inputFields, setInputFields] = useState<
@@ -36,35 +32,22 @@ export default function IncomingLetterForm() {
   const [isAddFieldEnabled2, setIsAddFieldEnabled2] = useState(true);
   const [isAddFieldEnabled3, setIsAddFieldEnabled3] = useState(true);
 
+  useEffect(() => {
+    if (contacts.length > 0) {
+      const options: IOption[] = contacts.map((contact) => {
+        return contactToOption(contact);
+      });
+
+      setOptions(options);
+    }
+  }, [contacts]);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (fileInputRef.current) {
       fileInputRef.current.click();
-      const participants = useSelector(
-        (state: RootState) => state.compose.participants
-      );
     }
   };
-
-  function handleChange(
-    option: readonly IUserOptions[],
-    actionMeta: ActionMeta<IUserOptions>
-  ) {
-    const { action, name, option: selectedOption, removedValue } = actionMeta;
-    const role = Number(name);
-
-    if (action === "select-option" && selectedOption) {
-      const { value: id, label: name, user_type } = selectedOption;
-      dispatch(addParticipant({ id, name, role, user_type }));
-    } else if (action === "create-option" && selectedOption) {
-      const user_type = "guest";
-      const { value: id, label: name } = selectedOption;
-      dispatch(addParticipant({ id, name, role, user_type }));
-    } else if (action === "remove-value" && removedValue) {
-      const { value: id, label: name, user_type } = removedValue;
-      dispatch(removeParticipant({ id, name, role, user_type }));
-    }
-  }
 
   const addInputField = (label: string, buttonNumber: number) => {
     const newField = { label, value: "" };
@@ -106,43 +89,34 @@ export default function IncomingLetterForm() {
 
   return (
     <form
-      className="flex flex-col mr-4 gap-4 text-card-foreground shadow-sm p-6 h-full mb-3"
+      className="flex flex-col pl-2 gap-4 h-full"
       onSubmit={(e) => e.preventDefault()}
     >
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ለ">
-          ለ
-        </Label>
-        <CreatableSelect
-          isMulti
-          name={String(RolesEnum.RECIPIENT)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20">ለ</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum.Recipient}
+          isCreatable={true}
+          isMulti={true}
         />
       </div>
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ግልባጭ">
-          ግልባጭ
-        </Label>
-        <CreatableSelect
-          isMulti
-          name={String(RolesEnum.CC)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20">ግልባጭ</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum["Carbon Copy Recipient"]}
+          isCreatable={true}
+          isMulti={true}
         />
       </div>
       <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="እንዲያውቁት">
-          እንዲያውቁት
-        </Label>
-        <CreatableSelect
-          isMulti
-          name={String(RolesEnum.BCC)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20">እንዲያውቁት</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum["Blind Carbon Copy Recipient"]}
+          isCreatable={true}
+          isMulti={true}
         />
       </div>
       <div className="flex items-center gap-1.5">
@@ -153,20 +127,17 @@ export default function IncomingLetterForm() {
           type="text"
           id="ጉዳይ"
           className="w-full"
-          value={subject}
+          value={letterDetails.subject}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
       <div className="flex items-center gap-1.5">
-        <Label className="w-20 pr-14" htmlFor="ለ">
-          ከ
-        </Label>
-        <CreatableSelect
-          isMulti
-          name={String(RolesEnum.SENDER)}
-          options={userOptions}
-          onChange={handleChange}
-          className="w-full"
+        <Label className="w-20 pr-14">ከ</Label>
+        <SelectableInput
+          options={options}
+          role={ParticipantRolesEnum.Sender}
+          isCreatable={true}
+          isMulti={true}
         />
         <div className="flex px-3 pr-0 w-relative">
           <Button
