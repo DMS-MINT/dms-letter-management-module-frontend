@@ -23,10 +23,17 @@ import { Bell } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { primaryRoutes } from "@/routes";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/lib/hooks";
+import { getContacts } from "@/lib/features/contact/contactSlice";
 
 export default function Topbar() {
   const [route, setRoute] = useState<string>("");
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getContacts({}));
+  }, []);
 
   useEffect(() => {
     const currentRoute = primaryRoutes.filter(
