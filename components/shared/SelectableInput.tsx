@@ -1,3 +1,4 @@
+"use client";
 import {
   addParticipant,
   removeParticipant,
@@ -6,15 +7,18 @@ import { useAppDispatch } from "@/lib/hooks";
 import { IOption } from "@/typing";
 import { ParticipantRolesEnum } from "@/typing";
 import { optionToContact } from "@/utils";
+import { useEffect, useState } from "react";
 import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
 import Creatable from "react-select/creatable";
+import { v4 as uuidv4 } from "uuid";
 
 interface ISelectableInputProps {
   options: IOption[];
   role: number;
-  defaultValue: IOption[];
+  defaultValue?: IOption[];
   isCreatable?: boolean;
   isMulti?: boolean;
+  placeholder?: string;
 }
 
 export default function SelectableInput({
@@ -23,8 +27,10 @@ export default function SelectableInput({
   defaultValue,
   isCreatable = false,
   isMulti = false,
+  placeholder = "",
 }: ISelectableInputProps) {
   const dispatch = useAppDispatch();
+  const [isMounted, setIsMounted] = useState(false);
 
   const handleSelectChange = (
     option: SingleValue<IOption> | MultiValue<IOption>,
@@ -70,14 +76,18 @@ export default function SelectableInput({
     return ParticipantRolesEnum[value];
   };
 
-  return (
+  useEffect(() => setIsMounted(true), []);
+
+  return isMounted ? (
     <SelectableInputToRender
+      id={uuidv4()}
       options={options}
       onChange={handleSelectChange}
       name={getRoleKeyByValue(role)}
       defaultValue={defaultValue}
       isMulti={isMulti}
       className="w-full"
+      placeholder={placeholder}
     />
-  );
+  ) : null;
 }
