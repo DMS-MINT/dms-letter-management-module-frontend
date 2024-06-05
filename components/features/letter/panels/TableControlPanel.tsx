@@ -16,7 +16,7 @@ export default function TableControlPanel() {
         <Button variant="outline" size="icon" onClick={refreshPage}>
           <RotateCw className="w-5 h-5" />
         </Button>
-        <Link href="/compose">
+        <Link href="/letters/compose">
           <Button className="flex gap-1 w-fit items-center">
             <Plus size={19} />
             አዲስ ደብዳቤ
