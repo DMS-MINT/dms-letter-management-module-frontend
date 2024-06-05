@@ -20,7 +20,7 @@ import {
   TableControlPanel,
 } from "@/components/features/letter";
 
-export default function ClerkInboxTable() {
+export default function Table() {
   const letters = useAppSelector(selectLetters);
   const params = useParams();
   const [columns, setColumns] = useState<
