@@ -6,6 +6,7 @@ import {
 export type LetterType = "internal" | "incoming" | "outgoing";
 
 export interface ILetterListInputSerializer {
+  id: string;
   subject: string;
   content: string;
   status: string;
@@ -22,15 +23,15 @@ export interface ILetterDetailInputSerializer
 }
 
 export interface ILetterCreateSerializer {
-  subject: string;
-  content: string;
+  subject?: string;
+  content?: string;
   status: number;
   letter_type: LetterType;
   participants: IParticipantOutputSerializer[];
 }
 
 export interface ILetterUpdateSerializer {
-  subject: string;
-  content: string;
+  subject?: string;
+  content?: string;
   participants: IParticipantOutputSerializer[];
 }
