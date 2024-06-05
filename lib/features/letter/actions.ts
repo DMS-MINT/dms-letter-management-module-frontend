@@ -10,12 +10,12 @@ interface ServerError {
 
 export async function get_letters() {
   try {
-    const response = await axiosInstance.get("letters/");
-    const data = await response.data;
+    const response = await axiosInstance.get("letters/?category=draft");
+    const data = await response.data.data;
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
-      throw error;
+      throw error.response.data.message;
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {
@@ -30,7 +30,7 @@ export async function get_letter_details(id: string) {
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
-      throw error;
+      throw error.response.data.message;
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {
@@ -45,7 +45,7 @@ export async function create_letter(letter: ILetterCreateSerializer) {
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
-      throw error;
+      throw error.response.data.message;
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {
@@ -64,7 +64,7 @@ export async function update_letter(
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
-      throw error;
+      throw error.response.data.message;
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {
@@ -80,7 +80,7 @@ export async function delete_letter(id: string) {
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
-      throw error;
+      throw error.response.data.message;
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {
