@@ -1,3 +1,5 @@
+"use server";
+
 import axiosInstance from "@/lib/axiosInstance";
 import { ICredentials } from "@/typing";
 
@@ -12,8 +14,11 @@ export async function get_authentication_token(credentials: ICredentials) {
     const data = await response.data;
     return data;
   } catch (error: any) {
+    console.log(process.env.BASE_API_URL);
     if (error.response && error.response.data) {
-      throw error;
+      error.response.data.extra.fields.non_field_errors.map((msg: string) => {
+        throw msg;
+      });
     } else if (error.request) {
       throw new Error("Network Error: No response received");
     } else {

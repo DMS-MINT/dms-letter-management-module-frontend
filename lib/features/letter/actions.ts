@@ -1,3 +1,5 @@
+"use server";
+
 import axiosInstance from "@/lib/axiosInstance";
 import { ILetterCreateSerializer, ILetterUpdateSerializer } from "@/typing";
 
