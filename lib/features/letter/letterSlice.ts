@@ -1,4 +1,3 @@
-import sampleData from "@/sampleData.json";
 import { createAppSlice } from "@/lib/createAppSlice";
 import {
   RequestStatusEnum,
@@ -27,9 +26,10 @@ export interface ILetterSliceState {
 }
 
 const initialState: ILetterSliceState = {
-  letters: sampleData.data as ILetterListInputSerializer[],
+  letters: [] as ILetterListInputSerializer[],
   letter: {
     participants: [] as IParticipantInputSerializer[],
+    letter_type: "internal",
   } as ILetterDetailInputSerializer,
   status: RequestStatusEnum.IDLE,
   error: null,
@@ -163,7 +163,7 @@ export const letterSlice = createAppSlice({
           state,
           action: PayloadAction<ILetterDetailInputSerializer>
         ) => {
-          state.status = RequestStatusEnum.IDLE;
+          state.status = RequestStatusEnum.FULFILLED;
           state.letter = action.payload;
           state.error = null;
           toast.dismiss();
