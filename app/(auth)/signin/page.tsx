@@ -5,27 +5,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
-import React, { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   login,
   selectStatus,
-  selectError,
   selectIsAuthenticated,
-  fetchProfile,
 } from "@/lib/features/authentication/authSlice";
 import { ICredentials, RequestStatusEnum } from "@/typing";
+import { redirect } from "next/navigation";
 
 export default function SignIn() {
   const [formData, setFormData] = useState<ICredentials>({
     email: "",
     password: "",
   });
-
   const status = useAppSelector(selectStatus);
-  const error = useAppSelector(selectError);
   const is_authenticated = useAppSelector(selectIsAuthenticated);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (is_authenticated) redirect("/letters/compose");
+  }, [is_authenticated]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData((prevData) => ({
