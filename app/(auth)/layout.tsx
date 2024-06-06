@@ -28,7 +28,7 @@ export default function RootLayout({
           </div>
           <aside className="bg-gradient px-14 pt-20 pb-14 flex flex-col justify-between">
             <div>
-              <Image src={Logo} alt="logo" width={30} height={30} />
+              <Image src={Logo} alt="logo" width={30} />
               <h2 className="text-white font-medium text-xl mt-5 mb-2">
                 የሰነድ አስተዳደር እና ኢ-ፊርማ
               </h2>
@@ -38,7 +38,7 @@ export default function RootLayout({
             </div>
             <div className="flex gap-2 items-end">
               <p className="text-gray-200">በኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር በኩራት የተደገፈ</p>
-              <Image src={MINT_Logo} alt="logo" width={30} height={30} />
+              <Image src={MINT_Logo} alt="logo" width={30} />
             </div>
           </aside>
           <aside className="grid items-center px-24 h-full">{children}</aside>
