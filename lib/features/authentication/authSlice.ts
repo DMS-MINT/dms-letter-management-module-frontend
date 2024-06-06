@@ -7,7 +7,6 @@ import {
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
-
 export interface IAuthSliceState {
   me: IMe;
   is_authenticated: boolean;
@@ -38,7 +37,7 @@ export const authSlice = createAppSlice({
           state.error = null;
           toast.loading("Logging in, please wait...");
         },
-        fulfilled: (state) => {
+        fulfilled: (state, action) => {
           state.status = RequestStatusEnum.IDLE;
           state.is_authenticated = true;
           state.error = null;
@@ -49,6 +48,7 @@ export const authSlice = createAppSlice({
           state.status = RequestStatusEnum.FAILED;
           state.error = action.error.message || "Failed to login";
           state.is_authenticated = false;
+          console.log(action.error);
           toast.dismiss();
           toast.error(action.error.message || "Failed to login");
         },
