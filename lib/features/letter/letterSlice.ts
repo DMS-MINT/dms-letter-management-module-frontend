@@ -172,6 +172,7 @@ export const letterSlice = createAppSlice({
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
           state.error = action.error.message || "Failed to create letter";
+          console.log(action.error);
           toast.dismiss();
           toast.error(action.error.message || "Failed to create letter");
         },
