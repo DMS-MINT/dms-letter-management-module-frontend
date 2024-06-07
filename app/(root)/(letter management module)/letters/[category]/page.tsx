@@ -2,8 +2,8 @@
 
 import { Subheader, Drawer, Main } from "@/components/layouts";
 import { DataTable } from "@/components/shared/tableComponents";
-import { useAppSelector } from "@/lib/hooks";
-import { selectLetters } from "@/lib/features/letter/letterSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
 import { useParams } from "next/navigation";
 import {
   archiveTableColumns,
@@ -26,6 +26,11 @@ export default function Table() {
   const [columns, setColumns] = useState<
     ColumnDef<ILetterListInputSerializer>[]
   >([]);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getLetters({}));
+  }, []);
 
   useEffect(() => {
     switch (params.category) {
