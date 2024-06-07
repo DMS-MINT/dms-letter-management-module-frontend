@@ -11,6 +11,7 @@ import {
   login,
   selectStatus,
   selectIsAuthenticated,
+  getUserProfile,
 } from "@/lib/features/authentication/authSlice";
 import { ICredentials, RequestStatusEnum } from "@/typing";
 import { redirect } from "next/navigation";
@@ -25,7 +26,10 @@ export default function SignIn() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (is_authenticated) redirect("/letters/compose");
+    if (is_authenticated) {
+      redirect("/letters/index");
+      dispatch(getUserProfile({}));
+    }
   }, [is_authenticated]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
