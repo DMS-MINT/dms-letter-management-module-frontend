@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/lib/axiosInstance";
 import { ILetterCreateSerializer, ILetterUpdateSerializer } from "@/typing";
+import { get_session } from "@/lib/features/authentication/actions";
 
 interface ServerError {
   message: string;
@@ -10,7 +11,14 @@ interface ServerError {
 
 export async function get_letters() {
   try {
-    const response = await axiosInstance.get("letters/?category=draft");
+    const session = await get_session();
+    const bearerToken = session.token.token;
+
+    const response = await axiosInstance.get("letters/?category=draft", {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
     const data = await response.data.data;
     return data;
   } catch (error: any) {
@@ -40,7 +48,14 @@ export async function get_letter_details(id: string) {
 }
 export async function create_letter(letter: ILetterCreateSerializer) {
   try {
-    const response = await axiosInstance.post("letters/create/", letter);
+    const session = await get_session();
+    const bearerToken = session.token.token;
+
+    const response = await axiosInstance.post("letters/create/", letter, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
     const data = await response.data;
     return data;
   } catch (error: any) {
