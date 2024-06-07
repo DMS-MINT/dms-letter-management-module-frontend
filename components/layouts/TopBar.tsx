@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Bell } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { DataLoader } from "@/components/shared";
+import { DataLoader } from "@/components/utils";
 
 export default function TopBar() {
   const pathname = usePathname();
