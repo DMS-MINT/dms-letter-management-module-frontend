@@ -38,6 +38,7 @@ export default function ComposeControlPanel() {
   useEffect(() => {
     if (letterDetail.status) {
       const serializedLetter = createLetterSerializer(letterDetail);
+      console.log(serializedLetter);
       dispatch(createLetter(serializedLetter));
     }
   }, [letterDetail.status]);
