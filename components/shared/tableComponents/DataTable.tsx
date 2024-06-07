@@ -81,7 +81,7 @@ export default function DataTable<TData, TValue>({
             }
             className="max-w-sm py-0 h-9"
           />
-          {/* <Input
+          <Input
             placeholder="ለ"
             value={
               (table
@@ -94,7 +94,7 @@ export default function DataTable<TData, TValue>({
                 ?.setFilterValue(event.target.value)
             }
             className="max-w-sm py-0 h-9"
-          /> */}
+          />
           <Input
             placeholder="ጉዳዩ"
             value={
