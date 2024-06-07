@@ -62,10 +62,6 @@ export default function LetterNavigationDrawer() {
   const letters = useAppSelector(selectLetters);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getLetters({}));
-  }, []);
-
   return (
     <nav className="flex flex-col gap-2 w-full">
       {primaryRoutes.map(({ name, icon, showBadge, path }) => (
