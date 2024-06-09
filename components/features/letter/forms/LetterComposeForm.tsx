@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
-  selectStatus,
   updateContent,
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
@@ -18,13 +17,12 @@ import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 
 interface ILetterComposeFormProps {
   letterType: LetterType;
 }
 
-interface ILetterParticipantOption {
+interface IFormConfig {
   label: string;
   participantRole: number;
   isCreatable: boolean;
@@ -32,7 +30,7 @@ interface ILetterParticipantOption {
   placeholder: string;
 }
 
-const letterParticipantOptions: ILetterParticipantOption[] = [
+const internalLetterFormConfig: IFormConfig[] = [
   {
     label: "ለ",
     participantRole: ParticipantRolesEnum.Recipient,
@@ -55,17 +53,76 @@ const letterParticipantOptions: ILetterParticipantOption[] = [
     placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
   },
 ];
+const incomingLetterFormConfig: IFormConfig[] = [
+  {
+    label: "ለ",
+    participantRole: ParticipantRolesEnum.Recipient,
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "ተቀባዮችን ያስገቡ...",
+  },
+  {
+    label: "ግልባጭ",
+    participantRole: ParticipantRolesEnum["Carbon Copy Recipient"],
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
+  },
+  {
+    label: "እንዲያዉቁት",
+    participantRole: ParticipantRolesEnum["Blind Carbon Copy Recipient"],
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
+  },
+];
+const outgoingLetterFormConfig: IFormConfig[] = [
+  {
+    label: "ለ",
+    participantRole: ParticipantRolesEnum.Recipient,
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "ተቀባዮችን ያስገቡ...",
+  },
+  {
+    label: "ግልባጭ",
+    participantRole: ParticipantRolesEnum["Carbon Copy Recipient"],
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
+  },
+  {
+    label: "እንዲያዉቁት",
+    participantRole: ParticipantRolesEnum["Blind Carbon Copy Recipient"],
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
+  },
+];
 
-export default function LetterComposeForm({
-  letterType,
-}: ILetterComposeFormProps) {
+export default function LetterComposeForm() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const contacts = useAppSelector(selectContacts);
-  const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
   const [options, setOptions] = useState<IOption[]>([]);
+  const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
 
-  const isIncomingLetter = letterType === "incoming" ? true : false;
+  const isIncomingLetter =
+    letterDetail.letter_type === "incoming" ? true : false;
+
+  useEffect(() => {
+    switch (letterDetail.letter_type) {
+      case "incoming":
+        setFormConfig(incomingLetterFormConfig);
+        break;
+      case "outgoing":
+        setFormConfig(outgoingLetterFormConfig);
+        break;
+      default:
+        setFormConfig(internalLetterFormConfig);
+        break;
+    }
+  }, [letterDetail.letter_type]);
 
   useEffect(() => {
     if (contacts.length > 0) {
@@ -92,7 +149,7 @@ export default function LetterComposeForm({
         </div>
       ) : null}
 
-      {letterParticipantOptions.map(
+      {formConfig.map(
         ({ label, participantRole, isCreatable, isMulti, placeholder }) => (
           <div key={label} className="flex items-center gap-1.5">
             <Label className="w-20">{label}</Label>
