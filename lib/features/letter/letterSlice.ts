@@ -86,8 +86,8 @@ export const letterSlice = createAppSlice({
       }
     ),
     getLetters: create.asyncThunk(
-      async () => {
-        const response = await get_letters();
+      async (category: string) => {
+        const response = await get_letters(category);
         return response;
       },
       {
@@ -172,7 +172,6 @@ export const letterSlice = createAppSlice({
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
           state.error = action.error.message || "Failed to create letter";
-          console.log(action.error);
           toast.dismiss();
           toast.error(action.error.message || "Failed to create letter");
         },
