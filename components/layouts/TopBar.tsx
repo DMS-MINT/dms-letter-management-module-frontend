@@ -21,16 +21,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Bell } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { DataLoader } from "@/components/utils";
+import { logout } from "@/lib/features/authentication/authSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
 export default function TopBar() {
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout({}));
+    redirect("/signin");
+  };
 
   return (
     <header className="min-h-16 w-full px-8 bg-white flex justify-between items-center">
       <DataLoader />
-      <div className="flex items-center gap-4">
+      <button className="flex items-center gap-4 hover:cursor-pointer">
         <Image src={Logo} alt="logo" width={30} />
         {/* <Breadcrumb>
           <BreadcrumbList>
@@ -51,7 +59,7 @@ export default function TopBar() {
                 ))}
           </BreadcrumbList>
         </Breadcrumb> */}
-      </div>
+      </button>
       <div className="flex gap-4 items-center">
         {pathname.split("/").splice(2)[0] !== "compose" ? (
           <Input
@@ -73,7 +81,7 @@ export default function TopBar() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="flex">
-              <DropdownMenuItem>ውጣ</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>ውጣ</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
