@@ -5,45 +5,52 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   login,
-  selectStatus,
   selectIsAuthenticated,
-  getUserProfile,
 } from "@/lib/features/authentication/authSlice";
-import { ICredentials, RequestStatusEnum } from "@/typing";
+import { ICredentials } from "@/typing";
 import { redirect } from "next/navigation";
+import * as yup from "yup";
+import { useFormik, FormikHelpers } from "formik";
 
 export default function SignIn() {
-  const [formData, setFormData] = useState<ICredentials>({
-    email: "",
-    password: "",
-  });
-  const status = useAppSelector(selectStatus);
   const is_authenticated = useAppSelector(selectIsAuthenticated);
   const dispatch = useAppDispatch();
 
+  const onSubmit = async (
+    values: ICredentials,
+    actions: FormikHelpers<ICredentials>
+  ) => {
+    await dispatch(login(values));
+    // actions.resetForm();
+  };
+
+  const authSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("እባክዎ ትክክለኛ ኢሜይል ያስገቡ")
+      .required("እባክዎ የኢሜል አድራሻዎን ያስገቡ"),
+    password: yup.string().required("እባክዎ የይለፍ ቃሎን ያስገቡ"),
+  });
+
+  const { values, errors, touched, isSubmitting, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: authSchema,
+      onSubmit,
+    });
+
   useEffect(() => {
     if (is_authenticated) {
-      redirect("/letters/index");
-      dispatch(getUserProfile({}));
+      redirect("/letters/inbox");
     }
   }, [is_authenticated]);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
-
-  const onSubmit = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    dispatch(login(formData));
-  };
 
   return (
     <section className="flex flex-col gap-7">
@@ -55,18 +62,26 @@ export default function SignIn() {
           እባክዎ ለመግባት የተጠቃሚ መለያዎን እና የይለፍ ቃልዎን ያስገቡ።
         </p>
       </div>
-      <form className="flex flex-col gap-5 ">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5 ">
         <div className="grid items-center gap-1.5">
           <Label htmlFor="email">የኢሜይል አድራሻዎን ያስገቡ</Label>
           <Input
             required
-            disabled={status === RequestStatusEnum.LOADING ? true : false}
+            disabled={isSubmitting}
             name="email"
             type="email"
             id="email"
-            value={formData.email}
-            onChange={(e) => onChange(e)}
+            value={values.email}
+            onChange={handleChange}
+            className={
+              errors.email && touched.email
+                ? "border border-red-500 focus-visible:ring-1 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                : ""
+            }
           />
+          {errors.email && touched.email && (
+            <p className="font-light text-red-500">{errors.email}</p>
+          )}
         </div>
         <div className="grid items-center gap-1.5">
           <div className="flex justify-between items-center h-fit">
@@ -79,19 +94,27 @@ export default function SignIn() {
           </div>
           <Input
             required
-            disabled={status === RequestStatusEnum.LOADING ? true : false}
+            readOnly={isSubmitting}
             name="password"
             type="password"
             id="password"
-            value={formData.password}
-            onChange={(e) => onChange(e)}
+            value={values.password}
+            onChange={handleChange}
+            className={
+              errors.password && touched.password
+                ? "border border-red-500 focus-visible:ring-1 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                : ""
+            }
           />
+          {errors.password && touched.password && (
+            <p className="font-light text-red-500">{errors.email}</p>
+          )}
         </div>
         <Button
-          disabled={status === RequestStatusEnum.LOADING ? true : false}
+          disabled={isSubmitting}
+          type="submit"
           variant="secondary"
           className="flex gap-2 items-center w-full"
-          onClick={(e) => onSubmit(e)}
         >
           <LogIn size={20} />
           ግባ
