@@ -63,7 +63,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
   },
   {
-    accessorKey: "participants",
+    accessorKey: LetterTableColumnEnum.SENDER,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
@@ -72,14 +72,14 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
     cell: ({ row }) => {
       const participants: IParticipantInputSerializer[] =
-        row.getValue("participants");
+        row.original.participants;
 
       const senders = getParticipantInfo("Sender", participants);
-      return <div>{senders}</div>;
+      return <p>{senders ? senders : ""}</p>;
     },
   },
   {
-    accessorKey: "participants",
+    accessorKey: LetterTableColumnEnum.RECIPIENT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
@@ -88,13 +88,12 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
     cell: ({ row }) => {
       const participants: IParticipantInputSerializer[] =
-        row.getValue("participants");
+        row.original.participants;
 
       const recipients = getParticipantInfo("Recipient", participants);
-      return <div>{recipients}</div>;
+      return <p>{recipients ? recipients : ""}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
     header: ({ column }) => (
