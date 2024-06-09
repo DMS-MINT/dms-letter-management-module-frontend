@@ -67,63 +67,11 @@ export default function DataTable<TData, TValue>({
     <div className="flex flex-col justify-between">
       <div>
         <div className="flex items-center  grid-cols-3 gap-4 mb-2">
-          <Input
-            placeholder="የደብዳቤ ቁጥር"
-            value={
-              (table
-                .getColumn(LetterTableColumnEnum.ID)
-                ?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn(LetterTableColumnEnum.ID)
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm py-0 h-9"
-          />
-          <Input
-            placeholder="ለ"
-            value={
-              (table
-                .getColumn(LetterTableColumnEnum.SENDER)
-                ?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn(LetterTableColumnEnum.RECIPIENT)
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm py-0 h-9"
-          />
-          <Input
-            placeholder="ጉዳዩ"
-            value={
-              (table
-                .getColumn(LetterTableColumnEnum.SUBJECT)
-                ?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn(LetterTableColumnEnum.SUBJECT)
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm py-0 h-9"
-          />
-
-          <Input
-            placeholder="የተላከበት ቀን"
-            value={
-              (table
-                .getColumn(LetterTableColumnEnum.SENT_AT)
-                ?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn(LetterTableColumnEnum.SENT_AT)
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm py-0 h-9"
-          />
+          <Input placeholder="የደብዳቤ ቁጥር" className="max-w-sm py-0 h-9" />
+          <Input placeholder="ከ" className="max-w-sm py-0 h-9" />
+          <Input placeholder="ለ" className="max-w-sm py-0 h-9" />
+          <Input placeholder="ጉዳዩ" className="max-w-sm py-0 h-9" />
+          <Input placeholder="የተላከበት ቀን" className="max-w-sm py-0 h-9" />
 
           <ViewOptions table={table} />
         </div>
@@ -151,8 +99,7 @@ export default function DataTable<TData, TValue>({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => {
-                  const cellID = "6f872903-cbd8-4d50-b96a-8d67bf5d263f";
-                  console.log(row.getVisibleCells());
+                  const cellID = row.getValue("id");
                   return (
                     <TableRow
                       key={row.id}
