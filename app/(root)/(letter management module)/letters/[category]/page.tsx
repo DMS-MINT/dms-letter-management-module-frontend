@@ -21,7 +21,7 @@ import {
 } from "@/components/features/letter";
 
 export default function Table() {
-  const letters = useAppSelector(selectLetters);
+  const letters: ILetterListInputSerializer[] = useAppSelector(selectLetters);
   const params = useParams();
   const [columns, setColumns] = useState<
     ColumnDef<ILetterListInputSerializer>[]
@@ -29,25 +29,26 @@ export default function Table() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getLetters({}));
-  }, []);
-
-  useEffect(() => {
     switch (params.category) {
       case "archive":
         setColumns(archiveTableColumns);
+        dispatch(getLetters("archive"));
         break;
       case "draft":
         setColumns(draftTableColumns);
+        dispatch(getLetters("draft"));
         break;
       case "inbox":
         setColumns(inboxTableColumns);
+        dispatch(getLetters("inbox"));
         break;
       case "outbox":
         setColumns(outboxTableColumns);
+        dispatch(getLetters("outbox"));
         break;
       case "trash":
         setColumns(trashTableColumns);
+        dispatch(getLetters("trash"));
         break;
       default:
         break;
