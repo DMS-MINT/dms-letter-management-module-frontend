@@ -11,6 +11,8 @@ export interface ILetterListInputSerializer {
   content: string;
   status: string;
   has_read: boolean;
+  sent_at: string;
+  received_at: string;
   created_at: string;
   updated_at: string;
   letter_type: LetterType;
