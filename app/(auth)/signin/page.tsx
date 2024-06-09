@@ -11,7 +11,7 @@ import {
   login,
   selectIsAuthenticated,
 } from "@/lib/features/authentication/authSlice";
-import { ICredentials } from "@/typing";
+import { ICredentials } from "@/typing/interface";
 import { redirect } from "next/navigation";
 import * as yup from "yup";
 import { useFormik, FormikHelpers } from "formik";
