@@ -4,13 +4,9 @@ import axiosInstance from "@/lib/axiosInstance";
 import { ICredentials } from "@/typing";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import { handleAxiosError } from "@/utils";
 
-interface ServerError {
-  message: string;
-  extra: Record<string, any>;
-}
-
-const SESSION_NAME = "DMS_Session";
+const SESSION_NAME = "DMS";
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
@@ -42,30 +38,21 @@ export async function get_authentication_token(credentials: ICredentials) {
     const response = await axiosInstance.post("auth/login/", credentials);
     const data = await response.data;
 
-    const token = { token: data.token };
+    const sessionId = data.session;
 
     const expires = Date.now() + 24 * 60 * 60 * 1000;
-    const session = await encrypt({ token, expires });
+    const session = await encrypt({ sessionId, expires });
 
     cookies().set(SESSION_NAME, session, {
       expires: expires,
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       secure: false,
     });
+
+    return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      // error?.response?.data.extra?.fields.non_field_errors?.map(
-      //   (msg: string) => {
-      //     throw msg;
-      //   }
-      // );
-      throw error;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
 
@@ -73,37 +60,8 @@ export async function delete_authentication_token() {
   try {
     await axiosInstance.post("auth/logout/");
 
-    cookies().set("session", "", { expires: new Date(0) });
+    cookies().set(SESSION_NAME, "", { expires: new Date(0) });
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
-  }
-}
-
-export async function get_user_profile() {
-  try {
-    const session = await get_session();
-    const bearerToken = session.token.token;
-
-    const response = await axiosInstance.get("auth/me/", {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
-    const data = await response.data;
-    return data;
-  } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
