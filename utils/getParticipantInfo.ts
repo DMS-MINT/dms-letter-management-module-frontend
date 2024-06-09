@@ -1,4 +1,4 @@
-import { IParticipantInputSerializer } from "@/typing";
+import { IParticipantInputSerializer } from "@/typing/interface";
 
 const getParticipantInfo = (
   role: string,

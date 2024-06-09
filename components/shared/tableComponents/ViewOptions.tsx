@@ -12,9 +12,9 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Filter, FilterX, Settings2 } from "lucide-react";
-import { letterTableColumnLookup } from "@/typing";
-import { LetterTableColumnEnum } from "@/typing";
-import { Separator } from "../../ui/separator";
+import { letterTableColumnLookup } from "@/typing/dictionary";
+import { LetterTableColumnEnum } from "@/typing/enum";
+import { Separator } from "@/components/ui/separator";
 
 interface ViewOptionsProps<TData> {
   table: Table<TData>;

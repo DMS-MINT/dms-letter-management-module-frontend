@@ -1,8 +1,8 @@
+import { ParticipantRolesEnum } from "@/typing/enum";
 import {
   ILetterDetailInputSerializer,
   ILetterUpdateSerializer,
-  ParticipantRolesEnum,
-} from "@/typing";
+} from "@/typing/interface";
 
 const updateLetterSerializer = (
   letter: ILetterDetailInputSerializer

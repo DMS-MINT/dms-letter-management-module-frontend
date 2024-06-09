@@ -1,5 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { RequestStatusEnum, IMe, ICredentials } from "@/typing";
+import { IMe, ICredentials } from "@/typing/interface";
+import { RequestStatusEnum } from "@/typing/enum";
 import {
   get_authentication_token,
   delete_authentication_token,

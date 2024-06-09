@@ -4,12 +4,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
-import { LetterTableColumnEnum, letterTableColumnLookup } from "@/typing";
+import { letterTableColumnLookup } from "@/typing/dictionary";
+import { LetterTableColumnEnum } from "@/typing/enum";
 import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
-} from "@/typing";
+} from "@/typing/interface";
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 

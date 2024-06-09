@@ -12,7 +12,8 @@ import {
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { contactToOption, getDefaultValue } from "@/utils";
-import { IOption, ParticipantRolesEnum } from "@/typing";
+import { IOption, IParticipantInputSerializer } from "@/typing/interface";
+import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
 import { useParams } from "next/navigation";

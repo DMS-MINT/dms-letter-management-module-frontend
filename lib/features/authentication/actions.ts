@@ -1,7 +1,7 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { ICredentials } from "@/typing";
+import { ICredentials } from "@/typing/interface";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { handleAxiosError } from "@/utils";

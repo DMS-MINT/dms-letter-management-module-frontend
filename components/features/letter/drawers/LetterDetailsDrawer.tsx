@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
-import { letterTypeLookup } from "@/typing";
+import { letterTypeLookup } from "@/typing/dictionary";
 import { Mail, MessageSquare } from "lucide-react";
 
 export default function LetterDetailsDrawer() {

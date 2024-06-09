@@ -1,4 +1,4 @@
-import { IOption } from "@/typing";
+import { IOption } from "@/typing/interface";
 
 interface IParticipant {
   role: string;

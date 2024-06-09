@@ -1,5 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { RequestStatusEnum, ContactType } from "@/typing";
+import { RequestStatusEnum } from "@/typing/enum";
+import { ContactType } from "@/typing/interface";
 import { get_contacts } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";

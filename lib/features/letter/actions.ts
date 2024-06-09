@@ -5,7 +5,7 @@ import {
   ILetterCreateSerializer,
   ILetterUpdateSerializer,
   IParticipantOutputSerializer,
-} from "@/typing";
+} from "@/typing/interface";
 import { handleAxiosError } from "@/utils";
 
 export async function get_letters(category: string) {

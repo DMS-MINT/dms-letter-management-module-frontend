@@ -1,4 +1,4 @@
-import { ContactType, IGuest, IMember, IOption, UserType } from "@/typing";
+import { ContactType, IGuest, IMember, IOption } from "@/typing/interface";
 
 const contactToOption = (contact: ContactType): IOption => {
   if (contact.user_type === "member") {

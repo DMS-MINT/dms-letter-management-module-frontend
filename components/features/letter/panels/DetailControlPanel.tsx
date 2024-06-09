@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Dot, Printer, Trash } from "lucide-react";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   deleteLetter,
@@ -13,6 +12,7 @@ import {
 import { updateLetterSerializer } from "@/utils";
 import { letterStatusLookup } from "@/typing/dictionary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { redirect } from "next/navigation";
 
 export default function DetailControlPanel() {
   const letterDetails = useAppSelector(selectLetterDetails);
@@ -32,6 +32,14 @@ export default function DetailControlPanel() {
   const dispatchLetterDelete = () => {
     dispatch(deleteLetter(letterDetails.id));
   };
+
+  if (
+    !letterDetails ||
+    !letterDetails.hasOwnProperty("subject") ||
+    !letterDetails.hasOwnProperty("status")
+  ) {
+    redirect("/letters/draft");
+  }
 
   return (
     <section className="flex items-center justify-between w-full">

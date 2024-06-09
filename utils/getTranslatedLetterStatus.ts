@@ -1,4 +1,4 @@
-import { letterStatusLookup, letterStatusStyleMap } from "@/typing";
+import { letterStatusLookup, letterStatusStyleMap } from "@/typing/dictionary";
 
 const getTranslatedLetterStatus = (
   status: string

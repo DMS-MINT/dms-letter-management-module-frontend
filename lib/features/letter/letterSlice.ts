@@ -1,13 +1,12 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import {
-  RequestStatusEnum,
   ILetterDetailInputSerializer,
   ILetterListInputSerializer,
   ILetterCreateSerializer,
   ILetterUpdateSerializer,
   LetterType,
   IParticipantInputSerializer,
-} from "@/typing";
+} from "@/typing/interface";
 import {
   get_letters,
   get_letter_details,
@@ -17,6 +16,7 @@ import {
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
+import { RequestStatusEnum } from "@/typing/enum";
 
 export interface ILetterSliceState {
   letters: ILetterListInputSerializer[];

@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import TablePagination from "./TablePagination";
 import ViewOptions from "./ViewOptions";
 import { useRouter, usePathname } from "next/navigation";
-import { LetterTableColumnEnum } from "@/typing";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

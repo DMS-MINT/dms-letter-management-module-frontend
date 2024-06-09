@@ -23,7 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createLetterSerializer } from "@/utils";
 import { useEffect } from "react";
-import { RequestStatusEnum } from "@/typing";
+import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
 
 export default function ComposeControlPanel() {

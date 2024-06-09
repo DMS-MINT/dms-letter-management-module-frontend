@@ -13,7 +13,7 @@ import {
   trashTableColumns,
 } from "@/components/features/letter/config";
 import { useEffect, useState } from "react";
-import { ILetterListInputSerializer } from "@/typing";
+import { ILetterListInputSerializer } from "@/typing/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   LetterNavigationDrawer,

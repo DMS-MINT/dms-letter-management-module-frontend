@@ -4,8 +4,8 @@ import {
   removeParticipant,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch } from "@/lib/hooks";
-import { IOption } from "@/typing";
-import { ParticipantRolesEnum } from "@/typing";
+import { IOption } from "@/typing/interface";
+import { ParticipantRolesEnum } from "@/typing/enum";
 import { optionToContact } from "@/utils";
 import { useEffect, useState } from "react";
 import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
