@@ -5,3 +5,4 @@ export * from "./ILetter";
 export * from "./IMe";
 export * from "./IParticipant";
 export * from "./IUIState";
+export * from "./IError";
