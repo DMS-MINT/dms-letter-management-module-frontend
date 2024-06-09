@@ -1,32 +1,14 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { get_session } from "../authentication/actions";
-
-interface ServerError {
-  message: string;
-  extra: Record<string, any>;
-}
+import { handleAxiosError } from "@/utils";
 
 export async function get_contacts() {
   try {
-    const session = await get_session();
-    const bearerToken = session.token.token;
-
-    const response = await axiosInstance.get("users/", {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
+    const response = await axiosInstance.get("users/");
     const data = await response.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }

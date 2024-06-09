@@ -1,71 +1,41 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { ILetterCreateSerializer, ILetterUpdateSerializer } from "@/typing";
-import { get_session } from "@/lib/features/authentication/actions";
+import {
+  ILetterCreateSerializer,
+  ILetterUpdateSerializer,
+  IParticipantOutputSerializer,
+} from "@/typing";
+import { handleAxiosError } from "@/utils";
 
-interface ServerError {
-  message: string;
-  extra: Record<string, any>;
-}
-
-export async function get_letters() {
+export async function get_letters(category: string) {
   try {
-    const session = await get_session();
-    const bearerToken = session.token.token;
-
-    const response = await axiosInstance.get("letters/?category=draft", {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
+    const response = await axiosInstance.get(`letters/?category=${category}`);
     const data = await response.data.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data.message;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
+
 export async function get_letter_details(id: string) {
   try {
     const response = await axiosInstance.get(`letters/${id}/`);
     const data = await response.data.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data.message;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
+
 export async function create_letter(letter: ILetterCreateSerializer) {
   try {
-    const session = await get_session();
-    const bearerToken = session.token.token;
+    const response = await axiosInstance.post("letters/create/", letter);
 
-    const response = await axiosInstance.post("letters/create/", letter, {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
     const data = await response.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data.message;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
 
@@ -78,13 +48,7 @@ export async function update_letter(
     const data = await response.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data.message;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
   }
 }
 
@@ -94,12 +58,22 @@ export async function delete_letter(id: string) {
     const data = await response.data;
     return data;
   } catch (error: any) {
-    if (error.response && error.response.data) {
-      throw error.response.data.message;
-    } else if (error.request) {
-      throw new Error("Network Error: No response received");
-    } else {
-      throw new Error("Request Error: Unable to send request");
-    }
+    handleAxiosError(error);
+  }
+}
+
+export async function forward_letter(
+  letter_id: string,
+  participant: IParticipantOutputSerializer
+) {
+  try {
+    const response = await axiosInstance.post(
+      `letters/forward/${letter_id}`,
+      participant
+    );
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
   }
 }
