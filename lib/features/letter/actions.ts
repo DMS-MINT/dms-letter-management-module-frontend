@@ -54,8 +54,9 @@ export async function update_letter(
 
 export async function delete_letter(id: string) {
   try {
-    const response = await axiosInstance.delete(`letters/delete/${id}`);
+    const response = await axiosInstance.delete(`letters/${id}/delete`);
     const data = await response.data;
+    console.log(data);
     return data;
   } catch (error: any) {
     handleAxiosError(error);

@@ -39,7 +39,7 @@ export default function Compose() {
 
       {composeTabs.map((tab) => (
         <TabsContent key={tab} value={tab} className="flex-1">
-          <LetterComposeForm letterType={tab} />
+          <LetterComposeForm />
         </TabsContent>
       ))}
     </Tabs>

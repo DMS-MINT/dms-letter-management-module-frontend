@@ -25,7 +25,7 @@ export default function SignIn() {
     actions: FormikHelpers<ICredentials>
   ) => {
     await dispatch(login(values));
-    // actions.resetForm();
+    actions.resetForm();
   };
 
   const authSchema = yup.object().shape({
