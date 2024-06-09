@@ -3,10 +3,9 @@ import { RequestStatusEnum, IMe, ICredentials } from "@/typing";
 import {
   get_authentication_token,
   delete_authentication_token,
-  get_user_profile,
 } from "./actions";
-import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
+import { PayloadAction } from "@reduxjs/toolkit";
 export interface IAuthSliceState {
   me: IMe;
   is_authenticated: boolean;
@@ -37,9 +36,10 @@ export const authSlice = createAppSlice({
           state.error = null;
           toast.loading("Logging in, please wait...");
         },
-        fulfilled: (state, action) => {
+        fulfilled: (state, action: PayloadAction<IMe>) => {
           state.status = RequestStatusEnum.IDLE;
           state.is_authenticated = true;
+          state.me = action.payload;
           state.error = null;
           toast.dismiss();
           toast.success("Welcome back! You have successfully logged in.");
@@ -48,7 +48,6 @@ export const authSlice = createAppSlice({
           state.status = RequestStatusEnum.FAILED;
           state.error = action.error.message || "Failed to login";
           state.is_authenticated = false;
-          console.log(action.error);
           toast.dismiss();
           toast.error(action.error.message || "Failed to login");
         },
@@ -75,28 +74,6 @@ export const authSlice = createAppSlice({
         },
       }
     ),
-    getUserProfile: create.asyncThunk(
-      async () => {
-        const response = await get_user_profile();
-        const data = await response.data;
-        return data;
-      },
-      {
-        pending: (state) => {
-          state.status = RequestStatusEnum.LOADING;
-          state.error = null;
-        },
-        fulfilled: (state, action: PayloadAction<IMe>) => {
-          state.status = RequestStatusEnum.IDLE;
-          state.me = action.payload;
-          state.error = null;
-        },
-        rejected: (state, action) => {
-          state.status = RequestStatusEnum.FAILED;
-          state.error = action.error.message || "Failed to fetch user profile";
-        },
-      }
-    ),
   }),
 
   selectors: {
@@ -107,6 +84,6 @@ export const authSlice = createAppSlice({
   },
 });
 
-export const { login, logout, getUserProfile } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export const { selectMe, selectIsAuthenticated, selectStatus, selectError } =
   authSlice.selectors;

@@ -21,7 +21,6 @@ interface ViewOptionsProps<TData> {
 }
 
 export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
-  console.log();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
