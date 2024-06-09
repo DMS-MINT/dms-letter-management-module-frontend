@@ -2,10 +2,11 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Dot, Printer } from "lucide-react";
+import { ChevronLeft, ChevronRight, Dot, Printer, Trash } from "lucide-react";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
+  deleteLetter,
   selectLetterDetails,
   updateLetter,
 } from "@/lib/features/letter/letterSlice";
@@ -26,6 +27,10 @@ export default function DetailControlPanel() {
         letter: serializedLetter,
       })
     );
+  };
+
+  const dispatchLetterDelete = () => {
+    dispatch(deleteLetter(letterDetails.id));
   };
 
   return (
@@ -56,6 +61,9 @@ export default function DetailControlPanel() {
         </Button>
         <Button variant="outline" size="icon">
           <Printer size={20} />
+        </Button>
+        <Button variant="outline" size="icon" onClick={dispatchLetterDelete}>
+          <Trash size={20} />
         </Button>
         <Button variant={"outline"} onClick={dispatchLetterUpdate}>
           አርም
