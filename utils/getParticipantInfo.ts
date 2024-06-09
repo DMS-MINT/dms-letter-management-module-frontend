@@ -4,7 +4,7 @@ const getParticipantInfo = (
   role: string,
   participants: IParticipantInputSerializer[]
 ) => {
-  return participants
+  const participantInfo = participants
     .filter((participant) => participant.role === role)
     .map((participant) => {
       if (participant.user.user_type === "member") {
@@ -16,6 +16,8 @@ const getParticipantInfo = (
       }
     })
     .join(", ");
+
+  return participantInfo;
 };
 
 export default getParticipantInfo;
