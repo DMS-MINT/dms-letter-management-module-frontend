@@ -1,13 +1,12 @@
+
 "use client";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
-  updateContent,
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { contactToOption } from "@/utils";
@@ -17,10 +16,10 @@ import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import Editor from "../../../shared/TextEditor";
 
-interface ILetterComposeFormProps {
-  letterType: LetterType;
-}
+
+
 
 interface IFormConfig {
   label: string;
@@ -135,24 +134,24 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
-    <form className="p-2 flex gap-2 flex-col ">
+    <form className='p-2 flex gap-2 flex-col '>
       {isIncomingLetter ? (
-        <div className="flex items-center gap-1.5">
-          <Label className="w-20">ከ</Label>
+        <div className='flex items-center gap-1.5'>
+          <Label className='w-20'>ከ</Label>
           <SelectableInput
             options={options}
             role={ParticipantRolesEnum.Sender}
             isCreatable={true}
             isMulti={true}
-            placeholder="የደብዳቤውን ላኪ ያስገቡ..."
+            placeholder='የደብዳቤውን ላኪ ያስገቡ...'
           />
         </div>
       ) : null}
 
       {formConfig.map(
         ({ label, participantRole, isCreatable, isMulti, placeholder }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <Label className="w-20">{label}</Label>
+          <div key={label} className='flex items-center gap-1.5'>
+            <Label className='w-20'>{label}</Label>
             <SelectableInput
               options={options}
               role={participantRole}
@@ -163,27 +162,22 @@ export default function LetterComposeForm() {
           </div>
         )
       )}
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ጉዳይ">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20' htmlFor='ጉዳይ'>
           ጉዳይ
         </Label>
         <Input
-          type="text"
-          id="ጉዳይ"
-          className="w-full"
+          type='text'
+          id='ጉዳይ'
+          className='w-full bg-white '
           value={letterDetail.subject || ""}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
-      {isIncomingLetter ? null : (
-        <Textarea
-          id="ደብዳቤ"
-          className="bg-gray-100 h-[500px]"
-          value={letterDetail.content || ""}
-          onChange={(e) => dispatch(updateContent(e.target.value))}
-        />
-      )}
-      <Button variant="outline" className="flex gap-2 w-fit mt-4">
+      {isIncomingLetter ? null : <Editor />}
+      
+
+      <Button variant='outline' className='flex gap-2 w-fit mt-4'>
         <Plus size={19} />
         ፋይል አያይዝ
       </Button>

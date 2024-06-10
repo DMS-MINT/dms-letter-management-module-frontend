@@ -1,3 +1,6 @@
+/** @format */
+
+
 import {
   ComposeControlPanel,
   LetterNavigationDrawer,
@@ -14,11 +17,11 @@ export default function RootLayout({
       <Subheader>
         <ComposeControlPanel />
       </Subheader>
-      <section className="flex px-8 gap-6 mt-2 h-fit">
+      <section className='flex px-8  gap-6 mt-2 h-fit'>
         <Drawer>
           <LetterNavigationDrawer />
         </Drawer>
-        <Main className="mb-10">{children}</Main>
+        <Main className='mb-10'>{children}</Main>
       </section>
     </>
   );
