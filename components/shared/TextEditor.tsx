@@ -1,3 +1,4 @@
+/** @format */
 
 "use client";
 import {
@@ -10,8 +11,12 @@ import { useAppSelector } from "@/lib/hooks";
 import React, { useState, useRef, useEffect } from "react";
 
 import "react-quill/dist/quill.snow.css";
+function stripHTMLTags(str: string): string {
+  return str.replace(/<[^>]*>/g, "");
+}
 
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+const ReactQuill =
+  typeof window === "object" ? require("react-quill") : () => false;
 const MyComponent = () => {
   const [text, setText] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -22,9 +27,11 @@ const MyComponent = () => {
   }, []);
 
   const handleChange = (content: string) => {
-    setText(content.toString());
-    dispatch(updateContent(content));
-    console.log("Edited content:", content.toString());
+    const contentString = content.toString();
+    const plainText = stripHTMLTags(contentString);
+    setText(plainText);
+    dispatch(updateContent(plainText));
+    console.log("Edited content:", plainText);
   };
 
   const toolbarOptions = [
