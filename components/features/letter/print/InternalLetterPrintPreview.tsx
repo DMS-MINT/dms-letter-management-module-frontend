@@ -10,8 +10,8 @@ export default function InternalLetterPrintPreview() {
   const letterDetails = useAppSelector(selectLetterDetails);
 
   return (
-    <div className='bg-gray-200 justify-center items-center h-fit pt-20 flex-1 flex print overflow-x-auto w-[210mm]'>
-      <div className='bg-white rounded-lg shadow-md flex flex-col p-16  h-[auto]  print overflow-x-auto w-[210mm]'>
+    <div className='bg-gray-200 justify-center items-center h-fit pt-20  flex-1 flex  w-[210mm]'>
+      <div className='bg-white rounded-lg shadow-md flex flex-col p-16 w-[210mm] h-[auto] overflow-auto overflow-x-wrap'>
         <header className='flex justify-between items-center mb-4'>
           <div className='flex flex-col items-center w-full font-serif'>
             <img src='/image/Type=1.svg' alt='Logo 1' className='w-60 h-36' />
@@ -60,7 +60,7 @@ export default function InternalLetterPrintPreview() {
             ጉዳዩ:- {letterDetails.subject}
           </p>
           <div className='h-[auto]'>
-            <p className='text-sm font-light text-gray-600 h-[auto] print overflow-x-auto '>
+            <p className='text-sm font-light text-gray-600 h-[auto] overflow-auto overflow-x-auto '>
               {letterDetails.content}
             </p>
           </div>

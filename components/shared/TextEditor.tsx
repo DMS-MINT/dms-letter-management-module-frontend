@@ -1,3 +1,4 @@
+/** @format */
 
 "use client";
 import {
@@ -11,7 +12,9 @@ import React, { useState, useRef, useEffect } from "react";
 
 import "react-quill/dist/quill.snow.css";
 
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+const ReactQuill =
+  typeof window === "object" ? require("react-quill") : () => false;
+
 const MyComponent = () => {
   const [text, setText] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -24,10 +27,11 @@ const MyComponent = () => {
   function stripHTMLTags(str: string): string {
     return str.replace(/<[^>]*>/g, "");
   }
+
   const handleChange = (content: string) => {
     const contentString = content.toString();
     const plainText = stripHTMLTags(contentString);
-  
+
     setText(plainText.toString());
     dispatch(updateContent(plainText));
     console.log("Edited content:", content.toString());
@@ -40,13 +44,10 @@ const MyComponent = () => {
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }],
     ["clean"],
-    [{ font: [] }],
-    [{ color: [] }],
+    [{ font: [] }, { color: [] }],
     ["superscript", "subscript"],
     ["undo", "redo"],
-    ["customButton"],
   ];
-
   const modules = {
     toolbar: toolbarOptions,
   };
@@ -62,11 +63,11 @@ const MyComponent = () => {
     <>
       {isClient && (
         <ReactQuill
-          value={letterDetail.content || ""}
+          // value={letterDetail.content || ""}
           onChange={handleChange}
           modules={modules}
           theme='snow'
-          className=' h-[700px] pt-2 pb-2 mt-2 mb-6 ml-20 w-[274mm] bg-white'
+          className='h-[700px] pt-0 pb-16 mt-2 mb-2 ml-20 w-[215mm]  bg-white '
         />
       )}
     </>
@@ -74,3 +75,6 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
+function ngAfterViewInit() {
+  throw new Error("Function not implemented.");
+}

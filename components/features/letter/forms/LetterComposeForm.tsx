@@ -132,7 +132,7 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
-    <form className='p-2 flex gap-2 flex-col w-[300mm] ml-24 overflow-auto'>
+    <form className='p-2 flex gap-2 flex-col w-[240mm] ml-24 overflow-auto'>
       {isIncomingLetter ? (
         <div className='flex items-center gap-1.5'>
           <Label className='w-20'>ከ</Label>

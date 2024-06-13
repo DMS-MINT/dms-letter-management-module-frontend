@@ -10,7 +10,7 @@ export default function OutgoingLetterPrintPreview() {
   const letterDetails = useAppSelector(selectLetterDetails);
   return (
     <div className='bg-gray-200 justify-center items-center h-fit pt-20  w-[210mm] flex-1 flex '>
-      <div className=' bg-white rounded-lg shadow-md flex flex-col p-16 w-[210mm] h-[auto] overflow-auto overflow-x-auto'>
+      <div className=' bg-white rounded-lg shadow-md flex flex-col p-16 w-[210mm] h-[auto] overflow-auto overflow-x-wrap'>
         <header className='flex justify-between items-center mb-4'>
           <img src='/image/star.png' alt='Logo 1' className='w-20 h-20' />
 
@@ -69,8 +69,8 @@ export default function OutgoingLetterPrintPreview() {
           <p className='text-lg  text-gray-600 underline'>አዲስ አበባ</p>
         </div>
         <div className='flex flex-col pt-10 gap-3 font-serif'>
-          <p className='text-lg  text-gray-600 text-center'>
-            ጉዳዩ:- {letterDetails.subject}
+         <p className='text-lg  text-gray-600 text-center'>
+             ጉዳዩ:- {letterDetails.subject}
           </p>
           <p className='text-sm font-light text-gray-600 h-[auto] overflow-auto overflow-x-auto '>
             {letterDetails.content}

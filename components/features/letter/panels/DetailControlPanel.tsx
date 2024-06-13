@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Dot,
+  Download,
   FileText,
   Printer,
   Trash,
@@ -89,7 +90,7 @@ export default function DetailControlPanel() {
           className='flex gap-1 w-fit items-center v'
           onClick={downloadAsPDFWithJsPDF}
         >
-          <FileText />
+          <Download />
           PDF
         </Button>
         {/* <Button variant='outline' size='icon'>
@@ -99,7 +100,7 @@ export default function DetailControlPanel() {
           <ChevronRight size={20} />
         </Button> */}
         <Button variant='outline' size='icon' onClick={handlePrint}>
-          <Printer size={20} />
+          <Printer size={20} /> 
         </Button>
         <Button variant='outline' size='icon' onClick={dispatchLetterDelete}>
           <Trash size={20} />
