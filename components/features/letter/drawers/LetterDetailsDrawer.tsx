@@ -11,7 +11,7 @@ export default function LetterDetailsDrawer() {
   const letter = useAppSelector(selectLetterDetails);
 
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex flex-col gap-10 no-print">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Mail size={20} className="text-gray-600" />

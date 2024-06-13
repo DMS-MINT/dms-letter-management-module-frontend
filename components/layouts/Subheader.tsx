@@ -10,7 +10,7 @@ export default function Subheader({
   const dispatch = useAppDispatch();
 
   return (
-    <section className="flex items-center py-3 pl-5 pr-8 bg-gray-50">
+    <section className="flex items-center py-3 pl-5 pr-8 bg-gray-50 no-print">
       <Button
         variant="ghost"
         size="icon"

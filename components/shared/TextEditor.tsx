@@ -21,9 +21,15 @@ const MyComponent = () => {
     setIsClient(true);
   }, []);
 
+  function stripHTMLTags(str: string): string {
+    return str.replace(/<[^>]*>/g, "");
+  }
   const handleChange = (content: string) => {
-    setText(content.toString());
-    dispatch(updateContent(content));
+    const contentString = content.toString();
+    const plainText = stripHTMLTags(contentString);
+  
+    setText(plainText.toString());
+    dispatch(updateContent(plainText));
     console.log("Edited content:", content.toString());
   };
 
@@ -60,7 +66,7 @@ const MyComponent = () => {
           onChange={handleChange}
           modules={modules}
           theme='snow'
-          className='w-full h-[700px] pt-2 pb-2 mt-2 mb-6 bg-white'
+          className=' h-[700px] pt-2 pb-2 mt-2 mb-6 ml-20 w-[274mm] bg-white'
         />
       )}
     </>

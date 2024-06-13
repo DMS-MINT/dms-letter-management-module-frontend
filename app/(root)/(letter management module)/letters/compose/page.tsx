@@ -21,7 +21,7 @@ export default function Compose() {
   }, []);
 
   return (
-    <Tabs defaultValue="internal" className="h-full flex flex-col">
+    <Tabs defaultValue="internal" className="h-full flex flex-col overflow-auto">
       <TabsList className="w-fit">
         {composeTabs.map((tab) => (
           <TabsTrigger
@@ -38,7 +38,7 @@ export default function Compose() {
       </TabsList>
 
       {composeTabs.map((tab) => (
-        <TabsContent key={tab} value={tab} className="flex-1 bg-gray-200">
+        <TabsContent key={tab} value={tab} className="flex-1 bg-gray-100">
           <LetterComposeForm />
         </TabsContent>
       ))}
