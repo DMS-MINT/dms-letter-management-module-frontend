@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 export default function OutgoingLetterPrintPreview() {
   const letterDetails = useAppSelector(selectLetterDetails);
   return (
-    <div className='bg-gray-200 justify-center items-center h-fit pt-20   flex-1 flex '>
-      <div className=' bg-white rounded-lg shadow-md flex flex-col p-16 w-[797px] h-[auto] overflow-auto overflow-x-auto'>
+    <div className='bg-gray-200 justify-center items-center h-fit pt-20  w-[210mm] flex-1 flex '>
+      <div className=' bg-white rounded-lg shadow-md flex flex-col p-16 w-[210mm] h-[auto] overflow-auto overflow-x-auto'>
         <header className='flex justify-between items-center mb-4'>
           <img src='/image/star.png' alt='Logo 1' className='w-20 h-20' />
 
