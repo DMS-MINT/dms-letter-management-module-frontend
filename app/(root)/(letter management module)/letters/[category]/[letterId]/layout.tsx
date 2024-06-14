@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <>
       <Subheader>
-        <section className="flex items-center justify-between w-full">
+        <section className="flex items-center justify-between w-full no-print">
           <DetailControlPanel />
         </section>
       </Subheader>

@@ -1,3 +1,4 @@
+/** @format */
 
 "use client";
 
@@ -17,9 +18,6 @@ import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Editor from "../../../shared/TextEditor";
-
-
-
 
 interface IFormConfig {
   label: string;
@@ -134,7 +132,7 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
-    <form className='p-2 flex gap-2 flex-col '>
+    <form className='p-2 flex gap-2 flex-col w-[240mm] ml-24 overflow-auto'>
       {isIncomingLetter ? (
         <div className='flex items-center gap-1.5'>
           <Label className='w-20'>ከ</Label>
@@ -175,7 +173,6 @@ export default function LetterComposeForm() {
         />
       </div>
       {isIncomingLetter ? null : <Editor />}
-      
 
       <Button variant='outline' className='flex gap-2 w-fit mt-4'>
         <Plus size={19} />

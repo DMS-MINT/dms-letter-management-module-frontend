@@ -1,4 +1,3 @@
-/** @format */
 
 "use client";
 import {
@@ -15,8 +14,7 @@ function stripHTMLTags(str: string): string {
   return str.replace(/<[^>]*>/g, "");
 }
 
-const ReactQuill =
-  typeof window === "object" ? require("react-quill") : () => false;
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 const MyComponent = () => {
   const [text, setText] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -26,12 +24,14 @@ const MyComponent = () => {
     setIsClient(true);
   }, []);
 
+  function stripHTMLTags(str: string): string {
+    return str.replace(/<[^>]*>/g, "");
+  }
+
   const handleChange = (content: string) => {
-    const contentString = content.toString();
-    const plainText = stripHTMLTags(contentString);
-    setText(plainText);
+    setText(content.toString());
     dispatch(updateContent(content));
-    console.log("Edited content:", plainText);
+    console.log("Edited content:", content.toString());
   };
 
   const toolbarOptions = [
@@ -41,13 +41,10 @@ const MyComponent = () => {
     [{ list: "ordered" }, { list: "bullet" }],
     [{ indent: "-1" }, { indent: "+1" }],
     ["clean"],
-    [{ font: [] }],
-    [{ color: [] }],
+    [{ font: [] }, { color: [] }],
     ["superscript", "subscript"],
     ["undo", "redo"],
-    ["customButton"],
   ];
-
   const modules = {
     toolbar: toolbarOptions,
   };
@@ -67,7 +64,7 @@ const MyComponent = () => {
           onChange={handleChange}
           modules={modules}
           theme='snow'
-         className='h-[700px] pt-0 pb-16 mt-2 mb-2 ml-20 w-[215mm]  bg-white editor-page editor-container'
+          className='w-full h-[700px] pt-2 pb-2 mt-2 mb-6 bg-white'
         />
       )}
     </>
@@ -75,3 +72,4 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
+
