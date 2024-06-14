@@ -30,7 +30,7 @@ const MyComponent = () => {
     const contentString = content.toString();
     const plainText = stripHTMLTags(contentString);
     setText(plainText);
-    dispatch(updateContent(plainText));
+    dispatch(updateContent(content));
     console.log("Edited content:", plainText);
   };
 
@@ -63,11 +63,11 @@ const MyComponent = () => {
     <>
       {isClient && (
         <ReactQuill
-          value={letterDetail.content || ""}
+          // value={letterDetail.content || ""}
           onChange={handleChange}
           modules={modules}
           theme='snow'
-          className='w-full h-[700px] pt-2 pb-2 mt-2 mb-6 bg-white'
+         className='h-[700px] pt-0 pb-16 mt-2 mb-2 ml-20 w-[215mm]  bg-white editor-page editor-container'
         />
       )}
     </>
