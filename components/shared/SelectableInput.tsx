@@ -41,18 +41,27 @@ export default function SelectableInput({
 
     const handleSelectOption = (selectedOption: IOption) => {
       const user = optionToContact(selectedOption);
-      dispatch(addParticipant({ role_name, user }));
+      dispatch(addParticipant({
+        role_name, user,
+        role: ""
+      }));
     };
 
     const handleCreateOption = (selectedOption: IOption) => {
       const user_type = "guest";
       const user = optionToContact({ ...selectedOption, user_type });
-      dispatch(addParticipant({ role_name, user }));
+      dispatch(addParticipant({
+        role_name, user,
+        role: ""
+      }));
     };
 
     const handleRemoveValue = (removedValue: IOption) => {
       const user = optionToContact(removedValue);
-      dispatch(removeParticipant({ role_name, user }));
+      dispatch(removeParticipant({
+        role_name, user,
+        role: ""
+      }));
     };
 
     switch (action) {

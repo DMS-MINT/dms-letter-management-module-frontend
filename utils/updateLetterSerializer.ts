@@ -13,6 +13,9 @@ const updateLetterSerializer = (
       participant.role as keyof typeof ParticipantRolesEnum
     ],
     message: participant.message,
+    role_name: ParticipantRolesEnum[
+      participant.role as keyof typeof ParticipantRolesEnum
+    ],
   }));
 
   const subject = letter.subject ? letter.subject : undefined;

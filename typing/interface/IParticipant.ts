@@ -6,6 +6,7 @@ interface BaseParticipant {
 }
 
 export interface IParticipantInputSerializer extends BaseParticipant {
+  role: string;
   role_name: ParticipantRolesEnum;
   message?: string;
 }
