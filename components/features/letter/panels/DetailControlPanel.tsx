@@ -2,6 +2,7 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,6 +37,15 @@ export default function DetailControlPanel() {
   }
 
   const dispatch = useAppDispatch();
+  const [isStateDefined, setIsStateDefined] = useState(false);
+
+  useEffect(() => {
+    if (letterDetails.state && letterDetails.state.name) {
+      setIsStateDefined(true);
+    } else {
+      setIsStateDefined(false);
+    }
+  }, [letterDetails.state]);
 
   const dispatchLetterUpdate = () => {
     const serializedLetter = updateLetterSerializer(letterDetails);
@@ -57,13 +67,8 @@ export default function DetailControlPanel() {
     dispatch(deleteLetter(letterDetails.id));
   };
 
-  if (
-    !letterDetails ||
-    !letterDetails.hasOwnProperty("subject") ||
-    !letterDetails.hasOwnProperty("status")
-  ) {
-    // redirect("/letters/draft");
-  }
+ if (!isStateDefined) {
+    return null;
 
   return (
     <section className='flex items-center justify-between w-full overflow-auto '>
@@ -73,12 +78,12 @@ export default function DetailControlPanel() {
         <Skeleton className='h-8 w-96' />
       )}
 
-      {letterDetails.status ? (
+      {letterDetails.state && letterDetails.state.name ? (
         <Badge
           variant='destructive'
           className='rounded-md flex items-center justify-between pl-0 ml-2'
         >
-          <Dot /> {letterStatusLookup[letterDetails.status]}
+          <Dot /> {letterStatusLookup[letterDetails.state.name]}
         </Badge>
       ) : (
         <Skeleton className='h-8 w-14 ml-2' />

@@ -2,7 +2,7 @@ export enum LetterTableColumnEnum {
   ID = "id",
   HAS_READ = "has_read",
   SUBJECT = "subject",
-  STATUS = "status",
+  STATUS = "state",
   SENDER = "sender",
   RECIPIENT = "recipient",
   LETTER_TYPE = "letter_type",

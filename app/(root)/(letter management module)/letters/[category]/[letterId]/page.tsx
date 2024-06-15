@@ -19,14 +19,13 @@ import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
 import { useParams } from "next/navigation";
 
 interface IParticipantState {
-  role: string;
+  role_name: ParticipantRolesEnum;
   user: IOption;
 }
 
 interface ILetterParticipantOption {
   label: string;
-  filterBy: string;
-  participantRole: number;
+  participantRole: ParticipantRolesEnum;
   isCreatable: boolean;
   isMulti: boolean;
 }
@@ -34,29 +33,25 @@ interface ILetterParticipantOption {
 const letterParticipantOptions: ILetterParticipantOption[] = [
   {
     label: "ከ",
-    filterBy: "Sender",
-    participantRole: ParticipantRolesEnum.Sender,
+    participantRole: ParticipantRolesEnum.AUTHOR,
     isCreatable: false,
     isMulti: false,
   },
   {
     label: "ለ",
-    filterBy: "Recipient",
-    participantRole: ParticipantRolesEnum.Sender,
+    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
   },
   {
     label: "ግልባጭ",
-    filterBy: "Carbon Copy Recipient",
-    participantRole: ParticipantRolesEnum.Sender,
+    participantRole: ParticipantRolesEnum["Carbon Copy Recipient"],
     isCreatable: false,
     isMulti: true,
   },
   {
     label: "እንዲያዉቁት",
-    filterBy: "Blind Carbon Copy Recipient",
-    participantRole: ParticipantRolesEnum.Sender,
+    participantRole: ParticipantRolesEnum["Blind Carbon Copy Recipient"],
     isCreatable: false,
     isMulti: true,
   },
@@ -64,7 +59,7 @@ const letterParticipantOptions: ILetterParticipantOption[] = [
 
 export default function LetterDetail() {
   const dispatch = useAppDispatch();
-  const letter = useAppSelector(selectLetterDetails);
+  const letterDetails = useAppSelector(selectLetterDetails);
   const contacts = useAppSelector(selectContacts);
   const [options, setOptions] = useState<IOption[]>([]);
   const [participants, setParticipants] = useState<IParticipantState[]>([]);
@@ -87,20 +82,20 @@ export default function LetterDetail() {
   }, [contacts]);
 
   useEffect(() => {
-    if (Object.keys(letter).length !== 0) {
-      if (letter.participants.length > 0) {
+    if (Object.keys(letterDetails).length !== 0) {
+      if (letterDetails.participants.length > 0) {
         const options: IParticipantState[] = [];
 
-        letter.participants.map((participant) => {
+        letterDetails.participants.map((participant) => {
           const option = contactToOption(participant.user);
 
-          options.push({ role: participant.role, user: option });
+          options.push({ role_name: participant.role_name, user: option });
         });
 
         setParticipants(options);
       }
     }
-  }, [letter, dispatch]);
+  }, [letterDetails, dispatch]);
 
   if (participants.length === 0) {
     return <LetterDetailSkeleton />;
@@ -112,11 +107,11 @@ export default function LetterDetail() {
         <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
         <section className="p-2 flex gap-2 flex-col">
           {letterParticipantOptions.map(
-            ({ label, filterBy, participantRole, isCreatable, isMulti }) => (
+            ({ label, participantRole, isCreatable, isMulti }) => (
               <div key={label} className="flex items-center gap-1.5">
                 <Label className="w-20">{label}</Label>
                 <SelectableInput
-                  defaultValue={getDefaultValue(participants, filterBy)}
+                  defaultValue={getDefaultValue(participants, participantRole)}
                   options={options}
                   role={participantRole}
                   isCreatable={isCreatable}
@@ -137,7 +132,7 @@ export default function LetterDetail() {
                 <Input
                   type="text"
                   id="ጉዳዩ"
-                  value={letter.subject ? letter.subject : ""}
+                  value={letterDetails.subject ? letterDetails.subject : ""}
                   onChange={(e) => dispatch(updateSubject(e.target.value))}
                 />
               </div>
@@ -148,13 +143,13 @@ export default function LetterDetail() {
             </div>
           </div>
           {
-            letter.letter_type !== "incoming" ? (
+            letterDetails.letter_type !== "incoming" ? (
               <section className="flex flex-col gap-1.5">
                 <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
                 <Textarea
                   id="ደብዳቤ"
                   className="bg-gray-100 h-[500px]"
-                  value={letter.content ? letter.content : ""}
+                  value={letterDetails.content ? letterDetails.content : ""}
                   onChange={(e) => dispatch(updateContent(e.target.value))}
                 />
               </section>

@@ -2,16 +2,14 @@ import {
   ILetterCreateSerializer,
   ILetterDetailInputSerializer,
 } from "@/typing/interface";
-import { LetterStatusEnum, ParticipantRolesEnum } from "@/typing/enum";
+import { ParticipantRolesEnum } from "@/typing/enum";
 
 const createLetterSerializer = (
   letter: ILetterDetailInputSerializer
 ): ILetterCreateSerializer => {
   const participants = letter.participants.map((participant) => ({
     user: participant.user,
-    role: ParticipantRolesEnum[
-      participant.role as keyof typeof ParticipantRolesEnum
-    ],
+    role_name: participant.role_name,
     message: participant.message,
   }));
 
@@ -21,7 +19,6 @@ const createLetterSerializer = (
   return {
     ...(subject && { subject }),
     ...(content && { content }),
-    status: LetterStatusEnum[letter.status as keyof typeof LetterStatusEnum],
     participants,
     letter_type: letter.letter_type,
   };
