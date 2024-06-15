@@ -45,13 +45,13 @@ const letterParticipantOptions: ILetterParticipantOption[] = [
   },
   {
     label: "ግልባጭ",
-    participantRole: ParticipantRolesEnum["Carbon Copy Recipient"],
+    participantRole: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
   },
   {
     label: "እንዲያዉቁት",
-    participantRole: ParticipantRolesEnum["Blind Carbon Copy Recipient"],
+    participantRole: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
   },
@@ -66,8 +66,8 @@ export default function LetterDetail() {
   const params = useParams();
 
   useEffect(() => {
-    if (params.letterId) {
-      dispatch(getLetterDetails(params.letterId as string));
+    if (params.referenceNumber) {
+      dispatch(getLetterDetails(params.referenceNumber as string));
     }
   }, [params, dispatch]);
 

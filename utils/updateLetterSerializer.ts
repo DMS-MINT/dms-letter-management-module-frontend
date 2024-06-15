@@ -9,10 +9,10 @@ const updateLetterSerializer = (
 ): ILetterUpdateSerializer => {
   const participants = letter.participants.map((participant) => ({
     user: participant.user,
-    role: ParticipantRolesEnum[
-      participant.role as keyof typeof ParticipantRolesEnum
-    ],
-    message: participant.message,
+    role_name:
+      ParticipantRolesEnum[
+        participant.role_name.toUpperCase() as keyof typeof ParticipantRolesEnum
+      ],
   }));
 
   const subject = letter.subject ? letter.subject : undefined;

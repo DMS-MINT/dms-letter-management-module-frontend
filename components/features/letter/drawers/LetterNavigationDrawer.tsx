@@ -60,7 +60,6 @@ const primaryRoutes: IRoute[] = [
 export default function LetterNavigationDrawer() {
   const pathname = usePathname();
   const letters = useAppSelector(selectLetters);
-  const dispatch = useAppDispatch();
 
   return (
     <nav className="flex flex-col gap-2 w-full">

@@ -1,8 +1,9 @@
 export enum LetterTableColumnEnum {
   ID = "id",
+  REFERENCE_NUMBER = "reference_number",
   HAS_READ = "has_read",
   SUBJECT = "subject",
-  STATUS = "state",
+  CURRENT_STATE = "current_state",
   SENDER = "sender",
   RECIPIENT = "recipient",
   LETTER_TYPE = "letter_type",

@@ -12,9 +12,10 @@ interface IState {
 
 export interface ILetterListInputSerializer {
   id: string;
+  reference_number: string;
   subject: string;
   content: string;
-  state: IState;
+  current_state: IState;
   has_read: boolean;
   sent_at: string;
   received_at: string;

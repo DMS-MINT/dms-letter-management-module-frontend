@@ -113,8 +113,8 @@ export const letterSlice = createAppSlice({
       }
     ),
     getLetterDetails: create.asyncThunk(
-      async (id: string) => {
-        const response = await get_letter_details(id);
+      async (reference_number: string) => {
+        const response = await get_letter_details(reference_number);
         return response;
       },
       {
@@ -176,13 +176,13 @@ export const letterSlice = createAppSlice({
     ),
     updateLetter: create.asyncThunk(
       async ({
-        id,
+        reference_number,
         letter,
       }: {
-        id: string;
+        reference_number: string;
         letter: ILetterUpdateSerializer;
       }) => {
-        const response = await update_letter(id, letter);
+        const response = await update_letter(reference_number, letter);
         const data = await response.data;
         return data;
       },
@@ -212,8 +212,8 @@ export const letterSlice = createAppSlice({
       }
     ),
     deleteLetter: create.asyncThunk(
-      async (id: string) => {
-        const response = await delete_letter(id);
+      async (reference_number: string) => {
+        const response = await delete_letter(reference_number);
         const data = await response.data;
         return data;
       },
@@ -232,7 +232,7 @@ export const letterSlice = createAppSlice({
           state.letter = action.payload;
           state.error = null;
           toast.dismiss();
-          toast.success("Letter successfully created!");
+          toast.success("Letter successfully deleted!");
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;

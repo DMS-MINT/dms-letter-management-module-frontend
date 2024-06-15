@@ -1,6 +1,7 @@
 export enum ParticipantRolesEnum {
+  "EDITOR" = "Editor",
   "AUTHOR" = "Author",
   "PRIMARY RECIPIENT" = "Primary Recipient",
-  "Carbon Copy Recipient" = "Carbon Copy Recipient",
-  "Blind Carbon Copy Recipient" = "Blind Carbon Copy Recipient",
+  "CARBON COPY RECIPIENT" = "Carbon Copy Recipient",
+  "BLIND CARBON COPY RECIPIENT" = "Blind Carbon Copy Recipient",
 }
