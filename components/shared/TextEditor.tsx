@@ -60,7 +60,7 @@ const MyComponent = () => {
     <>
       {isClient && (
         <ReactQuill
-          // value={letterDetail.content || ""}
+          value={letterDetail.content || ""}
           onChange={handleChange}
           modules={modules}
           theme='snow'
