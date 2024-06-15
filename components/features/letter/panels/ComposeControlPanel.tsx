@@ -20,7 +20,6 @@ import {
   createLetter,
   selectLetterDetails,
   selectStatus,
-  setLetterStatus,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createLetterSerializer } from "@/utils";
@@ -33,21 +32,14 @@ export default function ComposeControlPanel() {
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
 
-  const dispatchSetLetterStatus = (status: string) => {
-    dispatch(setLetterStatus(status));
+  const dispatchCreateLetter = () => {
+    const serializedLetter = createLetterSerializer(letterDetail);
+    dispatch(createLetter(serializedLetter));
   };
 
   useEffect(() => {
-    if (letterDetail.status) {
-      const serializedLetter = createLetterSerializer(letterDetail);
-      dispatch(createLetter(serializedLetter));
-    }
-  }, [letterDetail.status]);
-
-  useEffect(() => {
     if (status === RequestStatusEnum.FULFILLED) {
-      const category = letterDetail.status === "Draft" ? "draft" : "outbox";
-
+      const category = letterDetail.state === "Draft" ? "draft" : "outbox";
       redirect(`/letters/${category}/${letterDetail.id}`);
     }
   }, [status]);
@@ -70,11 +62,17 @@ export default function ComposeControlPanel() {
           </Button>
         </Link>
         <Button
+
           className='mr-0 RECIPIENTborder-gray-300 rounded-md'
           variant='outline'
           onClick={() => {
             dispatchSetLetterStatus("Draft");
           }}
+
+          className="mr-0 RECIPIENTborder-gray-300 rounded-md"
+          variant="outline"
+          onClick={dispatchCreateLetter}
+
         >
           ረቂቁን ያስቀምጡ
         </Button>
@@ -95,10 +93,14 @@ export default function ComposeControlPanel() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
+
               <Button
                 type='submit'
                 onClick={() => dispatchSetLetterStatus("Pending Approval")}
               >
+
+              <Button type="submit" onClick={dispatchCreateLetter}>
+
                 አዎ
               </Button>
               <Button className='bg-white text-black hover:bg-white'>አይ</Button>

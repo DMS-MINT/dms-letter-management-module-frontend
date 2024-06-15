@@ -1,11 +1,12 @@
+import { ParticipantRolesEnum } from "@/typing/enum";
 import { IParticipantInputSerializer } from "@/typing/interface";
 
 const getParticipantInfo = (
-  role: string,
+  role: ParticipantRolesEnum,
   participants: IParticipantInputSerializer[]
 ) => {
   const participantInfo = participants
-    .filter((participant) => participant.role === role)
+    .filter((participant) => participant.role_name === role)
     .map((participant) => {
       if (participant.user.user_type === "member") {
         return participant.user.job_title;

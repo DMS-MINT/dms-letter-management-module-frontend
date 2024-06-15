@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup } from "@/typing/dictionary";
-import { LetterTableColumnEnum } from "@/typing/enum";
+import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
 import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
@@ -75,7 +75,10 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const senders = getParticipantInfo("Sender", participants);
+      const senders = getParticipantInfo(
+        ParticipantRolesEnum.AUTHOR,
+        participants
+      );
       return <p>{senders ? senders : ""}</p>;
     },
   },
@@ -91,7 +94,10 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const recipients = getParticipantInfo("Recipient", participants);
+      const recipients = getParticipantInfo(
+        ParticipantRolesEnum["PRIMARY RECIPIENT"],
+        participants
+      );
       return <p>{recipients ? recipients : ""}</p>;
     },
   },
@@ -122,9 +128,12 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       />
     ),
     cell: ({ row }) => {
-      const status: string = row.getValue(LetterTableColumnEnum.STATUS);
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(status);
+      const status: { name: string } = row.getValue(
+        LetterTableColumnEnum.STATUS
+      );
+      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
+        status.name
+      );
       return (
         <Badge
           variant="default"

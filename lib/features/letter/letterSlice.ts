@@ -54,9 +54,6 @@ export const letterSlice = createAppSlice({
         state.letter.letter_type = action.payload;
       }
     ),
-    setLetterStatus: create.reducer((state, action: PayloadAction<string>) => {
-      state.letter.status = action.payload;
-    }),
     addParticipant: create.reducer(
       (state, action: PayloadAction<IParticipantInputSerializer>) => {
         state.letter.participants.push(action.payload);
@@ -66,7 +63,7 @@ export const letterSlice = createAppSlice({
       (state, action: PayloadAction<IParticipantInputSerializer>) => {
         state.letter.participants = state.letter.participants.filter(
           (participant) => {
-            if (participant.role !== action.payload.role) return true;
+            if (participant.role_name !== action.payload.role_name) return true;
 
             if (
               action.payload.user.user_type === "member" &&
@@ -198,7 +195,7 @@ export const letterSlice = createAppSlice({
         },
         fulfilled: (
           state,
-          action: PayloadAction<ILetterListInputSerializer>
+          action: PayloadAction<ILetterDetailInputSerializer>
         ) => {
           state.status = RequestStatusEnum.IDLE;
           state.letter = action.payload;
@@ -260,7 +257,6 @@ export const {
   updateSubject,
   updateContent,
   setLetterType,
-  setLetterStatus,
   addParticipant,
   removeParticipant,
   getLetters,

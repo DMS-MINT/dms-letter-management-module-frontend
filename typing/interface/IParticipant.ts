@@ -1,14 +1,15 @@
+import { ParticipantRolesEnum } from "../enum";
 import { ContactType } from "./IContact";
 
 interface BaseParticipant {
   user: ContactType;
-  message?: string;
 }
 
 export interface IParticipantInputSerializer extends BaseParticipant {
-  role: string;
+  role_name: ParticipantRolesEnum;
+  message?: string;
 }
 
 export interface IParticipantOutputSerializer extends BaseParticipant {
-  role: number;
+  role_name: ParticipantRolesEnum;
 }

@@ -11,17 +11,20 @@ import {
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { contactToOption } from "@/utils";
-import { IOption, LetterType } from "@/typing/interface";
+import { IOption } from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+
 import Editor from "../../../shared/TextEditor";
+
+
 
 interface IFormConfig {
   label: string;
-  participantRole: number;
+  participantRole: ParticipantRolesEnum;
   isCreatable: boolean;
   isMulti: boolean;
   placeholder: string;
@@ -29,8 +32,15 @@ interface IFormConfig {
 
 const internalLetterFormConfig: IFormConfig[] = [
   {
+    label: "ከ",
+    participantRole: ParticipantRolesEnum.AUTHOR,
+    isCreatable: false,
+    isMulti: true,
+    placeholder: "ተቀባዮችን ያስገቡ...",
+  },
+  {
     label: "ለ",
-    participantRole: ParticipantRolesEnum.Recipient,
+    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
@@ -52,8 +62,15 @@ const internalLetterFormConfig: IFormConfig[] = [
 ];
 const incomingLetterFormConfig: IFormConfig[] = [
   {
+    label: "ከ",
+    participantRole: ParticipantRolesEnum.AUTHOR,
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
+  },
+  {
     label: "ለ",
-    participantRole: ParticipantRolesEnum.Recipient,
+    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
@@ -75,8 +92,15 @@ const incomingLetterFormConfig: IFormConfig[] = [
 ];
 const outgoingLetterFormConfig: IFormConfig[] = [
   {
+    label: "ከ",
+    participantRole: ParticipantRolesEnum.AUTHOR,
+    isCreatable: true,
+    isMulti: true,
+    placeholder: "ተቀባዮችን ያስገቡ...",
+  },
+  {
     label: "ለ",
-    participantRole: ParticipantRolesEnum.Recipient,
+    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
@@ -132,6 +156,7 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
+
     <form className='p-2 flex gap-2 flex-col w-[240mm] ml-24 overflow-auto'>
       {isIncomingLetter ? (
         <div className='flex items-center gap-1.5'>
@@ -145,6 +170,8 @@ export default function LetterComposeForm() {
           />
         </div>
       ) : null}
+
+    <form className="p-2 flex gap-2 flex-col ">
 
       {formConfig.map(
         ({ label, participantRole, isCreatable, isMulti, placeholder }) => (

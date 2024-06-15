@@ -10,7 +10,7 @@ import { handleAxiosError } from "@/utils";
 
 export async function get_letters(category: string) {
   try {
-    const response = await axiosInstance.get(`letters/?category=${category}`);
+    const response = await axiosInstance.get(`letters/?category=${category}/`);
     const data = await response.data.data;
     return data;
   } catch (error: any) {
