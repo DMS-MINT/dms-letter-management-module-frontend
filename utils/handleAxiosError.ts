@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 const handleAxiosError = (error: AxiosError): never => {
   if (error.response) {
     const responseData = error.response.data as IServerErrorResponse;
+    console.log(responseData);
     if (
       responseData.message === "Validation error" &&
       // @ts-ignore

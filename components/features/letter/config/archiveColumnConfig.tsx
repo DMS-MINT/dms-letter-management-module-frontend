@@ -55,11 +55,11 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     },
   },
   {
-    accessorKey: LetterTableColumnEnum.ID,
+    accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.ID]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
   },
@@ -120,19 +120,19 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
   },
   {
-    accessorKey: LetterTableColumnEnum.STATUS,
+    accessorKey: LetterTableColumnEnum.CURRENT_STATE,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.STATUS]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.CURRENT_STATE]}
       />
     ),
     cell: ({ row }) => {
-      const status: { name: string } = row.getValue(
-        LetterTableColumnEnum.STATUS
+      const current_state: { name: string } = row.getValue(
+        LetterTableColumnEnum.CURRENT_STATE
       );
       const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
-        status.name
+        current_state.name
       );
       return (
         <Badge

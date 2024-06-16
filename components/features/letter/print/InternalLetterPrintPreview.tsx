@@ -2,6 +2,7 @@
 
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
+import { ParticipantRolesEnum } from "@/typing/enum";
 import { v4 as uuidv4 } from "uuid";
 
 export default function InternalLetterPrintPreview() {
@@ -42,7 +43,11 @@ export default function InternalLetterPrintPreview() {
         </div>
         <div className="flex flex-col pt-4 font-serif ">
           {letterDetails.participants
-            .filter((participant) => participant.role === "Recipient")
+            .filter(
+              (participant) =>
+                participant.role_name ===
+                ParticipantRolesEnum["PRIMARY RECIPIENT"]
+            )
             .map((participant) => (
               <p key={uuidv4()} className="text-lg  text-gray-600">
                 ለ{" "}
@@ -82,7 +87,9 @@ export default function InternalLetterPrintPreview() {
           <ul className="pl-5">
             {letterDetails.participants
               .filter(
-                (participant) => participant.role === "Carbon Copy Recipient"
+                (participant) =>
+                  participant.role_name ===
+                  ParticipantRolesEnum["CARBON COPY RECIPIENT"]
               )
               .map((participant) => (
                 <li key={uuidv4()}>
@@ -102,7 +109,9 @@ export default function InternalLetterPrintPreview() {
           <ul className="pl-5">
             {letterDetails.participants
               .filter(
-                (participant) => participant.role === "Carbon Copy Recipient"
+                (participant) =>
+                  (participant.role_name =
+                    ParticipantRolesEnum["CARBON COPY RECIPIENT"])
               )
               .map((participant) => (
                 <>

@@ -6,15 +6,24 @@ import {
   selectLetterDetails,
   updateLetter,
 } from "@/lib/features/letter/letterSlice";
-import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
+import {
+  closeLetter,
+  publishLetter,
+  retractLetter,
+  selectPermissions,
+  submitLetter,
+} from "@/lib/features/letter/workflow/workflowSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { updateLetterSerializer } from "@/utils";
 import { Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
+import { ShareLetterForm } from "@/components/features/letter";
+import { redirect } from "next/navigation";
 interface IButtonConfig {
   isVisible: boolean;
+  isButton: boolean;
+  component?: JSX.Element;
   label?: string | null;
   icon?: JSX.Element;
   variant:
@@ -41,26 +50,29 @@ export default function ActionButtons() {
       const configs: IButtonConfig[] = [
         {
           isVisible: permissions.can_delete,
+          isButton: true,
           variant: "outline",
           style: "",
           size: "icon",
           icon: <Trash size={20} />,
           action: () => {
-            console.log("DELETE LETTER");
+            dispatch(deleteLetter(letterDetails.reference_number));
+            redirect("/letters/inbox/");
           },
         },
         {
           isVisible: permissions.can_share,
+          isButton: false,
+          component: <ShareLetterForm />,
           label: "ደብዳቤውን አጋራ",
           variant: "outline",
           style: "",
           size: "default",
-          action: () => {
-            console.log("SHARE LETTER");
-          },
+          action: () => {},
         },
         {
           isVisible: permissions.can_edit,
+          isButton: true,
           label: "አርም",
           variant: "outline",
           style: "",
@@ -78,26 +90,29 @@ export default function ActionButtons() {
         },
         {
           isVisible: permissions.can_submit,
+          isButton: true,
           label: "ደብዳቤውን ላክ",
           variant: "default",
           style: "",
           size: "default",
           action: () => {
-            console.log("SUBMIT A REQUEST FOR THE LETTER TO BE PUBLISHED");
+            dispatch(submitLetter(letterDetails.reference_number));
           },
         },
         {
           isVisible: permissions.can_retract,
+          isButton: true,
           label: "ሰርዝ",
           variant: "destructive",
           style: "",
           size: "default",
           action: () => {
-            console.log("RETRACT LETTER PUBLISH REQUEST");
+            dispatch(retractLetter(letterDetails.reference_number));
           },
         },
         {
           isVisible: permissions.can_reject,
+          isButton: true,
           label: "ደብዳቤ አትቀበል",
           variant: "destructive",
           style: "",
@@ -108,22 +123,24 @@ export default function ActionButtons() {
         },
         {
           isVisible: permissions.can_publish,
+          isButton: true,
           label: "ደብዳቤ ያትሙ",
           variant: "third",
           style: "",
           size: "default",
           action: () => {
-            console.log("ACCEPT LETTER PUBLISH REQUEST");
+            dispatch(publishLetter(letterDetails.reference_number));
           },
         },
         {
           isVisible: permissions.can_close,
+          isButton: true,
           label: "ደብዳቤውን ዝጋ",
           variant: "default",
           style: "",
           size: "default",
           action: () => {
-            console.log("ACCEPT LETTER PUBLISH REQUEST");
+            dispatch(closeLetter(letterDetails.reference_number));
           },
         },
       ];
@@ -131,28 +148,36 @@ export default function ActionButtons() {
     }
   }, [letterDetails, permissions]);
 
-  const dispatchLetterUpdate = () => {};
-
-  const dispatchLetterDelete = () => {
-    dispatch(deleteLetter(letterDetails.reference_number));
-  };
-
   return (
     <>
       {buttonConfigs
         .filter((action) => action.isVisible === true)
-        .map(({ label, icon, variant, size, style, action }) => (
-          <Button
-            key={uuidv4()}
-            variant={variant}
-            size={size}
-            className={style}
-            onClick={action}
-          >
-            {label}
-            {icon}
-          </Button>
-        ))}
+        .map(
+          ({
+            label,
+            icon,
+            variant,
+            size,
+            style,
+            action,
+            isButton,
+            component,
+          }) =>
+            isButton ? (
+              <Button
+                key={uuidv4()}
+                variant={variant}
+                size={size}
+                className={style}
+                onClick={action}
+              >
+                {label}
+                {icon}
+              </Button>
+            ) : (
+              <React.Fragment key={uuidv4()}>{component}</React.Fragment>
+            )
+        )}
     </>
   );
 }
