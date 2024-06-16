@@ -6,7 +6,7 @@ import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
 import { letterTypeLookup } from "@/typing/dictionary";
 import { Mail, MessageSquare, FileDigit } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 interface ILetterMetaData {
   label: string;
@@ -16,24 +16,30 @@ interface ILetterMetaData {
 
 export default function LetterDetailsDrawer() {
   const letterDetails = useAppSelector(selectLetterDetails);
+  const [letterMeta, setLetterMeta] = useState<ILetterMetaData[]>([]);
 
-  const LetterMetaData: ILetterMetaData[] = [
-    {
-      label: "የደብዳቤ አይነት",
-      value: letterTypeLookup[letterDetails.letter_type.toUpperCase()],
-      icon: <Mail size={20} className="text-gray-600" />,
-    },
-    {
-      label: "የማጣቀሻ ቁጥር",
-      value: letterDetails.reference_number,
-      icon: <FileDigit size={20} className="text-gray-600" />,
-    },
-  ];
+  useEffect(() => {
+    if (letterDetails.letter_type) {
+      const LetterMetaData: ILetterMetaData[] = [
+        {
+          label: "የደብዳቤ አይነት",
+          value: letterTypeLookup[letterDetails.letter_type.toUpperCase()],
+          icon: <Mail size={20} className="text-gray-600" />,
+        },
+        {
+          label: "የመዝገብ ቁጥር",
+          value: letterDetails.reference_number,
+          icon: <FileDigit size={20} className="text-gray-600" />,
+        },
+      ];
+      setLetterMeta(LetterMetaData);
+    }
+  }, [letterDetails]);
 
   return (
     <section className="flex flex-col gap-10">
       <div className="flex flex-col gap-2">
-        {LetterMetaData.map(({ label, value, icon }) => (
+        {letterMeta.map(({ label, value, icon }) => (
           <Fragment key={label}>
             <div className="flex items-center gap-2">
               {icon}

@@ -3,12 +3,14 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit";
 import { uiManagerSlice } from "./features/ui/uiManagerSlice";
 import { authSlice } from "./features/authentication/authSlice";
 import { letterSlice } from "./features/letter/letterSlice";
+import { workflowSlice } from "./features/letter/workflow/workflowSlice";
 import { contactSlice } from "./features/contact/contactSlice";
 
 const rootReducer = combineSlices(
   uiManagerSlice,
   authSlice,
   letterSlice,
+  workflowSlice,
   contactSlice
 );
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dot, Printer } from "lucide-react";
@@ -9,27 +8,24 @@ import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { letterStatusLookup } from "@/typing/dictionary";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButtons from "../miscellaneous/ActionButtons";
+import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
 
 export default function DetailControlPanel() {
   const letterDetails = useAppSelector(selectLetterDetails);
-  const [isStateDefined, setIsStateDefined] = useState(false);
+  const permissions = useAppSelector(selectPermissions);
 
-  useEffect(() => {
-    if (letterDetails.current_state && letterDetails.current_state.name) {
-      setIsStateDefined(true);
-    } else {
-      setIsStateDefined(false);
-    }
-  }, [letterDetails.current_state]);
-
-  if (!isStateDefined) {
+  if (Object.keys(permissions).length === 0) {
     return null;
   }
 
   return (
     <section className="flex items-center justify-between w-full">
-      {letterDetails.subject ? (
-        <h1 className="page-title">{letterDetails.subject}</h1>
+      {Object.keys(permissions).length !== 0 ? (
+        letterDetails.subject ? (
+          <h1 className="page-title">{letterDetails.subject}</h1>
+        ) : (
+          <h1 className="page-title !text-gray-400">ርዕሰ ጉዳይ የሌለው ደብዳቤ</h1>
+        )
       ) : (
         <Skeleton className="h-8 w-96" />
       )}

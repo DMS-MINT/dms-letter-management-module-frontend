@@ -8,6 +8,7 @@ const createLetterSerializer = (
   letter: ILetterDetailInputSerializer
 ): ILetterCreateSerializer => {
   const participants = letter.participants.map((participant) => ({
+    id: participant.id,
     user: participant.user,
     role_name: participant.role_name,
     message: participant.message,

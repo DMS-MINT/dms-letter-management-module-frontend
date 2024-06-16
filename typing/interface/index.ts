@@ -7,3 +7,4 @@ export * from "./IParticipant";
 export * from "./IUIState";
 export * from "./IError";
 export * from "./IComment";
+export * from "./IPermissions";

@@ -6,6 +6,7 @@ import {
   ILetterUpdateSerializer,
   LetterType,
   IParticipantInputSerializer,
+  IPermissions,
 } from "@/typing/interface";
 import {
   get_letters,
@@ -17,6 +18,7 @@ import {
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import { RequestStatusEnum } from "@/typing/enum";
+import { setPermissions } from "./workflow/workflowSlice";
 
 export interface ILetterSliceState {
   letters: ILetterListInputSerializer[];
@@ -113,9 +115,12 @@ export const letterSlice = createAppSlice({
       }
     ),
     getLetterDetails: create.asyncThunk(
-      async (reference_number: string) => {
+      async (reference_number: string, { dispatch }) => {
         const response = await get_letter_details(reference_number);
-        return response;
+        const letterDetails: ILetterDetailInputSerializer = response.data;
+        const permissions: IPermissions = response.permissions;
+        dispatch(setPermissions(permissions));
+        return letterDetails;
       },
       {
         pending: (state) => {

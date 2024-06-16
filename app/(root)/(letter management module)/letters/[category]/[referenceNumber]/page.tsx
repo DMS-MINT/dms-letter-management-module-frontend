@@ -17,6 +17,8 @@ import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
 import { useParams } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
 
 interface IParticipantState {
   role_name: ParticipantRolesEnum;
@@ -35,7 +37,7 @@ const letterParticipantOptions: ILetterParticipantOption[] = [
     label: "ከ",
     participantRole: ParticipantRolesEnum.AUTHOR,
     isCreatable: false,
-    isMulti: false,
+    isMulti: true,
   },
   {
     label: "ለ",
@@ -60,6 +62,7 @@ const letterParticipantOptions: ILetterParticipantOption[] = [
 export default function LetterDetail() {
   const dispatch = useAppDispatch();
   const letterDetails = useAppSelector(selectLetterDetails);
+  const permissions = useAppSelector(selectPermissions);
   const contacts = useAppSelector(selectContacts);
   const [options, setOptions] = useState<IOption[]>([]);
   const [participants, setParticipants] = useState<IParticipantState[]>([]);
@@ -74,7 +77,10 @@ export default function LetterDetail() {
   useEffect(() => {
     if (contacts.length > 0) {
       const options: IOption[] = contacts.map((contact) => {
-        return contactToOption(contact);
+        const id = uuidv4();
+        const user = contact;
+        const data = { id, user } as IParticipantInputSerializer;
+        return contactToOption(data);
       });
 
       setOptions(options);
@@ -82,22 +88,22 @@ export default function LetterDetail() {
   }, [contacts]);
 
   useEffect(() => {
-    if (Object.keys(letterDetails).length !== 0) {
-      if (letterDetails.participants.length > 0) {
-        const options: IParticipantState[] = [];
+    if (letterDetails.participants.length > 0) {
+      const options: IParticipantState[] = [];
 
-        letterDetails.participants.map((participant) => {
-          const option = contactToOption(participant.user);
+      letterDetails.participants.map((participant) => {
+        const option = contactToOption(participant);
 
-          options.push({ role_name: participant.role_name, user: option });
-        });
-
-        setParticipants(options);
-      }
+        options.push({ role_name: participant.role_name, user: option });
+      });
+      setParticipants(options);
     }
-  }, [letterDetails, dispatch]);
+  }, [letterDetails.participants]);
 
-  if (participants.length === 0) {
+  if (
+    Object.keys(permissions).length === 0 ||
+    !(letterDetails?.participants?.length > 0)
+  ) {
     return <LetterDetailSkeleton />;
   }
 

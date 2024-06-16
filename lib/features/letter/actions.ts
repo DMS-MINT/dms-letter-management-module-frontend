@@ -21,7 +21,7 @@ export async function get_letters(category: string) {
 export async function get_letter_details(reference_number: string) {
   try {
     const response = await axiosInstance.get(`letters/${reference_number}/`);
-    const data = await response.data.data;
+    const data = await response.data;
     return data;
   } catch (error: any) {
     handleAxiosError(error);
@@ -48,6 +48,7 @@ export async function update_letter(
       `letters/${reference_number}/update/`,
       letter
     );
+
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -59,22 +60,6 @@ export async function delete_letter(reference_number: string) {
   try {
     const response = await axiosInstance.delete(
       `letters/${reference_number}/delete`
-    );
-    const data = await response.data;
-    return data;
-  } catch (error: any) {
-    handleAxiosError(error);
-  }
-}
-
-export async function forward_letter(
-  letter_reference_number: string,
-  participant: IParticipantOutputSerializer
-) {
-  try {
-    const response = await axiosInstance.post(
-      `letters/forward/${letter_reference_number}`,
-      participant
     );
     const data = await response.data;
     return data;

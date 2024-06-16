@@ -8,6 +8,7 @@ const updateLetterSerializer = (
   letter: ILetterDetailInputSerializer
 ): ILetterUpdateSerializer => {
   const participants = letter.participants.map((participant) => ({
+    id: participant.id,
     user: participant.user,
     role_name:
       ParticipantRolesEnum[

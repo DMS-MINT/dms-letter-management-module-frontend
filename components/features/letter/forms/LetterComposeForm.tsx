@@ -11,12 +11,13 @@ import {
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { contactToOption } from "@/utils";
-import { IOption } from "@/typing/interface";
+import { IOption, IParticipantInputSerializer } from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 interface IFormConfig {
   label: string;
@@ -144,7 +145,10 @@ export default function LetterComposeForm() {
   useEffect(() => {
     if (contacts.length > 0) {
       const options: IOption[] = contacts.map((contact) => {
-        return contactToOption(contact);
+        const id = uuidv4();
+        const user = contact;
+        const data = { id, user } as IParticipantInputSerializer;
+        return contactToOption(data);
       });
 
       setOptions(options);
