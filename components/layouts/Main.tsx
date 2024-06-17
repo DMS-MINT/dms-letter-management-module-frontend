@@ -1,13 +1,9 @@
-import { Card } from "@/components/ui/card";
-
 export default function Main({
   children,
+  className,
 }: Readonly<{
   children: React.ReactNode;
+  className?: string;
 }>) {
-  return (
-    <main className="flex-1">
-      <Card className="p-6 h-full">{children}</Card>
-    </main>
-  );
+  return <main className={`card h-fit flex-1 ${className}`}>{children}</main>;
 }
