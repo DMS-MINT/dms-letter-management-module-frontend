@@ -10,7 +10,7 @@ export default function PrintControlPanel() {
   }
 
   return (
-    <section className="flex items-center justify-between w-full">
+    <section className="flex items-center justify-between w-full no-print">
       <h1 className="page-title">
         የሩሲያ ፌዴሬሽን ባዘጋጀው የዕውቅና ሽልማት ላይ ተሳትፎ እንዲደረግ ስለማሳወቅ
       </h1>

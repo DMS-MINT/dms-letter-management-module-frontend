@@ -38,7 +38,7 @@ export default function Compose() {
       </TabsList>
 
       {composeTabs.map((tab) => (
-        <TabsContent key={tab} value={tab} className="flex-1">
+        <TabsContent key={tab} value={tab} className="flex-1 bg-gray-100 no-print">
           <LetterComposeForm />
         </TabsContent>
       ))}

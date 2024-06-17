@@ -18,6 +18,7 @@ import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import Editor from "../../../shared/TextEditor";
 
 interface IFormConfig {
   label: string;
@@ -178,18 +179,13 @@ export default function LetterComposeForm() {
         <Input
           type="text"
           id="ጉዳይ"
-          className="w-full"
+          className="w-full bg-white"
           value={letterDetail.subject || ""}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
       {isIncomingLetter ? null : (
-        <Textarea
-          id="ደብዳቤ"
-          className="bg-gray-100 h-[500px]"
-          value={letterDetail.content || ""}
-          onChange={(e) => dispatch(updateContent(e.target.value))}
-        />
+       <Editor />
       )}
       <Button variant="outline" className="flex gap-2 w-fit mt-4">
         <Plus size={19} />

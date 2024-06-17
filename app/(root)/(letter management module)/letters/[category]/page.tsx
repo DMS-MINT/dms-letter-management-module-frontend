@@ -60,7 +60,7 @@ export default function Table() {
       <Subheader>
         <TableControlPanel />
       </Subheader>
-      <section className="flex flex-1 pb-3 px-8 gap-6 mt-2">
+      <section className="flex flex-1 pb-3 px-8 gap-6 mt-2 no-print">
         <Drawer>
           <LetterNavigationDrawer />
         </Drawer>

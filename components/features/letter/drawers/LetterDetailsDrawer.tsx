@@ -37,7 +37,7 @@ export default function LetterDetailsDrawer() {
   }, [letterDetails]);
 
   return (
-    <section className="flex flex-col gap-10">
+    <section className="flex flex-col gap-10 no-print">
       <div className="flex flex-col gap-2">
         {letterMeta.map(({ label, value, icon }) => (
           <Fragment key={label}>

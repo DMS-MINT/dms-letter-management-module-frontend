@@ -25,7 +25,7 @@ export default function TableControlPanel() {
   }
 
   return (
-    <section className="flex items-center justify-between w-full">
+    <section className="flex items-center justify-between w-full no-print">
       <h1 className="page-title">
         {letterCategoryLookup[category.toUpperCase()]}
       </h1>

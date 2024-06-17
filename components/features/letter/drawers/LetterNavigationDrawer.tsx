@@ -62,7 +62,7 @@ export default function LetterNavigationDrawer() {
   const letters = useAppSelector(selectLetters);
 
   return (
-    <nav className="flex flex-col gap-2 w-full">
+    <nav className="flex flex-col gap-2 w-full no-print">
       {primaryRoutes.map(({ name, icon, showBadge, path }) => (
         <Link key={uuidv4()} href={path}>
           <Button

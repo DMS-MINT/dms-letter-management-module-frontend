@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   DetailControlPanel,
   LetterDetailsDrawer,
@@ -10,11 +12,11 @@ export default function RootLayout({
   return (
     <>
       <Subheader>
-        <section className="flex items-center justify-between w-full">
+        <section className='flex items-center justify-between w-full no-print'>
           <DetailControlPanel />
         </section>
       </Subheader>
-      <section className="flex px-8 gap-6 mt-2 h-full">
+      <section className='flex px-8 gap-6 mt-2 h-full'>
         <Drawer>
           <LetterDetailsDrawer />
         </Drawer>

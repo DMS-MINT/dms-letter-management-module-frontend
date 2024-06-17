@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Input } from "@/components/ui/input";
@@ -94,7 +96,6 @@ export default function LetterDetail() {
       letterDetails.participants.map((participant) => {
         const option = contactToOption(participant);
 
-        options.push({ role_name: participant.role_name, user: option });
       });
       setParticipants(options);
     }
@@ -108,14 +109,14 @@ export default function LetterDetail() {
   }
 
   return (
-    <section className="grid gap-5 h-fit pb-5 flex-1">
-      <section className="card">
-        <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
-        <section className="p-2 flex gap-2 flex-col">
+    <section className='grid gap-5 h-fit pb-5 flex-1 no-print'>
+      <section className='card'>
+        <h2 className='font-semibold text-lg'>የ ደብዳቤው ተሳታፊወች</h2>
+        <section className='p-2 flex gap-2 flex-col'>
           {letterParticipantOptions.map(
             ({ label, participantRole, isCreatable, isMulti }) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <Label className="w-20">{label}</Label>
+              <div key={label} className='flex items-center gap-1.5'>
+                <Label className='w-20'>{label}</Label>
                 <SelectableInput
                   defaultValue={getDefaultValue(participants, participantRole)}
                   options={options}
@@ -128,33 +129,33 @@ export default function LetterDetail() {
           )}
         </section>
       </section>
-      <section className="card">
-        <section className="flex flex-col gap-5">
-          <h2 className="font-semibold text-lg">ስለ ደብዳቤው መረጃ</h2>
-          <div className="grid  gap-5">
-            <div className="grid grid-cols-2 gap-5">
-              <div className="grid items-center gap-1.5">
-                <Label htmlFor="ጉዳዩ">ጉዳዩ</Label>
+      <section className='card'>
+        <section className='flex flex-col gap-5'>
+          <h2 className='font-semibold text-lg'>ስለ ደብዳቤው መረጃ</h2>
+          <div className='grid  gap-5'>
+            <div className='grid grid-cols-2 gap-5'>
+              <div className='grid items-center gap-1.5'>
+                <Label htmlFor='ጉዳዩ'>ጉዳዩ</Label>
                 <Input
-                  type="text"
-                  id="ጉዳዩ"
+                  type='text'
+                  id='ጉዳዩ'
                   value={letterDetails.subject ? letterDetails.subject : ""}
                   onChange={(e) => dispatch(updateSubject(e.target.value))}
                 />
               </div>
-              <div className="grid items-center gap-1.5">
-                <Label htmlFor="የገጾች ብዛት">የገጾች ብዛት</Label>
-                <Input readOnly type="text" id="የገጾች ብዛት" value="1" />
+              <div className='grid items-center gap-1.5'>
+                <Label htmlFor='የገጾች ብዛት'>የገጾች ብዛት</Label>
+                <Input readOnly type='text' id='የገጾች ብዛት' value='1' />
               </div>
             </div>
           </div>
           {
             letterDetails.letter_type !== "incoming" ? (
-              <section className="flex flex-col gap-1.5">
-                <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
+              <section className='flex flex-col gap-1.5'>
+                <Label htmlFor='ጉዳዩ'>ደብዳቤ</Label>
                 <Textarea
-                  id="ደብዳቤ"
-                  className="bg-gray-100 h-[500px]"
+                  id='ደብዳቤ'
+                  className='bg-gray-100 h-[500px]'
                   value={letterDetails.content ? letterDetails.content : ""}
                   onChange={(e) => dispatch(updateContent(e.target.value))}
                 />
