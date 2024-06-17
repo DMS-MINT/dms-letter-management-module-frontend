@@ -36,6 +36,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
+    size: 10,
   },
   {
     accessorKey: "has_read",
@@ -53,6 +54,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -62,6 +64,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
+    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SENDER,
@@ -81,6 +84,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{senders ? senders : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -100,6 +104,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{recipients ? recipients : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -109,6 +114,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
+    size: 250,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -118,6 +124,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CURRENT_STATE,
@@ -143,6 +150,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </Badge>
       );
     },
+    size: 20,
   },
   {
     accessorKey: LetterTableColumnEnum.SENT_AT,
@@ -161,26 +169,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.RECEIVED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.RECEIVED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const received_at: string = row.getValue(
-        LetterTableColumnEnum.RECEIVED_AT
-      );
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
-        </div>
-      );
-    },
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CREATED_AT,
@@ -199,23 +188,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.UPDATED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
-        </div>
-      );
-    },
+    size: 10,
   },
 ];
