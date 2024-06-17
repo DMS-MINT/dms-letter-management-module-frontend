@@ -14,20 +14,6 @@ export default function OutgoingLetterPrintPreview() {
         <header className='flex justify-between items-center mb-4'>
           <img src='/image/star.png' alt='Logo 1' className='w-20 h-20' />
 
-          {/* <div className="flex flex-col items-center w-full font-serif">
-            <h2 className="text-2xl font-bold text-gray-800 text-center">
-              በ ኢትዮጲያ ፌደረላዊ ሪፐብሊክ
-            </h2>
-            <h2 className="text-xl font-bold text-gray-800 text-center">
-              የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር
-            </h2>
-            <p className="text-base  text-gray-600 text-center">
-              The Federal Democratic Republic of Ethiopia
-            </p>
-            <p className="text-base  text-gray-600 text-center">
-              Minister of Innovation and Technology
-            </p>
-          </div> */}
           <img src='/image/innovation.png' alt='Logo 1' className='w-28 h-20' />
         </header>
 
@@ -69,8 +55,8 @@ export default function OutgoingLetterPrintPreview() {
           <p className='text-lg  text-gray-600 underline'>አዲስ አበባ</p>
         </div>
         <div className='flex flex-col pt-10 gap-3 font-serif'>
-         <p className='text-lg  text-gray-600 text-center'>
-             ጉዳዩ:- {letterDetails.subject}
+          <p className='text-lg  text-gray-600 text-center'>
+            ጉዳዩ:- {letterDetails.subject}
           </p>
           <p className='text-sm font-light text-gray-600 h-[auto] overflow-auto overflow-x-auto '>
             {letterDetails.content}

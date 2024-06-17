@@ -1,3 +1,4 @@
+import { IComment } from "./IComment";
 import {
   IParticipantInputSerializer,
   IParticipantOutputSerializer,
@@ -5,11 +6,16 @@ import {
 
 export type LetterType = "internal" | "incoming" | "outgoing";
 
+interface IState {
+  name: string;
+}
+
 export interface ILetterListInputSerializer {
   id: string;
+  reference_number: string;
   subject: string;
   content: string;
-  status: string;
+  current_state: IState;
   has_read: boolean;
   sent_at: string;
   received_at: string;
@@ -22,12 +28,12 @@ export interface ILetterListInputSerializer {
 export interface ILetterDetailInputSerializer
   extends ILetterListInputSerializer {
   content: string;
+  comments: IComment[];
 }
 
 export interface ILetterCreateSerializer {
   subject?: string;
   content?: string;
-  status: number;
   letter_type: LetterType;
   participants: IParticipantOutputSerializer[];
 }

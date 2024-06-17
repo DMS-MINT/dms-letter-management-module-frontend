@@ -1,16 +1,26 @@
-import { ContactType, IGuest, IMember, IOption } from "@/typing/interface";
+import {
+  ContactType,
+  IGuest,
+  IMember,
+  IOption,
+  IParticipantInputSerializer,
+} from "@/typing/interface";
 
-const contactToOption = (contact: ContactType): IOption => {
-  if (contact.user_type === "member") {
-    const memberContact = contact as IMember;
+const contactToOption = (participant: IParticipantInputSerializer): IOption => {
+  const id: string = participant.id;
+  const user: ContactType = participant.user;
+  if (user.user_type === "member") {
+    const memberContact = user as IMember;
     return {
+      id: id,
       value: memberContact.id,
       label: memberContact.job_title,
       user_type: "member",
     };
-  } else if (contact.user_type === "guest") {
-    const guestContact = contact as IGuest;
+  } else if (user.user_type === "guest") {
+    const guestContact = user as IGuest;
     return {
+      id: id,
       value: guestContact.id,
       label: guestContact.name,
       user_type: "guest",

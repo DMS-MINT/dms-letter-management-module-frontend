@@ -98,12 +98,14 @@ export default function DataTable<TData, TValue>({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => {
-                  const cellID = row.getValue("id");
+                  const reference_number = row.getValue("reference_number");
                   return (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      onClick={() => router.push(`${pathname}/${cellID}`)}
+                      onClick={() =>
+                        router.push(`${pathname}/${reference_number}`)
+                      }
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>

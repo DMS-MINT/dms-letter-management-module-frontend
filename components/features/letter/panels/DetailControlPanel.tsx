@@ -42,8 +42,8 @@ export default function DetailControlPanel() {
 
     dispatch(
       updateLetter({
-        id: letterDetails.id,
         letter: serializedLetter,
+        reference_number: ""
       })
     );
   };
@@ -73,12 +73,12 @@ export default function DetailControlPanel() {
         <Skeleton className='h-8 w-96' />
       )}
 
-      {letterDetails.status ? (
+      {letterDetails.current_state && letterDetails.current_state.name ? (
         <Badge
           variant='destructive'
           className='rounded-md flex items-center justify-between pl-0 ml-2'
         >
-          <Dot /> {letterStatusLookup[letterDetails.status]}
+          <Dot /> {letterStatusLookup[letterDetails.current_state.name]}
         </Badge>
       ) : (
         <Skeleton className='h-8 w-14 ml-2' />
@@ -93,12 +93,7 @@ export default function DetailControlPanel() {
           <Download />
           PDF
         </Button>
-        {/* <Button variant='outline' size='icon'>
-          <ChevronLeft size={20} />
-        </Button>
-        <Button variant='outline' size='icon'>
-          <ChevronRight size={20} />
-        </Button> */}
+      
         <Button variant='outline' size='icon' onClick={handlePrint}>
           <Printer size={20} /> 
         </Button>

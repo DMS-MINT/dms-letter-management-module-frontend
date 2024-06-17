@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 
 interface ISelectableInputProps {
   options: IOption[];
-  role: number;
+  role: ParticipantRolesEnum;
   defaultValue?: IOption[];
   isCreatable?: boolean;
   isMulti?: boolean;
@@ -37,22 +37,34 @@ export default function SelectableInput({
     actionMeta: ActionMeta<IOption>
   ) => {
     const { action, name, option: selectedOption, removedValue } = actionMeta;
-    const role = name as string;
+    const role_name = name as ParticipantRolesEnum;
 
     const handleSelectOption = (selectedOption: IOption) => {
+      const id = selectedOption.id;
       const user = optionToContact(selectedOption);
-      dispatch(addParticipant({ role, user }));
+      dispatch(addParticipant({
+        id, role_name, user,
+        role: ""
+      }));
     };
 
     const handleCreateOption = (selectedOption: IOption) => {
       const user_type = "guest";
+      const id = selectedOption.id;
       const user = optionToContact({ ...selectedOption, user_type });
-      dispatch(addParticipant({ role, user }));
+      dispatch(addParticipant({
+        id, role_name, user,
+        role: ""
+      }));
     };
 
     const handleRemoveValue = (removedValue: IOption) => {
+      const id = removedValue.id;
       const user = optionToContact(removedValue);
-      dispatch(removeParticipant({ role, user }));
+      dispatch(removeParticipant({
+        id, role_name, user,
+        role: ""
+      }));
     };
 
     switch (action) {
@@ -72,10 +84,6 @@ export default function SelectableInput({
 
   const SelectableInputToRender = isCreatable ? Creatable : Select;
 
-  const getRoleKeyByValue = (value: number): string | undefined => {
-    return ParticipantRolesEnum[value];
-  };
-
   useEffect(() => setIsMounted(true), []);
 
   return isMounted ? (
@@ -83,7 +91,7 @@ export default function SelectableInput({
       id={uuidv4()}
       options={options}
       onChange={handleSelectChange}
-      name={getRoleKeyByValue(role)}
+      name={role}
       defaultValue={defaultValue}
       isMulti={isMulti}
       className="w-full"

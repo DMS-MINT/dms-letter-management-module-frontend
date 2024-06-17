@@ -20,7 +20,6 @@ import {
   createLetter,
   selectLetterDetails,
   selectStatus,
-  setLetterStatus,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createLetterSerializer } from "@/utils";
@@ -33,24 +32,22 @@ export default function ComposeControlPanel() {
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
 
-  const dispatchSetLetterStatus = (status: string) => {
-    dispatch(setLetterStatus(status));
+  const dispatchCreateLetter = () => {
+    const serializedLetter = createLetterSerializer(letterDetail);
+    dispatch(createLetter(serializedLetter));
   };
 
   useEffect(() => {
-    if (letterDetail.status) {
-      const serializedLetter = createLetterSerializer(letterDetail);
-      dispatch(createLetter(serializedLetter));
-    }
-  }, [letterDetail.status]);
-
-  useEffect(() => {
     if (status === RequestStatusEnum.FULFILLED) {
-      const category = letterDetail.status === "Draft" ? "draft" : "outbox";
-
-      redirect(`/letters/${category}/${letterDetail.id}`);
+      const category =
+        letterDetail.current_state.name === "Draft" ? "draft" : "outbox";
+      redirect(`/letters/${category}/${letterDetail.reference_number}`);
     }
   }, [status]);
+
+  function dispatchSetLetterStatus(arg0: string): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <section className='flex items-center justify-between w-full overflow-auto'>

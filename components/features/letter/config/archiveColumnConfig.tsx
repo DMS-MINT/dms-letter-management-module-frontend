@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup } from "@/typing/dictionary";
-import { LetterTableColumnEnum } from "@/typing/enum";
+import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
 import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
@@ -36,6 +36,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
+    size: 10,
   },
   {
     accessorKey: "has_read",
@@ -53,15 +54,17 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
+    size: 10,
   },
   {
-    accessorKey: LetterTableColumnEnum.ID,
+    accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.ID]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
+    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SENDER,
@@ -75,9 +78,13 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const senders = getParticipantInfo("Sender", participants);
+      const senders = getParticipantInfo(
+        ParticipantRolesEnum.AUTHOR,
+        participants
+      );
       return <p>{senders ? senders : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -91,9 +98,13 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const recipients = getParticipantInfo("Recipient", participants);
+      const recipients = getParticipantInfo(
+        ParticipantRolesEnum["PRIMARY RECIPIENT"],
+        participants
+      );
       return <p>{recipients ? recipients : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -103,6 +114,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
+    size: 250,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -112,19 +124,23 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
+    size: 10,
   },
   {
-    accessorKey: LetterTableColumnEnum.STATUS,
+    accessorKey: LetterTableColumnEnum.CURRENT_STATE,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.STATUS]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.CURRENT_STATE]}
       />
     ),
     cell: ({ row }) => {
-      const status: string = row.getValue(LetterTableColumnEnum.STATUS);
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(status);
+      const current_state: { name: string } = row.getValue(
+        LetterTableColumnEnum.CURRENT_STATE
+      );
+      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
+        current_state.name
+      );
       return (
         <Badge
           variant="default"
@@ -134,6 +150,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </Badge>
       );
     },
+    size: 20,
   },
   {
     accessorKey: LetterTableColumnEnum.SENT_AT,
@@ -152,26 +169,7 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.RECEIVED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.RECEIVED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const received_at: string = row.getValue(
-        LetterTableColumnEnum.RECEIVED_AT
-      );
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
-        </div>
-      );
-    },
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CREATED_AT,
@@ -190,23 +188,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.UPDATED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
-        </div>
-      );
-    },
+    size: 10,
   },
 ];

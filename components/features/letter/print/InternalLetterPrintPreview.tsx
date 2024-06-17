@@ -4,6 +4,7 @@
 
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
+import { ParticipantRolesEnum } from "@/typing/enum";
 import { v4 as uuidv4 } from "uuid";
 
 export default function InternalLetterPrintPreview() {
@@ -83,7 +84,7 @@ export default function InternalLetterPrintPreview() {
         </div>
         <div className='pt-4 pb-6 font-serif'>
           <p>ግልባጭ:-</p>
-          <ul className='pl-5 overflow-auto h-[auto]'>
+          <ul className='pl-5'>
             {letterDetails.participants
               .filter(
                 (participant) => participant.role === "Carbon Copy Recipient"
@@ -96,8 +97,7 @@ export default function InternalLetterPrintPreview() {
                     : participant.user.name}
                 </li>
               ))}
-
-            <p className='underline'>ኢ.ቴ.ሚ</p>
+            <p>ኢ.ቴ.ሚ</p>
           </ul>
         </div>
 

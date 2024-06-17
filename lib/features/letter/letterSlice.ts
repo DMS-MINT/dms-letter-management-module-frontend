@@ -6,6 +6,7 @@ import {
   ILetterUpdateSerializer,
   LetterType,
   IParticipantInputSerializer,
+  IPermissions,
 } from "@/typing/interface";
 import {
   get_letters,
@@ -17,6 +18,7 @@ import {
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import { RequestStatusEnum } from "@/typing/enum";
+import { setPermissions } from "./workflow/workflowSlice";
 
 export interface ILetterSliceState {
   letters: ILetterListInputSerializer[];
@@ -54,9 +56,6 @@ export const letterSlice = createAppSlice({
         state.letter.letter_type = action.payload;
       }
     ),
-    setLetterStatus: create.reducer((state, action: PayloadAction<string>) => {
-      state.letter.status = action.payload;
-    }),
     addParticipant: create.reducer(
       (state, action: PayloadAction<IParticipantInputSerializer>) => {
         state.letter.participants.push(action.payload);
@@ -66,7 +65,7 @@ export const letterSlice = createAppSlice({
       (state, action: PayloadAction<IParticipantInputSerializer>) => {
         state.letter.participants = state.letter.participants.filter(
           (participant) => {
-            if (participant.role !== action.payload.role) return true;
+            if (participant.role_name !== action.payload.role_name) return true;
 
             if (
               action.payload.user.user_type === "member" &&
@@ -116,9 +115,12 @@ export const letterSlice = createAppSlice({
       }
     ),
     getLetterDetails: create.asyncThunk(
-      async (id: string) => {
-        const response = await get_letter_details(id);
-        return response;
+      async (reference_number: string, { dispatch }) => {
+        const response = await get_letter_details(reference_number);
+        const letterDetails: ILetterDetailInputSerializer = response.data;
+        const permissions: IPermissions = response.permissions;
+        dispatch(setPermissions(permissions));
+        return letterDetails;
       },
       {
         pending: (state) => {
@@ -179,13 +181,13 @@ export const letterSlice = createAppSlice({
     ),
     updateLetter: create.asyncThunk(
       async ({
-        id,
+        reference_number,
         letter,
       }: {
-        id: string;
+        reference_number: string;
         letter: ILetterUpdateSerializer;
       }) => {
-        const response = await update_letter(id, letter);
+        const response = await update_letter(reference_number, letter);
         const data = await response.data;
         return data;
       },
@@ -198,7 +200,7 @@ export const letterSlice = createAppSlice({
         },
         fulfilled: (
           state,
-          action: PayloadAction<ILetterListInputSerializer>
+          action: PayloadAction<ILetterDetailInputSerializer>
         ) => {
           state.status = RequestStatusEnum.IDLE;
           state.letter = action.payload;
@@ -215,8 +217,8 @@ export const letterSlice = createAppSlice({
       }
     ),
     deleteLetter: create.asyncThunk(
-      async (id: string) => {
-        const response = await delete_letter(id);
+      async (reference_number: string) => {
+        const response = await delete_letter(reference_number);
         const data = await response.data;
         return data;
       },
@@ -235,7 +237,7 @@ export const letterSlice = createAppSlice({
           state.letter = action.payload;
           state.error = null;
           toast.dismiss();
-          toast.success("Letter successfully created!");
+          toast.success("Letter successfully deleted!");
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
@@ -260,7 +262,6 @@ export const {
   updateSubject,
   updateContent,
   setLetterType,
-  setLetterStatus,
   addParticipant,
   removeParticipant,
   getLetters,

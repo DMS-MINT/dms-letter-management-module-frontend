@@ -10,7 +10,7 @@ import { handleAxiosError } from "@/utils";
 
 export async function get_letters(category: string) {
   try {
-    const response = await axiosInstance.get(`letters/?category=${category}`);
+    const response = await axiosInstance.get(`letters/?category=${category}/`);
     const data = await response.data.data;
     return data;
   } catch (error: any) {
@@ -18,10 +18,10 @@ export async function get_letters(category: string) {
   }
 }
 
-export async function get_letter_details(id: string) {
+export async function get_letter_details(reference_number: string) {
   try {
-    const response = await axiosInstance.get(`letters/${id}/`);
-    const data = await response.data.data;
+    const response = await axiosInstance.get(`letters/${reference_number}/`);
+    const data = await response.data;
     return data;
   } catch (error: any) {
     handleAxiosError(error);
@@ -40,11 +40,15 @@ export async function create_letter(letter: ILetterCreateSerializer) {
 }
 
 export async function update_letter(
-  id: string,
+  reference_number: string,
   letter: ILetterUpdateSerializer
 ) {
   try {
-    const response = await axiosInstance.put(`letters/${id}/update/`, letter);
+    const response = await axiosInstance.put(
+      `letters/${reference_number}/update/`,
+      letter
+    );
+
     const data = await response.data;
     return data;
   } catch (error: any) {
@@ -52,25 +56,10 @@ export async function update_letter(
   }
 }
 
-export async function delete_letter(id: string) {
+export async function delete_letter(reference_number: string) {
   try {
-    const response = await axiosInstance.delete(`letters/${id}/delete`);
-    const data = await response.data;
-    console.log(data);
-    return data;
-  } catch (error: any) {
-    handleAxiosError(error);
-  }
-}
-
-export async function forward_letter(
-  letter_id: string,
-  participant: IParticipantOutputSerializer
-) {
-  try {
-    const response = await axiosInstance.post(
-      `letters/forward/${letter_id}`,
-      participant
+    const response = await axiosInstance.delete(
+      `letters/${reference_number}/delete`
     );
     const data = await response.data;
     return data;

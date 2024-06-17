@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup } from "@/typing/dictionary";
-import { LetterTableColumnEnum } from "@/typing/enum";
+import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
 import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
@@ -55,11 +55,11 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     },
   },
   {
-    accessorKey: LetterTableColumnEnum.ID,
+    accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.ID]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
   },
@@ -75,7 +75,10 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const senders = getParticipantInfo("Sender", participants);
+      const senders = getParticipantInfo(
+        ParticipantRolesEnum.AUTHOR,
+        participants
+      );
       return <p>{senders ? senders : ""}</p>;
     },
   },
@@ -91,7 +94,10 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const participants: IParticipantInputSerializer[] =
         row.original.participants;
 
-      const recipients = getParticipantInfo("Recipient", participants);
+      const recipients = getParticipantInfo(
+        ParticipantRolesEnum["PRIMARY RECIPIENT"],
+        participants
+      );
       return <p>{recipients ? recipients : ""}</p>;
     },
   },
@@ -114,17 +120,20 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
   },
   {
-    accessorKey: LetterTableColumnEnum.STATUS,
+    accessorKey: LetterTableColumnEnum.CURRENT_STATE,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.STATUS]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.CURRENT_STATE]}
       />
     ),
     cell: ({ row }) => {
-      const status: string = row.getValue(LetterTableColumnEnum.STATUS);
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(status);
+      const current_state: { name: string } = row.getValue(
+        LetterTableColumnEnum.CURRENT_STATE
+      );
+      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
+        current_state.name
+      );
       return (
         <Badge
           variant="default"
@@ -132,44 +141,6 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         >
           {amharicTranslation}
         </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.SENT_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SENT_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const sent_at: string = row.getValue(LetterTableColumnEnum.SENT_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {sent_at ? format(new Date(sent_at), DateFormat) : ""}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.RECEIVED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.RECEIVED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const received_at: string = row.getValue(
-        LetterTableColumnEnum.RECEIVED_AT
-      );
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
-        </div>
       );
     },
   },
@@ -187,24 +158,6 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return (
         <div className="text-right font-medium px-4 py-1">
           {created_at ? format(new Date(created_at), DateFormat) : ""}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.UPDATED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
         </div>
       );
     },
