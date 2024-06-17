@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -25,16 +27,16 @@ export default function TableControlPanel() {
   }
 
   return (
-    <section className="flex items-center justify-between w-full">
-      <h1 className="page-title">
+    <section className='flex items-center justify-between w-full overflow-auto'>
+      <h1 className='page-title'>
         {letterCategoryLookup[category.toUpperCase()]}
       </h1>
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={refreshPage}>
-          <RotateCw className="w-5 h-5" />
+      <div className='flex items-center gap-4 '>
+        <Button variant='outline' size='icon' onClick={refreshPage}>
+          <RotateCw className='w-5 h-5' />
         </Button>
-        <Link href="/letters/compose">
-          <Button className="flex gap-1 w-fit items-center">
+        <Link href='/letters/compose'>
+          <Button className='flex gap-1 w-fit items-center'>
             <Plus size={19} />
             አዲስ ደብዳቤ
           </Button>
