@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -62,7 +64,7 @@ export default function LetterNavigationDrawer() {
   const letters = useAppSelector(selectLetters);
 
   return (
-    <nav className="flex flex-col gap-2 w-full">
+    <nav className='flex flex-col gap-2 w-full no-print'>
       {primaryRoutes.map(({ name, icon, showBadge, path }) => (
         <Link key={uuidv4()} href={path}>
           <Button
@@ -74,8 +76,8 @@ export default function LetterNavigationDrawer() {
             {name}
             {showBadge ? (
               <Badge
-                className="ml-auto hover:bg-gray-200 bg-gray-200"
-                variant="secondary"
+                className='ml-auto hover:bg-gray-200 bg-gray-200'
+                variant='secondary'
               >
                 {letters.length}
               </Badge>

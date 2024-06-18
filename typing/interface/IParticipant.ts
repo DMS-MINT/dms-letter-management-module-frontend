@@ -1,3 +1,5 @@
+/** @format */
+
 import { ParticipantRolesEnum } from "../enum";
 import { ContactType } from "./IContact";
 
@@ -8,6 +10,8 @@ interface BaseParticipant {
 }
 
 export interface IParticipantInputSerializer extends BaseParticipant {
+  role: string;
+
   message?: string;
 }
 

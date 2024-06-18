@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -43,9 +45,13 @@ export default function ComposeControlPanel() {
     }
   }, [status]);
 
+  function dispatchSetLetterStatus(arg0: string): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
-    <section className="flex items-center justify-between w-full">
-      <div className="flex gap-2">
+    <section className="flex items-center justify-between w-full overflow-auto">
+      <div className="flex gap-2 no-print">
         <h1 className="page-title">አዲስ ደብዳቤ </h1>
         <Badge
           variant="destructive"
@@ -54,8 +60,8 @@ export default function ComposeControlPanel() {
           <Dot /> አልተቀመጠም
         </Badge>
       </div>
-      <div className="flex items-center gap-3">
-        <Link href="/letters/print">
+      <div className="flex items-center gap-3 no-print">
+        <Link href="/letters/${category}/${letterDetail.id}/print">
           <Button variant="outline" size="icon">
             <Printer size={20} />
           </Button>
