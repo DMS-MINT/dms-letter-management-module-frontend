@@ -145,44 +145,6 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     },
   },
   {
-    accessorKey: LetterTableColumnEnum.SENT_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SENT_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const sent_at: string = row.getValue(LetterTableColumnEnum.SENT_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {sent_at ? format(new Date(sent_at), DateFormat) : ""}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.RECEIVED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.RECEIVED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const received_at: string = row.getValue(
-        LetterTableColumnEnum.RECEIVED_AT
-      );
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: LetterTableColumnEnum.CREATED_AT,
     header: ({ column }) => (
       <ColumnHeader
@@ -196,24 +158,6 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return (
         <div className="text-right font-medium px-4 py-1">
           {created_at ? format(new Date(created_at), DateFormat) : ""}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: LetterTableColumnEnum.UPDATED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
         </div>
       );
     },
