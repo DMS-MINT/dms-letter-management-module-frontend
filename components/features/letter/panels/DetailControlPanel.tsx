@@ -77,9 +77,9 @@ export default function DetailControlPanel() {
           <Download />
           PDF
         </Button>
-        <Button variant="outline" size="icon">
+        {/* <Button variant="outline" size="icon">
           <Printer size={20} />
-        </Button>
+        </Button> */}
         <Button variant="outline" size="icon" onClick={dispatchLetterDelete}>
           <Trash size={20} />
         </Button>

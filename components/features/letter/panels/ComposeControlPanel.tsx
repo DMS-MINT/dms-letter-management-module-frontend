@@ -1,11 +1,8 @@
-/** @format */
-
 "use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Printer, Dot } from "lucide-react";
-import Link from "next/link";
+import { Printer, Dot, Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,14 +20,24 @@ import {
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createLetterSerializer } from "@/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
+import printJS from "print-js";
+
+interface IContentJson {
+  content: string;
+}
 
 export default function ComposeControlPanel() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const status = useAppSelector(selectStatus);
+  const [contentJson, setContentJson] = useState<IContentJson[]>([]);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setContentJson([{ content: letterDetail.content }]);
+  }, [letterDetail]);
 
   const dispatchCreateLetter = () => {
     const serializedLetter = createLetterSerializer(letterDetail);
@@ -45,10 +52,6 @@ export default function ComposeControlPanel() {
     }
   }, [status]);
 
-  function dispatchSetLetterStatus(arg0: string): void {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <section className="flex items-center justify-between w-full overflow-auto">
       <div className="flex gap-2 no-print">
@@ -61,11 +64,25 @@ export default function ComposeControlPanel() {
         </Badge>
       </div>
       <div className="flex items-center gap-3 no-print">
-        <Link href="/letters/${category}/${letterDetail.id}/print">
+        <Button
+          variant="outline"
+          className="flex gap-1 w-fit items-center v"
+          onClick={() =>
+            printJS({
+              printable: contentJson,
+              properties: ["content"],
+              type: "json",
+            })
+          }
+        >
+          <Download />
+          PDF
+        </Button>
+        {/* <Link href="/letters/${category}/${letterDetail.id}/print">
           <Button variant="outline" size="icon">
             <Printer size={20} />
           </Button>
-        </Link>
+        </Link> */}
         <Button
           className="mr-0 RECIPIENTborder-gray-300 rounded-md"
           variant="outline"
