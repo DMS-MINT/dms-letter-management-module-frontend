@@ -157,24 +157,11 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
-    <form className='p-2 flex gap-2 flex-col w-[220mm] ml-28 overflow-auto'>
-      {isIncomingLetter ? (
-        <div className='flex items-center gap-1.5'>
-          <Label className='w-20'>ከ</Label>
-          <SelectableInput
-            options={options}
-            role={ParticipantRolesEnum.Sender}
-            isCreatable={true}
-            isMulti={true}
-            placeholder='የደብዳቤውን ላኪ ያስገቡ...'
-          />
-        </div>
-      ) : null}
-
+    <form className="p-2 flex gap-2 flex-col overflow-auto">
       {formConfig.map(
         ({ label, participantRole, isCreatable, isMulti, placeholder }) => (
-          <div key={label} className='flex items-center gap-1.5'>
-            <Label className='w-20'>{label}</Label>
+          <div key={label} className="flex items-center gap-1.5">
+            <Label className="w-20">{label}</Label>
             <SelectableInput
               options={options}
               role={participantRole}
@@ -185,21 +172,21 @@ export default function LetterComposeForm() {
           </div>
         )
       )}
-      <div className='flex items-center gap-1.5'>
-        <Label className='w-20' htmlFor='ጉዳይ'>
+      <div className="flex items-center gap-1.5">
+        <Label className="w-20" htmlFor="ጉዳይ">
           ጉዳይ
         </Label>
         <Input
-          type='text'
-          id='ጉዳይ'
-          className='w-full bg-white '
+          type="text"
+          id="ጉዳይ"
+          className="w-full bg-white "
           value={letterDetail.subject || ""}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
       {isIncomingLetter ? null : <Editor />}
 
-      <Button variant='outline' className='flex gap-2 w-fit mt-4'>
+      <Button variant="outline" className="flex gap-2 w-fit mt-4">
         <Plus size={19} />
         ፋይል አያይዝ
       </Button>

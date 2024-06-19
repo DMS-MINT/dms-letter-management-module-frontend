@@ -43,6 +43,7 @@
     "jspdf": "^2.5.1",
     "lucide-react": "^0.364.0",
     "next": "14.1.4",
+    "print-js": "^1.6.0",
     "react": "^18",
     "react-dom": "^18",
     "react-draft-wysiwyg": "^1.15.0",

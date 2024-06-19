@@ -1,4 +1,3 @@
-
 "use client";
 import {
   selectLetterDetails,
@@ -14,7 +13,8 @@ function stripHTMLTags(str: string): string {
   return str.replace(/<[^>]*>/g, "");
 }
 
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+const ReactQuill =
+  typeof window === "object" ? require("react-quill") : () => false;
 const MyComponent = () => {
   const [text, setText] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -30,7 +30,7 @@ const MyComponent = () => {
 
   const handleChange = (content: string) => {
     setText(content.toString());
-    const plaintext = stripHTMLTags(content)
+    const plaintext = stripHTMLTags(content);
     dispatch(updateContent(plaintext));
     console.log("Edited content:", content.toString());
   };
@@ -50,27 +50,22 @@ const MyComponent = () => {
     toolbar: toolbarOptions,
   };
 
-  const customButtonHandler = () => {
-    console.log("Custom button clicked!");
-  };
-
   const letterDetail = useAppSelector(selectLetterDetails);
   const dispatch = useAppDispatch();
 
   return (
-    <>
+    <div className="bg-gray-100 p-1 h-fit flex">
       {isClient && (
         <ReactQuill
           // value={letterDetail.content || ""}
           onChange={handleChange}
           modules={modules}
-          theme='snow'
-          className='   w-[732px] h-[650px] ml-20  mt-4 mb-1 pb-16 bg-white'
+          theme="snow"
+          className="w-[732px] min-h-[30em] mx-auto bg-white"
         />
       )}
-    </>
+    </div>
   );
 };
 
 export default MyComponent;
-
