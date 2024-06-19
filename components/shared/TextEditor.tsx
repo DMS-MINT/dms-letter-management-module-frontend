@@ -1,38 +1,25 @@
 "use client";
+
 import {
   selectLetterDetails,
   updateContent,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch } from "@/lib/hooks";
-
 import { useAppSelector } from "@/lib/hooks";
-import React, { useState, useRef, useEffect } from "react";
-
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-function stripHTMLTags(str: string): string {
-  return str.replace(/<[^>]*>/g, "");
-}
 
-const ReactQuill =
-  typeof window === "object" ? require("react-quill") : () => false;
-const MyComponent = () => {
-  const [text, setText] = useState("");
-  const [isClient, setIsClient] = useState(false);
-  const quillRef = useRef<HTMLDivElement>(null);
+export default function TextEditor() {
+  const letterDetail = useAppSelector(selectLetterDetails);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const stripHTMLTags = (html: string): string => {
+    return html.replace(/<[^>]*>/g, "");
+  };
 
-  function stripHTMLTags(str: string): string {
-    return str.replace(/<[^>]*>/g, "");
-  }
-
-  const handleChange = (content: string) => {
-    setText(content.toString());
-    const plaintext = stripHTMLTags(content);
+  const handleChange = (html: string) => {
+    const plaintext = stripHTMLTags(html);
     dispatch(updateContent(plaintext));
-    console.log("Edited content:", content.toString());
   };
 
   const toolbarOptions = [
@@ -46,26 +33,16 @@ const MyComponent = () => {
     ["superscript", "subscript"],
     ["undo", "redo"],
   ];
-  const modules = {
-    toolbar: toolbarOptions,
-  };
-
-  const letterDetail = useAppSelector(selectLetterDetails);
-  const dispatch = useAppDispatch();
 
   return (
     <div className="bg-gray-100 p-1 h-fit flex">
-      {isClient && (
-        <ReactQuill
-          // value={letterDetail.content || ""}
-          onChange={handleChange}
-          modules={modules}
-          theme="snow"
-          className="w-[732px] min-h-[30em] mx-auto bg-white"
-        />
-      )}
+      <ReactQuill
+        theme="snow"
+        value={letterDetail.content || ""}
+        onChange={handleChange}
+        modules={{ toolbar: toolbarOptions }}
+        className="w-[732px] min-h-[30em] mx-auto bg-white"
+      />
     </div>
   );
-};
-
-export default MyComponent;
+}

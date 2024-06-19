@@ -14,10 +14,9 @@ import { contactToOption } from "@/utils";
 import { IOption, IParticipantInputSerializer } from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
-import { SelectableInput } from "@/components/shared";
+import { SelectableInput, TextEditor } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import Editor from "../../../shared/TextEditor";
 import { v4 as uuidv4 } from "uuid";
 
 interface IFormConfig {
@@ -184,7 +183,7 @@ export default function LetterComposeForm() {
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
-      {isIncomingLetter ? null : <Editor />}
+      {isIncomingLetter ? null : <TextEditor />}
 
       <Button variant="outline" className="flex gap-2 w-fit mt-4">
         <Plus size={19} />

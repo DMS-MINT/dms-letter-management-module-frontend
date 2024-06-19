@@ -13,7 +13,7 @@ import { updateLetterSerializer } from "@/utils";
 import { letterStatusLookup } from "@/typing/dictionary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-import print from "print-js";
+import printJS from "print-js";
 
 interface IContentJson {
   content: string;
@@ -67,7 +67,7 @@ export default function DetailControlPanel() {
           variant="outline"
           className="flex gap-1 w-fit items-center v"
           onClick={() =>
-            print({
+            printJS({
               printable: contentJson,
               properties: ["content"],
               type: "json",
