@@ -87,7 +87,7 @@ export default function SignIn() {
           <div className="flex justify-between items-center h-fit">
             <Label htmlFor="password">የይለፍ ቃልዎን ያስገቡ</Label>
             <Link href="/forgot-password">
-              <Button variant="link" className="py-0 h-fit">
+              <Button type="button" variant="link" className="py-0 h-fit">
                 የይለፍ ቃልዎን ረስተዋል?
               </Button>
             </Link>
