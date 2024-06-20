@@ -9,10 +9,33 @@ import { letterStatusLookup } from "@/typing/dictionary";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButtons from "../miscellaneous/ActionButtons";
 import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
+import { useEffect, useState } from "react";
+
+interface IContentJson {
+  content: string;
+}
 
 export default function DetailControlPanel() {
-  const letterDetails = useAppSelector(selectLetterDetails);
+  const letterDetail = useAppSelector(selectLetterDetails);
   const permissions = useAppSelector(selectPermissions);
+  const [contentJson, setContentJson] = useState<IContentJson[]>([]);
+
+  useEffect(() => {
+    setContentJson([
+      { content: letterDetail.content ? letterDetail.content : "" },
+    ]);
+  }, [letterDetail]);
+
+  const handlePrint = async () => {
+    if (typeof window !== "undefined") {
+      const printJS = (await import("print-js")).default;
+      printJS({
+        printable: contentJson,
+        properties: ["content"],
+        type: "json",
+      });
+    }
+  };
 
   if (Object.keys(permissions).length === 0) {
     return null;
@@ -21,8 +44,8 @@ export default function DetailControlPanel() {
   return (
     <section className="flex items-center justify-between w-full">
       {Object.keys(permissions).length !== 0 ? (
-        letterDetails.subject ? (
-          <h1 className="page-title">{letterDetails.subject}</h1>
+        letterDetail.subject ? (
+          <h1 className="page-title">{letterDetail.subject}</h1>
         ) : (
           <h1 className="page-title !text-gray-400">ርዕሰ ጉዳይ የሌለው ደብዳቤ</h1>
         )
@@ -30,19 +53,19 @@ export default function DetailControlPanel() {
         <Skeleton className="h-8 w-96" />
       )}
 
-      {letterDetails.current_state && letterDetails.current_state.name ? (
+      {letterDetail.current_state && letterDetail.current_state.name ? (
         <Badge
           variant="destructive"
           className="rounded-md flex items-center justify-between pl-0 ml-2"
         >
-          <Dot /> {letterStatusLookup[letterDetails.current_state.name]}
+          <Dot /> {letterStatusLookup[letterDetail.current_state.name]}
         </Badge>
       ) : (
         <Skeleton className="h-8 w-14 ml-2" />
       )}
 
       <div className="flex items-center ml-auto gap-2">
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" onClick={handlePrint}>
           <Printer size={20} />
         </Button>
         <ActionButtons />

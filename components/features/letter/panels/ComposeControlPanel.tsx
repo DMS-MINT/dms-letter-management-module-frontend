@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Printer, Dot } from "lucide-react";
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
@@ -21,14 +21,24 @@ import {
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { createLetterSerializer } from "@/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
+interface IContentJson {
+  content: string;
+}
 
 export default function ComposeControlPanel() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
+  const [contentJson, setContentJson] = useState<IContentJson[]>([]);
+
+  useEffect(() => {
+    setContentJson([
+      { content: letterDetail.content ? letterDetail.content : "" },
+    ]);
+  }, [letterDetail]);
 
   const dispatchCreateLetter = () => {
     const serializedLetter = createLetterSerializer(letterDetail);
@@ -43,6 +53,17 @@ export default function ComposeControlPanel() {
     }
   }, [status]);
 
+  const handlePrint = async () => {
+    if (typeof window !== "undefined") {
+      const printJS = (await import("print-js")).default;
+      printJS({
+        printable: contentJson,
+        properties: ["content"],
+        type: "json",
+      });
+    }
+  };
+
   return (
     <section className="flex items-center justify-between w-full">
       <div className="flex gap-2">
@@ -55,11 +76,9 @@ export default function ComposeControlPanel() {
         </Badge>
       </div>
       <div className="flex items-center gap-3">
-        <Link href="/letters/print">
-          <Button variant="outline" size="icon">
-            <Printer size={20} />
-          </Button>
-        </Link>
+        <Button variant="outline" size="icon" onClick={handlePrint}>
+          <Printer size={20} />
+        </Button>
         <Button
           className="mr-0 RECIPIENTborder-gray-300 rounded-md"
           variant="outline"
