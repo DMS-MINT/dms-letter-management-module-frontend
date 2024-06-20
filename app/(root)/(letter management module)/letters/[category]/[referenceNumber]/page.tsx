@@ -19,6 +19,7 @@ import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
 import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
+import { RichTextEditor } from "@/components/shared/Editor";
 
 interface IParticipantState {
   role_name: ParticipantRolesEnum;
@@ -152,12 +153,7 @@ export default function LetterDetail() {
             letterDetails.letter_type !== "incoming" ? (
               <section className="flex flex-col gap-1.5">
                 <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
-                <Textarea
-                  id="ደብዳቤ"
-                  className="bg-gray-100 h-[500px]"
-                  value={letterDetails.content ? letterDetails.content : ""}
-                  onChange={(e) => dispatch(updateContent(e.target.value))}
-                />
+                <RichTextEditor />
               </section>
             ) : null
             // <section className="flex flex-col gap-1.5">
