@@ -14,7 +14,7 @@ import {
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 
-const DateFormat: string = "eee MMM dd";
+const DateFormat: string = "eee MMM dd yyy";
 
 export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -82,6 +82,7 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         ParticipantRolesEnum["PRIMARY RECIPIENT"],
         participants
       );
+
       return <p>{recipients ? recipients : ""}</p>;
     },
     size: 400,
@@ -115,16 +116,15 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       />
     ),
     cell: ({ row }) => {
-      const current_state: { name: string } = row.getValue(
+      const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
-        current_state.name
-      );
+      const { amharicTranslation, badgeVariant } =
+        getTranslatedLetterStatus(current_state);
       return (
         <Badge
           variant="default"
-          className="rounded-md flex items-center justify-between min-w-fit"
+          className="rounded-md flex items-center justify-between w-fit"
         >
           {amharicTranslation}
         </Badge>

@@ -4,7 +4,7 @@ import { ContactType } from "./IContact";
 interface BaseParticipant {
   id: string;
   user: ContactType;
-  role_name: ParticipantRolesEnum;
+  role: ParticipantRolesEnum;
 }
 
 export interface IParticipantInputSerializer extends BaseParticipant {

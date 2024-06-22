@@ -28,11 +28,29 @@ export const workflowSlice = createAppSlice({
   initialState,
 
   reducers: (create) => ({
-    setPermissions: create.reducer(
-      (state, action: PayloadAction<IPermissions>) => {
-        state.permissions = action.payload;
-      }
-    ),
+    setPermissions: create.reducer((state, action: PayloadAction<string[]>) => {
+      const permissions: IPermissions = {
+        can_view_letter: false,
+        can_update_letter: false,
+        can_submit_letter: false,
+        can_comment_letter: false,
+        can_share_letter: false,
+        can_delete_letter: false,
+        can_retract_letter: false,
+        can_archive_letter: false,
+        can_close_letter: false,
+        can_publish_letter: false,
+        can_reject_letter: false,
+        can_reopen_letter: false,
+      };
+
+      action.payload.forEach((permission) => {
+        if (permission in permissions) {
+          permissions[permission as keyof IPermissions] = true;
+        }
+      });
+      state.permissions = permissions;
+    }),
     shareLetter: create.asyncThunk(
       async ({
         reference_number,

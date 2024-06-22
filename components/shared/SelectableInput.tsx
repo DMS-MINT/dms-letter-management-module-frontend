@@ -37,25 +37,25 @@ export default function SelectableInput({
     actionMeta: ActionMeta<IOption>
   ) => {
     const { action, name, option: selectedOption, removedValue } = actionMeta;
-    const role_name = name as ParticipantRolesEnum;
+    const role = name as ParticipantRolesEnum;
 
     const handleSelectOption = (selectedOption: IOption) => {
       const id = selectedOption.id;
       const user = optionToContact(selectedOption);
-      dispatch(addParticipant({ id, role_name, user }));
+      dispatch(addParticipant({ id, role, user }));
     };
 
     const handleCreateOption = (selectedOption: IOption) => {
       const user_type = "guest";
       const id = selectedOption.id;
       const user = optionToContact({ ...selectedOption, user_type });
-      dispatch(addParticipant({ id, role_name, user }));
+      dispatch(addParticipant({ id, role, user }));
     };
 
     const handleRemoveValue = (removedValue: IOption) => {
       const id = removedValue.id;
       const user = optionToContact(removedValue);
-      dispatch(removeParticipant({ id, role_name, user }));
+      dispatch(removeParticipant({ id, role, user }));
     };
 
     switch (action) {
