@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Input } from "@/components/ui/input";
@@ -157,11 +159,11 @@ export default function LetterComposeForm() {
   }, [contacts]);
 
   return (
-    <form className="p-2 flex gap-2 flex-col ">
+    <form className='p-2 flex gap-2 flex-col '>
       {formConfig.map(
         ({ label, participantRole, isCreatable, isMulti, placeholder }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <Label className="w-20">{label}</Label>
+          <div key={label} className='flex items-center gap-1.5'>
+            <Label className='w-20'>{label}</Label>
             <SelectableInput
               options={options}
               role={participantRole}
@@ -172,20 +174,20 @@ export default function LetterComposeForm() {
           </div>
         )
       )}
-      <div className="flex items-center gap-1.5">
-        <Label className="w-20" htmlFor="ጉዳይ">
+      <div className='flex items-center gap-1.5'>
+        <Label className='w-20' htmlFor='ጉዳይ'>
           ጉዳይ
         </Label>
         <Input
-          type="text"
-          id="ጉዳይ"
-          className="w-full bg-white outline-gray-300"
+          type='text'
+          id='ጉዳይ'
+          className='w-full bg-white outline-gray-300'
           value={letterDetail.subject || ""}
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
       {isIncomingLetter ? null : <RichTextEditor />}
-      <Button variant="outline" className="flex gap-2 w-fit mt-4">
+      <Button variant='outline' className='flex gap-2 w-fit mt-4'>
         <Plus size={19} />
         ፋይል አያይዝ
       </Button>

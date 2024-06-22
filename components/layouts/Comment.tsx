@@ -1,120 +1,131 @@
 /** @format */
+
 "use client";
-import { Button } from "@/components/ui/button";
-import { Avatar } from "@radix-ui/react-avatar";
-import { Label } from "@radix-ui/react-dropdown-menu";
-import { Badge } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { Avatar } from "../ui/avatar";
 
-interface Comment {
+type Comment = {
+  id: string;
   text: string;
-}
-interface CommentFormProps {
-  newComment: string;
-  handleCommentChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
+  timestamp: string;
+  author: string;
+};
 
-interface CommentSectionProps {
-  comments: Comment[];
-}
-
-const CommentSection: React.FC<CommentSectionProps> = ({ comments }) => {
+const CommentSection: React.FC = () => {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [updatedComments, setUpdatedComments] = useState(comments);
-  const [showAllComments, setShowAllComments] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<"all" | "comments" | "add">(
+    "all"
+  );
 
-  const handleCommentChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setNewComment(event.target.value);
-  };
-
-  const handleSubmitComment = () => {
+  const handleCommentAdd = () => {
     if (newComment.trim() === "") {
       return;
     }
 
-    const updatedCommentsArr = [...updatedComments, { text: newComment }];
-    setUpdatedComments(updatedCommentsArr);
+    const newCommentItem: Comment = {
+      id: crypto.randomUUID(),
+      text: newComment,
+      timestamp: new Date().toLocaleString(),
+      author: "Biruk markos",
+    };
+
+    setComments([...comments, newCommentItem]);
     setNewComment("");
   };
 
-  const handleShowAllComments = () => {
-    setShowAllComments(true);
+  const handleCommentDelete = (commentId: string) => {
+    setComments(comments.filter((comment) => comment.id !== commentId));
   };
 
-  const handleShowCommentsOnly = () => {
-    setShowAllComments(false);
-  };
-
-  const filteredComments = showAllComments ? updatedComments : [];
+  const filteredComments =
+    selectedTab === "comments"
+      ? comments
+      : selectedTab === "add"
+      ? []
+      : comments;
 
   return (
-    <div className="comments-section rounded-xl bg-gray-50 h-[500px]">
-      <h2>
+    <div className='px-4 py-2 mt-0 justify-center items-center bg-slate-100'>
+      <div className='comment-section-header flex justify-start space-x-4 mb-2 ml-3'>
         <Button
-          onClick={handleShowAllComments}
-          className={showAllComments ? "active  bg-gray-800 mt-4 pl-6" : "mr-2"}
+          className={`px-4 py-1 bg-gray-600 w-[32] h-[16]  ${
+            selectedTab === "all"
+              ? "bg-gray-600 text-white"
+              : "bg-white text-gray-800 hover:bg-gray-200"
+          } rounded-md`}
+          onClick={() => setSelectedTab("all")}
+          type='button'
+          variant='third'
         >
           ሁሉም
         </Button>
         <Button
-          variant="default"
-          onClick={handleShowCommentsOnly}
-          className={
-            !showAllComments ? "active mt-4 " : "ml-2 pl-6 bg-white text-black"
-          }
+          className={`px-4 py-1 bg-gray-500 w-[99] h-[30] ${
+            selectedTab === "comments"
+              ? "bg-gray-800 text-white"
+              : "bg-white text-gray-800 hover:bg-gray-200"
+          } rounded-md`}
+          onClick={() => setSelectedTab("comments")}
+          type='button'
+          variant='outline'
         >
           አስተያየቶች ብቻ
         </Button>
-      </h2>
-      <p className="px-8 py-4 mt-6">
-        <span className="font-bold">•</span> መሰረት አበራ ይህን ከ5 ቀናት በፊት ፈጥረዋል ይህን
-        ከ5 ቀናት በፊት አዘጋጅተውታል።
-      </p>
-      <ul className="list-none p-0"></ul>
-      <div className="comment-form mt-4">
-        <div style={{ position: "relative" }}>
-          <textarea
-            className="ml-16 w-[730px] rounded-lg border-shadow bg-white h-[100px] mb-4 mt-2 border border-gray-300  p-2 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            value={newComment}
-          />
-
-          <h3 style={{ position: "absolute", top: 24, left: 80 }}>
-            <Avatar className="bg-gray-200 text-green-500 rounded-2xl px-3 py-1 mr-2 ">
-              A
-            </Avatar>
-            ስራ አመራር ዋና ስራ አስፈፃሚ መልእክት.
-          </h3>
-
-          <div
-            style={{
-              position: "absolute",
-              top: 18,
-              right: 80,
-              display: "flex;",
-            }}
-          >
-            <Button variant="ghost">አርትዕ</Button>
-            <Button variant="ghost">ሰርዝ</Button>
-          </div>
-        </div>
       </div>
-      <p className="px-8 py-4">
-        <span className="font-bold">•</span> መሰረት አበራ ይህን ከ5 ቀናት በፊት ፈጥረዋል ይህን
-        ከ5 ቀናት በፊት አዘጋጅተውታል።
-      </p>
-      <p className="px-8 py-4">
-        <span className="font-bold">•</span> መሰረት አበራ ይህን ከ5 ቀናት በፊት ፈጥረዋል ይህን
-        ከ5 ቀናት በፊት አዘጋጅተውታል።
-      </p>
-      <button
-        type="button"
-        className="bg-gray-600 text-white px-4 py-2 mr-6 mt-10 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-700  disabled:opacity-50 cursor-pointer"
-        disabled={!newComment.trim()}
+      <div className='comment-list max-h-72 overflow-y-auto'>
+        {filteredComments.map((comment) => (
+          <div
+            key={comment.id}
+            className='comment-item border-b border-gray-300 py-2 flex justify-between items-center'
+          >
+            <div className='flex items-center'>
+              <Avatar className='bg-white text-green-500 mr-2 text-2xl flex items-center justify-center'>
+                {comment.author.charAt(0)}
+              </Avatar>
+              <div>
+                <p className='text-black'>{comment.text}</p>
+                <p
+                  className={`comment-timestamp text-gray-600 text-sm ${
+                    selectedTab === "comments" ? "hidden" : ""
+                  }`}
+                >
+                  {comment.timestamp}
+                </p>
+              </div>
+            </div>
+            <Button
+              className='bg-red-500 text-white px-3 py-1 rounded-md cursor-pointer'
+              onClick={() => handleCommentDelete(comment.id)}
+              type='button'
+            >
+              ሰርዝ
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <div className='comment-input mt-2 flex items-center'>
+        <div className='bg-white rounded-full w-[40px] h-[35px] px-2 py-4 flex items-center justify-center'>
+          <MessageSquare size={40} strokeWidth={2} />{" "}
+        </div>
+        <textarea
+          className='border p-2 resize-y border-gray-400 shadow-lg ml-3 h-[100px] w-[700px] rounded-lg focus:outline-gray-300'
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder='አስተያየት ጨምር...'
+        ></textarea>
+      </div>
+      <Button
+        className='bg-gray-600 text-white mt-4 px-2 py-2 ml-2 border cursor-pointer text-sm w-[99] h-[30]'
+        onClick={handleCommentAdd}
+        type='button'
+        variant='third'
       >
-        አስተያየት ያስገቡ
-      </button>
+        አስተያየት ጨምር{" "}
+      </Button>
     </div>
   );
 };

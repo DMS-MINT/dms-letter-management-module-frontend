@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Input } from "@/components/ui/input";
@@ -20,6 +22,7 @@ import { useParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { selectPermissions } from "@/lib/features/letter/workflow/workflowSlice";
 import { RichTextEditor } from "@/components/shared/Editor";
+import CommentSection from "@/components/layouts/Comment";
 
 interface IParticipantState {
   role_name: ParticipantRolesEnum;
@@ -109,14 +112,14 @@ export default function LetterDetail() {
   }
 
   return (
-    <section className="grid gap-5 h-fit pb-5 flex-1">
-      <section className="card">
-        <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
-        <section className="p-2 flex gap-2 flex-col">
+    <section className='grid gap-5 h-fit pb-5 flex-1'>
+      <section className='card'>
+        <h2 className='font-semibold text-lg'>የ ደብዳቤው ተሳታፊወች</h2>
+        <section className='p-2 flex gap-2 flex-col'>
           {letterParticipantOptions.map(
             ({ label, participantRole, isCreatable, isMulti }) => (
-              <div key={label} className="flex items-center gap-1.5">
-                <Label className="w-20">{label}</Label>
+              <div key={label} className='flex items-center gap-1.5'>
+                <Label className='w-20'>{label}</Label>
                 <SelectableInput
                   defaultValue={getDefaultValue(participants, participantRole)}
                   options={options}
@@ -129,31 +132,33 @@ export default function LetterDetail() {
           )}
         </section>
       </section>
-      <section className="card">
-        <section className="flex flex-col gap-5">
-          <h2 className="font-semibold text-lg">ስለ ደብዳቤው መረጃ</h2>
-          <div className="grid  gap-5">
-            <div className="grid grid-cols-2 gap-5">
-              <div className="grid items-center gap-1.5">
-                <Label htmlFor="ጉዳዩ">ጉዳዩ</Label>
+      <section className='card'>
+        <section className='flex flex-col gap-5'>
+          <h2 className='font-semibold text-lg'>ስለ ደብዳቤው መረጃ</h2>
+          <div className='grid  gap-5'>
+            <div className='grid grid-cols-2 gap-5'>
+              <div className='grid items-center gap-1.5'>
+                <Label htmlFor='ጉዳዩ'>ጉዳዩ</Label>
                 <Input
-                  type="text"
-                  id="ጉዳዩ"
+                  type='text'
+                  id='ጉዳዩ'
                   value={letterDetails.subject ? letterDetails.subject : ""}
                   onChange={(e) => dispatch(updateSubject(e.target.value))}
                 />
               </div>
-              <div className="grid items-center gap-1.5">
-                <Label htmlFor="የገጾች ብዛት">የገጾች ብዛት</Label>
-                <Input readOnly type="text" id="የገጾች ብዛት" value="1" />
+              <div className='grid items-center gap-1.5'>
+                <Label htmlFor='የገጾች ብዛት'>የገጾች ብዛት</Label>
+                <Input readOnly type='text' id='የገጾች ብዛት' value='1' />
               </div>
             </div>
           </div>
           {
             letterDetails.letter_type !== "incoming" ? (
-              <section className="flex flex-col gap-1.5">
-                <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
+              <section className='flex flex-col gap-1.5'>
+                <Label htmlFor='ጉዳዩ'>ደብዳቤ</Label>
+
                 <RichTextEditor />
+                <CommentSection />
               </section>
             ) : null
             // <section className="flex flex-col gap-1.5">
