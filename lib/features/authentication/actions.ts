@@ -49,8 +49,6 @@ export async function get_authentication_token(credentials: ICredentials) {
       sameSite: "lax",
       secure: false,
     });
-
-    return data;
   } catch (error: any) {
     handleAxiosError(error);
   }
@@ -58,9 +56,19 @@ export async function get_authentication_token(credentials: ICredentials) {
 
 export async function delete_authentication_token() {
   try {
-    await axiosInstance.post("auth/logout/");
+    await axiosInstance.get("auth/logout/");
 
     cookies().set(SESSION_NAME, "", { expires: new Date(0) });
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+
+export async function get_user() {
+  try {
+    const response = await axiosInstance.get("auth/me/");
+    const data = await response.data;
+    return data.data;
   } catch (error: any) {
     handleAxiosError(error);
   }

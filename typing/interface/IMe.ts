@@ -1,3 +1,5 @@
+import { boolean } from "yup";
+
 export interface IMe {
   id: string;
   email: string;
@@ -8,4 +10,5 @@ export interface IMe {
   job_title: string;
   department: string;
   phone_number: string;
+  is_staff: boolean;
 }

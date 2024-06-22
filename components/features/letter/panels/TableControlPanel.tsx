@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { letterCategoryLookup } from "@/typing/dictionary";
-import { Plus, RotateCw } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -30,9 +30,6 @@ export default function TableControlPanel() {
         {letterCategoryLookup[category.toUpperCase()]}
       </h1>
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={refreshPage}>
-          <RotateCw className="w-5 h-5" />
-        </Button>
         <Link href="/letters/compose">
           <Button className="flex gap-1 w-fit items-center">
             <Plus size={19} />

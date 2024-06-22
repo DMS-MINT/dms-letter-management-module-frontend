@@ -115,16 +115,15 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       />
     ),
     cell: ({ row }) => {
-      const current_state: { name: string } = row.getValue(
+      const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
-        current_state.name
-      );
+      const { amharicTranslation, badgeVariant } =
+        getTranslatedLetterStatus(current_state);
       return (
         <Badge
           variant="default"
-          className="rounded-md flex items-center justify-between min-w-fit"
+          className="rounded-md flex items-center justify-between w-fit"
         >
           {amharicTranslation}
         </Badge>

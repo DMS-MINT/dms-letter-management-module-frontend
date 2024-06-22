@@ -65,7 +65,7 @@ export const letterSlice = createAppSlice({
       (state, action: PayloadAction<IParticipantInputSerializer>) => {
         state.letter.participants = state.letter.participants.filter(
           (participant) => {
-            if (participant.role_name !== action.payload.role_name) return true;
+            if (participant.role !== action.payload.role) return true;
 
             if (
               action.payload.user.user_type === "member" &&
@@ -118,7 +118,7 @@ export const letterSlice = createAppSlice({
       async (reference_number: string, { dispatch }) => {
         const response = await get_letter_details(reference_number);
         const letterDetails: ILetterDetailInputSerializer = response.data;
-        const permissions: IPermissions = response.permissions;
+        const permissions: string[] = response.permissions;
         dispatch(setPermissions(permissions));
         return letterDetails;
       },
