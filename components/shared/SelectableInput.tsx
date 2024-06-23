@@ -4,58 +4,115 @@ import {
   removeParticipant,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch } from "@/lib/hooks";
-import { IOption } from "@/typing/interface";
+import { ContactType } from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
-import { optionToContact } from "@/utils";
 import { useEffect, useState } from "react";
-import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
+import Select, { ActionMeta } from "react-select";
 import Creatable from "react-select/creatable";
 import { v4 as uuidv4 } from "uuid";
 
 interface ISelectableInputProps {
-  options: IOption[];
-  role: ParticipantRolesEnum;
-  defaultValue?: IOption[];
-  isCreatable?: boolean;
-  isMulti?: boolean;
-  placeholder?: string;
+  options: ContactType[];
+  name: ParticipantRolesEnum;
+  isCreatable: boolean;
+  isMulti: boolean;
+  placeholder: string;
+  defaultValue?: ContactType[];
 }
 
 export default function SelectableInput({
-  options,
-  role,
-  defaultValue,
-  isCreatable = false,
-  isMulti = false,
-  placeholder = "",
+  isCreatable,
+  isMulti,
+  ...rest
 }: ISelectableInputProps) {
   const dispatch = useAppDispatch();
   const [isMounted, setIsMounted] = useState(false);
 
-  const handleSelectChange = (
-    option: SingleValue<IOption> | MultiValue<IOption>,
-    actionMeta: ActionMeta<IOption>
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) return;
+
+  const handleSingleSelectChange = (
+    option: ContactType | null,
+    actionMeta: ActionMeta<ContactType>
   ) => {
-    const { action, name, option: selectedOption, removedValue } = actionMeta;
+    const { action, name, removedValues } = actionMeta;
     const role = name as ParticipantRolesEnum;
 
-    const handleSelectOption = (selectedOption: IOption) => {
-      const id = selectedOption.id;
-      const user = optionToContact(selectedOption);
-      dispatch(addParticipant({ id, role, user }));
+    const handleSelectOption = (option: ContactType) => {
+      dispatch(addParticipant({ id: uuidv4(), user: option, role }));
     };
 
-    const handleCreateOption = (selectedOption: IOption) => {
+    const handleClear = (removedValues: ContactType[]) => {
+      removedValues.forEach((removedValue) => {
+        const user_id = removedValue.id;
+        dispatch(removeParticipant(user_id));
+      });
+    };
+
+    switch (action) {
+      case "select-option":
+        if (option) handleSelectOption(option);
+        break;
+      case "clear":
+        if (removedValues) handleClear(removedValues as ContactType[]);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleMultiSelectChange = (
+    option: readonly ContactType[],
+    actionMeta: ActionMeta<ContactType>
+  ) => {
+    const {
+      action,
+      name,
+      removedValues,
+      option: selectedOption,
+      removedValue,
+    } = actionMeta;
+    const role = name as ParticipantRolesEnum;
+
+    const handleSelectOption = (selectedOption: ContactType) => {
+      dispatch(addParticipant({ id: uuidv4(), user: selectedOption, role }));
+    };
+
+    const handleCreateOption = (selectedOption: ContactType) => {
+      const { value } = selectedOption as unknown as { value: string };
       const user_type = "guest";
-      const id = selectedOption.id;
-      const user = optionToContact({ ...selectedOption, user_type });
-      dispatch(addParticipant({ id, role, user }));
+      dispatch(
+        addParticipant({
+          id: "__New__",
+          user: { id: "__New__", name: value, user_type },
+          role,
+        })
+      );
     };
 
-    const handleRemoveValue = (removedValue: IOption) => {
-      const id = removedValue.id;
-      const user = optionToContact(removedValue);
-      dispatch(removeParticipant({ id, role, user }));
+    const handleRemoveValue = (removedValue: ContactType) => {
+      const user_id = removedValue.id;
+
+      if (user_id) {
+        dispatch(removeParticipant(user_id));
+      } else {
+        const { value } = removedValue as unknown as { value: string };
+        dispatch(removeParticipant(value));
+      }
+    };
+
+    const handleClear = (removedValues: ContactType[]) => {
+      removedValues.forEach((removedValue) => {
+        const user_id = removedValue.id;
+
+        if (user_id) {
+          dispatch(removeParticipant(user_id));
+        } else {
+          const { value } = removedValue as unknown as { value: string };
+          dispatch(removeParticipant(value));
+        }
+      });
     };
 
     switch (action) {
@@ -68,25 +125,67 @@ export default function SelectableInput({
       case "remove-value":
         if (removedValue) handleRemoveValue(removedValue);
         break;
+      case "clear":
+        if (removedValues) handleClear(removedValues as ContactType[]);
+        break;
       default:
         break;
     }
   };
 
+  const isContactType = (
+    option: ContactType | { label: string; value: string }
+  ): option is ContactType => {
+    return (option as ContactType).user_type !== undefined;
+  };
+
+  const getLabel = (
+    option: ContactType | { label: string; value: string }
+  ): string => {
+    if (isContactType(option)) {
+      if (option.user_type === "member") {
+        return `${option.full_name} - ${option.job_title}`;
+      } else if (option.user_type === "guest") {
+        return `${option.name}`;
+      }
+    }
+    return `${option.label}`;
+  };
+
+  const getValue = (
+    option: ContactType | { label: string; value: string }
+  ): string => {
+    if (isContactType(option)) {
+      if (option.user_type === "member") {
+        return option.id;
+      } else if (option.user_type === "guest") {
+        return option.name;
+      }
+    }
+    return `${option.value}`;
+  };
+
   const SelectableInputToRender = isCreatable ? Creatable : Select;
 
-  useEffect(() => setIsMounted(true), []);
-
-  return isMounted ? (
+  return isMulti ? (
     <SelectableInputToRender
-      id={uuidv4()}
-      options={options}
-      onChange={handleSelectChange}
-      name={role}
-      defaultValue={defaultValue}
-      isMulti={isMulti}
+      isMulti={true}
+      isClearable={true}
+      {...rest}
+      onChange={handleMultiSelectChange}
+      getOptionLabel={getLabel}
+      getOptionValue={getValue}
       className="w-full"
-      placeholder={placeholder}
     />
-  ) : null;
+  ) : (
+    <SelectableInputToRender
+      isMulti={false}
+      isClearable={true}
+      {...rest}
+      onChange={handleSingleSelectChange}
+      getOptionLabel={getLabel}
+      getOptionValue={getValue}
+      className="w-full"
+    />
+  );
 }

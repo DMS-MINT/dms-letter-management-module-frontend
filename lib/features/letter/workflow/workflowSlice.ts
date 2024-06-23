@@ -44,6 +44,8 @@ export const workflowSlice = createAppSlice({
         can_reopen_letter: false,
       };
 
+      console.log(action.payload);
+
       action.payload.forEach((permission) => {
         if (permission in permissions) {
           permissions[permission as keyof IPermissions] = true;

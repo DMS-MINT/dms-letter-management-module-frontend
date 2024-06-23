@@ -34,10 +34,6 @@ export default function TopBar() {
   const dispatch = useAppDispatch();
   const params = useParams();
 
-  useEffect(() => {
-    console.log(params);
-  }, [params]);
-
   const handleLogout = () => {
     dispatch(logout({}));
     redirect("/signin");

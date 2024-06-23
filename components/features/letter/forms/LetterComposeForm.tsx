@@ -11,108 +11,115 @@ import {
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { contactToOption } from "@/utils";
-import { IOption, IParticipantInputSerializer } from "@/typing/interface";
+import {
+  ContactType,
+  IOption,
+  IParticipantInputSerializer,
+} from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
-import { SelectableInput } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { RichTextEditor } from "@/components/shared/Editor";
+import { SelectableInput } from "@/components/shared";
 
 interface IFormConfig {
   label: string;
-  participantRole: ParticipantRolesEnum;
+  name: ParticipantRolesEnum;
   isCreatable: boolean;
   isMulti: boolean;
   placeholder: string;
+  defaultValue?: ContactType[];
 }
 
 const internalLetterFormConfig: IFormConfig[] = [
   {
     label: "ከ",
-    participantRole: ParticipantRolesEnum.AUTHOR,
+    name: ParticipantRolesEnum.AUTHOR,
     isCreatable: false,
-    isMulti: true,
+    isMulti: false,
     placeholder: "ተቀባዮችን ያስገቡ...",
   },
   {
     label: "ለ",
-    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
+    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
   },
   {
     label: "ግልባጭ",
-    participantRole: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
     placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
   },
   {
     label: "እንዲያዉቁት",
-    participantRole: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
     isCreatable: false,
     isMulti: true,
     placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
   },
 ];
+
 const incomingLetterFormConfig: IFormConfig[] = [
   {
     label: "ከ",
-    participantRole: ParticipantRolesEnum.AUTHOR,
+    name: ParticipantRolesEnum.AUTHOR,
     isCreatable: true,
     isMulti: true,
     placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
   },
   {
     label: "ለ",
-    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
+    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
   },
   {
     label: "ግልባጭ",
-    participantRole: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
   },
   {
     label: "እንዲያዉቁት",
-    participantRole: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
   },
 ];
+
 const outgoingLetterFormConfig: IFormConfig[] = [
   {
     label: "ከ",
-    participantRole: ParticipantRolesEnum.AUTHOR,
-    isCreatable: true,
-    isMulti: true,
+    name: ParticipantRolesEnum.AUTHOR,
+    isCreatable: false,
+    isMulti: false,
     placeholder: "ተቀባዮችን ያስገቡ...",
   },
   {
     label: "ለ",
-    participantRole: ParticipantRolesEnum["PRIMARY RECIPIENT"],
+    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "ተቀባዮችን ያስገቡ...",
   },
   {
     label: "ግልባጭ",
-    participantRole: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
   },
   {
     label: "እንዲያዉቁት",
-    participantRole: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
+    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
     isCreatable: true,
     isMulti: true,
     placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
@@ -122,9 +129,8 @@ const outgoingLetterFormConfig: IFormConfig[] = [
 export default function LetterComposeForm() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const contacts = useAppSelector(selectContacts);
-  const dispatch = useAppDispatch();
-  const [options, setOptions] = useState<IOption[]>([]);
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
+  const dispatch = useAppDispatch();
 
   const isIncomingLetter =
     letterDetail.letter_type === "incoming" ? true : false;
@@ -143,35 +149,14 @@ export default function LetterComposeForm() {
     }
   }, [letterDetail.letter_type]);
 
-  useEffect(() => {
-    if (contacts.length > 0) {
-      const options: IOption[] = contacts.map((contact) => {
-        const id = uuidv4();
-        const user = contact;
-        const data = { id, user } as IParticipantInputSerializer;
-        return contactToOption(data);
-      });
-
-      setOptions(options);
-    }
-  }, [contacts]);
-
   return (
     <form className="p-2 flex gap-2 flex-col ">
-      {formConfig.map(
-        ({ label, participantRole, isCreatable, isMulti, placeholder }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <Label className="w-20">{label}</Label>
-            <SelectableInput
-              options={options}
-              role={participantRole}
-              isCreatable={isCreatable}
-              isMulti={isMulti}
-              placeholder={placeholder}
-            />
-          </div>
-        )
-      )}
+      {formConfig.map(({ label, ...rest }) => (
+        <div key={label} className="flex items-center gap-1.5">
+          <Label className="w-20">{label}</Label>
+          <SelectableInput options={contacts} {...rest} />
+        </div>
+      ))}
       <div className="flex items-center gap-1.5">
         <Label className="w-20" htmlFor="ጉዳይ">
           ጉዳይ
