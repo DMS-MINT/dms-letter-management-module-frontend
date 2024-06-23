@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const whitelist: string[] = ["inbox", "outbox", "draft", "archive", "trash"];
+const whitelist: string[] = ["inbox", "outbox", "draft", "pending", "publish"];
 
 export default function TableControlPanel() {
   const params = useParams();

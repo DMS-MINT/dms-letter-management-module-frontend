@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { RichTextEditor } from "@/components/shared/Editor";
+import SignatureDraw from "../signaturepad/signatureDraw";
 
 interface IFormConfig {
   label: string;
@@ -185,6 +186,7 @@ export default function LetterComposeForm() {
         />
       </div>
       {isIncomingLetter ? null : <RichTextEditor />}
+      <SignatureDraw />
       <Button variant="outline" className="flex gap-2 w-fit mt-4">
         <Plus size={19} />
         ፋይል አያይዝ
