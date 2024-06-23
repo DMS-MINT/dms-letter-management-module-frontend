@@ -48,7 +48,7 @@ export default function ComposeControlPanel() {
   useEffect(() => {
     if (status === RequestStatusEnum.FULFILLED) {
       const category =
-        letterDetail.current_state.name === "Draft" ? "draft" : "outbox";
+        letterDetail.current_state === "Draft" ? "draft" : "outbox";
       redirect(`/letters/${category}/${letterDetail.reference_number}`);
     }
   }, [status]);
