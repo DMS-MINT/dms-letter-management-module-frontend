@@ -16,7 +16,7 @@ import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 
 const DateFormat: string = "eee MMM dd";
 
-export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
