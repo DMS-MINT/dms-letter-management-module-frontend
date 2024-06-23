@@ -5,7 +5,7 @@ export interface IUIManagerSliceState {
 }
 
 const initialState: IUIManagerSliceState = {
-  isDrawerOpen: true,
+  isDrawerOpen: false,
 };
 
 export const uiManagerSlice = createAppSlice({
