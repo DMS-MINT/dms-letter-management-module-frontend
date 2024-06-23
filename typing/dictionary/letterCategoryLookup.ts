@@ -4,6 +4,6 @@ export const letterCategoryLookup: Record<string, string> = {
   DRAFT: "ረቂቆች",
   ARCHIVE: "ማህደር",
   TRASH: "መጣያ",
-  PENDING: "በመጠባበቅ ላይ",
-  PUBLISH: "አትም",
+  PENDING: "መጽደቅን በመጠባበቅ ላይ",
+  PUBLISHED: "የታተሙ ደብዳቤዎች",
 };

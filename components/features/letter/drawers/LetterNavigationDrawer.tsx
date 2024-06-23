@@ -1,22 +1,14 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import {
-  Archive,
-  BookCheck,
-  FileText,
-  Inbox,
-  MailCheckIcon,
-  Send,
-  Trash,
-} from "lucide-react";
+import { BookDashed, FileText, Inbox, Send, BookCheck } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { selectMe } from "@/lib/features/authentication/authSlice";
+import { Button } from "@/components/ui/button";
 
 interface IRoute {
   name: string;
@@ -24,63 +16,68 @@ interface IRoute {
   showBadge: boolean;
   path: string;
   count: number | null;
-  is_visible: boolean;
+  isVisible: boolean;
 }
 const icon_size: number = 20;
 const icon_color: string = "#2DA4FF";
 
-const primaryRoutes: IRoute[] = [
-  {
-    name: "ገቢ ደብዳቤዎች",
-    icon: <Inbox size={icon_size} color={icon_color} />,
-    showBadge: true,
-    path: "/letters/inbox",
-    count: 10,
-    is_visible: true,
-  },
-  {
-    name: "የተላኩ ደብዳቤዎች",
-    icon: <Send size={icon_size} color={icon_color} />,
-    showBadge: false,
-    path: "/letters/outbox",
-    count: null,
-    is_visible: true,
-  },
-  {
-    name: "ረቂቆች",
-    icon: <FileText size={icon_size} color={icon_color} />,
-    showBadge: true,
-    path: "/letters/draft",
-    count: 3,
-    is_visible: true,
-  },
- 
-  {
-    name: "በመጠባበቅ ላይ",
-    icon: <MailCheckIcon size={icon_size} color={icon_color} />,
-    showBadge: false,
-    path: "/letters/pending",
-    count: null,
-    is_visible: true,
-  },
-  {
-    name: "አትም",
-    icon: <BookCheck size={icon_size} color={icon_color} />,
-    showBadge: false,
-    path: "/letters/publish",
-    count: null,
-    is_visible: true,
-  },
-];
-
 export default function LetterNavigationDrawer() {
   const pathname = usePathname();
   const letters = useAppSelector(selectLetters);
+  const me = useAppSelector(selectMe);
+  const [routes, setRoutes] = useState<IRoute[]>([]);
+
+  useEffect(() => {
+    const primaryRoutes: IRoute[] = [
+      {
+        name: "ገቢ ደብዳቤዎች",
+        icon: <Inbox size={icon_size} color={icon_color} />,
+        showBadge: true,
+        path: "/letters/inbox",
+        count: 10,
+        isVisible: true,
+      },
+      {
+        name: "የተላኩ ደብዳቤዎች",
+        icon: <Send size={icon_size} color={icon_color} />,
+        showBadge: false,
+        path: "/letters/outbox",
+        count: null,
+        isVisible: true,
+      },
+      {
+        name: "ረቂቆች",
+        icon: <FileText size={icon_size} color={icon_color} />,
+        showBadge: true,
+        path: "/letters/draft",
+        count: 3,
+        isVisible: true,
+      },
+      {
+        name: "መጽደቅን በመጠባበቅ ላይ",
+        icon: <BookDashed size={icon_size} color={icon_color} />,
+        showBadge: false,
+        path: "/letters/pending",
+        count: null,
+        isVisible: me.is_staff,
+      },
+      {
+        name: "የታተሙ ደብዳቤዎች",
+        icon: <BookCheck size={icon_size} color={icon_color} />,
+        showBadge: false,
+        path: "/letters/published",
+        count: null,
+        isVisible: me.is_staff,
+      },
+    ];
+
+    setRoutes(primaryRoutes);
+  }, [me]);
 
   return (
     <nav className="flex flex-col gap-2 w-full">
-      {primaryRoutes
-        .filter((route) => route.is_visible)
+      {routes
+        .filter((route) => route.isVisible === true)
         .map(({ name, icon, showBadge, path }) => (
           <Link key={uuidv4()} href={path}>
             <Button

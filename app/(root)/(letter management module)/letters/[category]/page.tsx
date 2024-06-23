@@ -6,11 +6,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
 import { useParams } from "next/navigation";
 import {
+  pendingTableColumns,
   draftTableColumns,
   inboxTableColumns,
   outboxTableColumns,
-  pendingTableColumns,
-  publishTableColumns,
+  publishedTableColumns,
 } from "@/components/features/letter/config";
 import { useEffect, useState } from "react";
 import { ILetterListInputSerializer } from "@/typing/interface";
@@ -30,10 +30,6 @@ export default function Table() {
 
   useEffect(() => {
     switch (params.category) {
-      case "draft":
-        setColumns(draftTableColumns);
-        dispatch(getLetters("draft"));
-        break;
       case "inbox":
         setColumns(inboxTableColumns);
         dispatch(getLetters("inbox"));
@@ -42,14 +38,17 @@ export default function Table() {
         setColumns(outboxTableColumns);
         dispatch(getLetters("outbox"));
         break;
-
+      case "draft":
+        setColumns(draftTableColumns);
+        dispatch(getLetters("draft"));
+        break;
       case "pending":
         setColumns(pendingTableColumns);
         dispatch(getLetters("pending"));
         break;
-      case "publish":
-        setColumns(publishTableColumns);
-        dispatch(getLetters("publish"));
+      case "published":
+        setColumns(publishedTableColumns);
+        dispatch(getLetters("published"));
         break;
       default:
         break;
