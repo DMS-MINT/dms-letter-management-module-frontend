@@ -1,27 +1,44 @@
 import {
   ILetterCreateSerializer,
-  ILetterDetailInputSerializer,
+  ILetterDetails,
+  IParticipantOutputSerializer,
 } from "@/typing/interface";
-import { ParticipantRolesEnum } from "@/typing/enum";
 
 const createLetterSerializer = (
-  letter: ILetterDetailInputSerializer
+  letterDetails: ILetterDetails
 ): ILetterCreateSerializer => {
-  const participants = letter.participants.map((participant) => ({
-    id: participant.id,
-    user: participant.user,
-    role_name: participant.role_name,
-    message: participant.message,
-  }));
+  //@ts-ignore
+  const participants: IParticipantOutputSerializer[] =
+    letterDetails.participants.map((participant) => {
+      if (participant.user.user_type === "member") {
+        return {
+          user: {
+            id: participant.user.id,
+            user_type: "member",
+          },
+          role: participant.role,
+        };
+      } else if (participant.user.user_type === "guest") {
+        return {
+          user: {
+            name: participant.user.name,
+            user_type: "guest",
+          },
+          role: participant.role,
+        };
+      } else {
+        return null;
+      }
+    });
 
-  const subject = letter.subject ? letter.subject : undefined;
-  const content = letter.content ? letter.content : undefined;
+  const subject = letterDetails.subject ? letterDetails.subject : undefined;
+  const content = letterDetails.content ? letterDetails.content : undefined;
 
   return {
     ...(subject && { subject }),
     ...(content && { content }),
     participants,
-    letter_type: letter.letter_type,
+    letter_type: letterDetails.letter_type,
   };
 };
 

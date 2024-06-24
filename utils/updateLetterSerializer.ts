@@ -10,10 +10,9 @@ const updateLetterSerializer = (
   const participants = letter.participants.map((participant) => ({
     id: participant.id,
     user: participant.user,
-    role_name:
-      ParticipantRolesEnum[
-        participant.role_name.toUpperCase() as keyof typeof ParticipantRolesEnum
-      ],
+    role: ParticipantRolesEnum[
+      participant.role.toUpperCase() as keyof typeof ParticipantRolesEnum
+    ],
   }));
 
   const subject = letter.subject ? letter.subject : undefined;

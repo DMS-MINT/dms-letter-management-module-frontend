@@ -49,7 +49,7 @@ export default function ActionButtons() {
     if (Object.keys(permissions).length > 0) {
       const configs: IButtonConfig[] = [
         {
-          isVisible: permissions.can_delete,
+          isVisible: permissions.can_delete_letter,
           isButton: true,
           variant: "outline",
           style: "",
@@ -61,7 +61,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_share,
+          isVisible: permissions.can_share_letter,
           isButton: false,
           component: <ShareLetterForm />,
           label: "ደብዳቤውን አጋራ",
@@ -71,7 +71,7 @@ export default function ActionButtons() {
           action: () => {},
         },
         {
-          isVisible: permissions.can_edit,
+          isVisible: permissions.can_update_letter,
           isButton: true,
           label: "አርም",
           variant: "outline",
@@ -79,6 +79,8 @@ export default function ActionButtons() {
           size: "default",
           action: () => {
             const serializedLetter = updateLetterSerializer(letterDetails);
+
+            console.log(serializedLetter);
 
             dispatch(
               updateLetter({
@@ -89,7 +91,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_submit,
+          isVisible: permissions.can_submit_letter,
           isButton: true,
           label: "ደብዳቤውን ላክ",
           variant: "default",
@@ -100,7 +102,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_retract,
+          isVisible: permissions.can_retract_letter,
           isButton: true,
           label: "ሰርዝ",
           variant: "destructive",
@@ -111,7 +113,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_reject,
+          isVisible: permissions.can_reject_letter,
           isButton: true,
           label: "ደብዳቤ አትቀበል",
           variant: "destructive",
@@ -122,7 +124,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_publish,
+          isVisible: permissions.can_publish_letter,
           isButton: true,
           label: "ደብዳቤ ያትሙ",
           variant: "third",
@@ -133,7 +135,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_close,
+          isVisible: permissions.can_close_letter,
           isButton: true,
           label: "ደብዳቤውን ዝጋ",
           variant: "default",

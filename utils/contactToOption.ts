@@ -26,7 +26,7 @@ const contactToOption = (participant: IParticipantInputSerializer): IOption => {
       user_type: "guest",
     };
   } else {
-    throw new Error("Invalid contact type");
+    throw new Error("Invalid user type");
   }
 };
 

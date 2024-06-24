@@ -1,12 +1,14 @@
 export interface IPermissions {
-  can_edit: boolean;
-  can_submit: boolean;
-  can_comment: boolean;
-  can_share: boolean;
-  can_delete: boolean;
-  can_retract: boolean;
-  can_archive: boolean;
-  can_close: boolean;
-  can_publish: boolean;
-  can_reject: boolean;
+  can_view_letter: boolean;
+  can_update_letter: boolean;
+  can_submit_letter: boolean;
+  can_comment_letter: boolean;
+  can_share_letter: boolean;
+  can_delete_letter: boolean;
+  can_retract_letter: boolean;
+  can_archive_letter: boolean;
+  can_close_letter: boolean;
+  can_publish_letter: boolean;
+  can_reject_letter: boolean;
+  can_reopen_letter: boolean;
 }

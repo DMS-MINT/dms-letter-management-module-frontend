@@ -1,17 +1,12 @@
 import { ParticipantRolesEnum } from "@/typing/enum";
-import { IOption } from "@/typing/interface";
-
-interface IParticipant {
-  role_name: ParticipantRolesEnum;
-  user: IOption;
-}
+import { ContactType, IParticipantInputSerializer } from "@/typing/interface";
 
 const getDefaultValue = (
-  participants: IParticipant[],
+  participants: IParticipantInputSerializer[],
   participantRole: ParticipantRolesEnum
-): IOption[] => {
+): ContactType[] => {
   return participants
-    .filter((participant) => participant.role_name === participantRole)
+    .filter((participant) => participant.role === participantRole)
     .map((participant) => participant.user);
 };
 
