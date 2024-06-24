@@ -114,24 +114,22 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.CURRENT_STATE]}
       />
     ),
-
     cell: ({ row }) => {
-      const current_state: { name: string } = row.getValue(
+      const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
-        current_state.name
-      );
+      const { amharicTranslation, badgeVariant } =
+        getTranslatedLetterStatus(current_state);
       return (
         <Badge
           variant="default"
-          className="rounded-md flex items-center justify-between min-w-fit"
+          className="rounded-md flex items-center justify-between w-fit"
         >
           {amharicTranslation}
         </Badge>
       );
     },
-    size: 10,
+    size: 80,
   },
   {
     accessorKey: LetterTableColumnEnum.SENT_AT,

@@ -6,7 +6,7 @@ const getParticipantInfo = (
   participants: IParticipantInputSerializer[]
 ) => {
   const participantInfo = participants
-    .filter((participant) => participant.role_name === role)
+    .filter((participant) => participant.role === role)
     .map((participant) => {
       if (participant.user.user_type === "member") {
         return participant.user.job_title;

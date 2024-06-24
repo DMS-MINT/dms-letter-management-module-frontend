@@ -10,7 +10,7 @@ import { handleAxiosError } from "@/utils";
 
 export async function get_letters(category: string) {
   try {
-    const response = await axiosInstance.get(`letters/?category=${category}/`);
+    const response = await axiosInstance.get(`letters/?category=${category}`);
     const data = await response.data.data;
     return data;
   } catch (error: any) {
@@ -31,6 +31,19 @@ export async function get_letter_details(reference_number: string) {
 export async function create_letter(letter: ILetterCreateSerializer) {
   try {
     const response = await axiosInstance.post("letters/create/", letter);
+
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+export async function create_or_submit_letter(letter: ILetterCreateSerializer) {
+  try {
+    const response = await axiosInstance.post(
+      "letters/create_or_submit/",
+      letter
+    );
 
     const data = await response.data;
     return data;

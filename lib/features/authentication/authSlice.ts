@@ -4,6 +4,7 @@ import { RequestStatusEnum } from "@/typing/enum";
 import {
   get_authentication_token,
   delete_authentication_token,
+  get_user,
 } from "./actions";
 import { toast } from "sonner";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -28,8 +29,7 @@ export const authSlice = createAppSlice({
   reducers: (create) => ({
     login: create.asyncThunk(
       async (credentials: ICredentials) => {
-        const response = await get_authentication_token(credentials);
-        return response;
+        await get_authentication_token(credentials);
       },
       {
         pending: (state) => {
@@ -37,10 +37,9 @@ export const authSlice = createAppSlice({
           state.error = null;
           toast.loading("Logging in, please wait...");
         },
-        fulfilled: (state, action: PayloadAction<IMe>) => {
+        fulfilled: (state, _) => {
           state.status = RequestStatusEnum.IDLE;
           state.is_authenticated = true;
-          state.me = action.payload;
           state.error = null;
           toast.dismiss();
           toast.success("Welcome back! You have successfully logged in.");
@@ -75,6 +74,27 @@ export const authSlice = createAppSlice({
         },
       }
     ),
+    getMe: create.asyncThunk(
+      async () => {
+        const response = await get_user();
+        return response;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+        },
+        fulfilled: (state, action: PayloadAction<IMe>) => {
+          state.status = RequestStatusEnum.IDLE;
+          state.me = action.payload;
+          state.error = null;
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to login";
+        },
+      }
+    ),
   }),
 
   selectors: {
@@ -85,6 +105,6 @@ export const authSlice = createAppSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, getMe } = authSlice.actions;
 export const { selectMe, selectIsAuthenticated, selectStatus, selectError } =
   authSlice.selectors;

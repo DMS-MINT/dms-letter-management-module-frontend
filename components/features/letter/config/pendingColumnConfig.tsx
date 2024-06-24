@@ -13,10 +13,11 @@ import {
 } from "@/typing/interface";
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
+import React from "react";
 
-const DateFormat: string = "eee MMM dd";
+const DateFormat: string = "eee MMM dd yyy";
 
-export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -36,6 +37,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
+    size: 10,
   },
   {
     accessorKey: "has_read",
@@ -53,6 +55,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -62,6 +65,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
+    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SENDER,
@@ -81,6 +85,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{senders ? senders : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -100,6 +105,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{recipients ? recipients : ""}</p>;
     },
+    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -109,6 +115,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
+    size: 250,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -118,6 +125,7 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CURRENT_STATE,
@@ -128,21 +136,40 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       />
     ),
     cell: ({ row }) => {
-      const current_state: { name: string } = row.getValue(
+      const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } = getTranslatedLetterStatus(
-        current_state.name
-      );
+      const { amharicTranslation, badgeVariant } =
+        getTranslatedLetterStatus(current_state);
       return (
         <Badge
           variant="default"
-          className="rounded-md flex items-center justify-between min-w-fit"
+          className="rounded-md flex items-center justify-between w-fit"
         >
           {amharicTranslation}
         </Badge>
       );
     },
+    size: 80,
+  },
+  {
+    accessorKey: LetterTableColumnEnum.SENT_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={letterTableColumnLookup[LetterTableColumnEnum.SENT_AT]}
+        className="w-fit ml-auto"
+      />
+    ),
+    cell: ({ row }) => {
+      const sent_at: string = row.getValue(LetterTableColumnEnum.SENT_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1">
+          {sent_at ? format(new Date(sent_at), DateFormat) : ""}
+        </div>
+      );
+    },
+    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CREATED_AT,
@@ -161,5 +188,6 @@ export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
+    size: 10,
   },
 ];

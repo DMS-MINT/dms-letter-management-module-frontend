@@ -14,9 +14,9 @@ import {
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 
-const DateFormat: string = "eee MMM dd yyy";
+const DateFormat: string = "eee MMM dd";
 
-export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -36,7 +36,6 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
-    size: 30,
   },
   {
     accessorKey: "has_read",
@@ -54,7 +53,6 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
-    size: 30,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -64,7 +62,25 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
-    size: 350,
+  },
+  {
+    accessorKey: LetterTableColumnEnum.SENDER,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={letterTableColumnLookup[LetterTableColumnEnum.SENDER]}
+      />
+    ),
+    cell: ({ row }) => {
+      const participants: IParticipantInputSerializer[] =
+        row.original.participants;
+
+      const senders = getParticipantInfo(
+        ParticipantRolesEnum.AUTHOR,
+        participants
+      );
+      return <p>{senders ? senders : ""}</p>;
+    },
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -82,10 +98,8 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         ParticipantRolesEnum["PRIMARY RECIPIENT"],
         participants
       );
-
       return <p>{recipients ? recipients : ""}</p>;
     },
-    size: 400,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -95,7 +109,6 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
-    size: 350,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -105,7 +118,6 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
-    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.CURRENT_STATE,
@@ -149,25 +161,5 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         </div>
       );
     },
-    size: 50,
-  },
-  {
-    accessorKey: LetterTableColumnEnum.UPDATED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-    cell: ({ row }) => {
-      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
-      return (
-        <div className="text-right font-medium px-4 py-1">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
-        </div>
-      );
-    },
-    size: 50,
   },
 ];

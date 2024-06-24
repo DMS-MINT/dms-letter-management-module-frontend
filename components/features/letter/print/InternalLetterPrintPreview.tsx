@@ -45,8 +45,7 @@ export default function InternalLetterPrintPreview() {
           {letterDetails.participants
             .filter(
               (participant) =>
-                participant.role_name ===
-                ParticipantRolesEnum["PRIMARY RECIPIENT"]
+                participant.role === ParticipantRolesEnum["PRIMARY RECIPIENT"]
             )
             .map((participant) => (
               <p key={uuidv4()} className="text-lg  text-gray-600">
@@ -88,7 +87,7 @@ export default function InternalLetterPrintPreview() {
             {letterDetails.participants
               .filter(
                 (participant) =>
-                  participant.role_name ===
+                  participant.role ===
                   ParticipantRolesEnum["CARBON COPY RECIPIENT"]
               )
               .map((participant) => (
@@ -110,7 +109,7 @@ export default function InternalLetterPrintPreview() {
             {letterDetails.participants
               .filter(
                 (participant) =>
-                  (participant.role_name =
+                  (participant.role =
                     ParticipantRolesEnum["CARBON COPY RECIPIENT"])
               )
               .map((participant) => (
