@@ -11,13 +11,21 @@ export interface IGuest {
   user_type: "guest";
 }
 
+export interface IMemberCreateSerializer {
+  id: string;
+  user_type: "member";
+}
+export interface IGuestCreateSerializer {
+  name: string;
+  user_type: "guest";
+}
+
+export type UserCreateSerializer =
+  | IMemberCreateSerializer
+  | IGuestCreateSerializer;
+
 export type ContactType = IMember | IGuest;
 
 export type UserType = "member" | "guest";
 
-export interface IOption {
-  id: string;
-  value: string;
-  label: string;
-  user_type: UserType;
-}
+export type IOption = ContactType & {};
