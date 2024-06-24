@@ -9,68 +9,97 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
+import Select, { ActionMeta } from "react-select";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
-import { IOption, IParticipantInputSerializer } from "@/typing/interface";
-import { contactToOption } from "@/utils";
-import { v4 as uuidv4 } from "uuid";
+import { ContactType, IShareLetterFormData } from "@/typing/interface";
 import { Label } from "@/components/ui/label";
-import { shareLetter } from "@/lib/features/letter/workflow/workflowSlice";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
-
-interface IFormData {
-  to: string;
-  message: string;
-}
+import { shareLetter } from "@/lib/features/letter/workflow/workflowSlice";
 
 export default function ShareLetterForm() {
-  const [formData, setFormData] = useState<IFormData>({
-    to: "",
+  const [formData, setFormData] = useState<IShareLetterFormData>({
+    to: [],
     message: "",
+    permissions: ["can_view_letter"],
   });
   const contacts = useAppSelector(selectContacts);
-  const [options, setOptions] = useState<IOption[]>([]);
   const dispatch = useAppDispatch();
   const letterDetails = useAppSelector(selectLetterDetails);
 
-  useEffect(() => {
-    if (contacts.length > 0) {
-      const options: IOption[] = contacts.map((contact) => {
-        const id = uuidv4();
-        const user = contact;
-        const data = { id, user } as IParticipantInputSerializer;
-        return contactToOption(data);
-      });
-
-      setOptions(options);
-    }
-  }, [contacts]);
-
   const handleSelectChange = (
-    option: SingleValue<IOption> | MultiValue<IOption>,
-    actionMeta: ActionMeta<IOption>
+    option: readonly ContactType[],
+    actionMeta: ActionMeta<ContactType>
   ) => {
-    const { name, option: selectedOption } = actionMeta;
+    const { action, option: selectedOption, removedValue } = actionMeta;
 
-    const to = selectedOption?.value as string;
+    const handleSelectOption = (selectedOption: ContactType) => {
+      const user_id = selectedOption.id;
+      setFormData((prevData: IShareLetterFormData) => ({
+        ...prevData,
+        to: [...prevData.to, user_id],
+      }));
+    };
 
-    setFormData((prevData: IFormData) => ({ ...prevData, to }));
+    const handleRemoveValue = (removedValue: ContactType) => {
+      const user_id = removedValue.id;
+      const ids = formData.to.filter((id) => id !== user_id);
+      setFormData((prevData: IShareLetterFormData) => ({
+        ...prevData,
+        to: ids,
+      }));
+    };
+    const handleClear = () => {
+      setFormData((prevData: IShareLetterFormData) => ({
+        ...prevData,
+        to: [],
+      }));
+    };
+
+    switch (action) {
+      case "select-option":
+        if (selectedOption) handleSelectOption(selectedOption);
+        break;
+      case "remove-value":
+        if (removedValue) handleRemoveValue(removedValue);
+        break;
+      case "clear":
+        handleClear();
+        break;
+      default:
+        break;
+    }
   };
 
   const handleMessageChange = (message: string) => {
-    setFormData((prevData: IFormData) => ({ ...prevData, message }));
+    setFormData((prevData: IShareLetterFormData) => ({ ...prevData, message }));
   };
 
   const handleSubmit = () => {
     dispatch(
       shareLetter({
         reference_number: letterDetails.reference_number,
-        participant: formData,
+        participants: formData,
       })
     );
+  };
+
+  const getLabel = (option: ContactType): string => {
+    if (option.user_type === "member") {
+      return `${option.full_name} - ${option.job_title}`;
+    } else {
+      return `${option.name}`;
+    }
+  };
+
+  const getValue = (option: ContactType): string => {
+    if (option.user_type === "member") {
+      return option.id;
+    } else {
+      return option.name;
+    }
   };
 
   return (
@@ -86,8 +115,12 @@ export default function ShareLetterForm() {
             <Select
               isMulti
               onChange={handleSelectChange}
-              options={options}
+              options={contacts.filter(
+                (contact) => contact.user_type === "member"
+              )}
               placeholder=""
+              getOptionLabel={getLabel}
+              getOptionValue={getValue}
               className="w-full"
             />
           </div>
