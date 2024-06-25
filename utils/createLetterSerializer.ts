@@ -10,7 +10,7 @@ const createLetterSerializer = (
   const participants = letter.participants.map((participant) => ({
     id: participant.id,
     user: participant.user,
-    role_name: participant.role_name,
+    role: participant.role,
     message: participant.message,
   }));
 

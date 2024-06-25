@@ -2,7 +2,7 @@ import { ParticipantRolesEnum } from "@/typing/enum";
 import { IOption } from "@/typing/interface";
 
 interface IParticipant {
-  role_name: ParticipantRolesEnum;
+  role: ParticipantRolesEnum;
   user: IOption;
 }
 
@@ -11,7 +11,7 @@ const getDefaultValue = (
   participantRole: ParticipantRolesEnum
 ): IOption[] => {
   return participants
-    .filter((participant) => participant.role_name === participantRole)
+    .filter((participant) => participant.role === participantRole)
     .map((participant) => participant.user);
 };
 

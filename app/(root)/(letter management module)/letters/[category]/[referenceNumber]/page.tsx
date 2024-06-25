@@ -25,7 +25,7 @@ import { RichTextEditor } from "@/components/shared/Editor";
 import CommentSection from "@/components/layouts/Comment";
 
 interface IParticipantState {
-  role_name: ParticipantRolesEnum;
+  role: ParticipantRolesEnum;
   user: IOption;
 }
 
@@ -98,7 +98,7 @@ export default function LetterDetail() {
       letterDetails.participants.map((participant) => {
         const option = contactToOption(participant);
 
-        options.push({ role_name: participant.role_name, user: option });
+        options.push({ role: participant.role, user: option });
       });
       setParticipants(options);
     }

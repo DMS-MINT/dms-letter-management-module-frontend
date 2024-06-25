@@ -5,17 +5,12 @@ import {
 } from "./IParticipant";
 
 export type LetterType = "internal" | "incoming" | "outgoing";
-
-interface IState {
-  name: string;
-}
-
 export interface ILetterListInputSerializer {
   id: string;
   reference_number: string;
   subject: string;
   content: string;
-  current_state: IState;
+  current_state: string;
   has_read: boolean;
   sent_at: string;
   received_at: string;

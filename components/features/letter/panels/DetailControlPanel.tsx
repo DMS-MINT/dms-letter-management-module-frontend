@@ -53,12 +53,12 @@ export default function DetailControlPanel() {
         <Skeleton className="h-8 w-96" />
       )}
 
-      {letterDetail.current_state && letterDetail.current_state.name ? (
+      {letterDetail.current_state && letterDetail.current_state ? (
         <Badge
           variant="destructive"
           className="rounded-md flex items-center justify-between pl-0 ml-2"
         >
-          <Dot /> {letterStatusLookup[letterDetail.current_state.name]}
+          <Dot /> {letterStatusLookup[letterDetail.current_state]}
         </Badge>
       ) : (
         <Skeleton className="h-8 w-14 ml-2" />
