@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Printer, Dot } from "lucide-react";
-import dynamic from "next/dynamic";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +15,7 @@ import {
 
 import {
   createLetter,
+  createOrSubmitLetter,
   selectLetterDetails,
   selectStatus,
 } from "@/lib/features/letter/letterSlice";
@@ -24,6 +24,7 @@ import { createLetterSerializer } from "@/utils";
 import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
+import { toggleDrawerVisibility } from "@/lib/features/ui/uiManagerSlice";
 interface IContentJson {
   content: string;
 }
@@ -33,6 +34,10 @@ export default function ComposeControlPanel() {
   const status = useAppSelector(selectStatus);
   const dispatch = useAppDispatch();
   const [contentJson, setContentJson] = useState<IContentJson[]>([]);
+
+  useEffect(() => {
+    dispatch(toggleDrawerVisibility(false));
+  }, []);
 
   useEffect(() => {
     setContentJson([
@@ -45,10 +50,18 @@ export default function ComposeControlPanel() {
     dispatch(createLetter(serializedLetter));
   };
 
+  const dispatchCreateOrSubmitLetter = () => {
+    const serializedLetter = createLetterSerializer(letterDetail);
+    dispatch(createOrSubmitLetter(serializedLetter));
+  };
+
   useEffect(() => {
-    if (status === RequestStatusEnum.FULFILLED) {
+    if (
+      status === RequestStatusEnum.FULFILLED &&
+      letterDetail.reference_number
+    ) {
       const category =
-        letterDetail.current_state.name === "Draft" ? "draft" : "outbox";
+        letterDetail.current_state === "Draft" ? "draft" : "outbox";
       redirect(`/letters/${category}/${letterDetail.reference_number}`);
     }
   }, [status]);
@@ -87,13 +100,9 @@ export default function ComposeControlPanel() {
           ረቂቁን ያስቀምጡ
         </Button>
 
-        <Button className="ml-0 border-gray-300 rounded-md" variant="outline">
-          ደብዳቤውን ምራ
-        </Button>
-
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="default">ላክ</Button>
+            <Button variant="default">ወደ መዝገብ ቢሮ አስተላልፍ</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -103,7 +112,7 @@ export default function ComposeControlPanel() {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button type="submit" onClick={dispatchCreateLetter}>
+              <Button type="submit" onClick={dispatchCreateOrSubmitLetter}>
                 አዎ
               </Button>
               <Button className="bg-white text-black hover:bg-white">አይ</Button>

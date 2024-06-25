@@ -1,4 +1,5 @@
 import { IComment } from "./IComment";
+import { IMember } from "./IContact";
 import {
   IParticipantInputSerializer,
   IParticipantOutputSerializer,
@@ -14,15 +15,25 @@ export interface ILetterListInputSerializer {
   has_read: boolean;
   sent_at: string;
   received_at: string;
+  submitted_at: string;
+  published_at: string;
   created_at: string;
   updated_at: string;
   letter_type: LetterType;
   participants: IParticipantInputSerializer[];
 }
 
-export interface ILetterDetailInputSerializer
-  extends ILetterListInputSerializer {
-  content: string;
+export interface ILetterDetails {
+  id: string;
+  reference_number: string;
+  subject?: string;
+  content?: string;
+  letter_type: LetterType;
+  current_state: string;
+  owner: IMember;
+  submitted_at: string;
+  published_at: string;
+  participants: IParticipantInputSerializer[];
   comments: IComment[];
 }
 

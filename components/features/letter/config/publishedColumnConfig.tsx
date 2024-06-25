@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
-import { letterTableColumnLookup } from "@/typing/dictionary";
+import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,9 +14,9 @@ import {
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
 
-const DateFormat: string = "eee MMM dd yyy";
+const DateFormat: string = "eee MMM dd";
 
-export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -36,7 +36,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
-    size: 10,
   },
   {
     accessorKey: "has_read",
@@ -54,7 +53,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
-    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -64,7 +62,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
-    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SENDER,
@@ -84,7 +81,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{senders ? senders : ""}</p>;
     },
-    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -104,7 +100,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{recipients ? recipients : ""}</p>;
     },
-    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -114,7 +109,6 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
-    size: 250,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -125,6 +119,13 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       />
     ),
     size: 10,
+    cell: ({ row }) => {
+      const letter_type: string = row.getValue(
+        LetterTableColumnEnum.LETTER_TYPE
+      );
+
+      return <p>{letterTypeLookup[letter_type.toUpperCase()]}</p>;
+    },
   },
   {
     accessorKey: LetterTableColumnEnum.CURRENT_STATE,
@@ -152,41 +153,48 @@ export const archiveTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     size: 80,
   },
   {
-    accessorKey: LetterTableColumnEnum.SENT_AT,
+    accessorKey: LetterTableColumnEnum.SUBMITTED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SENT_AT]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.SUBMITTED_AT]}
         className="w-fit ml-auto"
       />
     ),
+
     cell: ({ row }) => {
-      const sent_at: string = row.getValue(LetterTableColumnEnum.SENT_AT);
+      const submitted_at: string = row.getValue(
+        LetterTableColumnEnum.SUBMITTED_AT
+      );
       return (
         <div className="text-right font-medium px-4 py-1">
-          {sent_at ? format(new Date(sent_at), DateFormat) : ""}
+          {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
         </div>
       );
     },
-    size: 10,
+    size: 50,
   },
   {
-    accessorKey: LetterTableColumnEnum.CREATED_AT,
+    accessorKey: LetterTableColumnEnum.PUBLISHED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.CREATED_AT]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.PUBLISHED_AT]}
         className="w-fit ml-auto"
       />
     ),
+
     cell: ({ row }) => {
-      const created_at: string = row.getValue(LetterTableColumnEnum.CREATED_AT);
+      const published_at: string = row.getValue(
+        LetterTableColumnEnum.PUBLISHED_AT
+      );
+
       return (
         <div className="text-right font-medium px-4 py-1">
-          {created_at ? format(new Date(created_at), DateFormat) : ""}
+          {published_at ? format(new Date(published_at), DateFormat) : ""}
         </div>
       );
     },
-    size: 10,
+    size: 50,
   },
 ];

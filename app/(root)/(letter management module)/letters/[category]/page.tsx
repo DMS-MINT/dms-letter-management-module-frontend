@@ -8,11 +8,11 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
 import { useParams } from "next/navigation";
 import {
-  archiveTableColumns,
+  pendingTableColumns,
   draftTableColumns,
   inboxTableColumns,
   outboxTableColumns,
-  trashTableColumns,
+  publishedTableColumns,
 } from "@/components/features/letter/config";
 import { useEffect, useState } from "react";
 import { ILetterListInputSerializer } from "@/typing/interface";
@@ -31,14 +31,6 @@ export default function Table() {
 
   useEffect(() => {
     switch (params.category) {
-      case "archive":
-        setColumns(archiveTableColumns);
-        dispatch(getLetters("archive"));
-        break;
-      case "draft":
-        setColumns(draftTableColumns);
-        dispatch(getLetters("draft"));
-        break;
       case "inbox":
         setColumns(inboxTableColumns);
         dispatch(getLetters("inbox"));
@@ -47,9 +39,17 @@ export default function Table() {
         setColumns(outboxTableColumns);
         dispatch(getLetters("outbox"));
         break;
-      case "trash":
-        setColumns(trashTableColumns);
-        dispatch(getLetters("trash"));
+      case "draft":
+        setColumns(draftTableColumns);
+        dispatch(getLetters("draft"));
+        break;
+      case "pending":
+        setColumns(pendingTableColumns);
+        dispatch(getLetters("pending"));
+        break;
+      case "published":
+        setColumns(publishedTableColumns);
+        dispatch(getLetters("published"));
         break;
       default:
         break;

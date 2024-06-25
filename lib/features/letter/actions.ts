@@ -38,6 +38,19 @@ export async function create_letter(letter: ILetterCreateSerializer) {
     handleAxiosError(error);
   }
 }
+export async function create_or_submit_letter(letter: ILetterCreateSerializer) {
+  try {
+    const response = await axiosInstance.post(
+      "letters/create_or_submit/",
+      letter
+    );
+
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
 
 export async function update_letter(
   reference_number: string,
