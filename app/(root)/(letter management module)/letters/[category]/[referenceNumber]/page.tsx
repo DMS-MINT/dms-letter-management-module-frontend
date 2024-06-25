@@ -21,6 +21,7 @@ import {
   selectIsReadonly,
   toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
+
 interface IFormConfig {
   label: string;
   name: ParticipantRolesEnum;
@@ -145,10 +146,6 @@ export default function LetterDetail() {
       dispatch(getLetterDetails(params.referenceNumber as string));
     }
   }, [params, dispatch]);
-
-  useEffect(() => {
-    console.table(letterDetails.participants);
-  }, [letterDetails]);
 
   useEffect(() => {
     switch (letterDetails.letter_type) {
