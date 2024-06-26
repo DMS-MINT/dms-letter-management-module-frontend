@@ -16,6 +16,7 @@ import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { RichTextEditor } from "@/components/shared/Editor";
+import SignatureDraw from "../signaturepad/signatureDraw";
 import { SelectableInput } from "@/components/shared";
 
 interface IFormConfig {
@@ -164,7 +165,8 @@ export default function LetterComposeForm() {
         />
       </div>
       {isIncomingLetter ? null : <RichTextEditor />}
-      <Button variant='outline' className='flex gap-2 w-fit mt-4'>
+      <SignatureDraw />
+      <Button variant="outline" className="flex gap-2 w-fit mt-4">
         <Plus size={19} />
         ፋይል አያይዝ
       </Button>
