@@ -21,7 +21,7 @@ import {
   selectStatus,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { createLetterSerializer } from "@/utils";
+import { letterSerializer } from "@/utils";
 import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
@@ -48,41 +48,25 @@ export default function ComposeControlPanel() {
   }, [letterDetail]);
 
   const dispatchCreateLetter = () => {
-    const serializedLetter = createLetterSerializer(letterDetail);
-
-    const composeFormData = new FormData();
-
-    composeFormData.append("subject", serializedLetter.subject || "");
-    composeFormData.append("content", serializedLetter.content || "");
-    composeFormData.append("letter_type", serializedLetter.letter_type);
-
-    composeFormData.append(
-      "participants",
-      JSON.stringify(serializedLetter.participants)
-    );
-
-    attachments.forEach((attachment, index) => {
-      composeFormData.append("attachments", attachment);
-    });
-
+    const composeFormData = letterSerializer(letterDetail, attachments);
     dispatch(createLetter(composeFormData));
   };
 
   const dispatchCreateOrSubmitLetter = () => {
-    const serializedLetter = createLetterSerializer(letterDetail);
-    dispatch(createOrSubmitLetter(serializedLetter));
+    const composeFormData = letterSerializer(letterDetail, attachments);
+    dispatch(createOrSubmitLetter(composeFormData));
   };
 
-  // useEffect(() => {
-  //   if (
-  //     status === RequestStatusEnum.FULFILLED &&
-  //     letterDetail.reference_number
-  //   ) {
-  //     const category =
-  //       letterDetail.current_state === "Draft" ? "draft" : "outbox";
-  //     redirect(`/letters/${category}/${letterDetail.reference_number}`);
-  //   }
-  // }, [status]);
+  useEffect(() => {
+    if (
+      status === RequestStatusEnum.FULFILLED &&
+      letterDetail.reference_number
+    ) {
+      const category =
+        letterDetail.current_state === "Draft" ? "draft" : "outbox";
+      redirect(`/letters/${category}/${letterDetail.reference_number}`);
+    }
+  }, [status]);
 
   const handlePrint = async () => {
     if (typeof window !== "undefined") {

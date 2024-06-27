@@ -15,7 +15,6 @@ import {
   update_letter,
   delete_letter,
   create_or_submit_letter,
-  upload_file,
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
@@ -89,6 +88,12 @@ export const letterSlice = createAppSlice({
         });
       }
     ),
+    signLetter: create.reducer((state, action: PayloadAction<File>) => {
+      state.letterDetails.signature = action.payload;
+    }),
+    removeSignature: create.reducer((state, _) => {
+      state.letterDetails.signature = state.letterDetails.signature;
+    }),
     addAttachment: create.reducer((state, action: PayloadAction<File>) => {
       state.attachments.push(action.payload);
     }),
@@ -185,7 +190,7 @@ export const letterSlice = createAppSlice({
       }
     ),
     createOrSubmitLetter: create.asyncThunk(
-      async (letter: ILetterCreateSerializer) => {
+      async (letter: FormData) => {
         const response = await create_or_submit_letter(letter);
         const data = await response;
         return data;
@@ -221,7 +226,7 @@ export const letterSlice = createAppSlice({
         letter,
       }: {
         reference_number: string;
-        letter: ILetterUpdateSerializer;
+        letter: FormData;
       }) => {
         const response = await update_letter(reference_number, letter);
         const data = await response.data;
@@ -277,32 +282,6 @@ export const letterSlice = createAppSlice({
         },
       }
     ),
-    uploadFile: create.asyncThunk(
-      async (formData: FormData) => {
-        const response = await upload_file(formData);
-        const data = await response;
-        return data;
-      },
-      {
-        pending: (state) => {
-          state.status = RequestStatusEnum.LOADING;
-          state.error = null;
-          toast.dismiss();
-          toast.loading("Uploading, Please wait...");
-        },
-        fulfilled: (state, _) => {
-          state.status = RequestStatusEnum.FULFILLED;
-          toast.dismiss();
-          toast.success("Success!");
-        },
-        rejected: (state, action) => {
-          state.status = RequestStatusEnum.FAILED;
-          state.error = action.error.message || "Failed ";
-          toast.dismiss();
-          toast.error(action.error.message || "Failed");
-        },
-      }
-    ),
   }),
 
   selectors: {
@@ -322,6 +301,8 @@ export const {
   setLetterType,
   addParticipant,
   removeParticipant,
+  signLetter,
+  removeSignature,
   addAttachment,
   removeAttachment,
   getLetters,
@@ -330,7 +311,6 @@ export const {
   createOrSubmitLetter,
   updateLetter,
   deleteLetter,
-  uploadFile,
 } = letterSlice.actions;
 export const {
   selectLetters,

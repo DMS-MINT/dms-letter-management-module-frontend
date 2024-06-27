@@ -33,6 +33,7 @@ export interface ILetterDetails {
   letter_type: LetterType;
   current_state: string;
   owner: IMember;
+  signature: File;
   submitted_at: string;
   published_at: string;
   participants: IParticipantInputSerializer[];

@@ -133,6 +133,10 @@ export default function LetterDetail() {
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
 
+  useEffect(()=>{
+    console.log(letterDetails)
+  },[letterDetails])
+
   useEffect(() => {
     dispatch(toggleDrawerVisibility(true));
     // if (status === RequestStatusEnum.FULFILLED) {

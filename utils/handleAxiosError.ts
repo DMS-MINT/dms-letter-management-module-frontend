@@ -12,8 +12,8 @@ const handleAxiosError = (error: any) => {
         responseData.message === "Validation error" &&
         responseData.extra?.fields
       ) {
-        responseData.extra.fields.forEach((field: string) => {
-          // console.error(field);
+        console.error(responseData.extra);
+        responseData?.extra?.fields?.forEach((field: string) => {
           throw new Error(field);
         });
         // throw new Error("Validation error occurred");

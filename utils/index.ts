@@ -1,6 +1,6 @@
 // Serializers
 export { default as updateLetterSerializer } from "./updateLetterSerializer";
-export { default as createLetterSerializer } from "./createLetterSerializer";
+export { default as letterSerializer } from "./letterSerializer";
 
 // Information Utils
 export { default as getParticipantInfo } from "./getParticipantInfo";
