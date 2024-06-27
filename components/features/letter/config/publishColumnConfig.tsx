@@ -13,11 +13,10 @@ import {
 } from "@/typing/interface";
 import { format } from "date-fns";
 import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
-import React from "react";
 
-const DateFormat: string = "eee MMM dd yyy";
+const DateFormat: string = "eee MMM dd";
 
-export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,7 +36,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
-    size: 10,
   },
   {
     accessorKey: "has_read",
@@ -55,7 +53,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
-    size: 10,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -65,7 +62,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
-    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SENDER,
@@ -85,7 +81,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{senders ? senders : ""}</p>;
     },
-    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -105,7 +100,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return <p>{recipients ? recipients : ""}</p>;
     },
-    size: 300,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -115,7 +109,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
-    size: 250,
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -127,7 +120,9 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
     ),
     size: 10,
     cell: ({ row }) => {
-      const letter_type:string = row.getValue(LetterTableColumnEnum.LETTER_TYPE);
+      const letter_type: string = row.getValue(
+        LetterTableColumnEnum.LETTER_TYPE
+      );
 
       return <p>{letterTypeLookup[letter_type.toUpperCase()]}</p>;
     },
@@ -174,6 +169,29 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return (
         <div className="text-right font-medium px-4 py-1">
           {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
+        </div>
+      );
+    },
+    size: 50,
+  },
+  {
+    accessorKey: LetterTableColumnEnum.PUBLISHED_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={letterTableColumnLookup[LetterTableColumnEnum.PUBLISHED_AT]}
+        className="w-fit ml-auto"
+      />
+    ),
+
+    cell: ({ row }) => {
+      const published_at: string = row.getValue(
+        LetterTableColumnEnum.PUBLISHED_AT
+      );
+
+      return (
+        <div className="text-right font-medium px-4 py-1">
+          {published_at ? format(new Date(published_at), DateFormat) : ""}
         </div>
       );
     },
