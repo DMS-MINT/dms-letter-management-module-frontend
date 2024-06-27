@@ -176,7 +176,6 @@ export default function LetterComposeForm() {
         />
       </div>
       {isIncomingLetter ? null : <RichTextEditor />}
-      <input type="file" onChange={(e) => handleFileChange(e)} />
       <FileUploadButton />
     </form>
   );

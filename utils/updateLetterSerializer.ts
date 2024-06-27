@@ -1,31 +1,53 @@
-import { ParticipantRolesEnum } from "@/typing/enum";
 import {
   ILetterDetails,
-  ILetterUpdateSerializer,
   IParticipantOutputSerializer,
 } from "@/typing/interface";
 
-const updateLetterSerializer = (
-  letterDetails: ILetterDetails
-): ILetterUpdateSerializer => {
+const createLetterSerializer = (
+  letterDetails: ILetterDetails,
+  attachments: File[]
+): FormData => {
   //@ts-ignore
   const participants: IParticipantOutputSerializer[] =
-    letterDetails.participants.map((participant) => ({
-      id: participant.id,
-      user: participant.user,
-      role: ParticipantRolesEnum[
-        participant.role.toUpperCase() as keyof typeof ParticipantRolesEnum
-      ],
-    }));
+    letterDetails.participants.map((participant) => {
+      if (participant.user.user_type === "member") {
+        return {
+          id:participant.id,
+          user: {
+            id: participant.user.id,
+            user_type: "member",
+          },
+          role: participant.role,
+        };
+      } else if (participant.user.user_type === "guest") {
+        return {
+          user: {
+            id: participant.user.name,
+            name: participant.user.name,
+            user_type: "guest",
+          },
+          role: participant.role,
+        };
+      } else {
+        return null;
+      }
+    });
 
-  const subject = letterDetails.subject ? letterDetails.subject : undefined;
-  const content = letterDetails.content ? letterDetails.content : undefined;
+  const subject = letterDetails.subject ? letterDetails.subject : "";
+  const content = letterDetails.content ? letterDetails.content : "";
 
-  return {
-    ...(subject && { subject }),
-    ...(content && { content }),
-    participants,
-  };
+  const formData = new FormData();
+  formData.append("subject", subject);
+  formData.append("content", content);
+  formData.append("letter_type", letterDetails.letter_type);
+  formData.append("signature", letterDetails.signature);
+  formData.append("participants", JSON.stringify(participants));
+
+  attachments.forEach((attachment) => {
+    formData.append("attachments", attachment);
+  });
+
+  return formData;
 };
 
-export default updateLetterSerializer;
+export default createLetterSerializer;

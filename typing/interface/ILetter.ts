@@ -29,7 +29,6 @@ export interface ILetterDetails {
   reference_number: string;
   subject?: string;
   content?: string;
-  signature?: string;
   letter_type: LetterType;
   current_state: string;
   owner: IMember;
@@ -39,19 +38,4 @@ export interface ILetterDetails {
   participants: IParticipantInputSerializer[];
   comments: IComment[];
   attachments: IAttachment[];
-}
-
-export interface ILetterCreateSerializer {
-  subject?: string;
-  content?: string;
-  letter_type: LetterType;
-  participants: IParticipantOutputSerializer[];
-  attachments: FormData[];
-}
-
-export interface ILetterUpdateSerializer {
-  subject?: string;
-  content?: string;
-  participants: IParticipantOutputSerializer[];
-  attachments: File[];
 }

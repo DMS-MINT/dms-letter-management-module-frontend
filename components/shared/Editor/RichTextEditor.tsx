@@ -24,7 +24,7 @@ export default function RichTextEditor() {
     editorProps: {
       attributes: {
         class:
-          "max-w-[210mm] min-h-[297mm] p-[2.5rem] mx-auto bg-white border border-gray-300",
+          "max-w-[210mm] min-h-[280mm] p-[2.5rem] mx-auto bg-white border border-gray-300",
       },
     },
     onUpdate: ({ editor }) => dispatch(updateContent(editor.getHTML())),
@@ -37,7 +37,7 @@ export default function RichTextEditor() {
     editorProps: {
       attributes: {
         class:
-          "max-w-[210mm] min-h-[297mm] p-[2.5rem] mx-auto bg-white border border-gray-300",
+          "max-w-[210mm] min-h-[280mm] p-[2.5rem] mx-auto bg-white border border-gray-300",
       },
     },
     onUpdate: ({ editor }) => dispatch(updateContent(editor.getHTML())),
@@ -48,7 +48,7 @@ export default function RichTextEditor() {
   }
 
   return (
-    <section className="border border-gray-300">
+    <section className="border border-gray-300 ">
       {isReadonly ? null : <Toolbar editor={editorEditable} />}
       {isReadonly ? (
         <Canvas editor={editorReadonly} />

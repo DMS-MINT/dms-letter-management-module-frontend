@@ -12,6 +12,7 @@ const createLetterSerializer = (
     letterDetails.participants.map((participant) => {
       if (participant.user.user_type === "member") {
         return {
+          id: participant.id,
           user: {
             id: participant.user.id,
             user_type: "member",

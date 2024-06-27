@@ -1,5 +1,4 @@
 // Serializers
-export { default as updateLetterSerializer } from "./updateLetterSerializer";
 export { default as letterSerializer } from "./letterSerializer";
 
 // Information Utils
