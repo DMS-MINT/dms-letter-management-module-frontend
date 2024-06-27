@@ -1,3 +1,4 @@
+import { IAttachment } from "./IAttachment";
 import { IComment } from "./IComment";
 import { IMember } from "./IContact";
 import {
@@ -36,6 +37,7 @@ export interface ILetterDetails {
   published_at: string;
   participants: IParticipantInputSerializer[];
   comments: IComment[];
+  attachments: IAttachment[];
 }
 
 export interface ILetterCreateSerializer {
@@ -43,10 +45,12 @@ export interface ILetterCreateSerializer {
   content?: string;
   letter_type: LetterType;
   participants: IParticipantOutputSerializer[];
+  attachments: FormData[];
 }
 
 export interface ILetterUpdateSerializer {
   subject?: string;
   content?: string;
   participants: IParticipantOutputSerializer[];
+  attachments: File[];
 }

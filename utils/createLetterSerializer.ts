@@ -40,6 +40,7 @@ const createLetterSerializer = (
     ...(content && { content }),
     participants,
     letter_type: letterDetails.letter_type,
+    attachments: [],
   };
 };
 

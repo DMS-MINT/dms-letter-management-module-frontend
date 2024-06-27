@@ -6,8 +6,7 @@ import {
   ILetterUpdateSerializer,
   LetterType,
   IParticipantInputSerializer,
-  IPermissions,
-  UserType,
+  IAttachment,
 } from "@/typing/interface";
 import {
   get_letters,
@@ -16,6 +15,7 @@ import {
   update_letter,
   delete_letter,
   create_or_submit_letter,
+  upload_file,
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import { setPermissions } from "./workflow/workflowSlice";
 export interface ILetterSliceState {
   letters: ILetterListInputSerializer[];
   letterDetails: ILetterDetails;
+  attachments: File[];
   status: RequestStatusEnum;
   error: string | null;
 }
@@ -33,7 +34,9 @@ const initialState: ILetterSliceState = {
   letters: [] as ILetterListInputSerializer[],
   letterDetails: {
     participants: [] as IParticipantInputSerializer[],
+    attachments: [] as IAttachment[],
   } as ILetterDetails,
+  attachments: [] as File[],
   status: RequestStatusEnum.IDLE,
   error: null,
 };
@@ -86,6 +89,12 @@ export const letterSlice = createAppSlice({
         });
       }
     ),
+    addAttachment: create.reducer((state, action: PayloadAction<File>) => {
+      state.attachments.push(action.payload);
+    }),
+    removeAttachment: create.reducer((state, action: PayloadAction<number>) => {
+      state.attachments.splice(action.payload, 1);
+    }),
     getLetters: create.asyncThunk(
       async (category: string) => {
         const response = await get_letters(category);
@@ -148,7 +157,7 @@ export const letterSlice = createAppSlice({
       }
     ),
     createLetter: create.asyncThunk(
-      async (letter: ILetterCreateSerializer) => {
+      async (letter: FormData) => {
         const response = await create_letter(letter);
         const data = await response.data;
         return data;
@@ -262,9 +271,35 @@ export const letterSlice = createAppSlice({
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
-          state.error = action.error.message || "Failed to create letter";
+          state.error = action.error.message || "Failed to delete letter";
           toast.dismiss();
-          toast.error(action.error.message || "Failed to create letter");
+          toast.error(action.error.message || "Failed to delete letter");
+        },
+      }
+    ),
+    uploadFile: create.asyncThunk(
+      async (formData: FormData) => {
+        const response = await upload_file(formData);
+        const data = await response;
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Uploading, Please wait...");
+        },
+        fulfilled: (state, _) => {
+          state.status = RequestStatusEnum.FULFILLED;
+          toast.dismiss();
+          toast.success("Success!");
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed ";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed");
         },
       }
     ),
@@ -275,6 +310,7 @@ export const letterSlice = createAppSlice({
     selectLetterDetails: (letter) => letter.letterDetails,
     selectStatus: (letter) => letter.status,
     selectError: (letter) => letter.error,
+    selectAttachments: (letter) => letter.attachments,
   },
 });
 
@@ -286,12 +322,20 @@ export const {
   setLetterType,
   addParticipant,
   removeParticipant,
+  addAttachment,
+  removeAttachment,
   getLetters,
   getLetterDetails,
   createLetter,
   createOrSubmitLetter,
   updateLetter,
   deleteLetter,
+  uploadFile,
 } = letterSlice.actions;
-export const { selectLetters, selectLetterDetails, selectStatus, selectError } =
-  letterSlice.selectors;
+export const {
+  selectLetters,
+  selectLetterDetails,
+  selectAttachments,
+  selectStatus,
+  selectError,
+} = letterSlice.selectors;
