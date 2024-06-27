@@ -1,9 +1,9 @@
-import { IMember } from "./IUser";
+import { IMe } from "./IMe";
 
 export interface IComment {
   id: string;
   content: string;
   created_at: string;
-  author: IMember;
-  replies?: IComment[];
+  author: IMe;
+  // replies?: IComment[];
 }

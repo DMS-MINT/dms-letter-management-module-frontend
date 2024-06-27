@@ -1,7 +1,7 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { IShareLetterFormData } from "@/typing/interface";
+import { IComment, IShareLetterFormData } from "@/typing/interface";
 import { handleAxiosError } from "@/utils";
 
 export async function share_letter(
@@ -74,6 +74,33 @@ export async function reopen_letter(reference_number: string) {
     );
     const data = await response.data.message;
     return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+
+export async function create_comment(comment: IComment, reference_number: string) {
+  try {
+    const response = await axiosInstance.post(`comments/${reference_number}/create/`, comment);
+    return response.data; 
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+
+export async function edit_comment(comment: IComment) {
+  try {
+    const comment_id: string = comment.id
+    const response = await axiosInstance.put(`comments/${comment_id}/update/`, comment);
+    return response.data; 
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+export async function delete_comment(comment_id: string) {
+  try {
+    const response = await axiosInstance.delete(`comments/${comment_id}/delete/`);
+    return response.data; 
   } catch (error: any) {
     handleAxiosError(error);
   }

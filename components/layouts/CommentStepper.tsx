@@ -1,6 +1,6 @@
 import { CircleDot, Pencil, Reply, Trash2, Undo2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -11,27 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CommentReplay from "./CommentReplay";
 import { IComment } from "../../typing/interface/IComment";
-
-// type Comment = {
-//   id: number;
-//   name: string;
-//   date: string;
-//   content: string;
-//   replay?: {
-//     name: string;
-//     content: string;
-//     date: string;
-//   }[];
-// };
+import {
+  deleteComment,
+  updateComment,
+} from "@/lib/features/letter/workflow/workflowSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
 export const FormatDate = (timestamp: string): string => {
   const date = new Date(timestamp);
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + date.getDate()).slice(-2);
-  return `${year}, ${month}, ${day}`;
+  const hours = ("0" + date.getHours()).slice(-2);
+  const minutes = ("0" + date.getMinutes()).slice(-2);
+  const seconds = ("0" + date.getSeconds()).slice(-2);
+  return `${hours}:${minutes}:${seconds} ሰአት በቀን ${day}/ ${month}/ ${year}`;
 };
 
 type CommentSectionProps = {
@@ -44,61 +39,10 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
   const [comments, setComments] = useState<IComment[]>(initialComments);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+  const [newContent, setNewContent] = useState<string>("");
   const [editClicked, setEditClicked] = useState<boolean>(false);
-  const [replayClicked, setReplayClicked] = useState<boolean>(false);
-  const [replaySubmitClicked, setReplaySubmitClicked] =
-    useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(false);
-  //   const [comments, setComments] = useState<Comment[]>([
-  //     {
-  //       id: 1,
-  //       name: "Abebe Alemu",
-  //       date: "Jun 21, 2024",
-  //       content:
-  //         "Step details here Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident praesentium deserunt enim natus ut aliquid dolore cumque blanditiis ducimus eum repellendus ea rem accusantium excepturi tempore! Saepe sapiente voluptatum odio.",
-  //       replay: [
-  //         {
-  //           name: "kalab",
-  //           content:
-  //             "replayed by me que blanditiis ducimus eum repellendus ea rem accusantium excepturi tempore! Saepe sapiente voluptatum odi",
-  //           date: "Jun 23, 2024",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Abebe Alemu",
-  //       date: "May 22, 2024",
-  //       content:
-  //         "Step details here Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident praesentium deserunt enim natus ut aliquid dolore cumque blanditiis ducimus eum repellendus ea rem accusantium excepturi tempore! Saepe sapiente voluptatum odio.",
-  //       replay: [
-  //         {
-  //           name: "kalab",
-  //           content: "replayed by me lodhhdhjhdj",
-  //           date: "Jun 23, 2024",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Abebe Alemu",
-  //       date: "Jun 22, 2024",
-  //       content:
-  //         "Step details here Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident praesentium deserunt enim natus ut aliquid dolore cumque blanditiis ducimus eum repellendus ea rem accusantium excepturi tempore! Saepe sapiente voluptatum odio.",
-  //       replay: [
-  //         {
-  //           name: "kalab",
-  //           content: "replayed by me hdfdjskfd",
-  //           date: "Jun 23, 2024",
-  //         },
-  //         {
-  //           name: "kalab",
-  //           content: "replayed by me hdfdjskfd",
-  //           date: "Jun 23, 2024",
-  //         },
-  //       ],
-  //     },
-  //   ]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -122,6 +66,9 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
   const handleClick = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
     setClickedIndex(index);
+    if (!editClicked) {
+      setNewContent(comments[index].content);
+    }
   };
 
   const handleMouseEnter = (index: number) => {
@@ -133,6 +80,7 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
   const handleMouseLeave = () => {
     if (clickedIndex === null) {
       setHoveredIndex(null);
+      setEditClicked(!editClicked);
     }
   };
 
@@ -140,23 +88,40 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
     setIsOpen(false);
   };
 
-  const handleDelete = () => {
-    // Perform deletion logic here
-    setIsOpen(false);
+  const handleDelete = (commentId: string) => {
+    dispatch(deleteComment({ comment_id: commentId }))
+      .then((response) => {
+        if (response.type === deleteComment.fulfilled.toString()) {
+          setComments((prevComments) =>
+            prevComments.filter((comment) => comment.id !== commentId)
+          );
+          setIsOpen(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to delete comment:", error);
+      });
   };
 
-  const handleSubmitReplay = (index: number, content: string) => {
-    // Assuming you have a way to gather the replay content, here we just simulate adding a new replay
-    const newComments = [...comments];
-    //   const newReplay = {
-    //     name: "user Name",
-    //     content,
-    //     date: new Date().toLocaleDateString(),
-    //   };
-    //   newComments[index].replay = [...newComments[index].replay, newReplay];
-    setComments(newComments);
-    setReplayClicked(false);
-    setReplaySubmitClicked(true);
+  const handleSubmitEdit = (index: number) => {
+    const editedComment: IComment = {
+      ...comments[index],
+      content: newContent,
+    };
+
+    dispatch(updateComment({ comment: editedComment }))
+      .then((response) => {
+        if (response.type === updateComment.fulfilled.toString()) {
+          const updatedComments = [...comments];
+          updatedComments[index] = editedComment;
+          setComments(updatedComments);
+          setEditClicked(false);
+          setClickedIndex(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to update comment:", error);
+      });
   };
 
   return (
@@ -174,7 +139,7 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
                 : ""
             }`}
             onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={() => handleMouseLeave()}
+            onMouseLeave={handleMouseLeave}
             onClick={(e) => handleClick(index, e)}
           >
             <span className="absolute flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full -start-4 ring-4 ring-gray-50 group-hover:bg-white group-hover:shadow-2xl group-hover:shadow-black ">
@@ -183,7 +148,6 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
             <span className="flex justify-between">
               <span className="flex gap-3 items-center pb-2">
                 <Avatar>
-                  {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
                   <AvatarFallback className="bg-gray-300">
                     {comment.author?.full_name
                       ? comment.author.full_name.substring(0, 2)
@@ -207,7 +171,6 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
                       </>
                     ) : (
                       <>
-                        {" "}
                         <Pencil className="mr-2 h-4 w-4" /> አርም
                       </>
                     )}
@@ -218,7 +181,11 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
                     onOpenChange={(open) => setIsOpen(open)}
                   >
                     <DialogTrigger asChild>
-                      <Button variant="ghost" className="text-red-500">
+                      <Button
+                        variant="ghost"
+                        className="text-red-500"
+                        onClick={() => setIsOpen(true)}
+                      >
                         <Trash2 className="mr-2 h-4 w-4" />
                         ሰርዝ
                       </Button>
@@ -234,7 +201,7 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
                         <Button
                           variant="destructive"
                           type="submit"
-                          onClick={handleDelete}
+                          onClick={() => handleDelete(comment.id)}
                           className="px-10"
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
@@ -256,59 +223,40 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
             {hoveredIndex === index || clickedIndex === index ? (
               <>
                 {editClicked ? (
-                  <textarea className="border mt-4 resize-y w-full p-3 border-gray-400 shadow-lg h-[150px] rounded-lg focus:outline-gray-300">
-                    {comment.content}
-                  </textarea>
+                  <textarea
+                    className="border mt-4 resize-y w-full p-3 border-gray-400 shadow-lg h-[150px] rounded-lg focus:outline-gray-300"
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
+                  />
                 ) : (
                   <p className="text-sm">{comment.content}</p>
                 )}
                 <div className="flex w-full justify-end">
                   {!editClicked ? (
-                    <Button
-                      variant="ghost"
-                      onClick={() => setReplayClicked(!replayClicked)}
-                    >
-                      <Reply className="mr-2 h-4 w-4" /> መልስ ስጥ
-                    </Button>
+                    // Uncomment the below code for using a comment reply
+                    // <Button
+                    //   variant="ghost"
+                    //   onClick={() => setReplayClicked(!replayClicked)}
+                    // >
+                    //   <Reply className="mr-2 h-4 w-4" /> መልስ ስጥ
+                    // </Button>
+                    <></>
                   ) : (
                     <Button
                       variant="third"
                       type="submit"
                       className="px-10"
-                      onClick={() =>
-                        handleSubmitReplay(index, "Replay content")
-                      }
+                      onClick={() => handleSubmitEdit(index)}
                     >
                       <Pencil className="mr-2 h-4 w-4" /> አስተካክል
                     </Button>
                   )}
                 </div>
-                {/* replay */}
-
-                {/* {clickedIndex === index &&
-                  comment.replay &&
-                  comment.replay.map((reply, replyIndex) => (
-                    <CommentReplay key={replyIndex} comment={reply} />
-                  ))} */}
               </>
             ) : (
               <h3 className="font-medium leading-tight group-hover:text-blue-500 group-hover:font-bold">
                 ይህንን በ {FormatDate(comment.created_at)} ፈጥረዋል.
               </h3>
-            )}
-            {clickedIndex === index && replayClicked ? (
-              <>
-                <textarea className="border mt-4 resize-y w-full p-3 border-gray-400 shadow-lg h-[100px] rounded-lg focus:outline-gray-300"></textarea>
-                <Button
-                  className="w-full"
-                  onClick={() => handleSubmitReplay(index, "Replay content")}
-                >
-                  {" "}
-                  ላክ{" "}
-                </Button>
-              </>
-            ) : (
-              <></>
             )}
           </li>
         ))}
