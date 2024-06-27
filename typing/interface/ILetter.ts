@@ -28,6 +28,7 @@ export interface ILetterDetails {
   reference_number: string;
   subject?: string;
   content?: string;
+  signature?: string;
   letter_type: LetterType;
   current_state: string;
   owner: IMember;

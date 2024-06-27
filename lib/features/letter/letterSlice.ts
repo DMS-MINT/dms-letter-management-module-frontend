@@ -49,6 +49,9 @@ export const letterSlice = createAppSlice({
     updateSubject: create.reducer((state, action: PayloadAction<string>) => {
       state.letterDetails.subject = action.payload;
     }),
+    signLetter: create.reducer((state, action: PayloadAction<string>) => {
+      state.letterDetails.signature = action.payload;
+    }),
     updateContent: create.reducer((state, action: PayloadAction<string>) => {
       state.letterDetails.content = action.payload;
     }),
@@ -279,6 +282,7 @@ export const {
   resetLetterDetail,
   updateSubject,
   updateContent,
+  signLetter,
   setLetterType,
   addParticipant,
   removeParticipant,

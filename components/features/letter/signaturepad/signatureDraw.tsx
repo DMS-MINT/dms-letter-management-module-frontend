@@ -1,84 +1,103 @@
-/** @format */
-
-import {
-  ReactSketchCanvas,
-  type ReactSketchCanvasRef,
-} from "react-sketch-canvas";
-import { type ChangeEvent, useRef, useState } from "react";
-import React from "react";
-
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Eraser,
-  Pen,
-  RefreshCw,
-  Undo,
-  Save,
-  FileSignature,
-} from "lucide-react";
+import { Pen, Eraser, Undo, RefreshCw, FileSignature } from "lucide-react";
 
 export default function App() {
-  const canvasRef = useRef<ReactSketchCanvasRef>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [eraseMode, setEraseMode] = useState(false);
-  const [strokeWidth, setStrokeWidth] = useState(5);
-  const [eraserWidth, setEraserWidth] = useState(10);
   const [isCanvasVisible, setIsCanvasVisible] = useState(false);
+  const [drawing, setDrawing] = useState(false);
+  const [lastX, setLastX] = useState<number | null>(null);
+  const [lastY, setLastY] = useState<number | null>(null);
+  const [strokeWidth, setStrokeWidth] = useState(5);
+  const [strokeColor, setStrokeColor] = useState("#000000");
+
+  const toggleCanvasVisibility = () => {
+    setIsCanvasVisible((prevState) => !prevState);
+  };
 
   const handleEraserClick = () => {
     setEraseMode(true);
-    canvasRef.current?.eraseMode(true);
   };
 
   const handlePenClick = () => {
     setEraseMode(false);
-    canvasRef.current?.eraseMode(false);
-  };
-
-  const handleStrokeWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setStrokeWidth(+event.target.value);
-  };
-
-  const handleEraserWidthChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setEraserWidth(+event.target.value);
-  };
-
-  const [strokeColor, setStrokeColor] = useState("#000000");
-  const [canvasColor, setCanvasColor] = useState("#ffffff");
-
-  const handleUndoClick = () => {
-    canvasRef.current?.undo();
-  };
-
-  const handleRedoClick = () => {
-    canvasRef.current?.redo();
   };
 
   const handleClearClick = () => {
-    canvasRef.current?.clearCanvas();
-  };
-
-  const handleResetClick = () => {
-    canvasRef.current?.resetCanvas();
-  };
-
-  const handleExport = async () => {
     if (canvasRef.current) {
-      try {
-        const dataURL = await canvasRef.current.exportImage("png");
-        const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = "sketch.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error("Failed to export image", error);
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        context.clearRect(
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
       }
     }
   };
 
-  const toggleCanvasVisibility = () => {
-    setIsCanvasVisible((prevState) => !prevState);
+  const handleUndoClick = () => {
+    // Implement undo logic if needed
+  };
+
+  const handleCanvasMouseDown = (
+    event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
+  ) => {
+    if (canvasRef.current) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        setDrawing(true);
+        const x = event.nativeEvent.offsetX;
+        const y = event.nativeEvent.offsetY;
+        setLastX(x);
+        setLastY(y);
+        context.beginPath();
+        context.moveTo(x, y);
+      }
+    }
+  };
+
+  const handleCanvasMouseMove = (
+    event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
+  ) => {
+    if (drawing && canvasRef.current) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        const x = event.nativeEvent.offsetX;
+        const y = event.nativeEvent.offsetY;
+        context.lineTo(x, y);
+        context.strokeStyle = eraseMode ? "#ffffff" : strokeColor;
+        context.lineWidth = strokeWidth;
+        context.stroke();
+        setLastX(x);
+        setLastY(y);
+      }
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    setDrawing(false);
+  };
+
+  const handleStrokeWidthChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setStrokeWidth(Number(event.target.value));
+  };
+
+  const handleAddClick = () => {
+    if (canvasRef.current) {
+      canvasRef.current.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "canvas-image.png", {
+            type: "image/png",
+          });
+          console.log(file);
+        }
+      }, "image/png");
+    }
   };
 
   return (
@@ -117,7 +136,6 @@ export default function App() {
                 <Eraser />
               </Button>
 
-              <div className="vr" />
               <Button
                 variant="outline"
                 type="button"
@@ -150,37 +168,26 @@ export default function App() {
                 value={strokeWidth}
                 onChange={handleStrokeWidthChange}
               />
-              <label htmlFor="eraserWidth" className="form-label ml-3 mr-3">
-                ማጥፊያ ስፋት
-              </label>
-              <input
-                disabled={!eraseMode}
-                type="range"
-                className="form-range ml-3 mr-3 px-3"
-                min="1"
-                max="20"
-                step="1"
-                id="eraserWidth"
-                value={eraserWidth}
-                onChange={handleEraserWidthChange}
-              />
               <Button
                 variant="outline"
                 type="button"
                 className="btn btn-sm btn-outline-primary ml-2 mr-2"
-                onClick={handleExport}
+                onClick={handleAddClick}
               >
-                <Save />
+                Add
               </Button>
             </div>
 
-            <ReactSketchCanvas
+            <canvas
               ref={canvasRef}
-              strokeWidth={strokeWidth}
-              eraserWidth={eraserWidth}
-              strokeColor={strokeColor}
-              canvasColor={canvasColor}
-            />
+              style={{ border: "1px solid #000000", marginTop: "10px" }}
+              width={400}
+              height={300}
+              onMouseDown={handleCanvasMouseDown}
+              onMouseMove={handleCanvasMouseMove}
+              onMouseUp={handleCanvasMouseUp}
+              onMouseOut={handleCanvasMouseUp}
+            ></canvas>
           </>
         )}
       </div>
