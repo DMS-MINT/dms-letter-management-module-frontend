@@ -1,10 +1,6 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import {
-  ILetterCreateSerializer,
-  ILetterUpdateSerializer,
-} from "@/typing/interface";
 import { handleAxiosError } from "@/utils";
 
 export async function get_letters(category: string) {
@@ -42,11 +38,16 @@ export async function create_letter(letter: FormData) {
   }
 }
 
-export async function create_or_submit_letter(letter: ILetterCreateSerializer) {
+export async function create_or_submit_letter(letter: FormData) {
   try {
     const response = await axiosInstance.post(
       "letters/create_or_submit/",
-      letter
+      letter,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
 
     const data = await response.data;
@@ -58,12 +59,17 @@ export async function create_or_submit_letter(letter: ILetterCreateSerializer) {
 
 export async function update_letter(
   reference_number: string,
-  letter: ILetterUpdateSerializer
+  letter: FormData
 ) {
   try {
     const response = await axiosInstance.put(
       `letters/${reference_number}/update/`,
-      letter
+      letter,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
 
     const data = await response.data;
@@ -80,20 +86,6 @@ export async function delete_letter(reference_number: string) {
     );
     const data = await response.data;
     return data;
-  } catch (error: any) {
-    handleAxiosError(error);
-  }
-}
-
-export async function upload_file(formData: FormData) {
-  try {
-    const response = await axiosInstance.post("letters/upload/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    return response;
   } catch (error: any) {
     handleAxiosError(error);
   }
