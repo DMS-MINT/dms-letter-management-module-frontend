@@ -80,7 +80,6 @@ const CommentStepper: React.FC<CommentSectionProps> = ({
   const handleMouseLeave = () => {
     if (clickedIndex === null) {
       setHoveredIndex(null);
-      setEditClicked(!editClicked);
     }
   };
 
