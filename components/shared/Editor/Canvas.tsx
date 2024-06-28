@@ -1,6 +1,5 @@
 "use client";
 import { type Editor, EditorContent } from "@tiptap/react";
-import SignaturePad from "../SignaturePad";
 import { useAppSelector } from "@/lib/hooks";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 
@@ -20,7 +19,6 @@ export default function Canvas({ editor }: { editor: Editor }) {
           className="bg-white mx-auto absolute w-80 bottom-1 right-1"
         />
       </div>
-      <SignaturePad />
     </section>
   );
 }

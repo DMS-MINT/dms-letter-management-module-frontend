@@ -2,6 +2,9 @@
   "folders": [
     {
       "path": "."
+    },
+    {
+      "path": "../DMS-MINT/dms-letter-management-module-backend"
     }
   ],
   "settings": {

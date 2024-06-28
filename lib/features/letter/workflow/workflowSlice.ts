@@ -5,6 +5,9 @@ import { RequestStatusEnum } from "@/typing/enum";
 import { IPermissions, IShareLetterFormData } from "@/typing/interface";
 import {
   close_letter,
+  create_comment,
+  delete_comment,
+  update_comment,
   publish_letter,
   reopen_letter,
   retract_letter,
@@ -220,6 +223,97 @@ export const workflowSlice = createAppSlice({
         },
       }
     ),
+    createComment: create.asyncThunk(
+      async ({
+        reference_number,
+        content,
+      }: {
+        reference_number: string;
+        content: string;
+      }) => {
+        const data = await create_comment(content, reference_number);
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Creating comment, Please wait...");
+        },
+        fulfilled: (state, action: PayloadAction<string>) => {
+          state.status = RequestStatusEnum.IDLE;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to create comment";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to create comment");
+        },
+      }
+    ),
+
+    updateComment: create.asyncThunk(
+      async ({
+        comment_id,
+        content,
+      }: {
+        comment_id: string;
+        content: string;
+      }) => {
+        const data = await update_comment(comment_id, content);
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Updating comment, Please wait...");
+        },
+        fulfilled: (state, action: PayloadAction<string>) => {
+          state.status = RequestStatusEnum.IDLE;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to update comment";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to update comment");
+        },
+      }
+    ),
+    deleteComment: create.asyncThunk(
+      async (comment_id: string) => {
+        const data = await delete_comment(comment_id);
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Deleting comment, Please wait...");
+        },
+        fulfilled: (state, action: PayloadAction<string>) => {
+          state.status = RequestStatusEnum.IDLE;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to delete comment";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to delete comment");
+        },
+      }
+    ),
   }),
 
   selectors: {
@@ -237,6 +331,9 @@ export const {
   retractLetter,
   closeLetter,
   reopenLetter,
+  createComment,
+  updateComment,
+  deleteComment,
 } = workflowSlice.actions;
 export const { selectPermissions, selectStatus, selectError } =
   workflowSlice.selectors;

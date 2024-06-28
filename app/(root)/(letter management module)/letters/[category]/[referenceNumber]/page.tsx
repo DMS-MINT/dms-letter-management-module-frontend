@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Input } from "@/components/ui/input";
@@ -21,6 +23,7 @@ import {
   selectIsReadonly,
   toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
+import { ActivityFeed } from "@/components/shared";
 
 interface IFormConfig {
   label: string;
@@ -133,9 +136,9 @@ export default function LetterDetail() {
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
 
-  useEffect(()=>{
-    console.log(letterDetails)
-  },[letterDetails])
+  useEffect(() => {
+    console.log(letterDetails);
+  }, [letterDetails]);
 
   useEffect(() => {
     dispatch(toggleDrawerVisibility(true));
@@ -212,6 +215,7 @@ export default function LetterDetail() {
             letterDetails.letter_type !== "incoming" ? (
               <section className="flex flex-col gap-1.5">
                 <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
+
                 <RichTextEditor />
               </section>
             ) : null
@@ -222,6 +226,7 @@ export default function LetterDetail() {
           }
         </section>
       </section>
+      <ActivityFeed />
     </section>
   ) : null;
 }

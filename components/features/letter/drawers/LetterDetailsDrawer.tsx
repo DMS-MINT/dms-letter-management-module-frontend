@@ -1,3 +1,5 @@
+/** @format */
+
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +12,7 @@ import {
 import { useAppSelector } from "@/lib/hooks";
 import { letterTypeLookup } from "@/typing/dictionary";
 import { RequestStatusEnum } from "@/typing/enum";
-import { Mail, MessageSquare, FileDigit, X, Paperclip } from "lucide-react";
+import { Mail, MessageSquareText, FileDigit, X, Paperclip } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
@@ -96,12 +98,12 @@ export default function LetterDetailsDrawer() {
       </div>
       {status === RequestStatusEnum.FULFILLED ? (
         <div className="flex flex-col gap-5">
-          <div className="flex items-center gap-2">
-            <MessageSquare size={20} className="text-gray-600" />
+          <a className="flex items-center gap-2 w-fit" href="#comment_section">
+            <MessageSquareText size={20} className="text-gray-600" />
             <p className="text-gray-600">
-              {letterDetails.comments ? letterDetails.comments.length : 0}
+              {letterDetails?.comments?.length || 0}
             </p>
-          </div>
+          </a>
         </div>
       ) : null}
     </section>

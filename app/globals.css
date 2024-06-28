@@ -68,6 +68,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply h-screen bg-gray-50 flex flex-col;
 }

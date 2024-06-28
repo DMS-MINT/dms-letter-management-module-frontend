@@ -1,7 +1,8 @@
-import { IMember } from "./IUser";
+import { IMe } from "./IMe";
 
 export interface IComment {
+  id: string;
   content: string;
-  author: IMember;
   created_at: string;
+  author: IMe;
 }

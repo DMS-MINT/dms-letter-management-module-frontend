@@ -1,11 +1,3 @@
-import { FileUploadButton } from "@/components/shared";
-import React from "react";
-
 export default function page() {
-  return (
-    <div>
-      MY PROFILE
-      <FileUploadButton />
-    </div>
-  );
+  return <div className="ml-10">MY PROFILE</div>;
 }
