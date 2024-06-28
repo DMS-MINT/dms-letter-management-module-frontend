@@ -43,7 +43,7 @@ export default function ComposeControlPanel() {
 
   useEffect(() => {
     setContentJson([
-      { content: letterDetail.content ? letterDetail.content : "" },
+      { content: letterDetail?.content ? letterDetail?.content : "" },
     ]);
   }, [letterDetail]);
 

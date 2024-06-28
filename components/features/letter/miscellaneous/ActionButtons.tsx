@@ -21,7 +21,7 @@ import { Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ShareLetterForm } from "@/components/features/letter";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 interface IButtonConfig {
   isVisible: boolean;
   isButton: boolean;
@@ -47,6 +47,7 @@ export default function ActionButtons() {
   const permissions = useAppSelector(selectPermissions);
   const [buttonConfigs, setButtonConfigs] = useState<IButtonConfig[]>([]);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     if (Object.keys(permissions).length > 0) {
@@ -60,7 +61,7 @@ export default function ActionButtons() {
           icon: <Trash size={20} />,
           action: () => {
             dispatch(deleteLetter(letterDetails.reference_number));
-            redirect("/letters/inbox/");
+            router.push("/letters/inbox/");
           },
         },
         {

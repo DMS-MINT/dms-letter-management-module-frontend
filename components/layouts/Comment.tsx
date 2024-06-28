@@ -6,12 +6,11 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import CommentStepper from "./CommentStepper";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { IComment } from "../../typing/interface/IComment";
+import { IComment, ICommentCreate } from "../../typing/interface/IComment";
 import { createComment } from "@/lib/features/letter/workflow/workflowSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { selectMe } from "@/lib/features/authentication/authSlice";
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 type CommentSectionProps = {
   comments: IComment[];
@@ -32,22 +31,26 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       return;
     }
 
-    console.log("id", String(uuidv4()));
-    const newCommentItem: IComment = {
-      id: String(uuidv4()),
+    const newCommentItem: ICommentCreate = {
       content: newComment,
-      created_at: new Date().toLocaleString(),
-      author: me,
     };
 
     try {
-      await dispatch(
+      const response = await dispatch(
         createComment({
           reference_number: params.referenceNumber as string,
           comment: newCommentItem,
         })
-      );
-      setComments([...comments, newCommentItem]);
+      ).unwrap();
+
+      const completeComment: IComment = {
+        id: response.id,
+        content: newComment,
+        created_at: new Date().toISOString(),
+        author: me,
+      };
+
+      setComments([...comments, completeComment]);
       setNewComment("");
     } catch (error) {
       console.error("Failed to create comment:", error);
@@ -82,7 +85,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               <div className="bg-white rounded-full w-[40px] h-[35px] px-2 py-4 flex items-center justify-center">
                 <MessageSquare size={40} strokeWidth={2} />{" "}
               </div>
-              <div className="relative w-full ">
+              <div className="relative w-full">
                 <form
                   action=""
                   onSubmit={handleSubmitComment}

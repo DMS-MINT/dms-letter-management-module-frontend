@@ -2,7 +2,7 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import { RequestStatusEnum } from "@/typing/enum";
-import { IComment, IPermissions, IShareLetterFormData } from "@/typing/interface";
+import { IComment, ICommentCreate, IPermissions, IShareLetterFormData } from "@/typing/interface";
 import {
   close_letter,
   create_comment,
@@ -229,8 +229,9 @@ export const workflowSlice = createAppSlice({
         comment,
       }: {
         reference_number: string;
-        comment: IComment;
+        comment: ICommentCreate;
       }) => {
+        console.log("comment", comment , reference_number);
         const response = await create_comment(comment, reference_number);
         return response;
       },
@@ -255,11 +256,11 @@ export const workflowSlice = createAppSlice({
         },
       }
     ),
+    
     updateComment: create.asyncThunk(
       async ({
         comment,
       }: {
-      
         comment: IComment;
       }) => {
         const response = await edit_comment(comment);

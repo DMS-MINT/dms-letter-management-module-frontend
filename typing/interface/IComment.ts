@@ -7,3 +7,7 @@ export interface IComment {
   author: IMe;
   // replies?: IComment[];
 }
+
+export interface ICommentCreate {
+  content: string;
+}

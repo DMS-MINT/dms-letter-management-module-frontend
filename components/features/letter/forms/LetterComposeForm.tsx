@@ -170,17 +170,10 @@ export default function LetterComposeForm() {
           ጉዳይ
         </Label>
         <Input
-<<<<<<< HEAD
-          type='text'
-          id='ጉዳይ'
-          className='w-full bg-white outline-gray-300'
-          value={letterDetail.subject || ""}
-=======
           type="text"
           id="ጉዳይ"
           className="w-full bg-white outline-gray-300"
           value={letterDetail?.subject || ""}
->>>>>>> 8f66c925e62fc455ec6eafc237ed6b80f4dc2740
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
