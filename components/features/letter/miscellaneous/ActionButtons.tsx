@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   deleteLetter,
+  selectAttachments,
   selectLetterDetails,
   updateLetter,
 } from "@/lib/features/letter/letterSlice";
@@ -15,7 +16,7 @@ import {
   submitLetter,
 } from "@/lib/features/letter/workflow/workflowSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { updateLetterSerializer } from "@/utils";
+import { letterSerializer } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -42,6 +43,7 @@ interface IButtonConfig {
 
 export default function ActionButtons() {
   const letterDetails = useAppSelector(selectLetterDetails);
+  const attachments = useAppSelector(selectAttachments);
   const permissions = useAppSelector(selectPermissions);
   const [buttonConfigs, setButtonConfigs] = useState<IButtonConfig[]>([]);
   const dispatch = useAppDispatch();
@@ -79,7 +81,10 @@ export default function ActionButtons() {
           style: "",
           size: "default",
           action: () => {
-            const serializedLetter = updateLetterSerializer(letterDetails);
+            const serializedLetter = letterSerializer(
+              letterDetails,
+              attachments
+            );
             console.table(letterDetails.participants);
 
             dispatch(
@@ -98,7 +103,10 @@ export default function ActionButtons() {
           style: "",
           size: "default",
           action: () => {
-            const serializedLetter = updateLetterSerializer(letterDetails);
+            const serializedLetter = letterSerializer(
+              letterDetails,
+              attachments
+            );
 
             dispatch(
               updateLetter({

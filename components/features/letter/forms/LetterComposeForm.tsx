@@ -8,16 +8,15 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
+  signLetter,
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { ContactType } from "@/typing/interface";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { RichTextEditor } from "@/components/shared/Editor";
-import SignatureDraw from "../signaturepad/signatureDraw";
-import { SelectableInput } from "@/components/shared";
+import { FileUploadButton, SelectableInput } from "@/components/shared";
+import { toast } from "sonner";
 
 interface IFormConfig {
   label: string;
@@ -128,10 +127,10 @@ export default function LetterComposeForm() {
   const dispatch = useAppDispatch();
 
   const isIncomingLetter =
-    letterDetail.letter_type === "incoming" ? true : false;
+    letterDetail?.letter_type === "incoming" ? true : false;
 
   useEffect(() => {
-    switch (letterDetail.letter_type) {
+    switch (letterDetail?.letter_type) {
       case "incoming":
         setFormConfig(incomingLetterFormConfig);
         break;
@@ -142,7 +141,21 @@ export default function LetterComposeForm() {
         setFormConfig(internalLetterFormConfig);
         break;
     }
-  }, [letterDetail.letter_type]);
+  }, [letterDetail]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const selectedFile = files[0];
+      const allowedTypes = ["image/png"];
+
+      if (allowedTypes.includes(selectedFile.type)) {
+        dispatch(signLetter(selectedFile));
+      } else {
+        toast.error(`Unsupported file type: ${selectedFile.type}`);
+      }
+    }
+  };
 
   return (
     <form className="p-2 flex gap-2 flex-col ">
@@ -157,19 +170,22 @@ export default function LetterComposeForm() {
           ጉዳይ
         </Label>
         <Input
+<<<<<<< HEAD
           type='text'
           id='ጉዳይ'
           className='w-full bg-white outline-gray-300'
           value={letterDetail.subject || ""}
+=======
+          type="text"
+          id="ጉዳይ"
+          className="w-full bg-white outline-gray-300"
+          value={letterDetail?.subject || ""}
+>>>>>>> 8f66c925e62fc455ec6eafc237ed6b80f4dc2740
           onChange={(e) => dispatch(updateSubject(e.target.value))}
         />
       </div>
       {isIncomingLetter ? null : <RichTextEditor />}
-      <SignatureDraw />
-      <Button variant="outline" className="flex gap-2 w-fit mt-4">
-        <Plus size={19} />
-        ፋይል አያይዝ
-      </Button>
+      <FileUploadButton />
     </form>
   );
 }

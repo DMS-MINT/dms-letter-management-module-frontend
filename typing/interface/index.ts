@@ -9,3 +9,4 @@ export * from "./IError";
 export * from "./IComment";
 export * from "./IPermissions";
 export * from "./IShareLetterForm";
+export * from "./IAttachment";

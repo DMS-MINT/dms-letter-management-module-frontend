@@ -2,12 +2,9 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import {
   ILetterDetails,
   ILetterListInputSerializer,
-  ILetterCreateSerializer,
-  ILetterUpdateSerializer,
   LetterType,
   IParticipantInputSerializer,
-  IPermissions,
-  UserType,
+  IAttachment,
 } from "@/typing/interface";
 import {
   get_letters,
@@ -25,6 +22,7 @@ import { setPermissions } from "./workflow/workflowSlice";
 export interface ILetterSliceState {
   letters: ILetterListInputSerializer[];
   letterDetails: ILetterDetails;
+  attachments: File[];
   status: RequestStatusEnum;
   error: string | null;
 }
@@ -33,7 +31,9 @@ const initialState: ILetterSliceState = {
   letters: [] as ILetterListInputSerializer[],
   letterDetails: {
     participants: [] as IParticipantInputSerializer[],
+    attachments: [] as IAttachment[],
   } as ILetterDetails,
+  attachments: [] as File[],
   status: RequestStatusEnum.IDLE,
   error: null,
 };
@@ -83,6 +83,18 @@ export const letterSlice = createAppSlice({
         });
       }
     ),
+    signLetter: create.reducer((state, action: PayloadAction<File>) => {
+      state.letterDetails.signature = action.payload;
+    }),
+    removeSignature: create.reducer((state, _) => {
+      state.letterDetails.signature = state.letterDetails.signature;
+    }),
+    addAttachment: create.reducer((state, action: PayloadAction<File>) => {
+      state.attachments.push(action.payload);
+    }),
+    removeAttachment: create.reducer((state, action: PayloadAction<number>) => {
+      state.attachments.splice(action.payload, 1);
+    }),
     getLetters: create.asyncThunk(
       async (category: string) => {
         const response = await get_letters(category);
@@ -145,7 +157,7 @@ export const letterSlice = createAppSlice({
       }
     ),
     createLetter: create.asyncThunk(
-      async (letter: ILetterCreateSerializer) => {
+      async (letter: FormData) => {
         const response = await create_letter(letter);
         const data = await response.data;
         return data;
@@ -173,7 +185,7 @@ export const letterSlice = createAppSlice({
       }
     ),
     createOrSubmitLetter: create.asyncThunk(
-      async (letter: ILetterCreateSerializer) => {
+      async (letter: FormData) => {
         const response = await create_or_submit_letter(letter);
         const data = await response;
         return data;
@@ -209,7 +221,7 @@ export const letterSlice = createAppSlice({
         letter,
       }: {
         reference_number: string;
-        letter: ILetterUpdateSerializer;
+        letter: FormData;
       }) => {
         const response = await update_letter(reference_number, letter);
         const data = await response.data;
@@ -259,9 +271,9 @@ export const letterSlice = createAppSlice({
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
-          state.error = action.error.message || "Failed to create letter";
+          state.error = action.error.message || "Failed to delete letter";
           toast.dismiss();
-          toast.error(action.error.message || "Failed to create letter");
+          toast.error(action.error.message || "Failed to delete letter");
         },
       }
     ),
@@ -272,6 +284,7 @@ export const letterSlice = createAppSlice({
     selectLetterDetails: (letter) => letter.letterDetails,
     selectStatus: (letter) => letter.status,
     selectError: (letter) => letter.error,
+    selectAttachments: (letter) => letter.attachments,
   },
 });
 
@@ -279,9 +292,12 @@ export const {
   resetLetterDetail,
   updateSubject,
   updateContent,
+  signLetter,
   setLetterType,
   addParticipant,
   removeParticipant,
+  addAttachment,
+  removeAttachment,
   getLetters,
   getLetterDetails,
   createLetter,
@@ -289,5 +305,10 @@ export const {
   updateLetter,
   deleteLetter,
 } = letterSlice.actions;
-export const { selectLetters, selectLetterDetails, selectStatus, selectError } =
-  letterSlice.selectors;
+export const {
+  selectLetters,
+  selectLetterDetails,
+  selectAttachments,
+  selectStatus,
+  selectError,
+} = letterSlice.selectors;

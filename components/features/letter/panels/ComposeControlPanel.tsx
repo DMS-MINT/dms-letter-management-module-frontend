@@ -16,11 +16,12 @@ import {
 import {
   createLetter,
   createOrSubmitLetter,
+  selectAttachments,
   selectLetterDetails,
   selectStatus,
 } from "@/lib/features/letter/letterSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { createLetterSerializer } from "@/utils";
+import { letterSerializer } from "@/utils";
 import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
@@ -32,6 +33,7 @@ interface IContentJson {
 export default function ComposeControlPanel() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const status = useAppSelector(selectStatus);
+  const attachments = useAppSelector(selectAttachments);
   const dispatch = useAppDispatch();
   const [contentJson, setContentJson] = useState<IContentJson[]>([]);
 
@@ -46,13 +48,13 @@ export default function ComposeControlPanel() {
   }, [letterDetail]);
 
   const dispatchCreateLetter = () => {
-    const serializedLetter = createLetterSerializer(letterDetail);
-    dispatch(createLetter(serializedLetter));
+    const composeFormData = letterSerializer(letterDetail, attachments);
+    dispatch(createLetter(composeFormData));
   };
 
   const dispatchCreateOrSubmitLetter = () => {
-    const serializedLetter = createLetterSerializer(letterDetail);
-    dispatch(createOrSubmitLetter(serializedLetter));
+    const composeFormData = letterSerializer(letterDetail, attachments);
+    dispatch(createOrSubmitLetter(composeFormData));
   };
 
   useEffect(() => {
