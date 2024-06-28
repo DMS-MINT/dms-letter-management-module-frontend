@@ -1,7 +1,7 @@
 "use server";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { IComment, ICommentCreate, IShareLetterFormData } from "@/typing/interface";
+import { IShareLetterFormData } from "@/typing/interface";
 import { handleAxiosError } from "@/utils";
 
 export async function share_letter(
@@ -79,30 +79,42 @@ export async function reopen_letter(reference_number: string) {
   }
 }
 
-export async function create_comment(comment: ICommentCreate, reference_number: string) {
+export async function create_comment(
+  content: string,
+  reference_number: string
+) {
   try {
-    const response = await axiosInstance.post(`comments/${reference_number}/create/`, comment);
-    return response.data; 
+    const response = await axiosInstance.post(
+      `comments/${reference_number}/create/`,
+      {
+        content,
+      }
+    );
+    const data = await response.data.message;
+    return data;
   } catch (error: any) {
     handleAxiosError(error);
   }
-} 
+}
 
-
-export async function edit_comment(comment: IComment) {
+export async function update_comment(comment_id: string, content: string) {
   try {
-    const comment_id: string = comment.id
-    const content: string = comment.content
-    const response = await axiosInstance.put(`comments/${comment_id}/update/`, {content});
-    return response.data; 
+    const response = await axiosInstance.put(`comments/${comment_id}/update/`, {
+      content,
+    });
+    const data = await response.data.message;
+    return data;
   } catch (error: any) {
     handleAxiosError(error);
   }
 }
 export async function delete_comment(comment_id: string) {
   try {
-    const response = await axiosInstance.delete(`comments/${comment_id}/delete/`);
-    return response.data; 
+    const response = await axiosInstance.delete(
+      `comments/${comment_id}/delete/`
+    );
+    const data = await response.data.message;
+    return data;
   } catch (error: any) {
     handleAxiosError(error);
   }

@@ -5,9 +5,4 @@ export interface IComment {
   content: string;
   created_at: string;
   author: IMe;
-  // replies?: IComment[];
-}
-
-export interface ICommentCreate {
-  content: string;
 }

@@ -12,7 +12,7 @@ import {
 import { useAppSelector } from "@/lib/hooks";
 import { letterTypeLookup } from "@/typing/dictionary";
 import { RequestStatusEnum } from "@/typing/enum";
-import { Mail, MessageSquare, FileDigit, X, Paperclip } from "lucide-react";
+import { Mail, MessageSquareText, FileDigit, X, Paperclip } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
@@ -38,12 +38,12 @@ export default function LetterDetailsDrawer() {
         {
           label: "የደብዳቤ አይነት",
           value: letterTypeLookup[letterDetails.letter_type.toUpperCase()],
-          icon: <Mail size={20} className='text-gray-600' />,
+          icon: <Mail size={20} className="text-gray-600" />,
         },
         {
           label: "የመዝገብ ቁጥር",
           value: letterDetails.reference_number,
-          icon: <FileDigit size={20} className='text-gray-600' />,
+          icon: <FileDigit size={20} className="text-gray-600" />,
         },
       ];
       setLetterMeta(LetterMetaData);
@@ -51,20 +51,20 @@ export default function LetterDetailsDrawer() {
   }, [letterDetails]);
 
   return (
-    <section className='flex flex-col gap-10'>
-      <div className='flex flex-col gap-2'>
+    <section className="flex flex-col gap-10">
+      <div className="flex flex-col gap-2">
         {letterMeta.map(({ label, value, icon }) => (
           <Fragment key={label}>
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               {icon}
-              <p className='text-gray-600'>{label}</p>
+              <p className="text-gray-600">{label}</p>
             </div>
             {status === RequestStatusEnum.FULFILLED ? (
-              <Badge className='rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal mb-2'>
+              <Badge className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal mb-2">
                 {value}
               </Badge>
             ) : (
-              <Skeleton className='rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal mb-2' />
+              <Skeleton className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal mb-2" />
             )}
           </Fragment>
         ))}
@@ -97,13 +97,13 @@ export default function LetterDetailsDrawer() {
         ))}
       </div>
       {status === RequestStatusEnum.FULFILLED ? (
-        <div className='flex flex-col gap-5'>
-          <div className='flex items-center gap-2'>
-            <MessageSquare size={20} className='text-gray-600' />
-            <p className='text-gray-600'>
+        <div className="flex flex-col gap-5">
+          <a className="flex items-center gap-2 w-fit" href="#comment_section">
+            <MessageSquareText size={20} className="text-gray-600" />
+            <p className="text-gray-600">
               {letterDetails?.comments?.length || 0}
             </p>
-          </div>
+          </a>
         </div>
       ) : null}
     </section>

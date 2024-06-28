@@ -19,11 +19,11 @@ import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
 import { useParams } from "next/navigation";
 import { RichTextEditor } from "@/components/shared/Editor";
-import CommentSection from "@/components/layouts/Comment";
 import {
   selectIsReadonly,
   toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
+import { ActivityFeed } from "@/components/shared";
 
 interface IFormConfig {
   label: string;
@@ -136,9 +136,9 @@ export default function LetterDetail() {
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
 
-  useEffect(()=>{
-    console.log(letterDetails)
-  },[letterDetails])
+  useEffect(() => {
+    console.log(letterDetails);
+  }, [letterDetails]);
 
   useEffect(() => {
     dispatch(toggleDrawerVisibility(true));
@@ -217,7 +217,6 @@ export default function LetterDetail() {
                 <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
 
                 <RichTextEditor />
-                <CommentSection comments={letterDetails.comments} />
               </section>
             ) : null
             // <section className="flex flex-col gap-1.5">
@@ -227,6 +226,7 @@ export default function LetterDetail() {
           }
         </section>
       </section>
+      <ActivityFeed />
     </section>
   ) : null;
 }

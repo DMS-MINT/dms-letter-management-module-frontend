@@ -35,6 +35,8 @@ export interface ILetterDetails {
   signature: File;
   submitted_at: string;
   published_at: string;
+  created_at: string;
+  updated_at: string;
   participants: IParticipantInputSerializer[];
   comments: IComment[];
   attachments: IAttachment[];

@@ -2,12 +2,12 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import { RequestStatusEnum } from "@/typing/enum";
-import { IComment, ICommentCreate, IPermissions, IShareLetterFormData } from "@/typing/interface";
+import { IPermissions, IShareLetterFormData } from "@/typing/interface";
 import {
   close_letter,
   create_comment,
   delete_comment,
-  edit_comment,
+  update_comment,
   publish_letter,
   reopen_letter,
   retract_letter,
@@ -226,14 +226,13 @@ export const workflowSlice = createAppSlice({
     createComment: create.asyncThunk(
       async ({
         reference_number,
-        comment,
+        content,
       }: {
         reference_number: string;
-        comment: ICommentCreate;
+        content: string;
       }) => {
-        console.log("comment", comment , reference_number);
-        const response = await create_comment(comment, reference_number);
-        return response;
+        const data = await create_comment(content, reference_number);
+        return data;
       },
       {
         pending: (state) => {
@@ -256,15 +255,17 @@ export const workflowSlice = createAppSlice({
         },
       }
     ),
-    
+
     updateComment: create.asyncThunk(
       async ({
-        comment,
+        comment_id,
+        content,
       }: {
-        comment: IComment;
+        comment_id: string;
+        content: string;
       }) => {
-        const response = await edit_comment(comment);
-        return response;
+        const data = await update_comment(comment_id, content);
+        return data;
       },
       {
         pending: (state) => {
@@ -288,9 +289,9 @@ export const workflowSlice = createAppSlice({
       }
     ),
     deleteComment: create.asyncThunk(
-      async ({ comment_id }: { comment_id: string }) => {
-        const response = await delete_comment(comment_id);
-        return response;
+      async (comment_id: string) => {
+        const data = await delete_comment(comment_id);
+        return data;
       },
       {
         pending: (state) => {
