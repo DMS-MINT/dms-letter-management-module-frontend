@@ -24,6 +24,7 @@ import {
   toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
 import { ActivityFeed } from "@/components/shared";
+import { useWebSocket } from "@/hooks";
 
 interface IFormConfig {
   label: string;
@@ -135,10 +136,7 @@ export default function LetterDetail() {
   const contacts = useAppSelector(selectContacts);
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
-
-  useEffect(() => {
-    console.log(letterDetails);
-  }, [letterDetails]);
+  useWebSocket(params.referenceNumber as string);
 
   useEffect(() => {
     dispatch(toggleDrawerVisibility(true));

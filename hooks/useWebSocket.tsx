@@ -1,45 +1,40 @@
-"use client";
+import { useEffect } from "react";
+import {
+  ILetterDetails,
+  IPermissions,
+  IPermissionsInputSerializer,
+} from "@/typing/interface";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { updateLetterDetails } from "@/lib/features/letter/letterSlice";
+import { setPermissions } from "@/lib/features/letter/workflow/workflowSlice";
+import { selectMe } from "@/lib/features/authentication/authSlice";
 
-import { useEffect, useRef, useState } from "react";
+type MessageType = {
+  data: ILetterDetails;
+  permissions: IPermissionsInputSerializer[];
+};
 
-interface WebSocketMessage {
-  event: string;
-  letter: {
-    subject: string;
-  };
-}
-
-export default function useWebSocket(url: string) {
-  const [messages, setMessages] = useState<WebSocketMessage[]>([]);
-  const socketRef = useRef<WebSocket | null>(null);
+export default function useWebSocket(referenceNumber: string) {
+  const me = useAppSelector(selectMe);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const socket = new WebSocket(url);
-    socketRef.current = socket;
+    const socket = new WebSocket(
+      `ws://127.0.0.1:8000/ws/letters/${referenceNumber}/`
+    );
 
-    socket.onopen = () => {
-      console.log("WebSocket connection opened");
-    };
+    console.log(socket);
 
     socket.onmessage = (event) => {
-      const data: WebSocketMessage = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, data]);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
+      const data: MessageType = JSON.parse(event.data).message;
+      const permissions = data.permissions;
+      console.log("WebSocket message received:", data);
+      dispatch(updateLetterDetails(data.data));
+      dispatch(setPermissions({ permissions, me }));
     };
 
     return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
-      }
+      socket.close();
     };
-  }, [url]);
-
-  return messages;
+  }, [referenceNumber, dispatch]);
 }

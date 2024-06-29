@@ -1,5 +1,3 @@
-/** @format */
-
 "use client";
 
 import { Subheader, Drawer, Main } from "@/components/layouts";
@@ -21,6 +19,7 @@ import {
   LetterNavigationDrawer,
   TableControlPanel,
 } from "@/components/features/letter";
+
 export default function Table() {
   const letters: ILetterListInputSerializer[] = useAppSelector(selectLetters);
   const params = useParams();
@@ -61,7 +60,7 @@ export default function Table() {
       <Subheader>
         <TableControlPanel />
       </Subheader>
-      <section className='flex flex-1 pb-3 px-8 gap-6 mt-2'>
+      <section className="flex flex-1 pb-3 px-8 gap-6 mt-2">
         <Drawer>
           <LetterNavigationDrawer />
         </Drawer>

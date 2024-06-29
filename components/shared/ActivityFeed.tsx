@@ -266,10 +266,12 @@ export default function ActivityFeed() {
         </div>
         <div className="flex items-center px-1">
           <p className="text-gray-700">
-            {`${letterDetails?.owner.full_name} ይህን ደብዳቤ ${format(
-              new Date(letterDetails.created_at),
-              DateFormat
-            )} ፈጥረዋል።`}
+            {Object.keys(letterDetails).includes("created_at")
+              ? `${letterDetails.owner?.full_name} ይህን ደብዳቤ ${format(
+                  new Date(letterDetails.created_at),
+                  DateFormat
+                )} ፈጥረዋል።`
+              : ""}
           </p>
         </div>
       </div>
