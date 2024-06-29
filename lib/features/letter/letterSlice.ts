@@ -97,6 +97,11 @@ export const letterSlice = createAppSlice({
     removeAttachment: create.reducer((state, action: PayloadAction<number>) => {
       state.attachments.splice(action.payload, 1);
     }),
+    updateLetterDetails: create.reducer(
+      (state, action: PayloadAction<ILetterDetails>) => {
+        state.letterDetails = { ...action.payload };
+      }
+    ),
     getLetters: create.asyncThunk(
       async (category: string) => {
         const response = await get_letters(category);
@@ -307,6 +312,7 @@ export const {
   createOrSubmitLetter,
   updateLetter,
   deleteLetter,
+  updateLetterDetails,
 } = letterSlice.actions;
 export const {
   selectLetters,

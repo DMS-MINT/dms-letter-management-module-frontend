@@ -29,10 +29,6 @@ export default function LetterDetailsDrawer() {
   const [letterMeta, setLetterMeta] = useState<ILetterMetaData[]>([]);
 
   useEffect(() => {
-    console.log(letterDetails?.attachments);
-  }, [letterDetails]);
-
-  useEffect(() => {
     if (letterDetails.letter_type) {
       const LetterMetaData: ILetterMetaData[] = [
         {

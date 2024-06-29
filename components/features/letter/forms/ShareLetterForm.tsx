@@ -185,7 +185,7 @@ export default function ShareLetterForm() {
                 value={formData.permissions[0]}
                 onValueChange={handlePermissionChange}
               >
-                <SelectTrigger className="min-w-[120px] max-w-[120px]">
+                <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="ማየት ይችላል" />
                 </SelectTrigger>
                 <SelectContent>
