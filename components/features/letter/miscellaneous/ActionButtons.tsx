@@ -12,7 +12,7 @@ import {
   publishLetter,
   reopenLetter,
   retractLetter,
-  selectPermissions,
+  selectCurrentUserPermissions,
   submitLetter,
 } from "@/lib/features/letter/workflow/workflowSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -44,16 +44,17 @@ interface IButtonConfig {
 export default function ActionButtons() {
   const letterDetails = useAppSelector(selectLetterDetails);
   const attachments = useAppSelector(selectAttachments);
-  const permissions = useAppSelector(selectPermissions);
+  const current_user_permissions = useAppSelector(selectCurrentUserPermissions);
   const [buttonConfigs, setButtonConfigs] = useState<IButtonConfig[]>([]);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    if (Object.keys(permissions).length > 0) {
+    if (Object.keys(current_user_permissions).length > 0) {
       const configs: IButtonConfig[] = [
         {
-          isVisible: permissions.can_delete_letter,
+          // @ts-ignore
+          isVisible: current_user_permissions.can_delete_letter,
           isButton: true,
           variant: "outline",
           style: "",
@@ -65,7 +66,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_share_letter,
+          isVisible: current_user_permissions.can_share_letter,
           isButton: false,
           component: <ShareLetterForm />,
           label: "ደብዳቤውን አጋራ",
@@ -75,7 +76,7 @@ export default function ActionButtons() {
           action: () => {},
         },
         {
-          isVisible: permissions.can_update_letter,
+          isVisible: current_user_permissions.can_update_letter,
           isButton: true,
           label: "ለውጦቹን አስቀምጥ",
           variant: "outline",
@@ -97,7 +98,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_submit_letter,
+          isVisible: current_user_permissions.can_submit_letter,
           isButton: true,
           label: "ወደ መዝገብ ቢሮ አስተላልፍ",
           variant: "default",
@@ -120,7 +121,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_retract_letter,
+          isVisible: current_user_permissions.can_retract_letter,
           isButton: true,
           label: "ለክለሳ መልስ",
           variant: "destructive",
@@ -131,7 +132,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_reject_letter,
+          isVisible: current_user_permissions.can_reject_letter,
           isButton: true,
           label: "ደብዳቤውን አትቀበል",
           variant: "destructive",
@@ -142,7 +143,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_publish_letter,
+          isVisible: current_user_permissions.can_publish_letter,
           isButton: true,
           label: "ደብዳቤውን አከፋፍል",
           variant: "third",
@@ -153,7 +154,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_close_letter,
+          isVisible: current_user_permissions.can_close_letter,
           isButton: true,
           label: "የደብዳቤውን የስራ ሂደት አጠናቅ",
           variant: "third",
@@ -164,7 +165,7 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: permissions.can_reopen_letter,
+          isVisible: current_user_permissions.can_reopen_letter,
           isButton: true,
           label: "የደብዳቤውን የስራ ሂደት እንደገና ክፈት",
           variant: "default",
@@ -177,7 +178,7 @@ export default function ActionButtons() {
       ];
       setButtonConfigs(configs);
     }
-  }, [letterDetails, permissions]);
+  }, [letterDetails, current_user_permissions]);
 
   return (
     <>

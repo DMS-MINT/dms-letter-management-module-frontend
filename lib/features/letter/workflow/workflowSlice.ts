@@ -2,7 +2,12 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import { RequestStatusEnum } from "@/typing/enum";
-import { IPermissions, IShareLetterFormData } from "@/typing/interface";
+import {
+  IMe,
+  IPermissions,
+  IPermissionsInputSerializer,
+  IShareLetterFormData,
+} from "@/typing/interface";
 import {
   close_letter,
   create_comment,
@@ -16,13 +21,15 @@ import {
 } from "./actions";
 
 export interface IWorkflowSliceState {
-  permissions: IPermissions;
+  permissions: IPermissionsInputSerializer[];
+  currentUserPermissions: IPermissions;
   status: RequestStatusEnum;
   error: string | null;
 }
 
 const initialState: IWorkflowSliceState = {
-  permissions: {} as IPermissions,
+  permissions: [] as IPermissionsInputSerializer[],
+  currentUserPermissions: {} as IPermissions,
   status: RequestStatusEnum.IDLE,
   error: null,
 };
@@ -32,29 +39,44 @@ export const workflowSlice = createAppSlice({
   initialState,
 
   reducers: (create) => ({
-    setPermissions: create.reducer((state, action: PayloadAction<string[]>) => {
-      const permissions: IPermissions = {
-        can_view_letter: false,
-        can_update_letter: false,
-        can_submit_letter: false,
-        can_comment_letter: false,
-        can_share_letter: false,
-        can_delete_letter: false,
-        can_retract_letter: false,
-        can_archive_letter: false,
-        can_close_letter: false,
-        can_publish_letter: false,
-        can_reject_letter: false,
-        can_reopen_letter: false,
-      };
+    setPermissions: create.reducer(
+      (
+        state,
+        action: PayloadAction<{
+          permissions: IPermissionsInputSerializer[];
+          me: IMe;
+        }>
+      ) => {
+        const current_user_perms =
+          action.payload.permissions.find(
+            (user) => user.user_id === action.payload.me.id
+          )?.permissions || [];
 
-      action.payload.forEach((permission) => {
-        if (permission in permissions) {
-          permissions[permission as keyof IPermissions] = true;
-        }
-      });
-      state.permissions = permissions;
-    }),
+        const current_user_permissions: IPermissions = {
+          can_view_letter: false,
+          can_update_letter: false,
+          can_submit_letter: false,
+          can_comment_letter: false,
+          can_share_letter: false,
+          can_delete_letter: false,
+          can_retract_letter: false,
+          can_archive_letter: false,
+          can_close_letter: false,
+          can_publish_letter: false,
+          can_reject_letter: false,
+          can_reopen_letter: false,
+        };
+
+        current_user_perms.forEach((permission) => {
+          if (permission in current_user_permissions) {
+            current_user_permissions[permission as keyof IPermissions] = true;
+          }
+        });
+
+        state.permissions = action.payload.permissions;
+        state.currentUserPermissions = current_user_permissions;
+      }
+    ),
     shareLetter: create.asyncThunk(
       async ({
         reference_number,
@@ -318,6 +340,7 @@ export const workflowSlice = createAppSlice({
 
   selectors: {
     selectPermissions: (workflow) => workflow.permissions,
+    selectCurrentUserPermissions: (workflow) => workflow.currentUserPermissions,
     selectStatus: (workflow) => workflow.status,
     selectError: (workflow) => workflow.error,
   },
@@ -335,5 +358,9 @@ export const {
   updateComment,
   deleteComment,
 } = workflowSlice.actions;
-export const { selectPermissions, selectStatus, selectError } =
-  workflowSlice.selectors;
+export const {
+  selectPermissions,
+  selectCurrentUserPermissions,
+  selectStatus,
+  selectError,
+} = workflowSlice.selectors;
