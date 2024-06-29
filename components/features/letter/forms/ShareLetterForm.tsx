@@ -1,16 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select as SelectUI,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {
   Dialog,
   DialogContent,
@@ -87,12 +76,9 @@ export default function ShareLetterForm() {
   const contacts = useAppSelector(selectContacts);
   const dispatch = useAppDispatch();
   const letterDetails = useAppSelector(selectLetterDetails);
-  const [selectedValue, setSelectedValue] = useState("can_view_letter");
-  const [editMode, setEditMode] = useState<boolean>(true);
 
   const filteredOptions = useMemo(() => {
     return contacts.filter((contact) => {
-      // Check if the contact is not already selected
       return !letterDetails.participants.some(
         (participant) => participant.user.id === contact.id
       );
@@ -193,7 +179,7 @@ export default function ShareLetterForm() {
             <ReactSelect
               isMulti
               onChange={handleSelectChange}
-              options={contacts.filter(
+              options={filteredOptions.filter(
                 (contact) => contact.user_type === "member"
               )}
               placeholder="ለማን እንደሚጋራ ይምረጡ"

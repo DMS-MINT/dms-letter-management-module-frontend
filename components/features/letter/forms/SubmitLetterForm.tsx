@@ -14,6 +14,7 @@ import {
 import { SignaturePad } from "@/components/shared";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
+  createOrSubmitLetter,
   selectAttachments,
   selectLetterDetails,
   updateLetter,
@@ -27,7 +28,7 @@ import {
   selectDefaultSignature,
 } from "@/lib/features/authentication/authSlice";
 
-export default function SubmitLetterForm() {
+export default function SubmitLetterForm({ compose }: { compose: boolean }) {
   const letterDetails = useAppSelector(selectLetterDetails);
   const attachments = useAppSelector(selectAttachments);
   const default_signature = useAppSelector(selectDefaultSignature);
@@ -45,16 +46,19 @@ export default function SubmitLetterForm() {
         attachments,
         signature
       );
-      console.log(serializedLetter);
 
-      dispatch(
-        updateLetter({
-          reference_number: letterDetails.reference_number,
-          letter: serializedLetter,
-        })
-      );
+      if (compose) {
+        dispatch(createOrSubmitLetter(serializedLetter));
+      } else {
+        dispatch(
+          updateLetter({
+            reference_number: letterDetails.reference_number,
+            letter: serializedLetter,
+          })
+        );
+        dispatch(submitLetter(letterDetails.reference_number));
+      }
 
-      dispatch(submitLetter(letterDetails.reference_number));
       dispatch(resetDefaultSignature());
     }
   };

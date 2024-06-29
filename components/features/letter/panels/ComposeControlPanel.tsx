@@ -4,18 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Printer, Dot } from "lucide-react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-import {
   createLetter,
-  createOrSubmitLetter,
   selectAttachments,
   selectLetterDetails,
   selectStatus,
@@ -26,6 +15,7 @@ import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import { redirect } from "next/navigation";
 import { toggleDrawerVisibility } from "@/lib/features/ui/uiManagerSlice";
+import SubmitLetterForm from "../forms/SubmitLetterForm";
 interface IContentJson {
   content: string;
 }
@@ -48,13 +38,12 @@ export default function ComposeControlPanel() {
   }, [letterDetail]);
 
   const dispatchCreateLetter = () => {
-    const composeFormData = letterSerializer(letterDetail, attachments);
+    const composeFormData = letterSerializer(
+      letterDetail,
+      attachments,
+      letterDetail.signature
+    );
     dispatch(createLetter(composeFormData));
-  };
-
-  const dispatchCreateOrSubmitLetter = () => {
-    const composeFormData = letterSerializer(letterDetail, attachments);
-    dispatch(createOrSubmitLetter(composeFormData));
   };
 
   useEffect(() => {
@@ -102,25 +91,7 @@ export default function ComposeControlPanel() {
           ረቂቁን ያስቀምጡ
         </Button>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="default">ወደ መዝገብ ቢሮ አስተላልፍ</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>ያረጋግጡ</DialogTitle>
-              <DialogDescription>
-                እርግጠኛ ነዎት ደብዳቤውን ወደ ማህደር ቢሮ በቋሚነት ማስገባት ይፈልጋሉ
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button type="submit" onClick={dispatchCreateOrSubmitLetter}>
-                አዎ
-              </Button>
-              <Button className="bg-white text-black hover:bg-white">አይ</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <SubmitLetterForm compose={true} />
       </div>
     </section>
   );

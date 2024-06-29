@@ -104,7 +104,7 @@ export default function ActionButtons() {
         {
           isVisible: current_user_permissions.can_submit_letter,
           isButton: false,
-          component: <SubmitLetterForm />,
+          component: <SubmitLetterForm compose={false} />,
           label: "ወደ መዝገብ ቢሮ አስተላልፍ",
           variant: "default",
           style: "",
