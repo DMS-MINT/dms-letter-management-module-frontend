@@ -175,6 +175,11 @@ export default function SelectableInput({
     }
     return `${option.value}`;
   };
+  const filteredOptions = rest.options.filter((option) => {
+    return !letterDetails.participants.some(
+      (participant) => participant.user.id === option.id
+    );
+  });
 
   const SelectableInputToRender = isCreatable ? Creatable : Select;
 

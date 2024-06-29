@@ -1,5 +1,16 @@
 "use client";
 
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select as SelectUI,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import {
   Dialog,
   DialogContent,
@@ -10,7 +21,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import ReactSelect, { ActionMeta } from "react-select";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -71,13 +82,22 @@ export default function ShareLetterForm() {
   const [formData, setFormData] = useState<IShareLetterFormData>({
     to: [],
     message: "",
-    permissions: ["can_view_letter"],
+    permissions: ["can_update_letter"],
   });
   const contacts = useAppSelector(selectContacts);
   const dispatch = useAppDispatch();
   const letterDetails = useAppSelector(selectLetterDetails);
   const [selectedValue, setSelectedValue] = useState("can_view_letter");
   const [editMode, setEditMode] = useState<boolean>(true);
+
+  const filteredOptions = useMemo(() => {
+    return contacts.filter((contact) => {
+      // Check if the contact is not already selected
+      return !letterDetails.participants.some(
+        (participant) => participant.user.id === contact.id
+      );
+    });
+  }, [contacts, letterDetails.participants]);
 
   const handleSelectChange = (
     option: readonly ContactType[],
@@ -167,6 +187,7 @@ export default function ShareLetterForm() {
       <DialogContent className="min-w-[45rem] max-w-[45rem] max-h-[40rem] flex flex-col">
         <DialogHeader className="flex-1 p-2">
           <DialogTitle>የደብዳቤ መምሪያ</DialogTitle>
+
           <div className="flex items-center gap-1.5 py-3">
             <Label className="w-5">ለ</Label>
             <ReactSelect
