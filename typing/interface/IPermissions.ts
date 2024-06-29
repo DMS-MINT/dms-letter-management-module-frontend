@@ -12,3 +12,8 @@ export interface IPermissions {
   can_reject_letter: boolean;
   can_reopen_letter: boolean;
 }
+
+export interface IPermissionsInputSerializer {
+  user_id: string;
+  permissions: string[];
+}
