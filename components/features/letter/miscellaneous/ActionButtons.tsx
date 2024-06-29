@@ -53,6 +53,7 @@ export default function ActionButtons() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(current_user_permissions);
     if (Object.keys(current_user_permissions).length > 0) {
       const configs: IButtonConfig[] = [
         {
@@ -88,7 +89,8 @@ export default function ActionButtons() {
           action: () => {
             const serializedLetter = letterSerializer(
               letterDetails,
-              attachments
+              attachments,
+              letterDetails.signature
             );
 
             dispatch(
@@ -107,21 +109,7 @@ export default function ActionButtons() {
           variant: "default",
           style: "",
           size: "default",
-          action: () => {
-            const serializedLetter = letterSerializer(
-              letterDetails,
-              attachments
-            );
-
-            dispatch(
-              updateLetter({
-                reference_number: letterDetails.reference_number,
-                letter: serializedLetter,
-              })
-            );
-
-            dispatch(submitLetter(letterDetails.reference_number));
-          },
+          action: () => {},
         },
         {
           isVisible: current_user_permissions.can_retract_letter,

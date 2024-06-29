@@ -27,6 +27,7 @@ interface ISelectableInputProps {
 export default function SelectableInput({
   isCreatable,
   isMulti,
+  placeholder,
   ...rest
 }: ISelectableInputProps) {
   const isReadonly = useAppSelector(selectIsReadonly);
@@ -183,6 +184,7 @@ export default function SelectableInput({
       isMulti={true}
       isClearable={true}
       {...rest}
+      placeholder={isReadonly ? "" : placeholder}
       onChange={handleMultiSelectChange}
       getOptionLabel={getLabel}
       getOptionValue={getValue}
@@ -194,6 +196,7 @@ export default function SelectableInput({
       isMulti={false}
       isClearable={true}
       {...rest}
+      placeholder={isReadonly ? "" : placeholder}
       onChange={handleSingleSelectChange}
       getOptionLabel={getLabel}
       getOptionValue={getValue}

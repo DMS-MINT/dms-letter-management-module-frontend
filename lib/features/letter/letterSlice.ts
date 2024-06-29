@@ -137,8 +137,8 @@ export const letterSlice = createAppSlice({
       async (reference_number: string, { dispatch, getState }) => {
         const response = await get_letter_details(reference_number);
         const letterDetails: ILetterDetails = response.data;
-        const permissions: IPermissionsInputSerializer[] = response.permissions;
         const { me } = (getState() as RootState).authentication;
+        const permissions: IPermissionsInputSerializer[] = response.permissions;
         dispatch(setPermissions({ permissions, me }));
         return letterDetails;
       },

@@ -16,10 +16,9 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   selectAttachments,
   selectLetterDetails,
-  signLetter,
   updateLetter,
 } from "@/lib/features/letter/letterSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { VerifyUserForm } from "@/components/features/user";
 import { letterSerializer } from "@/utils";
 import { submitLetter } from "@/lib/features/letter/workflow/workflowSlice";
@@ -40,18 +39,24 @@ export default function SubmitLetterForm() {
   };
 
   const handleSubmit = () => {
-    const serializedLetter = letterSerializer(letterDetails, attachments);
-    console.log(serializedLetter);
+    if (signature) {
+      const serializedLetter = letterSerializer(
+        letterDetails,
+        attachments,
+        signature
+      );
+      console.log(serializedLetter);
 
-    // dispatch(
-    //   updateLetter({
-    //     reference_number: letterDetails.reference_number,
-    //     letter: serializedLetter,
-    //   })
-    // );
+      dispatch(
+        updateLetter({
+          reference_number: letterDetails.reference_number,
+          letter: serializedLetter,
+        })
+      );
 
-    // dispatch(submitLetter(letterDetails.reference_number));
-    // dispatch(resetDefaultSignature());
+      dispatch(submitLetter(letterDetails.reference_number));
+      dispatch(resetDefaultSignature());
+    }
   };
 
   return (
