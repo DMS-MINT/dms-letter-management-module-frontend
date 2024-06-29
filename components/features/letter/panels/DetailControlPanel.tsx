@@ -27,7 +27,7 @@ export default function DetailControlPanel() {
 
   useEffect(() => {
     setContentJson([
-      { content: letterDetails.content ? letterDetails.content : "" },
+      { content: letterDetails?.content ? letterDetails?.content : "" },
     ]);
   }, [letterDetails]);
 
@@ -43,30 +43,32 @@ export default function DetailControlPanel() {
   };
 
   return (
-    <section className='flex items-center justify-between w-full'>
+    <section className="flex items-center justify-between w-full">
       {status === RequestStatusEnum.FULFILLED ? (
-        letterDetails ? (
-          <h1 className='page-title'>{letterDetails.subject}</h1>
+        letterDetails?.subject ? (
+          <h1 className="page-title limited-chars ">
+            {letterDetails?.subject}
+          </h1>
         ) : (
-          <h1 className='page-title !text-gray-400'>ርዕሰ ጉዳይ የሌለው ደብዳቤ</h1>
+          <h1 className="page-title !text-gray-400">ርዕሰ ጉዳይ የሌለው ደብዳቤ</h1>
         )
       ) : (
-        <Skeleton className='h-8 w-96' />
+        <Skeleton className="h-8 w-96" />
       )}
 
       {status === RequestStatusEnum.FULFILLED ? (
         <Badge
-          variant='destructive'
-          className='rounded-md flex items-center justify-between pl-0 ml-2'
+          variant="destructive"
+          className="rounded-md flex items-center justify-between pl-0 ml-2"
         >
           <Dot /> {letterStatusLookup[letterDetails?.current_state]}
         </Badge>
       ) : (
-        <Skeleton className='h-8 w-14 ml-2' />
+        <Skeleton className="h-8 w-14 ml-2" />
       )}
       {status === RequestStatusEnum.FULFILLED ? (
-        <div className='flex items-center ml-auto gap-2'>
-          <Button variant='outline' size='icon' onClick={handlePrint}>
+        <div className="flex items-center ml-auto gap-2">
+          <Button variant="outline" size="icon" onClick={handlePrint}>
             <Printer size={20} />
           </Button>
           <ActionButtons />

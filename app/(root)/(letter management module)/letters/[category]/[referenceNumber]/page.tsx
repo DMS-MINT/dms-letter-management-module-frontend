@@ -4,7 +4,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   getLetterDetails,
@@ -136,7 +136,7 @@ export default function LetterDetail() {
   const contacts = useAppSelector(selectContacts);
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
-  useWebSocket(params.referenceNumber as string);
+  // useWebSocket(params.referenceNumber as string);
 
   useEffect(() => {
     dispatch(toggleDrawerVisibility(true));
@@ -166,6 +166,14 @@ export default function LetterDetail() {
     }
   }, [letterDetails.letter_type]);
 
+  const filteredOptions = useMemo(() => {
+    return contacts.filter((contact) => {
+      return !letterDetails.participants.some(
+        (participant) => participant.user.id === contact.id
+      );
+    });
+  }, [contacts, letterDetails.participants]);
+
   return status === RequestStatusEnum.LOADING ? (
     <LetterDetailSkeleton />
   ) : status === RequestStatusEnum.FULFILLED ? (
@@ -181,7 +189,7 @@ export default function LetterDetail() {
                   letterDetails.participants,
                   rest.name
                 )}
-                options={contacts}
+                options={filteredOptions}
                 {...rest}
               />
             </div>

@@ -3,10 +3,11 @@ import {
   IParticipantOutputSerializer,
 } from "@/typing/interface";
 
-const createLetterSerializer = (
+export default function letterSerializer(
   letterDetails: ILetterDetails,
-  attachments: File[]
-): FormData => {
+  attachments: File[],
+  signature: File
+): FormData {
   //@ts-ignore
   const participants: IParticipantOutputSerializer[] =
     letterDetails.participants.map((participant) => {
@@ -40,7 +41,7 @@ const createLetterSerializer = (
   formData.append("subject", subject);
   formData.append("content", content);
   formData.append("letter_type", letterDetails.letter_type);
-  formData.append("signature", letterDetails.signature);
+  formData.append("signature", signature);
   formData.append("participants", JSON.stringify(participants));
 
   attachments.forEach((attachment) => {
@@ -48,6 +49,4 @@ const createLetterSerializer = (
   });
 
   return formData;
-};
-
-export default createLetterSerializer;
+}

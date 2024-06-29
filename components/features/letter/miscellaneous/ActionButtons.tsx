@@ -20,7 +20,10 @@ import { letterSerializer } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ShareLetterForm } from "@/components/features/letter";
+import {
+  ShareLetterForm,
+  SubmitLetterForm,
+} from "@/components/features/letter";
 import { useRouter } from "next/navigation";
 interface IButtonConfig {
   isVisible: boolean;
@@ -50,6 +53,7 @@ export default function ActionButtons() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(current_user_permissions);
     if (Object.keys(current_user_permissions).length > 0) {
       const configs: IButtonConfig[] = [
         {
@@ -85,9 +89,9 @@ export default function ActionButtons() {
           action: () => {
             const serializedLetter = letterSerializer(
               letterDetails,
-              attachments
+              attachments,
+              letterDetails.signature
             );
-            console.table(letterDetails.participants);
 
             dispatch(
               updateLetter({
@@ -99,26 +103,13 @@ export default function ActionButtons() {
         },
         {
           isVisible: current_user_permissions.can_submit_letter,
-          isButton: true,
+          isButton: false,
+          component: <SubmitLetterForm compose={false} />,
           label: "ወደ መዝገብ ቢሮ አስተላልፍ",
           variant: "default",
           style: "",
           size: "default",
-          action: () => {
-            const serializedLetter = letterSerializer(
-              letterDetails,
-              attachments
-            );
-
-            dispatch(
-              updateLetter({
-                reference_number: letterDetails.reference_number,
-                letter: serializedLetter,
-              })
-            );
-
-            dispatch(submitLetter(letterDetails.reference_number));
-          },
+          action: () => {},
         },
         {
           isVisible: current_user_permissions.can_retract_letter,
