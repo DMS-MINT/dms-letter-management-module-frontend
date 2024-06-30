@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   deleteLetter,
+  resetAttachments,
   selectAttachments,
   selectLetterDetails,
   updateLetter,
@@ -99,6 +100,8 @@ export default function ActionButtons() {
                 letter: serializedLetter,
               })
             );
+
+            dispatch(resetAttachments());
           },
         },
         {
@@ -185,7 +188,7 @@ export default function ActionButtons() {
       ];
       setButtonConfigs(configs);
     }
-  }, [letterDetails, current_user_permissions]);
+  }, [letterDetails, current_user_permissions, attachments]);
 
   return (
     <>

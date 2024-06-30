@@ -154,7 +154,6 @@ const HeaderTemplate: React.FC<HeaderTemplateProps> = ({ letterDetails }) => {
               <p className="text-sm">
                 ቁጥር / ref.no:-{" "}
                 <span className="pl-1 underline">
-                  {" "}
                   {letterDetails?.reference_number
                     ? `${letterDetails?.reference_number}`
                     : "Draft letter"}

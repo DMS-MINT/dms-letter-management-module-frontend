@@ -29,16 +29,16 @@ export default function LetterDetailsDrawer() {
   const [letterMeta, setLetterMeta] = useState<ILetterMetaData[]>([]);
 
   useEffect(() => {
-    if (letterDetails.letter_type) {
+    if (letterDetails?.letter_type) {
       const LetterMetaData: ILetterMetaData[] = [
         {
           label: "የደብዳቤ አይነት",
-          value: letterTypeLookup[letterDetails.letter_type.toUpperCase()],
+          value: letterTypeLookup[letterDetails?.letter_type.toUpperCase()],
           icon: <Mail size={20} className="text-gray-600" />,
         },
         {
           label: "የመዝገብ ቁጥር",
-          value: letterDetails.reference_number,
+          value: letterDetails?.reference_number,
           icon: <FileDigit size={20} className="text-gray-600" />,
         },
       ];

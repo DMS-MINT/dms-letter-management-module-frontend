@@ -96,7 +96,7 @@ export default function DetailControlPanel() {
         printable: printableContent,
         type: "raw-html",
         scanStyles: false,
-        documentTitle: `${letterDetails.subject}`,
+        documentTitle: `${letterDetails?.subject}`,
       });
     }
   };
