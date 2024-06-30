@@ -60,7 +60,7 @@ export default function LetterNavigationDrawer() {
         showBadge: false,
         path: "/letters/pending",
         count: null,
-        isVisible: me.is_staff,
+        isVisible: me?.is_staff,
       },
       {
         name: "የታተሙ ደብዳቤዎች",
@@ -68,7 +68,7 @@ export default function LetterNavigationDrawer() {
         showBadge: false,
         path: "/letters/published",
         count: null,
-        isVisible: me.is_staff,
+        isVisible: me?.is_staff,
       },
     ];
 

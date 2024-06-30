@@ -14,5 +14,4 @@ export { default as LetterDetailsDrawer } from "./drawers/LetterDetailsDrawer";
 export { default as LetterNavigationDrawer } from "./drawers/LetterNavigationDrawer";
 
 // Print
-export { default as InternalLetterPrintPreview } from "./print/InternalLetterPrintPreview";
-export { default as OutgoingLetterPrintPreview } from "./print/OutgoingLetterPrintPreview";
+export { default as PrintPreviewButton } from "./print/PrintPreviewButton";

@@ -152,3 +152,65 @@ input[type="number"]::-webkit-inner-spin-button {
   display: inline-block;
   box-sizing: border-box;
 }
+#letter-content h1,
+#letter-content h2,
+#letter-content h3,
+#letter-content h4,
+#letter-content h5,
+#letter-content h6 {
+  line-height: 1.1;
+  margin-top: 2.5rem;
+  text-wrap: pretty;
+}
+
+#letter-content h1,
+#letter-content h2 {
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#letter-content h1 {
+  font-size: 1.4rem;
+}
+
+#letter-content h2 {
+  font-size: 1.2rem;
+}
+
+#letter-content h3 {
+  font-size: 1.1rem;
+}
+
+#letter-content h4,
+#letter-content h5,
+#letter-content h6 {
+  font-size: 1rem;
+}
+
+#letter-content u {
+  text-decoration: underline;
+}
+
+#letter-content em {
+  font-style: italic;
+}
+
+#letter-content strong {
+  font-weight: bold;
+}
+
+#letter-content {
+  line-height: 1.5;
+}
+
+#letter-content p {
+  margin-bottom: 1em;
+}
+
+#letter-content p + p {
+  margin-top: 1em;
+}
+
+#letter-content br {
+  margin-bottom: 1rem;
+}
