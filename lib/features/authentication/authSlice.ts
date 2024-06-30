@@ -118,7 +118,6 @@ export const authSlice = createAppSlice({
               type: "image/png",
             });
             dispatch(signLetter(file));
-            console.log("File:", file);
           })
           .catch((error) => {
             console.error(

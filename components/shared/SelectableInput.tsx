@@ -28,6 +28,7 @@ export default function SelectableInput({
   isCreatable,
   isMulti,
   placeholder,
+  options,
   ...rest
 }: ISelectableInputProps) {
   const isReadonly = useAppSelector(selectIsReadonly);
@@ -175,13 +176,18 @@ export default function SelectableInput({
     }
     return `${option.value}`;
   };
-  const filteredOptions = rest.options.filter((option) => {
-    return !letterDetails.participants.some(
+
+  const filteredOptions = options.filter((option) => {
+    return !letterDetails?.participants.some(
       (participant) => participant.user.id === option.id
     );
   });
 
   const SelectableInputToRender = isCreatable ? Creatable : Select;
+
+  if (!isMounted) {
+    return <div className="w-full h-10 bg-gray-200 animate-pulse" />;
+  }
 
   return isMulti ? (
     <SelectableInputToRender
@@ -189,6 +195,7 @@ export default function SelectableInput({
       isMulti={true}
       isClearable={true}
       {...rest}
+      options={filteredOptions}
       placeholder={isReadonly ? "" : placeholder}
       onChange={handleMultiSelectChange}
       getOptionLabel={getLabel}
@@ -201,6 +208,7 @@ export default function SelectableInput({
       isMulti={false}
       isClearable={true}
       {...rest}
+      options={filteredOptions}
       placeholder={isReadonly ? "" : placeholder}
       onChange={handleSingleSelectChange}
       getOptionLabel={getLabel}

@@ -20,7 +20,7 @@ export default function RichTextEditor() {
   const editorEditable = useEditor({
     editable: true,
     extensions: [StarterKit, Underline],
-    content: letterDetail.content ? letterDetail.content : "",
+    content: letterDetail?.content ? letterDetail?.content : "",
     editorProps: {
       attributes: {
         class:
@@ -33,7 +33,7 @@ export default function RichTextEditor() {
   const editorReadonly = useEditor({
     editable: false,
     extensions: [StarterKit, Underline],
-    content: letterDetail.content ? letterDetail.content : "",
+    content: letterDetail?.content ? letterDetail?.content : "",
     editorProps: {
       attributes: {
         class:

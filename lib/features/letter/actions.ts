@@ -38,10 +38,29 @@ export async function create_letter(letter: FormData) {
   }
 }
 
-export async function create_or_submit_letter(letter: FormData) {
+export async function create_and_submit_letter(letter: FormData) {
   try {
     const response = await axiosInstance.post(
-      "letters/create_or_submit/",
+      "letters/create_and_submit/",
+      letter,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+
+export async function create_and_publish_letter(letter: FormData) {
+  try {
+    const response = await axiosInstance.post(
+      "letters/create_and_publish/",
       letter,
       {
         headers: {

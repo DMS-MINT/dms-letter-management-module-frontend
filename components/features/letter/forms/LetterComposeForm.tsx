@@ -1,5 +1,3 @@
-/** @format */
-
 "use client";
 
 import { Input } from "@/components/ui/input";
@@ -8,15 +6,15 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
-  signLetter,
+  selectStatus,
   updateSubject,
 } from "@/lib/features/letter/letterSlice";
 import { ContactType } from "@/typing/interface";
-import { ParticipantRolesEnum } from "@/typing/enum";
+import { ParticipantRolesEnum, RequestStatusEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
 import { RichTextEditor } from "@/components/shared/Editor";
 import { FileUploadButton, SelectableInput } from "@/components/shared";
-import { toast } from "sonner";
+import { toggleIsReadOnly } from "@/lib/features/ui/uiManagerSlice";
 
 interface IFormConfig {
   label: string;
@@ -33,7 +31,7 @@ const internalLetterFormConfig: IFormConfig[] = [
     name: ParticipantRolesEnum.AUTHOR,
     isCreatable: false,
     isMulti: false,
-    placeholder: "ተቀባዮችን ያስገቡ...",
+    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
   },
   {
     label: "ለ",
@@ -95,7 +93,7 @@ const outgoingLetterFormConfig: IFormConfig[] = [
     name: ParticipantRolesEnum.AUTHOR,
     isCreatable: false,
     isMulti: false,
-    placeholder: "ተቀባዮችን ያስገቡ...",
+    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
   },
   {
     label: "ለ",
@@ -123,8 +121,15 @@ const outgoingLetterFormConfig: IFormConfig[] = [
 export default function LetterComposeForm() {
   const letterDetail = useAppSelector(selectLetterDetails);
   const contacts = useAppSelector(selectContacts);
+  const status = useAppSelector(selectStatus);
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (status === RequestStatusEnum.LOADING) {
+      dispatch(toggleIsReadOnly(true));
+    }
+  }, [status]);
 
   const isIncomingLetter =
     letterDetail?.letter_type === "incoming" ? true : false;
@@ -142,20 +147,6 @@ export default function LetterComposeForm() {
         break;
     }
   }, [letterDetail]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const selectedFile = files[0];
-      const allowedTypes = ["image/png"];
-
-      if (allowedTypes.includes(selectedFile.type)) {
-        dispatch(signLetter(selectedFile));
-      } else {
-        toast.error(`Unsupported file type: ${selectedFile.type}`);
-      }
-    }
-  };
 
   return (
     <form className="p-2 flex gap-2 flex-col ">

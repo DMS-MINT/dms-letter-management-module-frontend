@@ -10,8 +10,8 @@ export default function letterSerializer(
 ): FormData {
   //@ts-ignore
   const participants: IParticipantOutputSerializer[] =
-    letterDetails.participants.map((participant) => {
-      if (participant.user.user_type === "member") {
+    letterDetails?.participants.map((participant) => {
+      if (participant?.user?.user_type === "member") {
         return {
           id: participant.id,
           user: {
@@ -20,8 +20,9 @@ export default function letterSerializer(
           },
           role: participant.role,
         };
-      } else if (participant.user.user_type === "guest") {
+      } else if (participant?.user?.user_type === "guest") {
         return {
+          id: participant.id,
           user: {
             id: participant.user.name,
             name: participant.user.name,

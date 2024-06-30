@@ -1,10 +1,8 @@
-/** @format */
-
 "use client";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Suspense } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   getLetterDetails,
@@ -16,7 +14,11 @@ import { getDefaultValue } from "@/utils";
 import { ContactType } from "@/typing/interface";
 import { ParticipantRolesEnum, RequestStatusEnum } from "@/typing/enum";
 import { selectContacts } from "@/lib/features/contact/contactSlice";
-import { LetterDetailSkeleton, SelectableInput } from "@/components/shared";
+import {
+  FileUploadButton,
+  LetterDetailSkeleton,
+  SelectableInput,
+} from "@/components/shared";
 import { useParams } from "next/navigation";
 import { RichTextEditor } from "@/components/shared/Editor";
 import {
@@ -24,6 +26,7 @@ import {
   toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
 import { ActivityFeed } from "@/components/shared";
+import { useRouter } from "next/navigation";
 import { useWebSocket } from "@/hooks";
 
 interface IFormConfig {
@@ -136,14 +139,17 @@ export default function LetterDetail() {
   const contacts = useAppSelector(selectContacts);
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
+  const router = useRouter();
   // useWebSocket(params.referenceNumber as string);
 
   useEffect(() => {
+    if (status === RequestStatusEnum.FAILED) {
+      router.push("/letters/inbox/");
+    }
+  }, [status]);
+
+  useEffect(() => {
     dispatch(toggleDrawerVisibility(true));
-    // if (status === RequestStatusEnum.FULFILLED) {
-    // } else {
-    //   dispatch(toggleDrawerVisibility(false));
-    // }
   }, []);
 
   useEffect(() => {
@@ -153,7 +159,7 @@ export default function LetterDetail() {
   }, [params, dispatch]);
 
   useEffect(() => {
-    switch (letterDetails.letter_type) {
+    switch (letterDetails?.letter_type) {
       case "incoming":
         setFormConfig(incomingLetterFormConfig);
         break;
@@ -200,7 +206,7 @@ export default function LetterDetail() {
         <section className="flex flex-col gap-5">
           <h2 className="font-semibold text-lg">ስለ ደብዳቤው መረጃ</h2>
           <div className="grid  gap-5">
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 gap-5">
               <div className="grid items-center gap-1.5">
                 <Label htmlFor="ጉዳዩ">ጉዳዩ</Label>
                 <Input
@@ -211,10 +217,13 @@ export default function LetterDetail() {
                   onChange={(e) => dispatch(updateSubject(e.target.value))}
                 />
               </div>
-              <div className="grid items-center gap-1.5">
+              {letterDetails?.letter_type === "incoming" && !isReadonly ? (
+                <FileUploadButton />
+              ) : null}
+              {/* <div className="grid items-center gap-1.5">
                 <Label htmlFor="የገጾች ብዛት">የገጾች ብዛት</Label>
                 <Input readOnly type="text" id="የገጾች ብዛት" value="1" />
-              </div>
+              </div> */}
             </div>
           </div>
           {
@@ -223,6 +232,7 @@ export default function LetterDetail() {
                 <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
 
                 <RichTextEditor />
+                {!isReadonly ? <FileUploadButton /> : null}
               </section>
             ) : null
             // <section className="flex flex-col gap-1.5">

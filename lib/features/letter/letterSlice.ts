@@ -13,7 +13,8 @@ import {
   create_letter,
   update_letter,
   delete_letter,
-  create_or_submit_letter,
+  create_and_submit_letter,
+  create_and_publish_letter,
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
@@ -45,8 +46,14 @@ export const letterSlice = createAppSlice({
   initialState,
 
   reducers: (create) => ({
+    resetLetterList: create.reducer((state, _) => {
+      state.letters = initialState.letters;
+    }),
     resetLetterDetail: create.reducer((state, _) => {
       state.letterDetails = initialState.letterDetails;
+    }),
+    resetAttachments: create.reducer((state, _) => {
+      state.attachments = initialState.attachments;
     }),
     updateSubject: create.reducer((state, action: PayloadAction<string>) => {
       state.letterDetails.subject = action.payload;
@@ -86,7 +93,6 @@ export const letterSlice = createAppSlice({
       }
     ),
     signLetter: create.reducer((state, action: PayloadAction<File>) => {
-      console.log(action.payload);
       state.letterDetails.signature = action.payload;
     }),
     removeSignature: create.reducer((state, _) => {
@@ -193,9 +199,40 @@ export const letterSlice = createAppSlice({
         },
       }
     ),
-    createOrSubmitLetter: create.asyncThunk(
+    createAndSubmitLetter: create.asyncThunk(
       async (letter: FormData) => {
-        const response = await create_or_submit_letter(letter);
+        const response = await create_and_submit_letter(letter);
+        const data = await response;
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Creating letter, Please wait...");
+        },
+        fulfilled: (
+          state,
+          action: PayloadAction<{ data: ILetterDetails; message: string }>
+        ) => {
+          state.status = RequestStatusEnum.FULFILLED;
+          state.letterDetails = action.payload.data;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload.message);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to create letter";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to create letter");
+        },
+      }
+    ),
+    createAndPublishLetter: create.asyncThunk(
+      async (letter: FormData) => {
+        const response = await create_and_publish_letter(letter);
         const data = await response;
         return data;
       },
@@ -298,7 +335,9 @@ export const letterSlice = createAppSlice({
 });
 
 export const {
+  resetLetterList,
   resetLetterDetail,
+  resetAttachments,
   updateSubject,
   updateContent,
   signLetter,
@@ -310,7 +349,8 @@ export const {
   getLetters,
   getLetterDetails,
   createLetter,
-  createOrSubmitLetter,
+  createAndSubmitLetter,
+  createAndPublishLetter,
   updateLetter,
   deleteLetter,
   updateLetterDetails,
