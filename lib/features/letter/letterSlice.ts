@@ -310,7 +310,7 @@ export const letterSlice = createAppSlice({
         },
         fulfilled: (state, action: PayloadAction<ILetterDetails>) => {
           state.status = RequestStatusEnum.FULFILLED;
-          state.letterDetails = action.payload;
+          state.letterDetails = initialState.letterDetails;
           state.error = null;
           toast.dismiss();
           toast.success("Letter successfully deleted!");

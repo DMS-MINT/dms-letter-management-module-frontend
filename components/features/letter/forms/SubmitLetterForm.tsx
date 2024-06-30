@@ -70,11 +70,11 @@ export default function SubmitLetterForm({ action }: { action: ActionType }) {
         case "update_and_submit":
           dispatch(
             updateLetter({
-              reference_number: letterDetails.reference_number,
+              reference_number: letterDetails?.reference_number,
               letter: serializedLetter,
             })
           );
-          dispatch(submitLetter(letterDetails.reference_number));
+          dispatch(submitLetter(letterDetails?.reference_number));
           break;
         case "create_and_publish":
           dispatch(createAndPublishLetter(serializedLetter));
@@ -82,11 +82,11 @@ export default function SubmitLetterForm({ action }: { action: ActionType }) {
         case "update_and_publish":
           dispatch(
             updateLetter({
-              reference_number: letterDetails.reference_number,
+              reference_number: letterDetails?.reference_number,
               letter: serializedLetter,
             })
           );
-          dispatch(publishLetter(letterDetails.reference_number));
+          dispatch(publishLetter(letterDetails?.reference_number));
           break;
         default:
           break;

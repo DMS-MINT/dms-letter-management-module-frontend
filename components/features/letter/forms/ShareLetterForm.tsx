@@ -79,11 +79,11 @@ export default function ShareLetterForm() {
 
   const filteredOptions = useMemo(() => {
     return contacts.filter((contact) => {
-      return !letterDetails.participants.some(
+      return !letterDetails?.participants.some(
         (participant) => participant.user.id === contact.id
       );
     });
-  }, [contacts, letterDetails.participants]);
+  }, [contacts, letterDetails?.participants]);
 
   const handleSelectChange = (
     option: readonly ContactType[],
@@ -159,11 +159,13 @@ export default function ShareLetterForm() {
   const handleSubmit = () => {
     dispatch(
       shareLetter({
-        reference_number: letterDetails.reference_number,
+        reference_number: letterDetails?.reference_number,
         participants: formData,
       })
     );
   };
+
+  if (!letterDetails) return;
 
   return (
     <Dialog>
@@ -213,17 +215,17 @@ export default function ShareLetterForm() {
                 <div className="flex items-center gap-3">
                   <Avatar className="w-11 h-11">
                     <AvatarFallback>
-                      {letterDetails?.owner.full_name
-                        ? letterDetails?.owner.full_name.substring(0, 2)
+                      {letterDetails?.owner?.full_name
+                        ? letterDetails?.owner?.full_name.substring(0, 2)
                         : ""}
                     </AvatarFallback>
                   </Avatar>
-                  <p>{`${letterDetails?.owner.full_name} - ${letterDetails?.owner.job_title}`}</p>
+                  <p>{`${letterDetails?.owner?.full_name} - ${letterDetails?.owner?.job_title}`}</p>
                   <p className="ml-auto text-gray-400">ባለቤት</p>
                 </div>
 
-                {letterDetails.participants.length > 0
-                  ? letterDetails.participants
+                {letterDetails?.participants.length > 0
+                  ? letterDetails?.participants
                       .filter(
                         (participant) =>
                           participant.role ===
