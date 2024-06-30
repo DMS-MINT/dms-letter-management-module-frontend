@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import Image from "next/image";
-import Logo from "@/public/assets/logo.svg";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,6 +27,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { letterCategoryLookup } from "@/typing/dictionary";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import MINT_Logo from "@/public/assets/mint_logo.svg";
 
 export default function TopBar() {
   const me = useAppSelector(selectMe);
@@ -48,7 +47,7 @@ export default function TopBar() {
       <DataLoader />
       <button className="flex items-center gap-4 hover:cursor-pointer">
         <Link href="/letters/compose">
-          <Image src={Logo} alt="logo" width={30} />
+          <Image src={MINT_Logo} alt="logo" width={40} />
         </Link>
         <Breadcrumb>
           <BreadcrumbList>
@@ -86,18 +85,18 @@ export default function TopBar() {
         </Breadcrumb>
       </button>
       <div className="flex gap-4 items-center">
-        {pathname.split("/").splice(2)[0] !== "compose" ? (
+        {/* {pathname.split("/").splice(2)[0] !== "compose" ? (
           <Input
             type="text"
             placeholder="ፈልግ"
             className=" w-96 py-0 focus-visible:ring-0 h-9 focus-visible:ring-offset-0"
           />
-        ) : null}
+        ) : null} */}
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon">
+          {/* <Button variant="ghost" size="icon">
             <Bell className="w-5 h-5" />
-          </Button>
-          <Separator orientation="vertical" className="h-8" />
+          </Button> */}
+          {/* <Separator orientation="vertical" className="h-8" /> */}
 
           <p className="text-xs">{me?.full_name ? me.full_name : ""}</p>
           <DropdownMenu>
