@@ -18,6 +18,7 @@ import {
   retract_letter,
   share_letter,
   submit_letter,
+  reject_letter,
 } from "./actions";
 
 export interface IWorkflowSliceState {
@@ -161,6 +162,33 @@ export const workflowSlice = createAppSlice({
           state.error = action.error.message || "Failed to publish letter";
           toast.dismiss();
           toast.error(action.error.message || "Failed to publish letter");
+        },
+      }
+    ),
+    rejectLetter: create.asyncThunk(
+      async (reference_number: string) => {
+        const response = await reject_letter(reference_number);
+        const data = await response;
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Rejecting letter, Please wait...");
+        },
+        fulfilled: (state, action: PayloadAction<string>) => {
+          state.status = RequestStatusEnum.IDLE;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to reject letter";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to reject letter");
         },
       }
     ),
@@ -351,6 +379,7 @@ export const {
   shareLetter,
   submitLetter,
   publishLetter,
+  rejectLetter,
   retractLetter,
   closeLetter,
   reopenLetter,

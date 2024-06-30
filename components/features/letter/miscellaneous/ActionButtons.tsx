@@ -10,10 +10,10 @@ import {
 import {
   closeLetter,
   publishLetter,
+  rejectLetter,
   reopenLetter,
   retractLetter,
   selectCurrentUserPermissions,
-  submitLetter,
 } from "@/lib/features/letter/workflow/workflowSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { letterSerializer } from "@/utils";
@@ -25,6 +25,7 @@ import {
   SubmitLetterForm,
 } from "@/components/features/letter";
 import { useRouter } from "next/navigation";
+
 interface IButtonConfig {
   isVisible: boolean;
   isButton: boolean;
@@ -53,7 +54,6 @@ export default function ActionButtons() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(current_user_permissions);
     if (Object.keys(current_user_permissions).length > 0) {
       const configs: IButtonConfig[] = [
         {
@@ -104,7 +104,19 @@ export default function ActionButtons() {
         {
           isVisible: current_user_permissions.can_submit_letter,
           isButton: false,
-          component: <SubmitLetterForm compose={false} />,
+          component: <SubmitLetterForm action="update_and_submit" />,
+          label: "ወደ መዝገብ ቢሮ አስተላልፍ",
+          variant: "default",
+          style: "",
+          size: "default",
+          action: () => {},
+        },
+        {
+          isVisible:
+            letterDetails?.letter_type === "incoming" &&
+            current_user_permissions.can_publish_letter,
+          isButton: false,
+          component: <SubmitLetterForm action="update_and_publish" />,
           label: "ወደ መዝገብ ቢሮ አስተላልፍ",
           variant: "default",
           style: "",
@@ -123,18 +135,22 @@ export default function ActionButtons() {
           },
         },
         {
-          isVisible: current_user_permissions.can_reject_letter,
+          isVisible:
+            letterDetails?.letter_type !== "incoming" &&
+            current_user_permissions.can_reject_letter,
           isButton: true,
           label: "ደብዳቤውን አትቀበል",
           variant: "destructive",
           style: "",
           size: "default",
           action: () => {
-            console.log("REJECT LETTER PUBLISH REQUEST");
+            dispatch(rejectLetter(letterDetails.reference_number));
           },
         },
         {
-          isVisible: current_user_permissions.can_publish_letter,
+          isVisible:
+            letterDetails?.letter_type !== "incoming" &&
+            current_user_permissions.can_publish_letter,
           isButton: true,
           label: "ደብዳቤውን አከፋፍል",
           variant: "third",

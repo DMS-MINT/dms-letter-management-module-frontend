@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
+  resetAttachments,
   resetLetterDetail,
   setLetterType,
 } from "@/lib/features/letter/letterSlice";
@@ -66,6 +67,7 @@ export default function Compose() {
               value={label}
               onClick={() => {
                 dispatch(resetLetterDetail());
+                dispatch(resetAttachments());
                 dispatch(setLetterType(label));
               }}
             >

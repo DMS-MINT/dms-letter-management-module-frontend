@@ -55,6 +55,16 @@ export default function Table() {
     }
   }, [params]);
 
+  const removeDuplicates = (letters: ILetterListInputSerializer[]) => {
+    const uniqueLetters = letters.reduce<{
+      [key: string]: ILetterListInputSerializer;
+    }>((acc, letter) => {
+      acc[letter.id] = letter;
+      return acc;
+    }, {});
+    return Object.values(uniqueLetters);
+  };
+
   return (
     <>
       <Subheader>
@@ -65,7 +75,7 @@ export default function Table() {
           <LetterNavigationDrawer />
         </Drawer>
         <Main>
-          <DataTable columns={columns} data={letters} />
+          <DataTable columns={columns} data={removeDuplicates(letters)} />
         </Main>
       </section>
     </>

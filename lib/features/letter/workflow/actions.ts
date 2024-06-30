@@ -44,6 +44,18 @@ export async function publish_letter(reference_number: string) {
   }
 }
 
+export async function reject_letter(reference_number: string) {
+  try {
+    const response = await axiosInstance.post(
+      `letters/${reference_number}/reject/`
+    );
+    const data = await response.data.message;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+
 export async function retract_letter(reference_number: string) {
   try {
     const response = await axiosInstance.post(

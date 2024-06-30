@@ -27,23 +27,29 @@ import { DataLoader } from "@/components/utils";
 import { logout, selectMe } from "@/lib/features/authentication/authSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { letterCategoryLookup } from "@/typing/dictionary";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function TopBar() {
   const me = useAppSelector(selectMe);
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const params = useParams();
+  const router = useRouter();
 
   const handleLogout = () => {
     dispatch(logout({}));
-    redirect("/signin");
+    router.push("/signin");
+    // redirect("/signin");
   };
 
   return (
     <header className="min-h-16 w-full px-8 bg-white flex justify-between items-center">
       <DataLoader />
       <button className="flex items-center gap-4 hover:cursor-pointer">
-        <Image src={Logo} alt="logo" width={30} />
+        <Link href="/letters/compose">
+          <Image src={Logo} alt="logo" width={30} />
+        </Link>
         <Breadcrumb>
           <BreadcrumbList>
             {params.category ? (

@@ -1,11 +1,12 @@
 "use client";
+
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { BookDashed, FileText, Inbox, Send, BookCheck } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { usePathname } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
+import { useAppSelector } from "@/lib/hooks";
+import { selectLetters } from "@/lib/features/letter/letterSlice";
 import { useEffect, useState } from "react";
 import { selectMe } from "@/lib/features/authentication/authSlice";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ export default function LetterNavigationDrawer() {
       {
         name: "ገቢ ደብዳቤዎች",
         icon: <Inbox size={icon_size} color={icon_color} />,
-        showBadge: true,
+        showBadge: false,
         path: "/letters/inbox",
         count: 10,
         isVisible: true,
@@ -48,14 +49,14 @@ export default function LetterNavigationDrawer() {
       {
         name: "ረቂቆች",
         icon: <FileText size={icon_size} color={icon_color} />,
-        showBadge: true,
+        showBadge: false,
         path: "/letters/draft",
         count: 3,
         isVisible: true,
       },
       {
         name: "መጽደቅን በመጠባበቅ ላይ",
-        icon: <BookDashed size={icon_size} color={icon_color} />,
+        icon: <BookDashed size={icon_size} color={"#FF5733"} />,
         showBadge: false,
         path: "/letters/pending",
         count: null,
@@ -63,7 +64,7 @@ export default function LetterNavigationDrawer() {
       },
       {
         name: "የታተሙ ደብዳቤዎች",
-        icon: <BookCheck size={icon_size} color={icon_color} />,
+        icon: <BookCheck size={icon_size} color={"#50C878"} />,
         showBadge: false,
         path: "/letters/published",
         count: null,

@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 
 export default function Canvas({ editor }: { editor: Editor }) {
-  const letterDetail = useAppSelector(selectLetterDetails);
+  const letterDetails = useAppSelector(selectLetterDetails);
 
   return (
     <section className="py-4 bg-slate-100">
@@ -14,10 +14,12 @@ export default function Canvas({ editor }: { editor: Editor }) {
           editor={editor}
           className="editor"
         />
-        <img
-          src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetail.signature}`}
-          className="bg-white mx-auto absolute w-80 bottom-1 right-1"
-        />
+        {letterDetails?.signature ? (
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetails?.signature}`}
+            className="bg-white mx-auto absolute w-80 bottom-1 right-1"
+          />
+        ) : null}
       </div>
     </section>
   );

@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Pen, Eraser, RefreshCw } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { v4 as uuidv4 } from "uuid";
+import { useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
-  signLetter,
+  selectStatus,
 } from "@/lib/features/letter/letterSlice";
-import { v4 as uuidv4 } from "uuid";
+import { RequestStatusEnum } from "@/typing/enum";
 
 type EditorToolType = {
   label?: string;
@@ -20,7 +21,7 @@ type EditorToolType = {
 export default function SignaturePad({
   handleSignatureChange,
 }: {
-  handleSignatureChange: (file: File) => void;
+  handleSignatureChange: (file: File | undefined) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [eraseMode, setEraseMode] = useState(false);
@@ -30,8 +31,7 @@ export default function SignaturePad({
   const [strokeWidth, setStrokeWidth] = useState(5);
   const [strokeColor, setStrokeColor] = useState("#000000");
   const [editorTools, setEditorTools] = useState<EditorToolType[]>([]);
-  const dispatch = useAppDispatch();
-  const letterDetails = useAppSelector(selectLetterDetails);
+  const status = useAppSelector(selectStatus);
 
   const handleCanvasMouseDown = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>
@@ -91,19 +91,15 @@ export default function SignaturePad({
         isDisabled: eraseMode,
         icon: <Eraser />,
         action: () => {
+          handleSignatureChange(undefined);
           setEraseMode(true);
         },
       },
-      // {
-      //   isDisabled: false,
-      //   icon: <Undo />,
-      //   action: () => {
-      //   },
-      // },
       {
         isDisabled: false,
         icon: <RefreshCw />,
         action: () => {
+          handleSignatureChange(undefined);
           if (canvasRef.current) {
             const context = canvasRef.current.getContext("2d");
             if (context) {
@@ -122,21 +118,43 @@ export default function SignaturePad({
         label: "ፊርማውን አስቀምጥ",
         action: () => {
           if (canvasRef.current) {
-            new Promise<void>((resolve) => {
-              canvasRef.current!.toBlob((blob) => {
-                if (blob) {
-                  const file = new File([blob], "signature.png", {
-                    type: "image/png",
-                  });
-                  handleSignatureChange(file);
-                  resolve();
-                } else {
-                  resolve();
-                }
-              }, "image/png");
-            }).catch((error) => {
-              console.error("Error processing the canvas blob:", error);
-            });
+            const canvas = canvasRef.current;
+            const context = canvas.getContext("2d");
+            if (context) {
+              const emptyCanvas = document.createElement("canvas");
+              emptyCanvas.width = canvas.width;
+              emptyCanvas.height = canvas.height;
+              const isEmpty =
+                context
+                  .getImageData(0, 0, canvas.width, canvas.height)
+                  .data.toString() ===
+                // @ts-ignore
+                emptyCanvas
+                  .getContext("2d")
+                  .getImageData(0, 0, canvas.width, canvas.height)
+                  .data.toString();
+
+              if (!isEmpty) {
+                new Promise<void>((resolve) => {
+                  canvas.toBlob((blob) => {
+                    if (blob) {
+                      const file = new File([blob], "signature.png", {
+                        type: "image/png",
+                      });
+                      handleSignatureChange(file);
+                      resolve();
+                    } else {
+                      resolve();
+                    }
+                  }, "image/png");
+                }).catch((error) => {
+                  console.error("Error processing the canvas blob:", error);
+                });
+              } else {
+                handleSignatureChange(undefined);
+                console.log("Canvas is empty, not processing.");
+              }
+            }
           }
         },
       },
@@ -148,19 +166,21 @@ export default function SignaturePad({
   return (
     <section className="flex flex-col border bg-white border-gray-300 w-fit mx-auto">
       <div className="flex gap-3 items-center p-2 justify-end">
-        {editorTools.map(({ label, icon, action, isDisabled }) => (
-          <Button
-            key={uuidv4()}
-            variant="outline"
-            type="button"
-            size={icon ? "icon" : "default"}
-            disabled={isDisabled}
-            onClick={action}
-          >
-            {label}
-            {icon}
-          </Button>
-        ))}
+        {status === RequestStatusEnum.LOADING
+          ? null
+          : editorTools.map(({ label, icon, action, isDisabled }) => (
+              <Button
+                key={uuidv4()}
+                variant="outline"
+                type="button"
+                size={icon ? "icon" : "default"}
+                disabled={isDisabled}
+                onClick={action}
+              >
+                {label}
+                {icon}
+              </Button>
+            ))}
       </div>
       <canvas
         ref={canvasRef}
