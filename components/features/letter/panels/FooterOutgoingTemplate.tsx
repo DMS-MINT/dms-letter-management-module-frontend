@@ -218,11 +218,12 @@ const FooterOutgoingTemplate: React.FC<FooterOutgoingTemplate> = ({
           </div>
           <div className="flex items-center justify-center gap-1">
             <img src="/image/Type=2.svg" alt="Logo 1" className="w-10 h-10" />
-            <img
-              src="/image/signature1.svg"
-              alt="Signature"
-              className="w-6 h-6"
-            />
+            {letterDetails?.signature ? (
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetails?.signature}`}
+                className="w-6 h-6"
+              />
+            ) : null}
           </div>
         </div>
         <div>
