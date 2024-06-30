@@ -71,7 +71,7 @@ export default function ShareLetterForm() {
   const [formData, setFormData] = useState<IShareLetterFormData>({
     to: [],
     message: "",
-    permissions: ["can_update_letter"],
+    permissions: ["can_view_letter"],
   });
   const contacts = useAppSelector(selectContacts);
   const dispatch = useAppDispatch();
@@ -163,6 +163,12 @@ export default function ShareLetterForm() {
         participants: formData,
       })
     );
+
+    setFormData({
+      to: [],
+      message: "",
+      permissions: ["can_view_letter"],
+    });
   };
 
   if (!letterDetails) return;
