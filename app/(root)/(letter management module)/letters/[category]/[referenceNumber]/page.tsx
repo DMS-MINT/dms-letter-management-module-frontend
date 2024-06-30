@@ -140,7 +140,7 @@ export default function LetterDetail() {
   const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
   const params = useParams();
   const router = useRouter();
-  // useWebSocket(params.referenceNumber as string);
+  useWebSocket(params.referenceNumber as string);
 
   useEffect(() => {
     if (status === RequestStatusEnum.FAILED) {
