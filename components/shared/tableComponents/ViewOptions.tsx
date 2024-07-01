@@ -23,18 +23,18 @@ interface ViewOptionsProps<TData> {
 export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      {/* <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="flex gap-2.5  ml-auto  h-8 lg:flex"
+          className="flex gap-2.5  ml-auto h-8 lg:flex"
         >
           <Filter size={15} className="mr-2" />
           አጣራ
           <Separator orientation="vertical" className="h-8" />
           <FilterX size={15} className="mr-2 " />
         </Button>
-      </DropdownMenuTrigger>
+      </DropdownMenuTrigger> */}
       {/* <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -56,6 +56,7 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
           አምዶች መቀየሪያ
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>ዓምዶችን ቀያይር</DropdownMenuLabel>
         <DropdownMenuSeparator />
