@@ -5,5 +5,7 @@ export default function Main({
   children: React.ReactNode;
   className?: string;
 }>) {
-  return <main className={`card h-fit flex-1 ${className}`}>{children}</main>;
+  return (
+    <main className={`card h-fit flex-1 min-w-0 ${className}`}>{children}</main>
+  );
 }

@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import TablePagination from "./TablePagination";
 import ViewOptions from "./ViewOptions";
 import { useRouter, usePathname } from "next/navigation";
+import { LetterTableColumnEnum } from "@/typing/enum";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -63,75 +64,87 @@ export default function DataTable<TData, TValue>({
     },
   });
   return (
-    <div className="flex flex-col justify-between">
-      <div>
-        <div className="flex items-center  grid-cols-3 gap-4 mb-2">
-          <Input placeholder="የደብዳቤ ቁጥር" className="max-w-sm py-0 h-9" />
-          <Input placeholder="ከ" className="max-w-sm py-0 h-9" />
-          <Input placeholder="ለ" className="max-w-sm py-0 h-9" />
-          <Input placeholder="ጉዳዩ" className="max-w-sm py-0 h-9" />
-          <Input placeholder="የተላከበት ቀን" className="max-w-sm py-0 h-9" />
+    <div className="flex flex-col justify-between w-full">
+      <div className="flex flex-wrap items-center  grid-cols-3 gap-4 mb-2">
+        <Input
+          value={
+            (table
+              .getColumn(LetterTableColumnEnum.REFERENCE_NUMBER)
+              ?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table
+              .getColumn(LetterTableColumnEnum.REFERENCE_NUMBER)
+              ?.setFilterValue(event.target.value)
+          }
+          placeholder="የደብዳቤ ቁጥር"
+          className="max-w-sm py-0 h-9 mr-auto"
+        />
+        {/* <Input placeholder="ከ" className="max-w-sm py-0 h-9" />
+        <Input placeholder="ለ" className="max-w-sm py-0 h-9" />
+        <Input placeholder="ጉዳዩ" className="max-w-sm py-0 h-9" />
+        <Input placeholder="የተላከበት ቀን" className="max-w-sm py-0 h-9" /> */}
 
-          <ViewOptions table={table} />
-        </div>
-
-        <div className="rounded-md border my-3">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => {
-                  const reference_number = row.getValue("reference_number");
-                  return (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                      onClick={() =>
-                        router.push(`${pathname}/${reference_number}`)
-                      }
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <ViewOptions table={table} />
       </div>
+
+      <div className="rounded-md border my-3">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => {
+                const reference_number = row.getValue("reference_number");
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() =>
+                      router.push(`${pathname}/${reference_number}`)
+                    }
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
       <TablePagination table={table} />
     </div>
   );
