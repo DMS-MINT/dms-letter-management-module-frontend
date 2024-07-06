@@ -59,7 +59,7 @@ export default function ActionButtons() {
       const configs: IButtonConfig[] = [
         {
           // @ts-ignore
-          isVisible: current_user_permissions.can_delete_letter,
+          isVisible: current_user_permissions.can_trash_letter,
           isButton: true,
           variant: "outline",
           style: "",
