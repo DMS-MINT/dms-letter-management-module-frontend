@@ -1,18 +1,16 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Dot } from "lucide-react";
 import { useAppSelector } from "@/lib/hooks";
 import {
   selectLetterDetails,
   selectStatus,
 } from "@/lib/features/letter/letterSlice";
-import { letterStatusLookup } from "@/typing/dictionary";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActionButtons from "../miscellaneous/ActionButtons";
 import { useEffect, useState } from "react";
 import { RequestStatusEnum } from "@/typing/enum";
 import PrintPreviewButton from "../print/PrintPreviewButton";
+import StatusBadge from "../miscellaneous/StatusBadge";
 
 interface IContentJson {
   content: string;
@@ -44,12 +42,7 @@ export default function DetailControlPanel() {
       )}
 
       {status === RequestStatusEnum.FULFILLED ? (
-        <Badge
-          variant="destructive"
-          className="rounded-md flex items-center justify-between pl-0 ml-2"
-        >
-          <Dot /> {letterStatusLookup[letterDetails?.current_state]}
-        </Badge>
+        <StatusBadge current_state={letterDetails?.current_state} />
       ) : (
         <Skeleton className="h-8 w-14 ml-2" />
       )}

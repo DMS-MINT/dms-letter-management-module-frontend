@@ -15,3 +15,6 @@ export { default as LetterNavigationDrawer } from "./drawers/LetterNavigationDra
 
 // Print
 export { default as PrintPreviewButton } from "./print/PrintPreviewButton";
+
+//Miscellaneous
+export { default as StatusBadge } from "./miscellaneous/StatusBadge";
