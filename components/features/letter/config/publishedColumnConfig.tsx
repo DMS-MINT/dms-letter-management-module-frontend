@@ -6,13 +6,13 @@ import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
 import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
+import { getParticipantInfo } from "@/utils";
+import StatusBadge from "../miscellaneous/StatusBadge";
 
 const DateFormat: string = "eee MMM dd";
 
@@ -139,18 +139,12 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit"
-        >
-          {amharicTranslation}
-        </Badge>
+        <div className="min-w-36">
+          <StatusBadge current_state={current_state} />
+        </div>
       );
     },
-    size: 80,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBMITTED_AT,

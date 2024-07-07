@@ -6,14 +6,14 @@ import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
 import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
+import { getParticipantInfo } from "@/utils";
 import React from "react";
+import StatusBadge from "../miscellaneous/StatusBadge";
 
 const DateFormat: string = "eee MMM dd yyy";
 
@@ -103,7 +103,9 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         ParticipantRolesEnum["PRIMARY RECIPIENT"],
         participants
       );
-      return <p className="limited-table-chars">{recipients ? recipients : ""}</p>;
+      return (
+        <p className="limited-table-chars">{recipients ? recipients : ""}</p>
+      );
     },
     size: 400,
   },
@@ -122,7 +124,6 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return <p className="limited-chars">{subject}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
@@ -156,18 +157,12 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit limited-rows"
-        >
-          {amharicTranslation}
-        </Badge>
+        <div className="min-w-48">
+          <StatusBadge current_state={current_state} />
+        </div>
       );
     },
-    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBMITTED_AT,

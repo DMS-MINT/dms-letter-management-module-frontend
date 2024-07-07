@@ -148,6 +148,7 @@ export default function ActionButtons() {
           size: "default",
           action: () => {
             dispatch(rejectLetter(letterDetails.reference_number));
+            router.push("/letters/pending/");
           },
         },
         {
