@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  deleteLetter,
+  moveToTrash,
   resetAttachments,
   selectAttachments,
   selectLetterDetails,
@@ -66,8 +66,8 @@ export default function ActionButtons() {
           size: "icon",
           icon: <Trash size={20} />,
           action: () => {
-            dispatch(deleteLetter(letterDetails.reference_number));
-            router.push("/letters/inbox/");
+            dispatch(moveToTrash(letterDetails.reference_number));
+            router.push("/letters/draft/");
           },
         },
         {
