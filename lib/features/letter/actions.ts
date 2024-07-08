@@ -98,10 +98,10 @@ export async function update_letter(
   }
 }
 
-export async function delete_letter(reference_number: string) {
+export async function move_to_trash(reference_number: string) {
   try {
     const response = await axiosInstance.delete(
-      `letters/${reference_number}/delete`
+      `letters/${reference_number}/trash`
     );
     const data = await response.data;
     return data;

@@ -12,7 +12,7 @@ import {
   get_letter_details,
   create_letter,
   update_letter,
-  delete_letter,
+  move_to_trash,
   create_and_submit_letter,
   create_and_publish_letter,
 } from "./actions";
@@ -295,9 +295,9 @@ export const letterSlice = createAppSlice({
         },
       }
     ),
-    deleteLetter: create.asyncThunk(
+    moveToTrash: create.asyncThunk(
       async (reference_number: string) => {
-        const response = await delete_letter(reference_number);
+        const response = await move_to_trash(reference_number);
         const data = await response.data;
         return data;
       },
@@ -352,7 +352,7 @@ export const {
   createAndSubmitLetter,
   createAndPublishLetter,
   updateLetter,
-  deleteLetter,
+  moveToTrash,
   updateLetterDetails,
 } = letterSlice.actions;
 export const {
