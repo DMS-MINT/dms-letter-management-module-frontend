@@ -1,5 +1,5 @@
 "use client";
-
+import { toEthiopian } from "ethiopian-date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
@@ -10,11 +10,10 @@ import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
 import { getParticipantInfo } from "@/utils";
 import StatusBadge from "../miscellaneous/StatusBadge";
-
-const DateFormat: string = "eee MMM dd yyy";
+import { EthiopianMonths } from "@/typing/enum/EthiopianMonths";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -101,7 +100,6 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return <p className="limited-chars">{subject}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
@@ -158,7 +156,7 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
+          {submitted_at ? formatEthiopianDate(submitted_at) : ""}
         </div>
       );
     },
@@ -180,7 +178,7 @@ export const outboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {published_at ? format(new Date(published_at), DateFormat) : ""}
+          {published_at ? formatEthiopianDate(published_at) : ""}
         </div>
       );
     },

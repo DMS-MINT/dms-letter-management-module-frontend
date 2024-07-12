@@ -10,11 +10,9 @@ import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
 import { getParticipantInfo } from "@/utils";
 import StatusBadge from "../miscellaneous/StatusBadge";
-
-const DateFormat: string = "eee MMM dd yyy";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -101,7 +99,6 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return <p className="limited-chars">{subject}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
@@ -151,14 +148,13 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         className="w-fit ml-auto "
       />
     ),
-
     cell: ({ row }) => {
       const received_at: string = row.getValue(
-        LetterTableColumnEnum.PUBLISHED_AT
+        LetterTableColumnEnum.RECEIVED_AT
       );
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
+          {received_at ? formatEthiopianDate(received_at) : ""}
         </div>
       );
     },

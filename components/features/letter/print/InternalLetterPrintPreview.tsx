@@ -5,6 +5,8 @@ import { useAppSelector } from "@/lib/hooks";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { IMember } from "@/typing/interface";
 
 interface InternalLetterPrintPreviewProps {
   forwardedRef: React.RefObject<HTMLDivElement>;
@@ -14,19 +16,28 @@ export default function InternalLetterPrintPreview({
   forwardedRef,
 }: InternalLetterPrintPreviewProps) {
   const letterDetails = useAppSelector(selectLetterDetails);
+  const [author, setAuthor] = useState<IMember>({
+    id: "",
+    full_name: "",
+    job_title: "",
+    user_type: "member",
+  });
 
   const DateFormat: string = "MMMM dd yyy";
+
+  useEffect(() => {
+    const author = letterDetails?.participants.filter(
+      (participant) => participant.role === ParticipantRolesEnum.AUTHOR
+    )[0]?.user;
+    if (author?.user_type === "member") {
+      setAuthor(author);
+    }
+  }, [letterDetails]);
 
   return (
     <div ref={forwardedRef} className="justify-center h-fit flex-1 flex ">
       <div className=" bg-white rounded-lg flex flex-col p-16 w-[797px]">
-        <header className="flex justify-between items-center mb-4">
-          <div className="flex flex-col items-center w-full font-serif">
-            {letterDetails?.current_state === "Published" ? (
-              <img src="/image/Type=1.svg" alt="Logo 1" className="w-60 h-36" />
-            ) : null}
-          </div>
-        </header>
+        <header className="flex justify-between items-center mb-4 h-36"></header>
         {letterDetails?.current_state === "Published" ? (
           <hr className="mb-4 border-b-1 border-black" />
         ) : null}
@@ -88,14 +99,18 @@ export default function InternalLetterPrintPreview({
               dangerouslySetInnerHTML={{ __html: letterDetails?.content || "" }}
             />
           </div>
-          <div className="flex justify-center">
-            {letterDetails?.signature ? (
+          {letterDetails?.signature ? (
+            <div className="relative flex flex-col items-end">
               <img
                 src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetails?.signature}`}
-                className="w-[400px] ml-60"
+                className="w-[400px]"
               />
-            ) : null}
-          </div>
+              <div className="w-fit absolute bottom-0 right-0 flex flex-col gap-1 items-end">
+                <span>{author.id ? author.full_name : ""}</span>
+                <span>{author.id ? author.job_title : ""}</span>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="pb-6 font-serif">
