@@ -4,6 +4,8 @@ import { useAppSelector } from "@/lib/hooks";
 import { format } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { ParticipantRolesEnum } from "@/typing/enum";
+import { useEffect, useState } from "react";
+import { IMember } from "@/typing/interface";
 
 interface OutgoingLetterPrintPreviewProps {
   forwardedRef: React.RefObject<HTMLDivElement>;
@@ -13,8 +15,23 @@ export default function OutgoingLetterPrintPreview({
   forwardedRef,
 }: OutgoingLetterPrintPreviewProps) {
   const letterDetails = useAppSelector(selectLetterDetails);
+  const [author, setAuthor] = useState<IMember>({
+    id: "",
+    full_name: "",
+    job_title: "",
+    user_type: "member",
+  });
 
   const DateFormat: string = "MMMM dd yyy";
+
+  useEffect(() => {
+    const author = letterDetails?.participants.filter(
+      (participant) => participant.role === ParticipantRolesEnum.AUTHOR
+    )[0]?.user;
+    if (author?.user_type === "member") {
+      setAuthor(author);
+    }
+  }, [letterDetails]);
 
   return (
     <div ref={forwardedRef} className="justify-center h-full flex-1 flex ">
@@ -97,24 +114,18 @@ export default function OutgoingLetterPrintPreview({
               dangerouslySetInnerHTML={{ __html: letterDetails?.content || "" }}
             />
           </div>
-          <div className="flex justify-center">
-            {letterDetails?.current_state === "Published" ? (
+          {letterDetails?.signature ? (
+            <div className="relative flex flex-col items-end">
               <img
-                src="/image/Type=2.svg"
-                alt="Logo 1"
-                className="w-[132px] h-[132px] ml-24"
+                src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetails?.signature}`}
+                className="w-[400px]"
               />
-            ) : null}
-
-            <div className="flex justify-center">
-              {letterDetails?.signature ? (
-                <img
-                  src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${letterDetails?.signature}`}
-                  className="w-[400px] ml-60"
-                />
-              ) : null}
+              <div className="w-fit absolute bottom-0 right-0 flex flex-col gap-1 items-end">
+                <span>{author.id ? author.full_name : ""}</span>
+                <span>{author.id ? author.job_title : ""}</span>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <div className="pt-4 pb-6 font-serif">
