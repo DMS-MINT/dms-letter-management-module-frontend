@@ -100,33 +100,34 @@ export async function update_letter(
 
 export async function move_to_trash(reference_number: string) {
   try {
-    const response = await axiosInstance.delete(
-      `letters/${reference_number}/trash`
+    const response = await axiosInstance.put(
+      `letters/${reference_number}/trash/`
     );
-    const data = await response.data;
+    const data = await response.data.message;
     return data;
   } catch (error: any) {
     handleAxiosError(error);
   }
 }
 
-export async function remove_to_trash(reference_number: string) {
+export async function restore_from_trash(reference_number: string) {
   try {
-    const response = await axiosInstance.delete(
-      `letters/${reference_number}/remove_to_trash`
+    const response = await axiosInstance.put(
+      `letters/${reference_number}/restore/`
     );
-    const data = await response.data;
+    const data = await response.data.message;
     return data;
   } catch (error: any) {
     handleAxiosError(error);
   }
 }
-export async function restore(reference_number: string) {
+
+export async function remove_from_trash(reference_number: string) {
   try {
     const response = await axiosInstance.delete(
-      `letters/${reference_number}/restore`
+      `letters/${reference_number}/remove_from_trash/`
     );
-    const data = await response.data;
+    const data = await response.data.message;
     return data;
   } catch (error: any) {
     handleAxiosError(error);

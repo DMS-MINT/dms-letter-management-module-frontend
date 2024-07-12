@@ -12,11 +12,11 @@ import {
   get_letter_details,
   create_letter,
   update_letter,
-  remove_to_trash,
   move_to_trash,
+  restore_from_trash,
+  remove_from_trash,
   create_and_submit_letter,
   create_and_publish_letter,
-  restore,
 } from "./actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
@@ -300,7 +300,7 @@ export const letterSlice = createAppSlice({
     moveToTrash: create.asyncThunk(
       async (reference_number: string) => {
         const response = await move_to_trash(reference_number);
-        const data = await response.data;
+        const data = await response;
         return data;
       },
       {
@@ -310,12 +310,12 @@ export const letterSlice = createAppSlice({
           toast.dismiss();
           toast.loading("Deleting letter, Please wait...");
         },
-        fulfilled: (state, action: PayloadAction<ILetterDetails>) => {
+        fulfilled: (state, action: PayloadAction<string>) => {
           state.status = RequestStatusEnum.FULFILLED;
 
           state.error = null;
           toast.dismiss();
-          toast.success("Letter successfully deleted!");
+          toast.success(action.payload);
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
@@ -325,38 +325,10 @@ export const letterSlice = createAppSlice({
         },
       }
     ),
-    removeToTrash: create.asyncThunk(
+    restoreFromTrash: create.asyncThunk(
       async (reference_number: string) => {
-        const response = await remove_to_trash(reference_number);
-        const data = await response.data;
-        return data;
-      },
-      {
-        pending: (state) => {
-          state.status = RequestStatusEnum.LOADING;
-          state.error = null;
-          toast.dismiss();
-          toast.loading("Removing letter, Please wait...");
-        },
-        fulfilled: (state, action: PayloadAction<ILetterDetails>) => {
-          state.status = RequestStatusEnum.FULFILLED;
-          state.letterDetails = initialState.letterDetails;
-          state.error = null;
-          toast.dismiss();
-          toast.success("Letter successfully removed!");
-        },
-        rejected: (state, action) => {
-          state.status = RequestStatusEnum.FAILED;
-          state.error = action.error.message || "Failed to remove letter";
-          toast.dismiss();
-          toast.error(action.error.message || "Failed to remove letter");
-        },
-      }
-    ),
-    Restore: create.asyncThunk(
-      async (reference_number: string) => {
-        const response = await restore(reference_number);
-        const data = await response.data;
+        const response = await restore_from_trash(reference_number);
+        const data = await response;
         return data;
       },
       {
@@ -366,18 +338,46 @@ export const letterSlice = createAppSlice({
           toast.dismiss();
           toast.loading("Restoring letter, Please wait...");
         },
-        fulfilled: (state, action: PayloadAction<ILetterDetails>) => {
+        fulfilled: (state, action: PayloadAction<string>) => {
           state.status = RequestStatusEnum.FULFILLED;
 
           state.error = null;
           toast.dismiss();
-          toast.success("Letter successfully restored!");
+          toast.success(action.payload);
         },
         rejected: (state, action) => {
           state.status = RequestStatusEnum.FAILED;
           state.error = action.error.message || "Failed to restore letter";
           toast.dismiss();
           toast.error(action.error.message || "Failed to restore letter");
+        },
+      }
+    ),
+    removeFromTrash: create.asyncThunk(
+      async (reference_number: string) => {
+        const response = await remove_from_trash(reference_number);
+        const data = await response;
+        return data;
+      },
+      {
+        pending: (state) => {
+          state.status = RequestStatusEnum.LOADING;
+          state.error = null;
+          toast.dismiss();
+          toast.loading("Removing letter, Please wait...");
+        },
+        fulfilled: (state, action: PayloadAction<string>) => {
+          state.status = RequestStatusEnum.FULFILLED;
+          state.letterDetails = initialState.letterDetails;
+          state.error = null;
+          toast.dismiss();
+          toast.success(action.payload);
+        },
+        rejected: (state, action) => {
+          state.status = RequestStatusEnum.FAILED;
+          state.error = action.error.message || "Failed to remove letter";
+          toast.dismiss();
+          toast.error(action.error.message || "Failed to remove letter");
         },
       }
     ),
@@ -411,9 +411,8 @@ export const {
   createAndPublishLetter,
   updateLetter,
   moveToTrash,
-  Restore,
-  removeToTrash,
-
+  restoreFromTrash,
+  removeFromTrash,
   updateLetterDetails,
 } = letterSlice.actions;
 export const {

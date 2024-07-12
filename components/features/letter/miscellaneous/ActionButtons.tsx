@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import {
   moveToTrash,
   resetAttachments,
-  Restore,
+  removeFromTrash,
   selectAttachments,
   selectLetterDetails,
   updateLetter,
+  restoreFromTrash,
 } from "@/lib/features/letter/letterSlice";
 import {
   closeLetter,
@@ -69,7 +70,6 @@ export default function ActionButtons() {
           icon: <Trash size={20} />,
           action: () => {
             dispatch(moveToTrash(letterDetails.reference_number));
-            router.push("/letters/draft/");
           },
         },
         {
@@ -85,18 +85,18 @@ export default function ActionButtons() {
         {
           isVisible: current_user_permissions.can_restore_letter,
           isButton: true,
-          label: "ወደነበረበት መመለስ",
-          variant: "destructive",
+          label: "ወደነበረበት መልስ",
+          variant: "default",
           style: "",
           size: "default",
           action: () => {
-            dispatch(Restore(letterDetails.reference_number));
+            dispatch(restoreFromTrash(letterDetails.reference_number));
           },
         },
         {
           isVisible: current_user_permissions.can_remove_from_trash_letter,
           isButton: false,
-          component: <PermanentlyDeleteDialog letterDetails={letterDetails} />,
+          component: <PermanentlyDeleteDialog />,
           label: "remove",
           variant: "outline",
           style: "",

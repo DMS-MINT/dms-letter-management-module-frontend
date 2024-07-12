@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import { useDispatch } from "react-redux";
-import { removeToTrash } from "@/lib/features/letter/letterSlice";
 import {
   Dialog,
   DialogContent,
@@ -11,50 +8,49 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import {
+  removeFromTrash,
+  selectLetterDetails,
+} from "@/lib/features/letter/letterSlice";
+import { useRouter } from "next/navigation";
 
-interface LetterDetails {
-  reference_number: string;
-}
-
-interface PermanentlyDeleteDialogProps {
-  letterDetails: LetterDetails;
-}
-
-const PermanentlyDeleteDialog: React.FC<PermanentlyDeleteDialogProps> = ({
-  letterDetails,
-}) => {
-  const dispatch = useDispatch();
+export default function PermanentlyDeleteDialog() {
+  const letterDetails = useAppSelector(selectLetterDetails);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handleRemoveClick = () => {
-    dispatch(removeToTrash(letterDetails.reference_number) as any);
+    dispatch(removeFromTrash(letterDetails.reference_number));
+    router.push("/letters/draft/");
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"outline"}>በቋሚነት ያስወግዱ</Button>
+        <Button variant={"destructive"}>በቋሚነት ያስወግዱ</Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[45rem] max-w-[45rem] max-h-[40rem] flex flex-col bg-white p-4 rounded-md shadow-lg">
+      <DialogContent className="flex flex-col bg-white p-4 rounded-md shadow-lg">
         <DialogHeader className="flex-1 p-2">
           <DialogTitle className="text-lg font-medium">
             ደብዳቤውን በቋሚነት አጥፋ
           </DialogTitle>
+          <DialogDescription>
+            እርግጠኛ ነዎት ይህን ደብዳቤ እስከመጨረሻው መሰረዝ ይፈልጋሉ?
+          </DialogDescription>
         </DialogHeader>
-        <div className="flex-1 p-2">
-          <div className="flex justify-end mt-4 space-x-2">
-            <Button variant={"outline"} onClick={handleRemoveClick}>
-              አዎ
-            </Button>
-            <DialogClose asChild>
-              <Button variant={"outline"}>አይ</Button>
-            </DialogClose>
-          </div>
-        </div>
+        <DialogFooter className="">
+          <DialogClose asChild>
+            <Button variant={"outline"}>አይ</Button>
+          </DialogClose>
+          <Button variant={"default"} onClick={handleRemoveClick}>
+            አዎ
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-};
-
-export default PermanentlyDeleteDialog;
+}

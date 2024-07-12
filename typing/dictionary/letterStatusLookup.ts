@@ -4,5 +4,5 @@ export const letterStatusLookup: Record<string, string> = {
   Published: "የታተመ ደብዳቤ",
   Closed: "የተዘጋ ደብዳቤ",
   Rejected: "ውድቅ ተደርጓል",
-  Trashed: "trashed",
+  Trashed: "የተጣለ",
 };
