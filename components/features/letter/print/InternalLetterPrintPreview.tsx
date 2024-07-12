@@ -4,9 +4,9 @@ import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { v4 as uuidv4 } from "uuid";
-import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { IMember } from "@/typing/interface";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 interface InternalLetterPrintPreviewProps {
   forwardedRef: React.RefObject<HTMLDivElement>;
@@ -23,8 +23,6 @@ export default function InternalLetterPrintPreview({
     user_type: "member",
   });
 
-  const DateFormat: string = "MMMM dd yyy";
-
   useEffect(() => {
     const author = letterDetails?.participants.filter(
       (participant) => participant.role === ParticipantRolesEnum.AUTHOR
@@ -36,16 +34,16 @@ export default function InternalLetterPrintPreview({
 
   return (
     <div ref={forwardedRef} className="justify-center h-fit flex-1 flex ">
-      <div className=" bg-white rounded-lg flex flex-col p-16 w-[797px]">
+      <div className="bg-white rounded-lg flex flex-col p-16 w-[797px]">
         <header className="flex justify-between items-center mb-4 h-36"></header>
         {letterDetails?.current_state === "Published" ? (
           <hr className="mb-4 border-b-1 border-black" />
         ) : null}
         <div className="flex flex-col items-end gap-1 pt-5 font-serif">
-          <div className="flex gap-2 ">
-            <div className="flex flex-col  ">
-              <p className="text-sm  text-gray-600">ቁጥር</p>
-              <p className="text-sm  text-gray-600">ref.no</p>
+          <div className="flex gap-2">
+            <div className="flex flex-col">
+              <p className="text-sm text-gray-600">ቁጥር</p>
+              <p className="text-sm text-gray-600">ref.no</p>
             </div>
             <div className="flex flex-col w-32 font-mono">
               <p>
@@ -57,21 +55,21 @@ export default function InternalLetterPrintPreview({
             </div>
           </div>
           <div className="flex gap-2 font-serif">
-            <div className="flex flex-col ">
-              <p className="text-sm  text-gray-600">ቀን</p>
-              <p className="text-sm  text-gray-600">Date</p>
+            <div className="flex flex-col">
+              <p className="text-sm text-gray-600">ቀን</p>
+              <p className="text-sm text-gray-600">Date</p>
             </div>
-            <div className="flex flex-col w-32 font-mono  ">
+            <div className="flex flex-col w-32 font-mono">
               <p>
                 {letterDetails?.created_at
-                  ? format(new Date(letterDetails?.created_at), DateFormat)
+                  ? formatEthiopianDate(letterDetails?.created_at)
                   : "N/A"}
               </p>
               <hr />
             </div>
           </div>
         </div>
-        <div className="flex flex-col pt-4 font-serif ">
+        <div className="flex flex-col pt-4 font-serif">
           {letterDetails?.participants
             .filter(
               (participant) =>

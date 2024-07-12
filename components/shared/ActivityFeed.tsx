@@ -29,6 +29,11 @@ import {
   deleteComment,
   updateComment,
 } from "@/lib/features/letter/workflow/workflowSlice";
+import { toEthiopian } from "ethiopian-date";
+import {
+  EthiopianMonths,
+  formatEthiopianDate,
+} from "@/typing/enum/EthiopianMonths";
 
 export default function ActivityFeed() {
   const me = useAppSelector(selectMe);
@@ -92,7 +97,7 @@ export default function ActivityFeed() {
         <div className="flex gap-4 px-1 py-2">
           <Button className="bg-gray-500 hover:bg-gray-700">ሁሉም</Button>
           <Button variant="outline">አስተያየቶች ብቻ</Button>
-          {createMode ? null : (
+          {!createMode && (
             <Button variant="outline" onClick={toggleCreateMode}>
               አዲስ አስተያየት
             </Button>
@@ -174,7 +179,7 @@ export default function ActivityFeed() {
                     <MessageSquareText size={18} className="text-gray-500" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{format(new Date(created_at), DateFormat)}</p>
+                    <p>{formatEthiopianDate(created_at)}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -267,9 +272,10 @@ export default function ActivityFeed() {
         <div className="flex items-center px-1">
           <p className="text-gray-700">
             {Object.keys(letterDetails).includes("created_at")
-              ? `${letterDetails.owner?.full_name} ይህን ደብዳቤ ${format(
-                  new Date(letterDetails.created_at),
-                  DateFormat
+              ? `${
+                  letterDetails.owner?.full_name
+                } ይህን ደብዳቤ ${formatEthiopianDate(
+                  letterDetails.created_at
                 )} ፈጥረዋል።`
               : ""}
           </p>

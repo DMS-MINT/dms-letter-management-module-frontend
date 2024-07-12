@@ -29,5 +29,5 @@ export const formatEthiopianDate = (dateString: string): string => {
       ? EthiopianMonths[ethMonth as unknown as keyof typeof EthiopianMonths]
       : "";
 
-  return `${ethDay} ${ethMonthName} ${ethYear}`;
+  return ` ${ethMonthName} ${ethDay}  ${ethYear}`;
 };

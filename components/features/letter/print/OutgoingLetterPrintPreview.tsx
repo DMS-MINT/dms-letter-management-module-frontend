@@ -1,11 +1,11 @@
 import { LaptopMinimal, Mail, MapPin, Phone, ScanSearch } from "lucide-react";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import { useAppSelector } from "@/lib/hooks";
-import { format } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 import { ParticipantRolesEnum } from "@/typing/enum";
 import { useEffect, useState } from "react";
 import { IMember } from "@/typing/interface";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 interface OutgoingLetterPrintPreviewProps {
   forwardedRef: React.RefObject<HTMLDivElement>;
@@ -21,8 +21,6 @@ export default function OutgoingLetterPrintPreview({
     job_title: "",
     user_type: "member",
   });
-
-  const DateFormat: string = "MMMM dd yyy";
 
   useEffect(() => {
     const author = letterDetails?.participants.filter(
@@ -80,7 +78,7 @@ export default function OutgoingLetterPrintPreview({
             <div className="flex flex-col w-32 font-mono  ">
               <p>
                 {letterDetails?.created_at
-                  ? format(new Date(letterDetails?.created_at), DateFormat)
+                  ? formatEthiopianDate(letterDetails?.created_at)
                   : "N/A"}
               </p>
               <hr />
