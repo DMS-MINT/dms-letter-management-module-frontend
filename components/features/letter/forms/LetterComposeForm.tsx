@@ -27,13 +27,6 @@ interface IFormConfig {
 
 const internalLetterFormConfig: IFormConfig[] = [
   {
-    label: "ከ",
-    name: ParticipantRolesEnum.AUTHOR,
-    isCreatable: false,
-    isMulti: false,
-    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
-  },
-  {
     label: "ለ",
     name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
     isCreatable: false,
@@ -88,13 +81,6 @@ const incomingLetterFormConfig: IFormConfig[] = [
 ];
 
 const outgoingLetterFormConfig: IFormConfig[] = [
-  {
-    label: "ከ",
-    name: ParticipantRolesEnum.AUTHOR,
-    isCreatable: false,
-    isMulti: false,
-    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
-  },
   {
     label: "ለ",
     name: ParticipantRolesEnum["PRIMARY RECIPIENT"],

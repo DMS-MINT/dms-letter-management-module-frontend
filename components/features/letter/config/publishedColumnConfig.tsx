@@ -1,20 +1,19 @@
 "use client";
 
+import { toEthiopian } from "ethiopian-date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
-
-const DateFormat: string = "eee MMM dd";
+import { getParticipantInfo } from "@/utils";
+import StatusBadge from "../miscellaneous/StatusBadge";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -139,18 +138,12 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit"
-        >
-          {amharicTranslation}
-        </Badge>
+        <div className="min-w-36">
+          <StatusBadge current_state={current_state} />
+        </div>
       );
     },
-    size: 80,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBMITTED_AT,
@@ -168,7 +161,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       );
       return (
         <div className="text-right font-medium px-4 py-1">
-          {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
+          {submitted_at ? formatEthiopianDate(submitted_at) : ""}
         </div>
       );
     },
@@ -191,7 +184,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
 
       return (
         <div className="text-right font-medium px-4 py-1">
-          {published_at ? format(new Date(published_at), DateFormat) : ""}
+          {published_at ? formatEthiopianDate(published_at) : ""}
         </div>
       );
     },

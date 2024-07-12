@@ -11,6 +11,7 @@ import {
   inboxTableColumns,
   outboxTableColumns,
   publishedTableColumns,
+  trashTableColumns,
 } from "@/components/features/letter/config";
 import { useEffect, useState } from "react";
 import { ILetterListInputSerializer } from "@/typing/interface";
@@ -41,6 +42,10 @@ export default function Table() {
       case "draft":
         setColumns(draftTableColumns);
         dispatch(getLetters("draft"));
+        break;
+      case "trash":
+        setColumns(trashTableColumns);
+        dispatch(getLetters("trash"));
         break;
       case "pending":
         setColumns(pendingTableColumns);

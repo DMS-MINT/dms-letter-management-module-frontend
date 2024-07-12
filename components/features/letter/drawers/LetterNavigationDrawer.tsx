@@ -2,7 +2,14 @@
 
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { BookDashed, FileText, Inbox, Send, BookCheck } from "lucide-react";
+import {
+  BookDashed,
+  FileText,
+  Inbox,
+  Send,
+  BookCheck,
+  Trash,
+} from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
@@ -51,6 +58,14 @@ export default function LetterNavigationDrawer() {
         icon: <FileText size={icon_size} color={icon_color} />,
         showBadge: false,
         path: "/letters/draft",
+        count: 3,
+        isVisible: true,
+      },
+      {
+        name: "መጣያ",
+        icon: <Trash size={icon_size} color={icon_color} />,
+        showBadge: false,
+        path: "/letters/trash",
         count: 3,
         isVisible: true,
       },

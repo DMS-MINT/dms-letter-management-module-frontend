@@ -2,11 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  deleteLetter,
+  moveToTrash,
   resetAttachments,
+  removeFromTrash,
   selectAttachments,
   selectLetterDetails,
   updateLetter,
+  restoreFromTrash,
 } from "@/lib/features/letter/letterSlice";
 import {
   closeLetter,
@@ -26,6 +28,7 @@ import {
   SubmitLetterForm,
 } from "@/components/features/letter";
 import { useRouter } from "next/navigation";
+import PermanentlyDeleteDialog from "../deleteDialog/PermanentlyDeleteDialog";
 
 interface IButtonConfig {
   isVisible: boolean;
@@ -59,15 +62,14 @@ export default function ActionButtons() {
       const configs: IButtonConfig[] = [
         {
           // @ts-ignore
-          isVisible: current_user_permissions.can_delete_letter,
+          isVisible: current_user_permissions.can_trash_letter,
           isButton: true,
           variant: "outline",
           style: "",
           size: "icon",
           icon: <Trash size={20} />,
           action: () => {
-            dispatch(deleteLetter(letterDetails.reference_number));
-            router.push("/letters/inbox/");
+            dispatch(moveToTrash(letterDetails.reference_number));
           },
         },
         {
@@ -75,6 +77,27 @@ export default function ActionButtons() {
           isButton: false,
           component: <ShareLetterForm />,
           label: "ደብዳቤውን አጋራ",
+          variant: "outline",
+          style: "",
+          size: "default",
+          action: () => {},
+        },
+        {
+          isVisible: current_user_permissions.can_restore_letter,
+          isButton: true,
+          label: "ወደነበረበት መልስ",
+          variant: "default",
+          style: "",
+          size: "default",
+          action: () => {
+            dispatch(restoreFromTrash(letterDetails.reference_number));
+          },
+        },
+        {
+          isVisible: current_user_permissions.can_remove_from_trash_letter,
+          isButton: false,
+          component: <PermanentlyDeleteDialog />,
+          label: "remove",
           variant: "outline",
           style: "",
           size: "default",
@@ -148,6 +171,7 @@ export default function ActionButtons() {
           size: "default",
           action: () => {
             dispatch(rejectLetter(letterDetails.reference_number));
+            router.push("/letters/pending/");
           },
         },
         {

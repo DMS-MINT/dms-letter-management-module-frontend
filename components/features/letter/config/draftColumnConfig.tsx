@@ -6,15 +6,13 @@ import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
-
-const DateFormat: string = "eee MMM dd yyy";
+import { getParticipantInfo } from "@/utils";
+import StatusBadge from "../miscellaneous/StatusBadge";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -135,18 +133,12 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit"
-        >
-          {amharicTranslation}
-        </Badge>
+        <div className="min-w-14">
+          <StatusBadge current_state={current_state} />
+        </div>
       );
     },
-    size: 50,
   },
   {
     accessorKey: LetterTableColumnEnum.CREATED_AT,
@@ -161,7 +153,7 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const created_at: string = row.getValue(LetterTableColumnEnum.CREATED_AT);
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {created_at ? format(new Date(created_at), DateFormat) : ""}
+          {created_at ? formatEthiopianDate(created_at) : ""}
         </div>
       );
     },
@@ -180,7 +172,7 @@ export const draftTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {updated_at ? format(new Date(updated_at), DateFormat) : ""}
+          {updated_at ? formatEthiopianDate(updated_at) : ""}
         </div>
       );
     },

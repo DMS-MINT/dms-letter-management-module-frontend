@@ -97,8 +97,13 @@ export default function TopBar() {
             <Bell className="w-5 h-5" />
           </Button> */}
           {/* <Separator orientation="vertical" className="h-8" /> */}
-
-          <p className="text-xs">{me?.full_name ? me.full_name : ""}</p>
+          <div className="flex items-end gap-2">
+            <p className="text-sm font-medium">
+              {me?.job_title ? me.job_title : ""}
+            </p>
+            {" - "}
+            <p className="text-xs">{me?.full_name ? me.full_name : ""}</p>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>

@@ -6,18 +6,15 @@ import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
-import LetterDetail from "@/app/(root)/(letter management module)/letters/[category]/[referenceNumber]/page";
+import { getParticipantInfo } from "@/utils";
+import StatusBadge from "../miscellaneous/StatusBadge";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
-const DateFormat: string = "eee MMM dd";
-
-export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,6 +34,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
+    size: 30,
   },
   {
     accessorKey: "has_read",
@@ -54,6 +52,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
+    size: 30,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -63,25 +62,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
-  },
-  {
-    accessorKey: LetterTableColumnEnum.SENDER,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SENDER]}
-      />
-    ),
-    cell: ({ row }) => {
-      const participants: IParticipantInputSerializer[] =
-        row.original.participants;
-
-      const senders = getParticipantInfo(
-        ParticipantRolesEnum.AUTHOR,
-        participants
-      );
-      return <p className="limited-table-chars">{senders ? senders : ""}</p>;
-    },
+    size: 350,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -99,8 +80,10 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         ParticipantRolesEnum["PRIMARY RECIPIENT"],
         participants
       );
-      return <p className="limited-table-chars">{recipients ? recipients : ""}</p>;
+
+      return <p className="limited-rows">{recipients ? recipients : ""}</p>;
     },
+    size: 350,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -117,7 +100,6 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return <p className="limited-chars">{subject}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
@@ -126,7 +108,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
-    size: 10,
+    size: 30,
     cell: ({ row }) => {
       const letter_type: string = row.getValue(
         LetterTableColumnEnum.LETTER_TYPE
@@ -151,62 +133,49 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit limited-rows"
-        >
-          {amharicTranslation}
-        </Badge>
-      );
-    },
-    size: 80,
-  },
-  {
-    accessorKey: LetterTableColumnEnum.SUBMITTED_AT,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SUBMITTED_AT]}
-        className="w-fit ml-auto"
-      />
-    ),
-
-    cell: ({ row }) => {
-      const submitted_at: string = row.getValue(
-        LetterTableColumnEnum.SUBMITTED_AT
-      );
-      return (
-        <div className="text-right font-medium px-4 py-1 limited-rows">
-          {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
+        <div className="min-w-14">
+          <StatusBadge current_state={current_state} />
         </div>
       );
     },
-    size: 50,
   },
   {
-    accessorKey: LetterTableColumnEnum.PUBLISHED_AT,
+    accessorKey: LetterTableColumnEnum.CREATED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.PUBLISHED_AT]}
+        title={letterTableColumnLookup[LetterTableColumnEnum.CREATED_AT]}
         className="w-fit ml-auto limited-rows"
       />
     ),
-
     cell: ({ row }) => {
-      const published_at: string = row.getValue(
-        LetterTableColumnEnum.PUBLISHED_AT
-      );
-
+      const created_at: string = row.getValue(LetterTableColumnEnum.CREATED_AT);
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {published_at ? format(new Date(published_at), DateFormat) : ""}
+          {created_at ? formatEthiopianDate(created_at) : ""}
         </div>
       );
     },
-    size: 50,
+    size: 30,
+  },
+  {
+    accessorKey: LetterTableColumnEnum.UPDATED_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
+        className="w-fit ml-auto limited-rows"
+      />
+    ),
+    cell: ({ row }) => {
+      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1 limited-rows">
+          {updated_at ? formatEthiopianDate(updated_at) : ""}
+        </div>
+      );
+    },
+    size: 30,
   },
 ];

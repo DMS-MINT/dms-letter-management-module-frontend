@@ -6,15 +6,13 @@ import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { letterTableColumnLookup, letterTypeLookup } from "@/typing/dictionary";
 import { LetterTableColumnEnum, ParticipantRolesEnum } from "@/typing/enum";
-import { Badge } from "@/components/ui/badge";
 import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
-import { getParticipantInfo, getTranslatedLetterStatus } from "@/utils";
-
-const DateFormat: string = "eee MMM dd yyy";
+import { getParticipantInfo } from "@/utils";
+import StatusBadge from "../miscellaneous/StatusBadge";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -101,7 +99,6 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       return <p className="limited-chars">{subject}</p>;
     },
   },
-
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
     header: ({ column }) => (
@@ -135,18 +132,12 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
       const current_state: string = row.getValue(
         LetterTableColumnEnum.CURRENT_STATE
       );
-      const { amharicTranslation, badgeVariant } =
-        getTranslatedLetterStatus(current_state);
       return (
-        <Badge
-          variant="default"
-          className="rounded-md flex items-center justify-between w-fit limited-rows"
-        >
-          {amharicTranslation}
-        </Badge>
+        <div className="min-w-36">
+          <StatusBadge current_state={current_state} />
+        </div>
       );
     },
-    size: 80,
   },
   {
     accessorKey: LetterTableColumnEnum.RECEIVED_AT,
@@ -157,14 +148,13 @@ export const inboxTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         className="w-fit ml-auto "
       />
     ),
-
     cell: ({ row }) => {
       const received_at: string = row.getValue(
-        LetterTableColumnEnum.PUBLISHED_AT
+        LetterTableColumnEnum.RECEIVED_AT
       );
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {received_at ? format(new Date(received_at), DateFormat) : ""}
+          {received_at ? formatEthiopianDate(received_at) : ""}
         </div>
       );
     },
