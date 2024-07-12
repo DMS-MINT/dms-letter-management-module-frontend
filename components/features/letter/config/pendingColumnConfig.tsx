@@ -10,12 +10,9 @@ import {
   ILetterListInputSerializer,
   IParticipantInputSerializer,
 } from "@/typing/interface";
-import { format } from "date-fns";
 import { getParticipantInfo } from "@/utils";
-import React from "react";
 import StatusBadge from "../miscellaneous/StatusBadge";
-
-const DateFormat: string = "eee MMM dd yyy";
+import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
 export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
@@ -117,11 +114,11 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
-    size: 300,
+    size: 400,
     cell: ({ row }) => {
       const subject: string = row.getValue(LetterTableColumnEnum.SUBJECT);
 
-      return <p className="limited-chars">{subject}</p>;
+      return <p className="limited-table-chars">{subject}</p>;
     },
   },
   {
@@ -132,7 +129,7 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
-    size: 10,
+    size: 30,
     cell: ({ row }) => {
       const letter_type: string = row.getValue(
         LetterTableColumnEnum.LETTER_TYPE
@@ -158,32 +155,48 @@ export const pendingTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         LetterTableColumnEnum.CURRENT_STATE
       );
       return (
-        <div className="min-w-48">
+        <div className="min-w-14">
           <StatusBadge current_state={current_state} />
         </div>
       );
     },
   },
   {
-    accessorKey: LetterTableColumnEnum.SUBMITTED_AT,
+    accessorKey: LetterTableColumnEnum.CREATED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SUBMITTED_AT]}
-        className="w-fit ml-auto "
+        title={letterTableColumnLookup[LetterTableColumnEnum.CREATED_AT]}
+        className="w-fit ml-auto limited-rows"
       />
     ),
-
     cell: ({ row }) => {
-      const submitted_at: string = row.getValue(
-        LetterTableColumnEnum.SUBMITTED_AT
-      );
+      const created_at: string = row.getValue(LetterTableColumnEnum.CREATED_AT);
       return (
         <div className="text-right font-medium px-4 py-1 limited-rows">
-          {submitted_at ? format(new Date(submitted_at), DateFormat) : ""}
+          {created_at ? formatEthiopianDate(created_at) : ""}
         </div>
       );
     },
-    size: 50,
+    size: 30,
+  },
+  {
+    accessorKey: LetterTableColumnEnum.UPDATED_AT,
+    header: ({ column }) => (
+      <ColumnHeader
+        column={column}
+        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
+        className="w-fit ml-auto limited-rows"
+      />
+    ),
+    cell: ({ row }) => {
+      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
+      return (
+        <div className="text-right font-medium px-4 py-1 limited-rows">
+          {updated_at ? formatEthiopianDate(updated_at) : ""}
+        </div>
+      );
+    },
+    size: 30,
   },
 ];

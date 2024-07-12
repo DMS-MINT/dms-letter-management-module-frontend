@@ -1,6 +1,5 @@
 "use client";
 
-import { toEthiopian } from "ethiopian-date";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
@@ -15,7 +14,7 @@ import { getParticipantInfo } from "@/utils";
 import StatusBadge from "../miscellaneous/StatusBadge";
 import { formatEthiopianDate } from "@/typing/enum/EthiopianMonths";
 
-export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
+export const trashTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -35,6 +34,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         aria-label="ረድፍ ይምረጡ"
       />
     ),
+    size: 30,
   },
   {
     accessorKey: "has_read",
@@ -52,6 +52,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         />
       );
     },
+    size: 30,
   },
   {
     accessorKey: LetterTableColumnEnum.REFERENCE_NUMBER,
@@ -61,25 +62,7 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.REFERENCE_NUMBER]}
       />
     ),
-  },
-  {
-    accessorKey: LetterTableColumnEnum.SENDER,
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SENDER]}
-      />
-    ),
-    cell: ({ row }) => {
-      const participants: IParticipantInputSerializer[] =
-        row.original.participants;
-
-      const senders = getParticipantInfo(
-        ParticipantRolesEnum.AUTHOR,
-        participants
-      );
-      return <p>{senders ? senders : ""}</p>;
-    },
+    size: 350,
   },
   {
     accessorKey: LetterTableColumnEnum.RECIPIENT,
@@ -97,8 +80,10 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         ParticipantRolesEnum["PRIMARY RECIPIENT"],
         participants
       );
-      return <p>{recipients ? recipients : ""}</p>;
+
+      return <p className="limited-rows">{recipients ? recipients : ""}</p>;
     },
+    size: 350,
   },
   {
     accessorKey: LetterTableColumnEnum.SUBJECT,
@@ -108,6 +93,12 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.SUBJECT]}
       />
     ),
+    size: 400,
+    cell: ({ row }) => {
+      const subject: string = row.getValue(LetterTableColumnEnum.SUBJECT);
+
+      return <p className="limited-chars">{subject}</p>;
+    },
   },
   {
     accessorKey: LetterTableColumnEnum.LETTER_TYPE,
@@ -117,13 +108,17 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         title={letterTableColumnLookup[LetterTableColumnEnum.LETTER_TYPE]}
       />
     ),
-    size: 10,
+    size: 30,
     cell: ({ row }) => {
       const letter_type: string = row.getValue(
         LetterTableColumnEnum.LETTER_TYPE
       );
 
-      return <p>{letterTypeLookup[letter_type.toUpperCase()]}</p>;
+      return (
+        <p className="limited-rows">
+          {letterTypeLookup[letter_type.toUpperCase()]}
+        </p>
+      );
     },
   },
   {
@@ -139,55 +134,48 @@ export const publishedTableColumns: ColumnDef<ILetterListInputSerializer>[] = [
         LetterTableColumnEnum.CURRENT_STATE
       );
       return (
-        <div className="min-w-36">
+        <div className="min-w-14">
           <StatusBadge current_state={current_state} />
         </div>
       );
     },
   },
   {
-    accessorKey: LetterTableColumnEnum.SUBMITTED_AT,
+    accessorKey: LetterTableColumnEnum.CREATED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.SUBMITTED_AT]}
-        className="w-fit ml-auto"
+        title={letterTableColumnLookup[LetterTableColumnEnum.CREATED_AT]}
+        className="w-fit ml-auto limited-rows"
       />
     ),
-
     cell: ({ row }) => {
-      const submitted_at: string = row.getValue(
-        LetterTableColumnEnum.SUBMITTED_AT
-      );
+      const created_at: string = row.getValue(LetterTableColumnEnum.CREATED_AT);
       return (
-        <div className="text-right font-medium px-4 py-1">
-          {submitted_at ? formatEthiopianDate(submitted_at) : ""}
+        <div className="text-right font-medium px-4 py-1 limited-rows">
+          {created_at ? formatEthiopianDate(created_at) : ""}
         </div>
       );
     },
-    size: 50,
+    size: 30,
   },
   {
-    accessorKey: LetterTableColumnEnum.PUBLISHED_AT,
+    accessorKey: LetterTableColumnEnum.UPDATED_AT,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
-        title={letterTableColumnLookup[LetterTableColumnEnum.PUBLISHED_AT]}
-        className="w-fit ml-auto"
+        title={letterTableColumnLookup[LetterTableColumnEnum.UPDATED_AT]}
+        className="w-fit ml-auto limited-rows"
       />
     ),
-
     cell: ({ row }) => {
-      const published_at: string = row.getValue(
-        LetterTableColumnEnum.PUBLISHED_AT
-      );
-
+      const updated_at: string = row.getValue(LetterTableColumnEnum.UPDATED_AT);
       return (
-        <div className="text-right font-medium px-4 py-1">
-          {published_at ? formatEthiopianDate(published_at) : ""}
+        <div className="text-right font-medium px-4 py-1 limited-rows">
+          {updated_at ? formatEthiopianDate(updated_at) : ""}
         </div>
       );
     },
-    size: 50,
+    size: 30,
   },
 ];

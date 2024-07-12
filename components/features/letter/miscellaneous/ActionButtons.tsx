@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   moveToTrash,
   resetAttachments,
+  Restore,
   selectAttachments,
   selectLetterDetails,
   updateLetter,
@@ -26,6 +27,7 @@ import {
   SubmitLetterForm,
 } from "@/components/features/letter";
 import { useRouter } from "next/navigation";
+import PermanentlyDeleteDialog from "../deleteDialog/PermanentlyDeleteDialog";
 
 interface IButtonConfig {
   isVisible: boolean;
@@ -75,6 +77,27 @@ export default function ActionButtons() {
           isButton: false,
           component: <ShareLetterForm />,
           label: "ደብዳቤውን አጋራ",
+          variant: "outline",
+          style: "",
+          size: "default",
+          action: () => {},
+        },
+        {
+          isVisible: current_user_permissions.can_restore_letter,
+          isButton: true,
+          label: "ወደነበረበት መመለስ",
+          variant: "destructive",
+          style: "",
+          size: "default",
+          action: () => {
+            dispatch(Restore(letterDetails.reference_number));
+          },
+        },
+        {
+          isVisible: current_user_permissions.can_remove_from_trash_letter,
+          isButton: false,
+          component: <PermanentlyDeleteDialog letterDetails={letterDetails} />,
+          label: "remove",
           variant: "outline",
           style: "",
           size: "default",

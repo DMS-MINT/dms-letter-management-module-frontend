@@ -13,6 +13,7 @@ const whitelist: string[] = [
   "draft",
   "pending",
   "published",
+  "trash",
 ];
 
 export default function TableControlPanel() {

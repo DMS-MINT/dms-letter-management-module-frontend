@@ -109,3 +109,26 @@ export async function move_to_trash(reference_number: string) {
     handleAxiosError(error);
   }
 }
+
+export async function remove_to_trash(reference_number: string) {
+  try {
+    const response = await axiosInstance.delete(
+      `letters/${reference_number}/remove_to_trash`
+    );
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}
+export async function restore(reference_number: string) {
+  try {
+    const response = await axiosInstance.delete(
+      `letters/${reference_number}/restore`
+    );
+    const data = await response.data;
+    return data;
+  } catch (error: any) {
+    handleAxiosError(error);
+  }
+}

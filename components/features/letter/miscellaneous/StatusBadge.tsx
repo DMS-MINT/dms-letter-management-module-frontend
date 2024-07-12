@@ -5,6 +5,7 @@ import {
   FolderClosed,
   Hourglass,
   LucideIcon,
+  Trash,
   X,
 } from "lucide-react";
 import clsx from "clsx";
@@ -15,6 +16,7 @@ const statusIconMapping: Record<string, LucideIcon> = {
   Published: Check,
   Closed: FolderClosed,
   Rejected: X,
+  Trashed: Trash,
 };
 
 export default function StatusBadge({
@@ -34,6 +36,7 @@ export default function StatusBadge({
           "bg-green-600 text-green-200 gap-1": current_state === "Published",
           "bg-gray-600 text-gray-200 gap-1": current_state === "Closed",
           "bg-red-600 text-red-200 gap-1": current_state === "Rejected",
+          "bg-red-500 text-red-200 gap-1": current_state === "Trashed",
         }
       )}
     >
