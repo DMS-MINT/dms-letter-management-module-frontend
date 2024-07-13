@@ -1,13 +1,13 @@
 "use client";
 
-import InternalLetterPrintPreview from "./InternalLetterPrintPreview";
 import { Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 import { useAppSelector } from "@/lib/hooks";
 import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
-import OutgoingLetterPrintPreview from "./OutgoingLetterPrintPreview";
+import InternalLetterPrintPreview from "./InternalLetterPrintPreview";
+import OutgoingLetterPrintPreview from "./OutgoingLetter/OutgoingLetterPrintPreview";
 
 export default function PrintPreviewButton() {
   const componentRef = useRef<HTMLDivElement>(null);
