@@ -12,6 +12,7 @@ export { default as DetailControlPanel } from "./panels/DetailControlPanel";
 // Drawers
 export { default as LetterDetailsDrawer } from "./drawers/LetterDetailsDrawer";
 export { default as LetterNavigationDrawer } from "./drawers/LetterNavigationDrawer";
+export { default as LetterComposeDrawer } from "./drawers/LetterComposeDrawer";
 
 // Print
 export { default as PrintPreviewButton } from "./print/PrintPreviewButton";
