@@ -1,131 +1,147 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LogIn } from "lucide-react";
-import Link from "next/link";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  login,
-  selectIsAuthenticated,
-} from "@/lib/features/authentication/authSlice";
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { Eye, EyeOff, LogIn } from "lucide-react";
+import { useState } from "react";
+import { BrandingSection } from "@/components/features/user";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "@/lib/features/authentication/actions";
 import { ICredentials } from "@/typing/interface";
-import { redirect } from "next/navigation";
-import * as yup from "yup";
-import { useFormik, FormikHelpers } from "formik";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function SignIn() {
-  const is_authenticated = useAppSelector(selectIsAuthenticated);
-  const dispatch = useAppDispatch();
+const formSchema = z.object({
+	email: z.string().email(),
+	password: z.string(),
+});
 
-  const onSubmit = async (
-    values: ICredentials,
-    actions: FormikHelpers<ICredentials>
-  ) => {
-    await dispatch(login(values));
-    actions.resetForm();
-  };
+export default function page() {
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const router = useRouter();
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+	const { mutate } = useMutation({
+		mutationKey: ["Sign in"],
+		mutationFn: (credentials: ICredentials) => signIn(credentials),
+		onMutate: () => {
+			toast.dismiss();
+			toast.loading("Logging in, please wait...");
+		},
+		onSuccess: (message: string) => {
+			toast.dismiss();
+			toast.success(message);
+			router.push("/letters/inbox");
+		},
+		onError: (errorMessage: string) => {
+			toast.dismiss();
+			toast.error(errorMessage);
+		},
+	});
 
-  const authSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("እባክዎ ትክክለኛ ኢሜይል ያስገቡ")
-      .required("እባክዎ የኢሜል አድራሻዎን ያስገቡ"),
-    password: yup.string().required("እባክዎ የይለፍ ቃሎን ያስገቡ"),
-  });
+	function onSubmit(values: z.infer<typeof formSchema>) {
+		mutate(values);
+	}
 
-  const { values, errors, touched, isSubmitting, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        email: "",
-        password: "",
-      },
-      validationSchema: authSchema,
-      onSubmit,
-    });
+	return (
+		<main className="grid grid-cols-2 h-full">
+			<BrandingSection />
+			<section className="flex flex-col gap-7 px-24 h-full justify-center">
+				<div>
+					<h2 className="text-gray-900 font-medium text-xl mt-5 mb-2">
+						እንኳን ደህና መጡ!
+					</h2>
+					<p className="text-gray-700 font-light text-sm">
+						እባክዎ ለመግባት የተጠቃሚ መለያዎን እና የይለፍ ቃልዎን ያስገቡ።
+					</p>
+				</div>
 
-  useEffect(() => {
-    if (is_authenticated) {
-      redirect("/letters/inbox");
-    }
-  }, [is_authenticated]);
+				<Form {...form}>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>የኢሜይል አድራሻዎን ያስገቡ</FormLabel>
+									<FormControl>
+										<Input tabIndex={1} {...field} />
+									</FormControl>
+									<FormMessage className="form-error-message" />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="password"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="flex justify-between">
+										የይለፍ ቃልዎን ያስገቡ
+										<Link href="/forgot-password" tabIndex={4}>
+											<Button type="button" variant="link" className="py-0 h-fit">
+												የይለፍ ቃልዎን ረስተዋል?
+											</Button>
+										</Link>
+									</FormLabel>
+									<FormControl>
+										<div className="relative ">
+											<Input
+												type={showPassword ? "text" : "password"}
+												tabIndex={2}
+												{...field}
+											/>
+											<Button
+												type="button"
+												size={"icon"}
+												variant={"ghost"}
+												className="absolute right-1 top-0 hover:bg-transparent"
+												onClick={() => setShowPassword(!showPassword)}
+											>
+												{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+											</Button>
+										</div>
+									</FormControl>
+									<FormMessage className="form-error-message" />
+								</FormItem>
+							)}
+						/>
+						<Button
+							type="submit"
+							variant="secondary"
+							className="flex gap-2 items-center w-full"
+							tabIndex={3}
+						>
+							<LogIn size={20} />
+							ግባ
+						</Button>
+					</form>
+				</Form>
 
-  return (
-    <section className="flex flex-col gap-7">
-      <div>
-        <h2 className="text-gray-900 font-medium text-xl mt-5 mb-2">
-          እንኳን ደህና መጡ!
-        </h2>
-        <p className="text-gray-700 font-light text-sm">
-          እባክዎ ለመግባት የተጠቃሚ መለያዎን እና የይለፍ ቃልዎን ያስገቡ።
-        </p>
-      </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5 ">
-        <div className="grid items-center gap-1.5">
-          <Label htmlFor="email">የኢሜይል አድራሻዎን ያስገቡ</Label>
-          <Input
-            required
-            disabled={isSubmitting}
-            name="email"
-            type="email"
-            id="email"
-            value={values.email}
-            onChange={handleChange}
-            className={
-              errors.email && touched.email
-                ? "border border-red-500 focus-visible:ring-1 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                : ""
-            }
-          />
-          {errors.email && touched.email && (
-            <p className="font-light text-red-500">{errors.email}</p>
-          )}
-        </div>
-        <div className="grid items-center gap-1.5">
-          <div className="flex justify-between items-center h-fit">
-            <Label htmlFor="password">የይለፍ ቃልዎን ያስገቡ</Label>
-            <Link href="/forgot-password">
-              <Button type="button" variant="link" className="py-0 h-fit">
-                የይለፍ ቃልዎን ረስተዋል?
-              </Button>
-            </Link>
-          </div>
-          <Input
-            required
-            readOnly={isSubmitting}
-            name="password"
-            type="password"
-            id="password"
-            value={values.password}
-            onChange={handleChange}
-            className={
-              errors.password && touched.password
-                ? "border border-red-500 focus-visible:ring-1 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                : ""
-            }
-          />
-          {errors.password && touched.password && (
-            <p className="font-light text-red-500">{errors.email}</p>
-          )}
-        </div>
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          variant="secondary"
-          className="flex gap-2 items-center w-full"
-        >
-          <LogIn size={20} />
-          ግባ
-        </Button>
-      </form>
-      <div className="flex gap-2 items-center self-center">
-        <p className="text-gray-800">የቴክኒክ ድጋፍ ለማግኘት </p>
-        <Button variant="link" className="p-0 h-fit text-base">
-          እኛን ያነጋግሩን
-        </Button>
-      </div>
-    </section>
-  );
+				<div className="flex gap-2 items-center self-center">
+					<p className="text-gray-800">የቴክኒክ ድጋፍ ለማግኘት </p>
+					<Button variant="link" className="p-0 h-fit text-base">
+						እኛን ያነጋግሩን
+					</Button>
+				</div>
+			</section>
+		</main>
+	);
 }

@@ -1,32 +1,23 @@
-import { IServerErrorResponse } from "@/typing/interface";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 const handleAxiosError = (error: any) => {
-  if (
-    axios.isAxiosError<IServerErrorResponse, Record<string, unknown>>(error)
-  ) {
-    if (error.response) {
-      const responseData = error.response.data;
-      // console.error(responseData)
-      if (
-        responseData.message === "Validation error" &&
-        responseData.extra?.fields
-      ) {
-        console.error(responseData.extra);
-        responseData?.extra?.fields?.forEach((field: string) => {
-          throw new Error(field);
-        });
-        // throw new Error("Validation error occurred");
-      } else {
-        throw new Error(responseData.message);
-      }
-      // throw new Error("An unknown error occurred");
-    }
-  } else if (error.request) {
-    throw new Error("Network Error: No response received");
-  } else {
-    throw new Error("Request Error: Unable to send request");
-  }
+	const axiosError = error as AxiosError;
+
+	let errorMessage = "An unexpected error occurred. Please try again.";
+
+	switch (true) {
+		case axiosError.message.includes("ECONNREFUSED"):
+			errorMessage =
+				"Unable to connect to the server. Please ensure the server is running and try again.";
+			break;
+		case axiosError.message.includes("401"):
+			errorMessage = "Unauthorized. Please check your credentials and try again.";
+			break;
+		default:
+			break;
+	}
+
+	return errorMessage;
 };
 
 export default handleAxiosError;
