@@ -61,6 +61,10 @@ export default function Table() {
   }, [params]);
 
   const removeDuplicates = (letters: ILetterListInputSerializer[]) => {
+    if (!letters) {
+      return [];
+    }
+
     const uniqueLetters = letters.reduce<{
       [key: string]: ILetterListInputSerializer;
     }>((acc, letter) => {
