@@ -8,10 +8,10 @@ const handleAxiosError = (error: any) => {
 	switch (true) {
 		case axiosError.message.includes("ECONNREFUSED"):
 			errorMessage =
-				"Unable to connect to the server. Please ensure the server is running and try again.";
+				"ከኮምፒውተር ሰርቨሩ ጋር መገናኘት አልተቻለም።እባክዎ የኮምፒውተር ሰርቨሩ እየሰራ መሆኑን ያረጋግጡ እና እንደገና ይሞክሩ።";
 			break;
 		case axiosError.message.includes("401"):
-			errorMessage = "Unauthorized. Please check your credentials and try again.";
+			errorMessage = "እባክዎ ኢሜልዎን እና የይለፍ ቃልዎን ያረጋግጡ እና እንደገና ይሞክሩ።";
 			break;
 		default:
 			break;
