@@ -88,3 +88,24 @@ export async function get_default_signature(password: string) {
 		handleAxiosError(error);
 	}
 }
+
+export async function requestQRCode() {
+	try {
+		const response = await axiosInstance.post("auth/qr-code/");
+		return response.data.qr_code_image;
+	} catch (error: any) {
+		throw error;
+	}
+}
+
+export async function validateOneTimePassword(otp: number) {
+	try {
+		const response = await axiosInstance.post("auth/validate-otp/", { otp });
+		return response.data.e_signature;
+	} catch (error: any) {
+		if (error.response && error.response.status === 400) {
+			throw "የተሳሳተ የማረጋገጫ ኮድ፣ እባክዎ እንደገና ይሞክሩ።";
+		}
+		throw error;
+	}
+}
