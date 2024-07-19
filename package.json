@@ -55,6 +55,7 @@
     "draft-js": "^0.11.7",
     "ethiopian-date": "^0.0.6",
     "formik": "^2.4.6",
+    "input-otp": "^1.2.4",
     "jose": "^5.4.0",
     "lowlight": "^3.1.0",
     "lucide-react": "^0.364.0",
