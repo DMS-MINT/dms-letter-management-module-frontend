@@ -80,16 +80,11 @@ export default function DataTable<TData, TValue>({
 					placeholder="የደብዳቤ ቁጥር"
 					className="max-w-sm py-0 h-9 mr-auto"
 				/>
-				{/* <Input placeholder="ከ" className="max-w-sm py-0 h-9" />
-        <Input placeholder="ለ" className="max-w-sm py-0 h-9" />
-        <Input placeholder="ጉዳዩ" className="max-w-sm py-0 h-9" />
-        <Input placeholder="የተላከበት ቀን" className="max-w-sm py-0 h-9" /> */}
-
 				<ViewOptions table={table} />
 			</div>
 
 			<div className="rounded-md border my-3 h-full">
-				<Table>
+				<Table className="h-full">
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
@@ -124,9 +119,9 @@ export default function DataTable<TData, TValue>({
 								);
 							})
 						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									No results.
+							<TableRow className="hover:bg-transparent">
+								<TableCell colSpan={columns.length} className="h-60 text-center">
+									ምንም ደብዳቤዎች አልተገኙም።
 								</TableCell>
 							</TableRow>
 						)}

@@ -7,30 +7,43 @@ import { getContacts } from "@/lib/features/contact/contactSlice";
 import { getMe } from "@/lib/features/authentication/authSlice";
 import { selectCurrentUserPermissions } from "@/lib/features/letter/workflow/workflowSlice";
 import { toggleIsReadOnly } from "@/lib/features/ui/uiManagerSlice";
+import { useMutation } from "@tanstack/react-query";
+import { get_my_profile } from "@/actions/user_module/action";
 
 export default function DataLoader() {
-  const currentUserPermissions = useAppSelector(selectCurrentUserPermissions);
-  const dispatch = useAppDispatch();
+	const { mutate } = useMutation({
+		mutationKey: ["getMyProfile"],
+		mutationFn: () => get_my_profile(),
+		onSuccess: (data) => {
+			console.log(data);
+		},
+	});
+	const currentUserPermissions = useAppSelector(selectCurrentUserPermissions);
+	const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchData = () => {
-      try {
-        // Fetch Me
-        dispatch(getMe({}));
+	useEffect(() => {
+		mutate();
+	}, []);
 
-        // Fetch contacts
-        dispatch(getContacts({}));
-      } catch (error: any) {
-        toast.error("Error fetching data:", error);
-      }
-    };
+	// useEffect(() => {
+	// 	const fetchData = () => {
+	// 		try {
+	// 			// Fetch Me
+	// 			dispatch(getMe({}));
 
-    fetchData();
-  }, [dispatch]);
+	// 			// Fetch contacts
+	// 			dispatch(getContacts({}));
+	// 		} catch (error: any) {
+	// 			toast.error("Error fetching data:", error);
+	// 		}
+	// 	};
 
-  useEffect(() => {
-    dispatch(toggleIsReadOnly(!currentUserPermissions.can_update_letter));
-  }, [currentUserPermissions]);
+	// 	fetchData();
+	// }, [dispatch]);
 
-  return <span className="absolute"></span>;
+	useEffect(() => {
+		dispatch(toggleIsReadOnly(!currentUserPermissions.can_update_letter));
+	}, [currentUserPermissions]);
+
+	return <span className="absolute"></span>;
 }

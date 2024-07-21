@@ -2,80 +2,69 @@
 
 import { Subheader, Drawer, Main } from "@/components/layouts";
 import { DataTable } from "@/components/shared/tableComponents";
-import { useParams } from "next/navigation";
-import {
-	pendingTableColumns,
-	draftTableColumns,
-	inboxTableColumns,
-	outboxTableColumns,
-	publishedTableColumns,
-	trashTableColumns,
-} from "@/components/features/letter/config";
 import { useEffect, useState } from "react";
-import { ILetterListInputSerializer } from "@/typing/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import {
 	LetterNavigationDrawer,
 	TableControlPanel,
 } from "@/components/features/letter";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getLetters } from "@/lib/features/letter/actions";
 import { toast } from "sonner";
+import { LetterType } from "@/types/letter_module";
+import {
+	draftTableColumns,
+	inboxTableColumns,
+	outboxTableColumns,
+	pendingTableColumns,
+	publishedTableColumns,
+	trashTableColumns,
+} from "@/components/features/letter/config";
+import { useParams } from "next/navigation";
+import { LetterSkeleton } from "@/components/skeletons";
+
+const getColumnConfig = (category: string): ColumnDef<LetterType>[] => {
+	switch (category) {
+		case "inbox":
+			return inboxTableColumns;
+		case "outbox":
+			return outboxTableColumns;
+		case "draft":
+			return draftTableColumns;
+		case "trash":
+			return trashTableColumns;
+		case "pending":
+			return pendingTableColumns;
+		case "published":
+			return publishedTableColumns;
+		default:
+			return [];
+	}
+};
 
 export default function Table() {
 	const params = useParams();
-	const [columns, setColumns] = useState<
-		ColumnDef<ILetterListInputSerializer>[]
-	>([]);
-	const { mutate, data } = useMutation({
-		mutationKey: ["Get Letters"],
-		mutationFn: (category: string) => getLetters(category),
-		onMutate: () => {
-			toast.dismiss();
-			toast.loading("Fetching letters, Please wait...");
-		},
-		onSuccess: (data) => {
-			toast.dismiss();
-			toast.success("Letters successfully retrieved!");
-		},
-		onError: (errorMessage: string) => {
-			toast.dismiss();
-			toast.success(errorMessage);
+	const [columns, setColumns] = useState<ColumnDef<LetterType>[]>([]);
+	const { isSuccess, data: letters } = useQuery({
+		queryKey: ["getLetters", params.category],
+		queryFn: async () => {
+			try {
+				toast.dismiss();
+				toast.loading("ደብዳቤዎችን በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
+				const category = params.category as string;
+				const data = await getLetters(category);
+				const columnConfig = getColumnConfig(category);
+				setColumns(columnConfig);
+				toast.dismiss();
+				return data.letters;
+			} catch (error: any) {
+				toast.dismiss();
+				toast.error(error.message);
+			}
 		},
 	});
 
-	useEffect(() => {
-		switch (params.category) {
-			case "inbox":
-				setColumns(inboxTableColumns);
-				mutate("inbox");
-				break;
-			case "outbox":
-				setColumns(outboxTableColumns);
-				mutate("outbox");
-				break;
-			case "draft":
-				setColumns(draftTableColumns);
-				mutate("draft");
-				break;
-			case "trash":
-				setColumns(trashTableColumns);
-				mutate("trash");
-				break;
-			case "pending":
-				setColumns(pendingTableColumns);
-				mutate("pending");
-				break;
-			case "published":
-				setColumns(publishedTableColumns);
-				mutate("published");
-				break;
-			default:
-				break;
-		}
-	}, [params]);
-
-	return (
+	return isSuccess ? (
 		<>
 			<Subheader>
 				<TableControlPanel />
@@ -85,9 +74,11 @@ export default function Table() {
 					<LetterNavigationDrawer />
 				</Drawer>
 				<Main>
-					<DataTable columns={columns} data={data ? data : []} />
+					<DataTable columns={columns} data={letters} />
 				</Main>
 			</section>
 		</>
+	) : (
+		<LetterSkeleton />
 	);
 }

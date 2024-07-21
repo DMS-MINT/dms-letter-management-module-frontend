@@ -10,8 +10,11 @@ import Providers from "@/providers/Providers";
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Letter Management System",
+	title: "የደብዳቤ አስተዳደር ሞጁል",
 	description: "Efficiently manage and organize your letters.",
+	icons: {
+		icon: "/icons/favicon.ico",
+	},
 };
 
 export default function RootLayout({

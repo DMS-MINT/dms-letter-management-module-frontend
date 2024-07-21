@@ -1,14 +1,11 @@
 "use client";
 
-import OutgoingLetterPrintPreview from "@/components/features/letter/print/OutgoingLetter/OutgoingLetterPrintPreview";
-import { useRef } from "react";
+import { SubmitLetterDialog } from "@/components/features/letter/Dialogs";
 
 export default function MyAccount() {
-  const componentRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <div>
-      <OutgoingLetterPrintPreview forwardedRef={componentRef} />
-    </div>
-  );
+	return (
+		<div>
+			<SubmitLetterDialog />
+		</div>
+	);
 }

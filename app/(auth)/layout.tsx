@@ -8,8 +8,11 @@ import Providers from "@/providers/Providers";
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Authentication",
+	title: "የተጠቃሚ መግቢያ",
 	description: "Efficiently manage and secure your account credentials.",
+	icons: {
+		icon: "/icons/favicon.ico",
+	},
 };
 
 export default function RootLayout({

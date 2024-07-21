@@ -16,10 +16,10 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useState } from "react";
-import { BrandingSection } from "@/components/features/user";
+import { BrandingSection } from "@/components/features";
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "@/lib/features/authentication/actions";
-import { ICredentials } from "@/typing/interface";
+import { signIn } from "@/actions/auth/action";
+import type { ICredentials } from "@/actions/auth/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -39,7 +39,7 @@ export default function page() {
 		},
 	});
 	const { mutate } = useMutation({
-		mutationKey: ["Sign in"],
+		mutationKey: ["signIn"],
 		mutationFn: (credentials: ICredentials) => signIn(credentials),
 		onMutate: () => {
 			toast.dismiss();
@@ -50,9 +50,9 @@ export default function page() {
 			toast.success(message);
 			router.push("/letters/inbox");
 		},
-		onError: (errorMessage: string) => {
+		onError: (error: any) => {
 			toast.dismiss();
-			toast.error(errorMessage);
+			toast.error(error.message);
 		},
 	});
 

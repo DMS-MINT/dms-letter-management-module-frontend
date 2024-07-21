@@ -1,24 +1,23 @@
 "use server";
 
-import axiosInstance from "@/lib/axiosInstance";
+import axiosInstance from "@/actions/axiosInstance";
 import { handleAxiosError } from "@/utils";
 
 export async function getLetters(category: string) {
 	try {
 		const response = await axiosInstance.get(`letters/?category=${category}`);
-		return response.data.letters;
+		return response.data;
 	} catch (error: any) {
-		console.log(error.message);
+		throw error.message;
 	}
 }
 
 export async function get_letter_details(reference_number: string) {
 	try {
 		const response = await axiosInstance.get(`letters/${reference_number}/`);
-		const data = await response.data;
-		return data;
+		return response.data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 

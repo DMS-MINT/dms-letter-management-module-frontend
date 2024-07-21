@@ -4,7 +4,7 @@ import {
 	ComposeControlPanel,
 	LetterComposeDrawer,
 } from "@/components/features/letter";
-import { Drawer, Main, Subheader } from "@/components/layouts";
+import { Drawer, Subheader } from "@/components/layouts";
 import { OutgoingLetterTemplate } from "@/components/templates";
 
 export default function Compose() {
