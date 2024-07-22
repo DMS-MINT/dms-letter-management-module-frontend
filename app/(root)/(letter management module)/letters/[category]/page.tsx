@@ -2,12 +2,8 @@
 
 import { Subheader, Drawer, Main } from "@/components/layouts";
 import { DataTable } from "@/components/shared/tableComponents";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-	LetterNavigationDrawer,
-	TableControlPanel,
-} from "@/components/features/letter";
 import { useQuery } from "@tanstack/react-query";
 import { getLetters } from "@/lib/features/letter/actions";
 import { toast } from "sonner";
@@ -19,9 +15,13 @@ import {
 	pendingTableColumns,
 	publishedTableColumns,
 	trashTableColumns,
-} from "@/components/features/letter/config";
+} from "@/components/letter_module/config";
 import { useParams } from "next/navigation";
-import { LetterSkeleton } from "@/components/skeletons";
+import {
+	LetterSkeleton,
+	LetterNavigationDrawer,
+	TableControlPanel,
+} from "@/components/letter_module";
 
 const getColumnConfig = (category: string): ColumnDef<LetterType>[] => {
 	switch (category) {

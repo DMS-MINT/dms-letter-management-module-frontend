@@ -5,6 +5,8 @@ export { default as letterSerializer } from "./letterSerializer";
 export { default as getParticipantInfo } from "./getParticipantInfo";
 export { default as generateUserPermissions } from "./generateUserPermissions";
 export { default as convertToEthiopianDate } from "./convertToEthiopianDate";
+export { default as getActionButtonConfigs } from "./getActionButtonConfigs";
+export * from "./getActionButtonConfigs";
 
 // Value Utils
 export { default as getDefaultValue } from "./getDefaultValue";

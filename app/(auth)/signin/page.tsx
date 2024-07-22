@@ -16,12 +16,13 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useState } from "react";
-import { BrandingSection } from "@/components/features";
+import { BrandingSection } from "@/components/user_module";
 import { useMutation } from "@tanstack/react-query";
 import { signIn } from "@/actions/auth/action";
 import type { ICredentials } from "@/actions/auth/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LetterSkeleton } from "@/components/letter_module";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -38,7 +39,7 @@ export default function page() {
 			password: "",
 		},
 	});
-	const { mutate } = useMutation({
+	const { mutate, isSuccess } = useMutation({
 		mutationKey: ["signIn"],
 		mutationFn: (credentials: ICredentials) => signIn(credentials),
 		onMutate: () => {
@@ -60,7 +61,7 @@ export default function page() {
 		mutate(values);
 	}
 
-	return (
+	return !isSuccess ? (
 		<main className="grid grid-cols-2 h-full">
 			<BrandingSection />
 			<section className="flex flex-col gap-7 px-24 h-full justify-center">
@@ -143,5 +144,7 @@ export default function page() {
 				</div>
 			</section>
 		</main>
+	) : (
+		<LetterSkeleton />
 	);
 }

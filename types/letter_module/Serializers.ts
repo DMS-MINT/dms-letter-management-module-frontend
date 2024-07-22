@@ -1,4 +1,4 @@
-import { LetterType } from "./LetterType";
+import { LetterDetailType } from "./LetterType";
 
 export type PermissionsResponseType = {
 	user_id: string;
@@ -7,7 +7,7 @@ export type PermissionsResponseType = {
 };
 
 export type LetterDetailResponseType = {
-	letter: LetterType;
+	letter: LetterDetailType;
 	permissions: Array<PermissionsResponseType>;
 };
 

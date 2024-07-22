@@ -1,11 +1,9 @@
-"use client";
-
+import { Drawer, Subheader } from "@/components/layouts";
 import {
 	ComposeControlPanel,
 	LetterComposeDrawer,
-} from "@/components/features/letter";
-import { Drawer, Subheader } from "@/components/layouts";
-import { OutgoingLetterTemplate } from "@/components/templates";
+} from "@/components/letter_module";
+import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
 
 export default function Compose() {
 	return (

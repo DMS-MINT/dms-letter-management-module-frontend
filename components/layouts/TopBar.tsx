@@ -13,7 +13,7 @@ import { letterCategoryLookup } from "@/typing/dictionary";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { MINT_Logo } from "@/constants";
-import { UserProfileMenu } from "../features";
+import { UserProfileMenu } from "../user_module";
 
 export default function TopBar() {
 	const params = useParams();

@@ -4,7 +4,7 @@ import "@/app/globals.css";
 import { StoreProvider } from "@/app/StoreProvider";
 import { TopBar } from "@/components/layouts";
 import { Toaster } from "sonner";
-import { RequireAuth } from "@/components/utils";
+import { RequireAuth } from "@/components/shared";
 import Providers from "@/providers/Providers";
 
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });

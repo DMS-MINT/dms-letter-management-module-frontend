@@ -14,8 +14,6 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { selectLetterDetails } from "@/lib/features/letter/letterSlice";
 import {
 	Tooltip,
 	TooltipContent,
@@ -28,7 +26,7 @@ import {
 	deleteComment,
 	updateComment,
 } from "@/lib/features/letter/workflow/workflowSlice";
-import { LetterType } from "@/types/letter_module";
+import { LetterDetailType } from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { create_comment } from "@/actions/shared/action";
@@ -37,9 +35,12 @@ import type {
 	UpdateCommentParams,
 } from "@/actions/shared/action";
 import { toast } from "sonner";
+import { useAppSelector } from "@/hooks/hooks";
+import { selectMyProfile } from "@/lib/features/user/userSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
-export default function ActivityFeed({ letter }: { letter: LetterType }) {
-	const me = useAppSelector(selectMe);
+export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
+	const myProfile = useAppSelector(selectMyProfile);
 	const [createMode, setCreateMode] = useState<boolean>(false);
 	const [selectedCommentId, setSelectedCommentId] = useState<string>("");
 	const [updatedContent, setUpdatedContent] = useState<string>("");
@@ -55,7 +56,7 @@ export default function ActivityFeed({ letter }: { letter: LetterType }) {
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
-			toast.success("Success");
+			toast.success(data.message);
 		},
 		onError: (errorMessage: string) => {
 			toast.dismiss();
@@ -87,7 +88,7 @@ export default function ActivityFeed({ letter }: { letter: LetterType }) {
 		dispatch(deleteComment(id));
 	};
 
-	return (
+	return myProfile ? (
 		<section id="comment_section" className="flex flex-col mb-10">
 			<div className="flex gap-6 min-h-16">
 				<div className="flex flex-col items-center w-[50px]">
@@ -138,10 +139,10 @@ export default function ActivityFeed({ letter }: { letter: LetterType }) {
 						<div className="flex gap-4 items-center">
 							<Avatar className="w-11 h-11">
 								<AvatarFallback>
-									{me?.full_name ? me.full_name.substring(0, 2) : ""}
+									{myProfile.full_name ? myProfile.full_name.substring(0, 2) : ""}
 								</AvatarFallback>
 							</Avatar>
-							<h4 className="text-base font-semibold">{`${me?.full_name} - ${me?.job_title}`}</h4>
+							<h4 className="text-base font-semibold">{`${myProfile.full_name} - ${myProfile.job_title}`}</h4>
 							<div className="flex gap-1 ml-auto">
 								<Button
 									variant="ghost"
@@ -279,5 +280,5 @@ export default function ActivityFeed({ letter }: { letter: LetterType }) {
 				</div>
 			</div>
 		</section>
-	);
+	) : null;
 }
