@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,7 +12,7 @@ import { signOut } from "@/actions/auth/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getMyProfile } from "@/actions/user_module/action";
-import { useAppDispatch } from "@/hooks/hooks";
+import { useAppDispatch } from "@/hooks";
 import { storeMyProfile } from "@/lib/features/user/userSlice";
 import { CurrentUserType } from "@/types/user_module";
 

@@ -5,7 +5,7 @@ import { DataTable } from "@/components/shared/tableComponents";
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
-import { getLetters } from "@/lib/features/letter/actions";
+import { getLetters } from "@/actions/letter_module/crudActions";
 import { toast } from "sonner";
 import { LetterType } from "@/types/letter_module";
 import {

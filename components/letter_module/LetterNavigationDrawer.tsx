@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
 
 type RouteType = {

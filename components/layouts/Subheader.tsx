@@ -1,10 +1,11 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
 	selectIsDrawerOpen,
 	toggleDrawerVisibility,
 } from "@/lib/features/ui/uiManagerSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { Menu } from "lucide-react";
 
 export default function Subheader({

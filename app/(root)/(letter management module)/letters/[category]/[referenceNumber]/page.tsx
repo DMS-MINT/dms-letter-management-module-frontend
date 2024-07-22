@@ -3,7 +3,7 @@
 import { Subheader, Drawer } from "@/components/layouts";
 import { ActivityFeed } from "@/components/shared";
 import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
-import { get_letter_details } from "@/lib/features/letter/actions";
+import { getLetterDetails } from "@/actions/letter_module/crudActions";
 import { LetterDetailResponseType } from "@/types/letter_module";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -18,19 +18,19 @@ export default function LetterDetail() {
 	const { referenceNumber } = useParams();
 
 	const { data, isLoading, isSuccess, isError } = useQuery({
-		queryKey: ["fetchLetterDetails", referenceNumber],
+		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
 			try {
 				toast.dismiss();
 				toast.loading("የደብዳቤ ዝርዝር መረጃ በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
-				const data: LetterDetailResponseType = await get_letter_details(
+				const data: LetterDetailResponseType = await getLetterDetails(
 					referenceNumber as string
 				);
 				toast.dismiss();
 				return data;
 			} catch (error: any) {
 				toast.dismiss();
-				toast.error(error);
+				toast.error(error.message);
 			}
 		},
 		enabled: !!referenceNumber,

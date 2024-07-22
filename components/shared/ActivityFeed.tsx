@@ -13,19 +13,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { selectMe } from "@/lib/features/authentication/authSlice";
-import {
-	createComment,
-	deleteComment,
-	updateComment,
-} from "@/lib/features/letter/workflow/workflowSlice";
 import { LetterDetailType } from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -35,16 +29,14 @@ import type {
 	UpdateCommentParams,
 } from "@/actions/shared/action";
 import { toast } from "sonner";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { useAppDispatch } from "@/lib/hooks";
 
 export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 	const myProfile = useAppSelector(selectMyProfile);
 	const [createMode, setCreateMode] = useState<boolean>(false);
 	const [selectedCommentId, setSelectedCommentId] = useState<string>("");
 	const [updatedContent, setUpdatedContent] = useState<string>("");
-	const dispatch = useAppDispatch();
 	const [content, setContent] = useState<string>("");
 
 	const { mutate: createComment } = useMutation({
@@ -80,12 +72,12 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 	};
 
 	const dispatchUpdateComment = () => {
-		dispatch(
-			updateComment({ comment_id: selectedCommentId, content: updatedContent })
-		);
+		// dispatch(
+		// 	updateComment({ comment_id: selectedCommentId, content: updatedContent })
+		// );
 	};
 	const dispatchDeleteComment = (id: string) => {
-		dispatch(deleteComment(id));
+		// dispatch(deleteComment(id));
 	};
 
 	return myProfile ? (

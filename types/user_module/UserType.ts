@@ -25,4 +25,5 @@ export type CurrentUserType = {
 	department: string;
 	phone_number: string;
 	is_staff: boolean;
+	is_2fa_enabled: boolean;
 };

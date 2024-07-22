@@ -93,7 +93,7 @@ export async function requestQRCode() {
 export async function validateOneTimePassword(otp: number) {
 	try {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
-		return response.data.e_signature;
+		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.status === 400) {
 			throw "የተሳሳተ የማረጋገጫ ኮድ፣ እባክዎ እንደገና ይሞክሩ።";

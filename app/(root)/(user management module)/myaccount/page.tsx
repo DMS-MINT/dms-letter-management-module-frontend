@@ -1,6 +1,4 @@
-"use client";
-
-import { SubmitLetterDialog } from "@/components/features/letter/Dialogs";
+import { SubmitLetterDialog } from "@/components/letter_module";
 
 export default function MyAccount() {
 	return (

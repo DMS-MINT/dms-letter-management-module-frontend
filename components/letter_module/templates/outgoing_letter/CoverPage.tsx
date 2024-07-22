@@ -2,7 +2,7 @@
 
 import { Download, LaptopMinimal, Mail, Phone } from "lucide-react";
 import { useState } from "react";
-import { MINT, PENTAGRAM, QR_CODE } from "@/constants";
+import { IMAGES } from "@/constants";
 const ICON_SIZE: number = 14;
 
 export default function CoverPage() {
@@ -20,7 +20,11 @@ export default function CoverPage() {
 		<div className=" bg-white px-16 py-14 w-[797px] h-[280mm] border border-gray-300">
 			<div className="flex flex-col h-full">
 				<header className="flex justify-between items-center">
-					<img src={PENTAGRAM} alt="Logo 1" className="w-20 h-20" />
+					<img
+						src={IMAGES.pentagram}
+						alt="Ethiopian flag pentagon star symbol"
+						className="w-20 h-20"
+					/>
 					<div className="flex flex-col items-center w-full font-serif">
 						<h2 className="text-lg font-bold text-gray-800 text-center">
 							በ ኢትዮጲያ ፌደረላዊ ሪፐብሊክ
@@ -35,7 +39,11 @@ export default function CoverPage() {
 							Minister of Innovation and Technology
 						</p>
 					</div>
-					<img src={MINT} alt="Logo 1" className="w-28 h-20" />
+					<img
+						src={IMAGES.mint}
+						alt="Ministry of Innovation and Technology logo"
+						className="w-28 h-20"
+					/>
 				</header>
 
 				<hr className="mb-2 border-b-1 border-black" />
@@ -175,7 +183,11 @@ export default function CoverPage() {
 						</p>
 					</div>
 					<div className="flex-1">
-						<img src={QR_CODE} alt="Logo 1" className="w-20 aspect-square ml-auto" />
+						<img
+							src={IMAGES.qr_code}
+							alt="QR code"
+							className="w-20 aspect-square ml-auto"
+						/>
 					</div>
 				</footer>
 			</div>

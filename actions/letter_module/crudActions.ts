@@ -1,7 +1,7 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import { handleAxiosError } from "@/utils";
+import getErrorMessage from "./getErrorMessage";
 
 export async function getLetters(category: string) {
 	try {
@@ -12,31 +12,30 @@ export async function getLetters(category: string) {
 	}
 }
 
-export async function get_letter_details(reference_number: string) {
+export async function getLetterDetails(referenceNumber: string) {
 	try {
-		const response = await axiosInstance.get(`letters/${reference_number}/`);
+		const response = await axiosInstance.get(`letters/${referenceNumber}/`);
 		return response.data;
 	} catch (error: any) {
-		throw error.message;
+		throw getErrorMessage(error);
 	}
 }
 
-export async function create_letter(letter: FormData) {
+export async function createLetter(letter: FormData) {
 	try {
 		const response = await axiosInstance.post("letters/create/", letter, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
 		});
-
 		const data = await response.data;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 
-export async function create_and_submit_letter(letter: FormData) {
+export async function createAndSubmitLetter(letter: FormData) {
 	try {
 		const response = await axiosInstance.post(
 			"letters/create_and_submit/",
@@ -47,15 +46,14 @@ export async function create_and_submit_letter(letter: FormData) {
 				},
 			}
 		);
-
 		const data = await response.data;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 
-export async function create_and_publish_letter(letter: FormData) {
+export async function createAndPublishLetter(letter: FormData) {
 	try {
 		const response = await axiosInstance.post(
 			"letters/create_and_publish/",
@@ -66,21 +64,17 @@ export async function create_and_publish_letter(letter: FormData) {
 				},
 			}
 		);
-
 		const data = await response.data;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 
-export async function update_letter(
-	reference_number: string,
-	letter: FormData
-) {
+export async function updateLetter(referenceNumber: string, letter: FormData) {
 	try {
 		const response = await axiosInstance.put(
-			`letters/${reference_number}/update/`,
+			`letters/${referenceNumber}/update/`,
 			letter,
 			{
 				headers: {
@@ -88,46 +82,43 @@ export async function update_letter(
 				},
 			}
 		);
-
 		const data = await response.data;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 
-export async function move_to_trash(reference_number: string) {
+export async function moveToTrash(referenceNumber: string) {
+	try {
+		const response = await axiosInstance.put(`letters/${referenceNumber}/trash/`);
+		const data = await response.data.message;
+		return data;
+	} catch (error: any) {
+		throw error.message;
+	}
+}
+
+export async function restoreFromTrash(referenceNumber: string) {
 	try {
 		const response = await axiosInstance.put(
-			`letters/${reference_number}/trash/`
+			`letters/${referenceNumber}/restore/`
 		);
 		const data = await response.data.message;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }
 
-export async function restore_from_trash(reference_number: string) {
-	try {
-		const response = await axiosInstance.put(
-			`letters/${reference_number}/restore/`
-		);
-		const data = await response.data.message;
-		return data;
-	} catch (error: any) {
-		handleAxiosError(error);
-	}
-}
-
-export async function remove_from_trash(reference_number: string) {
+export async function removeFromTrash(referenceNumber: string) {
 	try {
 		const response = await axiosInstance.delete(
-			`letters/${reference_number}/remove_from_trash/`
+			`letters/${referenceNumber}/remove_from_trash/`
 		);
 		const data = await response.data.message;
 		return data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw error.message;
 	}
 }

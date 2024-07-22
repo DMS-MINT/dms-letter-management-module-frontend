@@ -12,8 +12,8 @@ import {
 import { letterCategoryLookup } from "@/typing/dictionary";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { MINT_Logo } from "@/constants";
 import { UserProfileMenu } from "../user_module";
+import { IMAGES } from "@/constants";
 
 export default function TopBar() {
 	const params = useParams();
@@ -22,7 +22,13 @@ export default function TopBar() {
 		<header className="min-h-14 w-full px-5 bg-white flex justify-between items-center">
 			<button className="flex items-center gap-4 hover:cursor-pointer">
 				<Link href="/letters/compose">
-					<Image src={MINT_Logo} alt="MINT logo" width={40} height={40} />
+					<Image
+						src={IMAGES.mint_logo}
+						alt="Ministry of Innovation and Technology logo"
+						width={40}
+						height={40}
+						priority
+					/>
 				</Link>
 				<Breadcrumb>
 					<BreadcrumbList>

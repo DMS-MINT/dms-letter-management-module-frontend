@@ -1,6 +1,6 @@
 "use client";
 import { selectIsDrawerOpen } from "@/lib/features/ui/uiManagerSlice";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppSelector } from "@/hooks";
 
 export default function Drawer({
 	children,
