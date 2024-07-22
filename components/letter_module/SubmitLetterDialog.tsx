@@ -90,16 +90,9 @@ export default function SubmitLetter() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button
-					onClick={() => {
-						form.reset();
-						requestQRCodeMutate();
-					}}
-				>
-					ወደ መዝገብ ቢሮ አስተላልፍ
-				</Button>
+				<Button>ወደ መዝገብ ቢሮ አስተላልፍ</Button>
 			</DialogTrigger>
-			<DialogContent className="">
+			<DialogContent>
 				<DialogHeader className="gap-2">
 					<DialogTitle>ማንነቶን ያረጋግጡ</DialogTitle>
 					<DialogDescription>
