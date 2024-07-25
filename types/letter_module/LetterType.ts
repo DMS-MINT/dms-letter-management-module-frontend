@@ -1,6 +1,7 @@
 import { MemberType } from "../user_module";
 import { AttachmentType, CommentType } from "../shared";
 import { ParticipantType } from "./ParticipantType";
+import { ColumnDef } from "@tanstack/react-table";
 
 export type LetterType = {
 	id: string;
@@ -18,6 +19,8 @@ export type LetterType = {
 	letter_type: "internal" | "outgoing" | "incoming";
 	participants: ParticipantType[];
 };
+
+export type LetterColumnDefType = ColumnDef<LetterType>[];
 
 export type LetterDetailType = {
 	id: string;
