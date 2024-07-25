@@ -4,7 +4,7 @@ import { get_session } from "./auth/action";
 axios.defaults.withCredentials = true;
 
 const axiosInstance: AxiosInstance = axios.create({
-	baseURL: process.env.BASE_API_URL,
+	baseURL: process.env.DJANGO_API_BASE_URL,
 	timeout: 10000,
 	headers: {
 		"Content-Type": "application/json",

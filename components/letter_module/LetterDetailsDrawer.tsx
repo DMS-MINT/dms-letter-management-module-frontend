@@ -65,7 +65,7 @@ export default function LetterDetailsDrawer({
 					>
 						<Link
 							key={uuidv4()}
-							href={`${process.env.NEXT_PUBLIC_BASE_API_URL}${attachment.file}`}
+							href={`${process.env.NEXT_PUBLIC_API_BASE_URL}${attachment.file}`}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
