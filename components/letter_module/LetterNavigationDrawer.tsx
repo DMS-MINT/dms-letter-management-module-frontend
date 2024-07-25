@@ -11,10 +11,11 @@ import {
 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
+import clsx from "clsx";
 
 type RouteType = {
 	name: string;
@@ -23,57 +24,54 @@ type RouteType = {
 	isVisible: boolean;
 };
 
-const icon_size: number = 20;
-const icon_color: string = "#2DA4FF";
+const ICON_SIZE: number = 20;
+const ICON_COLOR: string = "#2DA4FF";
 
 export default function LetterNavigationDrawer() {
 	const myProfile = useAppSelector(selectMyProfile);
 	const pathname = usePathname();
-	const [routes, setRoutes] = useState<RouteType[]>([]);
 
-	useEffect(() => {
-		if (myProfile) {
-			const primaryRoutes: RouteType[] = [
-				{
-					name: "ገቢ ደብዳቤዎች",
-					icon: <Inbox size={icon_size} color={icon_color} />,
-					path: "/letters/inbox",
-					isVisible: true,
-				},
-				{
-					name: "የተላኩ ደብዳቤዎች",
-					icon: <Send size={icon_size} color={icon_color} />,
-					path: "/letters/outbox",
-					isVisible: true,
-				},
-				{
-					name: "ረቂቆች",
-					icon: <FileText size={icon_size} color={icon_color} />,
-					path: "/letters/draft",
-					isVisible: true,
-				},
-				{
-					name: "መጣያ",
-					icon: <Trash size={icon_size} color={icon_color} />,
-					path: "/letters/trash",
-					isVisible: true,
-				},
-				{
-					name: "መጽደቅን በመጠባበቅ ላይ",
-					icon: <BookDashed size={icon_size} color={"#FF5733"} />,
-					path: "/letters/pending",
-					isVisible: myProfile.is_staff,
-				},
-				{
-					name: "የታተሙ ደብዳቤዎች",
-					icon: <BookCheck size={icon_size} color={"#50C878"} />,
-					path: "/letters/published",
-					isVisible: myProfile.is_staff,
-				},
-			];
+	const routes: RouteType[] = useMemo(() => {
+		if (!myProfile) return [];
 
-			setRoutes(primaryRoutes);
-		}
+		return [
+			{
+				name: "ገቢ ደብዳቤዎች",
+				icon: <Inbox size={ICON_SIZE} color={ICON_COLOR} />,
+				path: "/letters/inbox",
+				isVisible: true,
+			},
+			{
+				name: "የተላኩ ደብዳቤዎች",
+				icon: <Send size={ICON_SIZE} color={ICON_COLOR} />,
+				path: "/letters/outbox",
+				isVisible: true,
+			},
+			{
+				name: "ረቂቆች",
+				icon: <FileText size={ICON_SIZE} color={ICON_COLOR} />,
+				path: "/letters/draft",
+				isVisible: true,
+			},
+			{
+				name: "መጣያ",
+				icon: <Trash size={ICON_SIZE} color={ICON_COLOR} />,
+				path: "/letters/trash",
+				isVisible: true,
+			},
+			{
+				name: "መጽደቅን በመጠባበቅ ላይ",
+				icon: <BookDashed size={ICON_SIZE} color={"#FF5733"} />,
+				path: "/letters/pending",
+				isVisible: myProfile.is_staff,
+			},
+			{
+				name: "የታተሙ ደብዳቤዎች",
+				icon: <BookCheck size={ICON_SIZE} color={"#50C878"} />,
+				path: "/letters/published",
+				isVisible: myProfile.is_staff,
+			},
+		];
 	}, [myProfile]);
 
 	return (
@@ -83,9 +81,10 @@ export default function LetterNavigationDrawer() {
 				.map(({ name, icon, path }) => (
 					<Link key={uuidv4()} href={path}>
 						<Button
-							className={`flex gap-2 text-gray-900 w-full hover:bg-gray-200 justify-start px-2 ${
-								path === pathname ? "bg-gray-200" : "bg-transparent"
-							}`}
+							className={clsx(
+								"bg-transparent flex gap-2 text-gray-900 w-full hover:bg-gray-200 justify-start px-2",
+								{ "bg-gray-200": path === pathname }
+							)}
 						>
 							{icon}
 							{name}
