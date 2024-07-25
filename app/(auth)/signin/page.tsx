@@ -25,11 +25,11 @@ import { useRouter } from "next/navigation";
 import { LetterSkeleton } from "@/components/letter_module";
 
 const formSchema = z.object({
-	email: z.string().email(),
-	password: z.string(),
+	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
+	password: z.string().min(1, { message: "እባክዎ የይለፍ ቃሎን ያስገቡ።" }),
 });
 
-export default function page() {
+export default function SignIn() {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const router = useRouter();
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -39,12 +39,12 @@ export default function page() {
 			password: "",
 		},
 	});
-	const { mutate, isSuccess } = useMutation({
+	const { mutate, isSuccess, isPending } = useMutation({
 		mutationKey: ["signIn"],
-		mutationFn: (credentials: ICredentials) => signIn(credentials),
+		mutationFn: signIn,
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("Logging in, please wait...");
+			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎ ይጠብቁ...");
 		},
 		onSuccess: (message: string) => {
 			toast.dismiss();
@@ -58,7 +58,7 @@ export default function page() {
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		mutate(values);
+		mutate(values as ICredentials);
 	}
 
 	return !isSuccess ? (
@@ -83,7 +83,7 @@ export default function page() {
 								<FormItem>
 									<FormLabel>የኢሜይል አድራሻዎን ያስገቡ</FormLabel>
 									<FormControl>
-										<Input tabIndex={1} {...field} />
+										<Input readOnly={isPending} tabIndex={1} {...field} />
 									</FormControl>
 									<FormMessage className="form-error-message" />
 								</FormItem>
@@ -105,6 +105,7 @@ export default function page() {
 									<FormControl>
 										<div className="relative ">
 											<Input
+												readOnly={isPending}
 												type={showPassword ? "text" : "password"}
 												tabIndex={2}
 												{...field}
@@ -125,6 +126,7 @@ export default function page() {
 							)}
 						/>
 						<Button
+							disabled={isPending || !form.formState.isValid}
 							type="submit"
 							variant="secondary"
 							className="flex gap-2 items-center w-full"
