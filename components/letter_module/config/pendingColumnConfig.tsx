@@ -1,19 +1,18 @@
-import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Circle } from "lucide-react";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import StatusBadge from "../StatusBadge";
 import {
+	LetterColumnDefType,
 	LetterTableColumns,
-	LetterType,
 	ParticipantType,
 	RoleEnum,
 	columnTranslation,
 	letterTypeTranslations,
 } from "@/types/letter_module";
 
-export const pendingTableColumns: ColumnDef<LetterType>[] = [
+export const pendingTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
