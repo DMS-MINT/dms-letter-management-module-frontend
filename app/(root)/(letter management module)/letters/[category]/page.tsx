@@ -2,91 +2,87 @@
 
 import { Subheader, Drawer, Main } from "@/components/layouts";
 import { DataTable } from "@/components/shared/tableComponents";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { getLetters, selectLetters } from "@/lib/features/letter/letterSlice";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getLetters } from "@/actions/letter_module/crudActions";
+import { toast } from "sonner";
+import { LetterColumnDefType } from "@/types/letter_module";
+import {
+	draftTableColumns,
+	inboxTableColumns,
+	outboxTableColumns,
+	pendingTableColumns,
+	publishedTableColumns,
+	trashTableColumns,
+} from "@/components/letter_module/config";
 import { useParams } from "next/navigation";
 import {
-  pendingTableColumns,
-  draftTableColumns,
-  inboxTableColumns,
-  outboxTableColumns,
-  publishedTableColumns,
-  trashTableColumns,
-} from "@/components/features/letter/config";
-import { useEffect, useState } from "react";
-import { ILetterListInputSerializer } from "@/typing/interface";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-  LetterNavigationDrawer,
-  TableControlPanel,
-} from "@/components/features/letter";
+	LetterSkeleton,
+	LetterNavigationDrawer,
+	TableControlPanel,
+} from "@/components/letter_module";
+
+const getColumnConfig = (category: string): LetterColumnDefType => {
+	switch (category) {
+		case "inbox":
+			return inboxTableColumns;
+		case "outbox":
+			return outboxTableColumns;
+		case "draft":
+			return draftTableColumns;
+		case "trash":
+			return trashTableColumns;
+		case "pending":
+			return pendingTableColumns;
+		case "published":
+			return publishedTableColumns;
+		default:
+			return [];
+	}
+};
 
 export default function Table() {
-  const letters: ILetterListInputSerializer[] = useAppSelector(selectLetters);
-  const params = useParams();
-  const [columns, setColumns] = useState<
-    ColumnDef<ILetterListInputSerializer>[]
-  >([]);
-  const dispatch = useAppDispatch();
+	const params = useParams();
+	const [columns, setColumns] = useState<LetterColumnDefType>([]);
 
-  useEffect(() => {
-    switch (params.category) {
-      case "inbox":
-        setColumns(inboxTableColumns);
-        dispatch(getLetters("inbox"));
-        break;
-      case "outbox":
-        setColumns(outboxTableColumns);
-        dispatch(getLetters("outbox"));
-        break;
-      case "draft":
-        setColumns(draftTableColumns);
-        dispatch(getLetters("draft"));
-        break;
-      case "trash":
-        setColumns(trashTableColumns);
-        dispatch(getLetters("trash"));
-        break;
-      case "pending":
-        setColumns(pendingTableColumns);
-        dispatch(getLetters("pending"));
-        break;
-      case "published":
-        setColumns(publishedTableColumns);
-        dispatch(getLetters("published"));
-        break;
-      default:
-        break;
-    }
-  }, [params]);
+	const { isSuccess, data: letters } = useQuery({
+		queryKey: ["getLetters", params.category],
+		queryFn: async () => {
+			try {
+				toast.dismiss();
+				toast.loading("ደብዳቤዎችን በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
 
-  const removeDuplicates = (letters: ILetterListInputSerializer[]) => {
-    if (!letters) {
-      return [];
-    }
+				const category = params.category as string;
+				const data = await getLetters(category);
 
-    const uniqueLetters = letters.reduce<{
-      [key: string]: ILetterListInputSerializer;
-    }>((acc, letter) => {
-      acc[letter.id] = letter;
-      return acc;
-    }, {});
-    return Object.values(uniqueLetters);
-  };
+				const columnConfig = getColumnConfig(category);
+				setColumns(columnConfig);
 
-  return (
-    <>
-      <Subheader>
-        <TableControlPanel />
-      </Subheader>
-      <section className="flex flex-1 pb-3 px-8 gap-6 mt-2">
-        <Drawer>
-          <LetterNavigationDrawer />
-        </Drawer>
-        <Main>
-          <DataTable columns={columns} data={removeDuplicates(letters)} />
-        </Main>
-      </section>
-    </>
-  );
+				toast.dismiss();
+
+				return data.letters;
+			} catch (error: any) {
+				toast.dismiss();
+				toast.error(error.message);
+			}
+		},
+	});
+
+	return isSuccess && letters ? (
+		<>
+			<Subheader>
+				<TableControlPanel />
+			</Subheader>
+			<section className="flex flex-1 pb-3 px-5 gap-3 mt-2">
+				<Drawer>
+					<LetterNavigationDrawer />
+				</Drawer>
+				<Main>
+					<DataTable columns={columns} data={letters} />
+				</Main>
+			</section>
+		</>
+	) : (
+		<LetterSkeleton />
+	);
 }

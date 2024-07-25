@@ -4,33 +4,39 @@ import "@/app/globals.css";
 import { StoreProvider } from "@/app/StoreProvider";
 import { TopBar } from "@/components/layouts";
 import { Toaster } from "sonner";
-import { RequireAuth } from "@/components/utils";
+import { RequireAuth } from "@/components/shared";
+import Providers from "@/providers/Providers";
 
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Letter Management System",
-  description: "Efficiently manage and organize your letters.",
+	title: "የደብዳቤ አስተዳደር ሞጁል",
+	description: "Efficiently manage and organize your letters.",
+	icons: {
+		icon: "/icons/favicon.ico",
+	},
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <StoreProvider>
-      <html lang="am">
-        <body className={noto_serif_ethiopic.className}>
-          <RequireAuth>
-            <div className="absolute">
-              <Toaster richColors position="top-center" />
-            </div>
-            <TopBar />
-            {children}
-          </RequireAuth>
-        </body>
-      </html>
-    </StoreProvider>
-  );
+	return (
+		<StoreProvider>
+			<html lang="am">
+				<body className={noto_serif_ethiopic.className}>
+					<Providers>
+						<RequireAuth>
+							<div className="absolute">
+								<Toaster richColors position="top-center" />
+							</div>
+							<TopBar />
+							{children}
+						</RequireAuth>
+					</Providers>
+				</body>
+			</html>
+		</StoreProvider>
+	);
 }

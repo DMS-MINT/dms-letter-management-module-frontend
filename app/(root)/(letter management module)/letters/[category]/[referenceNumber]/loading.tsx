@@ -1,5 +1,5 @@
-import { LetterDetailSkeleton } from "@/components/shared";
+import { LetterSkeleton } from "@/components/letter_module";
 
-export default function Loading() {
-  return <LetterDetailSkeleton />;
+export default function loading() {
+	return <LetterSkeleton />;
 }

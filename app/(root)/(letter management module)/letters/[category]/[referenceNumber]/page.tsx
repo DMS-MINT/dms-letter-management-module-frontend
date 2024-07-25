@@ -1,248 +1,59 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useEffect, useState, useMemo, Suspense } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import {
-  getLetterDetails,
-  selectLetterDetails,
-  selectStatus,
-  updateSubject,
-} from "@/lib/features/letter/letterSlice";
-import { getDefaultValue } from "@/utils";
-import { ContactType } from "@/typing/interface";
-import { ParticipantRolesEnum, RequestStatusEnum } from "@/typing/enum";
-import { selectContacts } from "@/lib/features/contact/contactSlice";
-import {
-  FileUploadButton,
-  LetterDetailSkeleton,
-  SelectableInput,
-} from "@/components/shared";
-import { useParams } from "next/navigation";
-import { RichTextEditor } from "@/components/shared/Editor";
-import {
-  selectIsReadonly,
-  toggleDrawerVisibility,
-} from "@/lib/features/ui/uiManagerSlice";
+import { Subheader, Drawer } from "@/components/layouts";
 import { ActivityFeed } from "@/components/shared";
-import { useRouter } from "next/navigation";
-import { useWebSocket } from "@/hooks";
-
-interface IFormConfig {
-  label: string;
-  name: ParticipantRolesEnum;
-  isCreatable: boolean;
-  isMulti: boolean;
-  placeholder: string;
-  defaultValue?: ContactType[];
-}
-
-const internalLetterFormConfig: IFormConfig[] = [
-  {
-    label: "ከ",
-    name: ParticipantRolesEnum.AUTHOR,
-    isCreatable: false,
-    isMulti: false,
-    placeholder: "ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "ለ",
-    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
-    isCreatable: false,
-    isMulti: true,
-    placeholder: "ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "ግልባጭ",
-    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
-    isCreatable: false,
-    isMulti: true,
-    placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "እንዲያዉቁት",
-    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
-    isCreatable: false,
-    isMulti: true,
-    placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
-  },
-];
-
-const incomingLetterFormConfig: IFormConfig[] = [
-  {
-    label: "ከ",
-    name: ParticipantRolesEnum.AUTHOR,
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "የደብዳቤውን ላኪ ያስገቡ...",
-  },
-  {
-    label: "ለ",
-    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "ግልባጭ",
-    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "እንዲያዉቁት",
-    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
-  },
-];
-
-const outgoingLetterFormConfig: IFormConfig[] = [
-  {
-    label: "ከ",
-    name: ParticipantRolesEnum.AUTHOR,
-    isCreatable: false,
-    isMulti: false,
-    placeholder: "ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "ለ",
-    name: ParticipantRolesEnum["PRIMARY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "ግልባጭ",
-    name: ParticipantRolesEnum["CARBON COPY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "የካርቦን ቅጂ ተቀባዮችን ያስገቡ...",
-  },
-  {
-    label: "እንዲያዉቁት",
-    name: ParticipantRolesEnum["BLIND CARBON COPY RECIPIENT"],
-    isCreatable: true,
-    isMulti: true,
-    placeholder: "እንዲያዉቁት የሚገባቸው ተቀባዮችን ያስገቡ...",
-  },
-];
+import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
+import { getLetterDetails } from "@/actions/letter_module/crudActions";
+import { LetterDetailResponseType } from "@/types/letter_module";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import {
+	DetailControlPanel,
+	LetterDetailsDrawer,
+	LetterSkeleton,
+} from "@/components/letter_module";
 
 export default function LetterDetail() {
-  const dispatch = useAppDispatch();
-  const letterDetails = useAppSelector(selectLetterDetails);
-  const status = useAppSelector(selectStatus);
-  const isReadonly = useAppSelector(selectIsReadonly);
-  const contacts = useAppSelector(selectContacts);
-  const [formConfig, setFormConfig] = useState<IFormConfig[]>([]);
-  const params = useParams();
-  const router = useRouter();
-  useWebSocket(params.referenceNumber as string);
+	const { referenceNumber } = useParams();
 
-  useEffect(() => {
-    if (status === RequestStatusEnum.FAILED) {
-      router.push("/letters/inbox/");
-    }
-  }, [status]);
+	const { data, isLoading, isSuccess, isError } = useQuery({
+		queryKey: ["getLetterDetails", referenceNumber],
+		queryFn: async () => {
+			try {
+				toast.dismiss();
+				toast.loading("የደብዳቤዉን ዝርዝር መረጃ በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
+				const data: LetterDetailResponseType = await getLetterDetails(
+					referenceNumber as string
+				);
+				toast.dismiss();
+				return data;
+			} catch (error: any) {
+				toast.dismiss();
+				toast.error(error.message);
+			}
+		},
+		enabled: !!referenceNumber,
+	});
 
-  useEffect(() => {
-    dispatch(toggleDrawerVisibility(true));
-  }, []);
-
-  useEffect(() => {
-    if (params.referenceNumber) {
-      dispatch(getLetterDetails(params.referenceNumber as string));
-    }
-  }, [params, dispatch]);
-
-  useEffect(() => {
-    switch (letterDetails?.letter_type) {
-      case "incoming":
-        setFormConfig(incomingLetterFormConfig);
-        break;
-      case "outgoing":
-        setFormConfig(outgoingLetterFormConfig);
-        break;
-      default:
-        setFormConfig(internalLetterFormConfig);
-        break;
-    }
-  }, [letterDetails.letter_type]);
-
-  const filteredOptions = useMemo(() => {
-    return contacts.filter((contact) => {
-      return !letterDetails.participants.some(
-        (participant) => participant.user.id === contact.id
-      );
-    });
-  }, [contacts, letterDetails.participants]);
-
-  return status === RequestStatusEnum.LOADING ? (
-    <LetterDetailSkeleton />
-  ) : status === RequestStatusEnum.FULFILLED ? (
-    <section className="grid gap-5 h-fit pb-5 flex-1">
-      <section className="card">
-        <h2 className="font-semibold text-lg">የ ደብዳቤው ተሳታፊወች</h2>
-        <section className="p-2 flex gap-2 flex-col">
-          {formConfig.map(({ label, ...rest }) => (
-            <div key={label} className="flex items-center gap-1.5">
-              <Label className="w-20">{label}</Label>
-              <SelectableInput
-                defaultValue={getDefaultValue(
-                  letterDetails.participants,
-                  rest.name
-                )}
-                options={filteredOptions}
-                {...rest}
-              />
-            </div>
-          ))}
-        </section>
-      </section>
-      <section className="card">
-        <section className="flex flex-col gap-5">
-          <h2 className="font-semibold text-lg">ስለ ደብዳቤው መረጃ</h2>
-          <div className="grid  gap-5">
-            <div className="grid grid-cols-1 gap-5">
-              <div className="grid items-center gap-1.5">
-                <Label htmlFor="ጉዳዩ">ጉዳዩ</Label>
-                <Input
-                  readOnly={isReadonly}
-                  type="text"
-                  id="ጉዳዩ"
-                  value={letterDetails.subject ? letterDetails.subject : ""}
-                  onChange={(e) => dispatch(updateSubject(e.target.value))}
-                />
-              </div>
-              {letterDetails?.letter_type === "incoming" && !isReadonly ? (
-                <FileUploadButton />
-              ) : null}
-              {/* <div className="grid items-center gap-1.5">
-                <Label htmlFor="የገጾች ብዛት">የገጾች ብዛት</Label>
-                <Input readOnly type="text" id="የገጾች ብዛት" value="1" />
-              </div> */}
-            </div>
-          </div>
-          {
-            letterDetails.letter_type !== "incoming" ? (
-              <section className="flex flex-col gap-1.5">
-                <Label htmlFor="ጉዳዩ">ደብዳቤ</Label>
-
-                <RichTextEditor />
-                {!isReadonly ? <FileUploadButton /> : null}
-              </section>
-            ) : null
-            // <section className="flex flex-col gap-1.5">
-            //   <Label htmlFor="ጉዳዩ">የተያያዘ ፋይል</Label>
-            //   <p>Attachment Will be displayed here</p>
-            // </section>
-          }
-        </section>
-      </section>
-      <ActivityFeed />
-    </section>
-  ) : null;
+	return isSuccess && data ? (
+		<main className="flex flex-col h-full">
+			<Subheader>
+				<DetailControlPanel data={data} />
+			</Subheader>
+			<section className="flex px-5 gap-6 mt-2 flex-1">
+				<Drawer>
+					<LetterDetailsDrawer letter={data.letter} />
+				</Drawer>
+				<section className="flex-1 pb-5">
+					<section className="mb-5 flex-1 flex flex-col bg-gray-100">
+						{true ? <OutgoingLetterTemplate /> : null}
+					</section>
+					<ActivityFeed letter={data.letter} />
+				</section>
+			</section>
+		</main>
+	) : (
+		<LetterSkeleton />
+	);
 }
