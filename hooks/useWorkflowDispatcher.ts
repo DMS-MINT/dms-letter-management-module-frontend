@@ -1,56 +1,100 @@
 import {
+	moveToTrash,
+	permanentlyDelete,
+	restoreFromTrash,
+} from "@/actions/letter_module/crudActions";
+import {
 	closeLetter,
 	publishLetter,
 	rejectLetter,
 	reopenLetter,
 	retractLetter,
-	shareLetter,
 	submitLetter,
 } from "@/actions/letter_module/workflowActions";
-import { ShareLetterRequestType } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-type ParamType = {
-	reference_number: string;
-	participants?: ShareLetterRequestType;
+export type ActionType =
+	| "close_letter"
+	| "publish_letter"
+	| "reject_letter"
+	| "permanently_delete"
+	| "reopen_letter"
+	| "retract_letter"
+	| "restore_letter"
+	| "trash_letter"
+	| "submit_letter";
+
+export type ParamsType = {
+	referenceNumber: string;
+	otp?: number;
 };
 
 export type PropType = {
-	actionType: string;
-	params: ParamType;
+	actionType: ActionType;
+	params: ParamsType;
 };
 
 const actionDispatcher = async ({ actionType, params }: PropType) => {
 	switch (actionType) {
-		case "share_letter":
-			return await shareLetter(params.reference_number, params.participants!);
-		case "submit_letter":
-			return await submitLetter(params.reference_number);
-		case "publish_letter":
-			return await publishLetter(params.reference_number);
-		case "reject_letter":
-			return await rejectLetter(params.reference_number);
-		case "retract_letter":
-			return await retractLetter(params.reference_number);
 		case "close_letter":
-			return await closeLetter(params.reference_number);
+			return await closeLetter(params.referenceNumber);
+		case "publish_letter":
+			return await publishLetter({
+				referenceNumber: params.referenceNumber,
+				otp: params.otp,
+			});
+		case "reject_letter":
+			return await rejectLetter({
+				referenceNumber: params.referenceNumber,
+				otp: params.otp,
+			});
+		case "permanently_delete":
+			return await permanentlyDelete({
+				referenceNumber: params.referenceNumber,
+				otp: params.otp,
+			});
 		case "reopen_letter":
-			return await reopenLetter(params.reference_number);
+			return await reopenLetter(params.referenceNumber);
+		case "retract_letter":
+			return await retractLetter({
+				referenceNumber: params.referenceNumber,
+				otp: params.otp,
+			});
+		case "restore_letter":
+			return await restoreFromTrash(params.referenceNumber);
+		case "submit_letter":
+			return await submitLetter({
+				referenceNumber: params.referenceNumber,
+			});
+		case "trash_letter":
+			return await moveToTrash(params.referenceNumber);
 		default:
 			throw new Error("Invalid action type");
 	}
 };
 
 export default function useWorkflowDispatcher() {
-	const { mutate } = useMutation({
+	const { mutate, isPending, isSuccess } = useMutation({
 		mutationKey: ["letter-workflow"],
 		mutationFn: actionDispatcher,
-		onMutate: () => {},
-		onSuccess: () => {},
-		onError: () => {},
+		onMutate: () => {
+			toast.dismiss();
+			toast.loading("ጥያቄዎን በማስተናገድ ላይ፣ እባክዎን ይጠብቁ...");
+		},
+		onSuccess: (data) => {
+			toast.dismiss();
+			toast.success(data);
+		},
+		onError: (error: any) => {
+			toast.dismiss();
+			toast.error(error.message);
+		},
 	});
 
 	return {
 		mutate,
+		isPending,
+		isSuccess,
 	};
 }
