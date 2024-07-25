@@ -2,6 +2,7 @@ export enum ErrorCodeEnum {
 	// Client errors
 	BAD_REQUEST = "BAD_REQUEST", // 400
 	FORBIDDEN = "FORBIDDEN", // 403
+	VALIDATION_ERROR = "VALIDATION_ERROR", // 403
 
 	// Server errors
 	BAD_RESPONSE = "BAD_RESPONSE", // 500
