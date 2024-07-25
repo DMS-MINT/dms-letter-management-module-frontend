@@ -9,7 +9,9 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: { children: ReactNode }) {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<ReactQueryDevtools initialIsOpen={false} />
+			{process.env.NEXT_PUBLIC_ENABLE_REACT_QUERY_DEV_TOOLS === "true" ? (
+				<ReactQueryDevtools initialIsOpen={false} />
+			) : null}
 			{children}
 		</QueryClientProvider>
 	);
