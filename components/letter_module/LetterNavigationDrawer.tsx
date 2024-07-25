@@ -61,13 +61,13 @@ export default function LetterNavigationDrawer() {
 			},
 			{
 				name: "መጽደቅን በመጠባበቅ ላይ",
-				icon: <BookDashed size={ICON_SIZE} color={"#FF5733"} />,
+				icon: <></>,
 				path: "/letters/pending",
 				isVisible: myProfile.is_staff,
 			},
 			{
 				name: "የታተሙ ደብዳቤዎች",
-				icon: <BookCheck size={ICON_SIZE} color={"#50C878"} />,
+				icon: <></>,
 				path: "/letters/published",
 				isVisible: myProfile.is_staff,
 			},
