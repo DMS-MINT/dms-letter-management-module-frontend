@@ -1,13 +1,13 @@
 import {
-	LetterDetailResponseType,
+	PermissionsResponseType,
 	PermissionsType,
 } from "@/types/letter_module";
 
 export default function generateUserPermissions(
-	data: LetterDetailResponseType
+	permissions: PermissionsResponseType[]
 ): PermissionsType {
 	const currentUserPerms =
-		data.permissions.find((perms) => perms.is_current_user)?.permissions || [];
+		permissions.find((perms) => perms.is_current_user)?.permissions || [];
 
 	const newPerms: PermissionsType = {
 		can_view_letter: false,
@@ -17,7 +17,7 @@ export default function generateUserPermissions(
 		can_share_letter: false,
 		can_trash_letter: false,
 		can_restore_letter: false,
-		can_remove_from_trash_letter: false,
+		can_permanently_delete_letter: false,
 		can_retract_letter: false,
 		can_archive_letter: false,
 		can_close_letter: false,
