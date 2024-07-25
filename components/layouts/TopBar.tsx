@@ -9,11 +9,11 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { letterCategoryLookup } from "@/typing/dictionary";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { UserProfileMenu } from "../user_module";
 import { IMAGES } from "@/constants";
+import { letterCategoryTranslations } from "@/types/letter_module";
 
 export default function TopBar() {
 	const params = useParams();
@@ -37,7 +37,7 @@ export default function TopBar() {
 								<BreadcrumbSeparator />
 								<BreadcrumbItem>
 									<BreadcrumbLink href={`/letters/${params.category}`}>
-										{letterCategoryLookup[params.category.toString().toUpperCase()]}
+										{letterCategoryTranslations[params.category.toString().toUpperCase()]}
 									</BreadcrumbLink>
 								</BreadcrumbItem>
 								<BreadcrumbSeparator />
