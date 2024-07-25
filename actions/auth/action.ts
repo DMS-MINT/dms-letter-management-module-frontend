@@ -3,8 +3,8 @@
 import axiosInstance from "@/actions/axiosInstance";
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
-import { handleAxiosError } from "@/utils";
-import getErrorMessage from "./getErrorMessage";
+import { authErrorMessages } from "./errorMessages";
+import getErrorMessage from "../getErrorMessage";
 
 const SESSION_NAME = "DMS";
 
@@ -54,9 +54,9 @@ export async function signIn(credentials: ICredentials) {
 			secure: false,
 		});
 
-		return "Welcome back! You have successfully logged in.";
+		return "እንኳን ደህና መጡ! በተሳካ ሁኔታ ገብተዋል።";
 	} catch (error: any) {
-		throw getErrorMessage(error);
+		throw getErrorMessage(authErrorMessages, error);
 	}
 }
 
@@ -66,8 +66,7 @@ export async function signOut() {
 
 		cookies().set(SESSION_NAME, "", { expires: new Date(0) });
 	} catch (error: any) {
-		const errorMessage = handleAxiosError(error);
-		throw errorMessage;
+		throw getErrorMessage(authErrorMessages, error);
 	}
 }
 
@@ -77,7 +76,7 @@ export async function get_user() {
 		const data = await response.data;
 		return data.data;
 	} catch (error: any) {
-		handleAxiosError(error);
+		throw getErrorMessage(authErrorMessages, error);
 	}
 }
 
@@ -86,7 +85,7 @@ export async function requestQRCode() {
 		const response = await axiosInstance.post("auth/qr-code/");
 		return response.data.qr_code_image;
 	} catch (error: any) {
-		throw error;
+		throw getErrorMessage(authErrorMessages, error);
 	}
 }
 
@@ -95,9 +94,6 @@ export async function validateOneTimePassword(otp: number) {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
 		return response.data;
 	} catch (error: any) {
-		if (error.response && error.response.status === 400) {
-			throw "የተሳሳተ የማረጋገጫ ኮድ፣ እባክዎ እንደገና ይሞክሩ።";
-		}
-		throw error;
+		throw getErrorMessage(authErrorMessages, error);
 	}
 }
