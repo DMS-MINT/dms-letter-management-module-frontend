@@ -3,11 +3,14 @@
 import { Subheader, Drawer, Main } from "@/components/layouts";
 import { DataTable } from "@/components/shared/tableComponents";
 import { useState } from "react";
-import { ColumnDef } from "@tanstack/react-table";
 import { useQuery } from "@tanstack/react-query";
 import { getLetters } from "@/actions/letter_module/crudActions";
 import { toast } from "sonner";
-import { LetterType } from "@/types/letter_module";
+import {
+	LetterColumnDefType,
+	LetterType,
+	ParticipantType,
+} from "@/types/letter_module";
 import {
 	draftTableColumns,
 	inboxTableColumns,
@@ -23,7 +26,7 @@ import {
 	TableControlPanel,
 } from "@/components/letter_module";
 
-const getColumnConfig = (category: string): ColumnDef<LetterType>[] => {
+const getColumnConfig = (category: string): LetterColumnDefType => {
 	switch (category) {
 		case "inbox":
 			return inboxTableColumns;
@@ -44,18 +47,23 @@ const getColumnConfig = (category: string): ColumnDef<LetterType>[] => {
 
 export default function Table() {
 	const params = useParams();
-	const [columns, setColumns] = useState<ColumnDef<LetterType>[]>([]);
+	const [columns, setColumns] = useState<LetterColumnDefType>([]);
+
 	const { isSuccess, data: letters } = useQuery({
 		queryKey: ["getLetters", params.category],
 		queryFn: async () => {
 			try {
 				toast.dismiss();
 				toast.loading("ደብዳቤዎችን በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
+
 				const category = params.category as string;
 				const data = await getLetters(category);
+
 				const columnConfig = getColumnConfig(category);
 				setColumns(columnConfig);
+
 				toast.dismiss();
+
 				return data.letters;
 			} catch (error: any) {
 				toast.dismiss();
@@ -64,7 +72,7 @@ export default function Table() {
 		},
 	});
 
-	return isSuccess ? (
+	return isSuccess && letters ? (
 		<>
 			<Subheader>
 				<TableControlPanel />
