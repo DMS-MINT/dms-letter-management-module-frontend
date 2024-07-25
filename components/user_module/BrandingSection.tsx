@@ -8,8 +8,8 @@ export default function BrandingSection() {
 				<Image
 					src={IMAGES.mint}
 					alt="Ministry of Innovation and Technology logo"
-					width={60}
-					height={60}
+					width={80}
+					height={80}
 				/>
 
 				<h2 className="text-white font-medium text-xl mt-5 mb-2">

@@ -6,11 +6,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getLetters } from "@/actions/letter_module/crudActions";
 import { toast } from "sonner";
-import {
-	LetterColumnDefType,
-	LetterType,
-	ParticipantType,
-} from "@/types/letter_module";
+import { LetterColumnDefType } from "@/types/letter_module";
 import {
 	draftTableColumns,
 	inboxTableColumns,

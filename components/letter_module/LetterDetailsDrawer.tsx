@@ -1,23 +1,12 @@
-/** @format */
-
 "use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-	selectLetterDetails,
-	selectStatus,
-} from "@/lib/features/letter/letterSlice";
-import { useAppSelector } from "@/lib/hooks";
-import { letterTypeLookup } from "@/typing/dictionary";
-import { RequestStatusEnum } from "@/typing/enum";
 import { Mail, MessageSquareText, FileDigit, X, Paperclip } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import {
-	LetterDetailResponseType,
 	LetterDetailType,
 	letterTypeTranslations,
 } from "@/types/letter_module";

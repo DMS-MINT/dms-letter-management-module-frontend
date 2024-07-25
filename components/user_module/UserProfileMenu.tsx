@@ -38,7 +38,7 @@ export default function UserProfileMenu() {
 		mutationFn: signOut,
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("Logging out, please wait...");
+			toast.loading("እርስዎን በማስወጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: () => {
 			router.push("/signin");

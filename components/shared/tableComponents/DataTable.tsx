@@ -25,9 +25,11 @@ import { Input } from "@/components/ui/input";
 import TablePagination from "./TablePagination";
 import ViewOptions from "./ViewOptions";
 import { useRouter, usePathname } from "next/navigation";
-import { LetterTableColumnEnum } from "@/typing/enum";
-import { LetterColumnDefType, LetterType } from "@/types/letter_module";
-
+import {
+	LetterColumnDefType,
+	LetterTableColumns,
+	LetterType,
+} from "@/types/letter_module";
 interface DataTableProps {
 	columns: LetterColumnDefType;
 	data: LetterType[];
@@ -67,12 +69,12 @@ function DataTable({ columns, data }: DataTableProps) {
 				<Input
 					value={
 						(table
-							.getColumn(LetterTableColumnEnum.REFERENCE_NUMBER)
+							.getColumn(LetterTableColumns.REFERENCE_NUMBER)
 							?.getFilterValue() as string) ?? ""
 					}
 					onChange={(event) =>
 						table
-							.getColumn(LetterTableColumnEnum.REFERENCE_NUMBER)
+							.getColumn(LetterTableColumns.REFERENCE_NUMBER)
 							?.setFilterValue(event.target.value)
 					}
 					placeholder="የደብዳቤ ቁጥር"
