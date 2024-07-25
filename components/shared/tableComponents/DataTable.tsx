@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import {
-	ColumnDef,
 	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
@@ -27,16 +26,14 @@ import TablePagination from "./TablePagination";
 import ViewOptions from "./ViewOptions";
 import { useRouter, usePathname } from "next/navigation";
 import { LetterTableColumnEnum } from "@/typing/enum";
+import { LetterColumnDefType, LetterType } from "@/types/letter_module";
 
-interface DataTableProps<TData, TValue> {
-	columns: ColumnDef<TData, TValue>[];
-	data: TData[];
+interface DataTableProps {
+	columns: LetterColumnDefType;
+	data: LetterType[];
 }
 
-export default function DataTable<TData, TValue>({
-	columns,
-	data,
-}: DataTableProps<TData, TValue>) {
+function DataTable({ columns, data }: DataTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -63,6 +60,7 @@ export default function DataTable<TData, TValue>({
 			rowSelection,
 		},
 	});
+
 	return (
 		<div className="flex flex-col justify-between w-full h-full">
 			<div className="flex flex-wrap items-center  grid-cols-3 gap-4 mb-2">
@@ -133,3 +131,5 @@ export default function DataTable<TData, TValue>({
 		</div>
 	);
 }
+
+export default memo(DataTable);
