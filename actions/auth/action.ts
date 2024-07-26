@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { authErrorMessages } from "./errorMessages";
 import getErrorMessage from "../getErrorMessage";
+import { workflowErrorMessages } from "../letter_module/errorMessages";
 
 const SESSION_NAME = "DMS";
 
@@ -86,7 +87,7 @@ export async function requestQRCode() {
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
-		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
@@ -96,6 +97,6 @@ export async function validateOneTimePassword(otp: number) {
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
-		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
