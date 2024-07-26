@@ -3,9 +3,6 @@ export type MemberType = {
 	full_name: string;
 	job_title: string;
 	user_type: "member";
-	user_id: string;
-	permissions: string[];
-	is_current_user: boolean;
 };
 
 export type GuestType = {
