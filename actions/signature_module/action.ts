@@ -1,17 +1,17 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
+import { authErrorMessages } from "../auth/errorMessages";
+import getErrorMessage from "../getErrorMessage";
 
 export async function getDefaultSignature(otp: number) {
 	try {
 		const response = await axiosInstance.post("signatures/retrieve-signature/", {
 			otp,
 		});
-		return response.data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		if (error.response && error.response.status === 400) {
-			throw "የተሳሳተ የማረጋገጫ ኮድ፣ እባክዎ እንደገና ይሞክሩ።";
-		}
-		throw error.message;
+		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
 	}
 }

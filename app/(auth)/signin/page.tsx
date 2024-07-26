@@ -41,14 +41,20 @@ export default function SignIn() {
 	});
 	const { mutate, isSuccess, isPending } = useMutation({
 		mutationKey: ["signIn"],
-		mutationFn: signIn,
+		mutationFn: async (values: z.infer<typeof formSchema>) => {
+			const response = await signIn(values);
+
+			if (!response.ok) throw response;
+
+			return response;
+		},
 		onMutate: () => {
 			toast.dismiss();
 			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎ ይጠብቁ...");
 		},
-		onSuccess: (message: string) => {
+		onSuccess: (data) => {
 			toast.dismiss();
-			toast.success(message);
+			toast.success(data.message);
 			router.push("/letters/inbox");
 		},
 		onError: (error: any) => {

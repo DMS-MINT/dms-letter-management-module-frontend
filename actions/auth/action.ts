@@ -54,9 +54,9 @@ export async function signIn(credentials: ICredentials) {
 			secure: false,
 		});
 
-		return "እንኳን ደህና መጡ! በተሳካ ሁኔታ ገብተዋል።";
+		return { ok: true, message: "እንኳን ደህና መጡ! በተሳካ ሁኔታ ገብተዋል።" };
 	} catch (error: any) {
-		throw getErrorMessage(authErrorMessages, error);
+		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
 	}
 }
 
@@ -83,17 +83,19 @@ export async function get_user() {
 export async function requestQRCode() {
 	try {
 		const response = await axiosInstance.post("auth/qr-code/");
-		return response.data.qr_code_image;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(authErrorMessages, error);
+		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
 	}
 }
 
 export async function validateOneTimePassword(otp: number) {
 	try {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
-		return response.data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(authErrorMessages, error);
+		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
 	}
 }
