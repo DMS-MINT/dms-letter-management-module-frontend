@@ -23,13 +23,13 @@ export default function LetterDetail() {
 			try {
 				toast.dismiss();
 				toast.loading("የደብዳቤዉን ዝርዝር መረጃ በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
-				const data: LetterDetailResponseType = await getLetterDetails(
-					referenceNumber as string
-				);
+				const response = await getLetterDetails(referenceNumber as string);
+
 				toast.dismiss();
-				return data;
+				if (!response.ok) throw response;
+
+				return response.message as LetterDetailResponseType;
 			} catch (error: any) {
-				toast.dismiss();
 				toast.error(error.message);
 			}
 		},

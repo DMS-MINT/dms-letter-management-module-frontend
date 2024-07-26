@@ -53,14 +53,18 @@ export default function Table() {
 				toast.loading("ደብዳቤዎችን በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
 
 				const category = params.category as string;
-				const data = await getLetters(category);
+				const response = await getLetters(category);
 
 				const columnConfig = getColumnConfig(category);
 				setColumns(columnConfig);
 
 				toast.dismiss();
 
-				return data.letters;
+				if (!response.ok) throw response;
+
+				console.log(response.message);
+
+				return response.message.letters;
 			} catch (error: any) {
 				toast.dismiss();
 				toast.error(error.message);

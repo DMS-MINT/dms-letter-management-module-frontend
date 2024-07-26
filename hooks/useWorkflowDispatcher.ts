@@ -77,14 +77,20 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 export default function useWorkflowDispatcher() {
 	const { mutate, isPending, isSuccess } = useMutation({
 		mutationKey: ["letter-workflow"],
-		mutationFn: actionDispatcher,
+		mutationFn: async (action: PropType) => {
+			const response = await actionDispatcher(action);
+
+			if (!response.ok) throw response;
+
+			return response;
+		},
 		onMutate: () => {
 			toast.dismiss();
 			toast.loading("ጥያቄዎን በማስተናገድ ላይ፣ እባክዎን ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
-			toast.success(data);
+			toast.success(data.message);
 		},
 		onError: (error: any) => {
 			toast.dismiss();

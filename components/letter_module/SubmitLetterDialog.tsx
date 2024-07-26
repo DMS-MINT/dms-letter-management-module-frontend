@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { LINKS } from "@/constants";
 import { getDefaultSignature } from "@/actions/signature_module/action";
-import { useEffect } from "react";
 import { useOTP, useWorkflowDispatcher } from "@/hooks";
 import { OTPInputForm } from "../shared";
 import { LetterDetailType } from "@/types/letter_module";
@@ -31,7 +30,13 @@ export default function SubmitLetterDialog({
 
 	const getDefaultSignatureMutation = useMutation({
 		mutationKey: ["getDefaultSignature"],
-		mutationFn: getDefaultSignature,
+		mutationFn: async (otp: number) => {
+			const response = await getDefaultSignature(otp);
+
+			if (!response.ok) throw response;
+
+			return response.message;
+		},
 		onMutate: () => {
 			toast.dismiss();
 			toast.loading("የእርስዎን የማረጋገጫ ኮድ በማረጋገጥ ላይ። እባክዎ ይጠብቁ...");

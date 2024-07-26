@@ -59,8 +59,14 @@ export default function TwoFactorSetupDialog() {
 
 	const { mutate: requestQRCodeMutate, data: qrCodeImage } = useMutation({
 		mutationKey: ["requestQRCode"],
-		mutationFn: () => requestQRCode(),
-		onError: (error) => {
+		mutationFn: async () => {
+			const response = await requestQRCode();
+
+			if (!response.ok) throw response;
+
+			return response.message.qr_code_image;
+		},
+		onError: (error: any) => {
 			toast.dismiss();
 			toast.error(error.message);
 		},
@@ -68,7 +74,13 @@ export default function TwoFactorSetupDialog() {
 
 	const { mutate: validateOTPMutate, isPending } = useMutation({
 		mutationKey: ["validateOneTimePassword"],
-		mutationFn: (otp: number) => validateOneTimePassword(otp),
+		mutationFn: async (otp: number) => {
+			const response = await validateOneTimePassword(otp);
+
+			if (!response.ok) throw response;
+
+			return response.message;
+		},
 		onMutate: () => {
 			toast.dismiss();
 			toast.loading("የእርስዎን የማረጋገጫ ኮድ በማረጋገጥ ላይ። እባክዎ ይጠብቁ...");
@@ -78,7 +90,7 @@ export default function TwoFactorSetupDialog() {
 			toast.success("በተሳካ ሁኔታ የሁለት ደረጃ ማረጋገጫን አዘጋጅተዋል።");
 			setIsDialogOpen(false);
 		},
-		onError: (error) => {
+		onError: (error: any) => {
 			toast.dismiss();
 			toast.error(error.message);
 		},
