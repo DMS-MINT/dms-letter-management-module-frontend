@@ -4,6 +4,7 @@ import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
 import { curdErrorMessages } from "./errorMessages";
 import getErrorMessage from "../getErrorMessage";
+import { NewLetterType } from "@/types/letter_module";
 
 export async function getLetters(category: string) {
 	try {
@@ -25,15 +26,11 @@ export async function getLetterDetails(referenceNumber: string) {
 	}
 }
 
-export async function createLetter(letter: FormData) {
+export async function createLetter(letter: NewLetterType) {
 	try {
-		const response = await axiosInstance.post("letters/create/", letter, {
-			headers: {
-				"Content-Type": "multipart/form-data",
-			},
-		});
+		const response = await axiosInstance.post("letters/create/", letter);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: response.data.letter };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
