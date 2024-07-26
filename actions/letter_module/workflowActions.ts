@@ -15,10 +15,10 @@ export async function shareLetter(
 			`letters/${referenceNumber}/share/`,
 			participants
 		);
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: response.data.message };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
@@ -29,9 +29,10 @@ export async function submitLetter({
 }) {
 	try {
 		await axiosInstance.put(`letters/${referenceNumber}/submit/`);
-		return "ደብዳቤው በተሳካ ሁኔታ ወደ መዝገብ ቤት ገብቷል።";
+
+		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መዝገብ ቤት ገብቷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
@@ -41,10 +42,10 @@ export async function publishLetter({ referenceNumber, otp }: ParamsType) {
 			`letters/${referenceNumber}/publish/`,
 			{ otp }
 		);
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: response.data.message };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
@@ -54,29 +55,30 @@ export async function rejectLetter({ referenceNumber, otp }: ParamsType) {
 			`letters/${referenceNumber}/reject/`,
 			{ otp }
 		);
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: response.data.message };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
 export async function retractLetter({ referenceNumber, otp }: ParamsType) {
 	try {
 		await axiosInstance.put(`letters/${referenceNumber}/retract/`, { otp });
-		return "ደብዳቤ በተሳካ ሁኔታ አሁን ካለበት ሁኔታ ተነስቷል።";
+
+		return { ok: true, message: "ደብዳቤ በተሳካ ሁኔታ አሁን ካለበት ሁኔታ ተነስቷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 
 export async function closeLetter(referenceNumber: string) {
 	try {
 		const response = await axiosInstance.put(`letters/${referenceNumber}/close/`);
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: response.data.message };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
 export async function reopenLetter(referenceNumber: string) {
@@ -84,9 +86,9 @@ export async function reopenLetter(referenceNumber: string) {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/reopen/`
 		);
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: response.data.message };
 	} catch (error: any) {
-		throw getErrorMessage(workflowErrorMessages, error);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
