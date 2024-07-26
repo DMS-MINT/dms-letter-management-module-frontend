@@ -8,18 +8,20 @@ import getErrorMessage from "../getErrorMessage";
 export async function getLetters(category: string) {
 	try {
 		const response = await axiosInstance.get(`letters/?category=${category}`);
-		return response.data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
 export async function getLetterDetails(referenceNumber: string) {
 	try {
 		const response = await axiosInstance.get(`letters/${referenceNumber}/`);
-		return response.data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
@@ -30,10 +32,10 @@ export async function createLetter(letter: FormData) {
 				"Content-Type": "multipart/form-data",
 			},
 		});
-		const data = await response.data;
-		return data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
@@ -48,10 +50,10 @@ export async function createAndSubmitLetter(letter: FormData) {
 				},
 			}
 		);
-		const data = await response.data;
-		return data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
@@ -66,10 +68,10 @@ export async function createAndPublishLetter(letter: FormData) {
 				},
 			}
 		);
-		const data = await response.data;
-		return data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
@@ -84,10 +86,10 @@ export async function updateLetter(referenceNumber: string, letter: FormData) {
 				},
 			}
 		);
-		const data = await response.data;
-		return data;
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
 }
 
