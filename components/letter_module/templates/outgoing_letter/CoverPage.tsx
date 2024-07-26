@@ -1,20 +1,29 @@
 "use client";
 
 import { Download, LaptopMinimal, Mail, Phone } from "lucide-react";
-import { useState } from "react";
 import { IMAGES } from "@/constants";
+import { Editor, SelectableInputGroup } from "@/components/shared";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import {
+	LetterDetailType,
+	NewLetterType,
+	ParticipantType,
+	RoleEnum,
+	SignatureType,
+} from "@/types/letter_module";
+import {
+	handleSubjectChange,
+	selectNewLetter,
+} from "@/lib/features/letterSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { convertToEthiopianDate } from "@/utils";
+
 const ICON_SIZE: number = 14;
 
-export default function CoverPage() {
-	const [participants, setParticipants] = useState<{
-		primary: number;
-		cc: number;
-		bcc: number;
-	}>({
-		primary: 1,
-		cc: 1,
-		bcc: 1,
-	});
+export default function CoverPage({ letter }: { letter: LetterDetailType }) {
+	const { subject } = useAppSelector(selectNewLetter);
+	const dispatch = useAppDispatch();
 
 	return (
 		<div className=" bg-white px-16 py-14 w-[797px] h-[280mm] border border-gray-300">
@@ -54,7 +63,7 @@ export default function CoverPage() {
 							<p className="text-sm  text-gray-600">ቁጥር (ref.no)</p>
 						</div>
 						<div className="flex flex-col w-32 font-mono">
-							<p>DOC-2024-0001</p>
+							<p>{letter?.reference_number || ""}</p>
 							<hr className="border-b-1 border-black" />
 						</div>
 					</div>
@@ -63,92 +72,49 @@ export default function CoverPage() {
 							<p className="text-sm  text-gray-600">ቀን (Date)</p>
 						</div>
 						<div className="flex flex-col w-32 font-mono  ">
-							<p>ሐምሌ 7 /2016 </p>
+							<p>
+								{letter?.created_at ? convertToEthiopianDate(letter.created_at) : ""}
+							</p>
 							<hr />
 						</div>
 					</div>
 				</div>
 
 				<div className="flex flex-col gap-1 pt-2 font-serif ">
-					{Array.from({ length: participants.primary }).map((_, index) => (
-						<div key={index} className="flex gap-2">
-							<p className="text-lg text-black">ለ</p>
-							<input type="text" className="border border-black" />
-							{index === participants.primary - 1 ? (
-								<button
-									onClick={() =>
-										setParticipants((prevParticipants) => ({
-											...prevParticipants,
-											primary: prevParticipants.primary + 1,
-										}))
-									}
-								>
-									Add
-								</button>
-							) : (
-								<button
-									onClick={() =>
-										setParticipants((prevParticipants) => ({
-											...prevParticipants,
-											primary: prevParticipants.primary - 1,
-										}))
-									}
-								>
-									Remove
-								</button>
-							)}
-						</div>
-					))}
+					<SelectableInputGroup groupName={RoleEnum["PRIMARY RECIPIENT"]} />
 					<p className="text-lg text-black underline">አዲስ አበባ</p>
 				</div>
 
-				<p className="text-lg text-black text-center ">
-					ጉዳዩ:- <input type="text" className="border border-black" />
-				</p>
-
-				<div className="flex flex-col font-serif flex-1 overflow-hidden my-1">
-					<textarea name="" id="" className="h-full"></textarea>
+				<div className="flex gap-2 items-center self-center">
+					<Label>ጉዳዩ:-</Label>
+					<Input
+						type="text"
+						value={letter?.subject ? letter.subject : subject}
+						onChange={(e) => dispatch(handleSubjectChange(e.target.value))}
+					/>
 				</div>
 
-				<div className="w-64 h-24 ml-auto flex justify-center items-center gap-1 flex-col bg-yellow-300">
-					ፈርም
-					<Download />
+				<div className="flex flex-col font-serif flex-1 overflow-hidden my-1">
+					<Editor />
+				</div>
+
+				<div className="w-64 h-24 ml-auto flex justify-center items-center gap-1 flex-col">
+					{letter?.e_signature
+						? letter.e_signature.map((signature: SignatureType) => (
+								<img
+									key={signature.id}
+									src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${signature.e_signature}`}
+									alt="Your Signature"
+								/>
+						  ))
+						: null}
 				</div>
 
 				<div className="pb-3 font-serif">
 					<p>ግልባጭ:-</p>
 					<ul className="pl-5">
 						<div className="flex flex-col gap-1 pt-1 font-serif ">
-							{Array.from({ length: participants.cc }).map((_, index) => (
-								<div key={index} className="flex gap-2">
-									<p className="text-lg text-black">ለ</p>
-									<input type="text" className="border border-black" />
-									{index === participants.cc - 1 ? (
-										<button
-											onClick={() =>
-												setParticipants((prevParticipants) => ({
-													...prevParticipants,
-													cc: prevParticipants.cc + 1,
-												}))
-											}
-										>
-											Add
-										</button>
-									) : (
-										<button
-											onClick={() =>
-												setParticipants((prevParticipants) => ({
-													...prevParticipants,
-													cc: prevParticipants.cc - 1,
-												}))
-											}
-										>
-											Remove
-										</button>
-									)}
-								</div>
-							))}
-
+							<SelectableInputGroup groupName={RoleEnum["CARBON COPY RECIPIENT"]} />
 							<p className="underline">ኢ.ቴ.ሚ</p>
 						</div>
 					</ul>
