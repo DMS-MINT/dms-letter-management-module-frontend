@@ -7,6 +7,8 @@ export const workflowErrorMessages: ErrorMessageType = {
 		"ቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
 	[ErrorCodeEnum.INVALID_OTP]:
 		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
+	[ErrorCodeEnum.VALIDATION_ERROR]:
+		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
 	[ErrorCodeEnum.EMPTY_CONTENT]: "የደብዳቤው ይዘት ባዶ ሊሆን አይችልም።",
 	[ErrorCodeEnum.MISSING_ATTACHMENT]: "ደብዳቤው ቢያንስ አንድ አባሪ ሊኖረው ይገባል።",
 	[ErrorCodeEnum.UNSIGNED_LETTER]: "ደብዳቤው ከመቀጠልዎ በፊት መፈረም አለበት።",

@@ -47,7 +47,7 @@ export default function LetterDetail() {
 				</Drawer>
 				<section className="flex-1 pb-5">
 					<section className="mb-5 flex-1 flex flex-col bg-gray-100">
-						{true ? <OutgoingLetterTemplate /> : null}
+						{true ? <OutgoingLetterTemplate letter={data.letter} /> : null}
 					</section>
 					<ActivityFeed letter={data.letter} />
 				</section>
