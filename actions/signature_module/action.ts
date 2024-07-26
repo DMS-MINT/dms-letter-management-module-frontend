@@ -1,8 +1,8 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import { authErrorMessages } from "../auth/errorMessages";
 import getErrorMessage from "../getErrorMessage";
+import { workflowErrorMessages } from "../letter_module/errorMessages";
 
 export async function getDefaultSignature(otp: number) {
 	try {
@@ -12,6 +12,6 @@ export async function getDefaultSignature(otp: number) {
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
-		return { ok: false, message: getErrorMessage(authErrorMessages, error) };
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
