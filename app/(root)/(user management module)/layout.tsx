@@ -25,16 +25,16 @@ export default function RootLayout({
 		<StoreProvider>
 			<html lang="am">
 				<body className={noto_serif_ethiopic.className}>
-					<RequireAuth>
-						<Providers>
+					<Providers>
+						<RequireAuth>
 							<ToastContainer />
-							{/* <div className="absolute">
+							<div className="absolute">
 								<Toaster richColors position="top-center" />
-							</div> */}
+							</div>
 							<TopBar />
 							{children}
-						</Providers>
-					</RequireAuth>
+						</RequireAuth>
+					</Providers>
 				</body>
 			</html>
 		</StoreProvider>
