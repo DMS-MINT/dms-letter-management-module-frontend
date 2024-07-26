@@ -3,6 +3,12 @@ import { AttachmentType, CommentType } from "../shared";
 import { ParticipantType } from "./ParticipantType";
 import { ColumnDef } from "@tanstack/react-table";
 
+export type SignatureType = {
+	id: string;
+	user: MemberType;
+	e_signature: string;
+};
+
 export type LetterType = {
 	id: string;
 	reference_number: string;
@@ -38,4 +44,5 @@ export type LetterDetailType = {
 	participants: ParticipantType[];
 	comments: CommentType[];
 	attachments: AttachmentType[];
+	e_signature: SignatureType[];
 };
