@@ -31,7 +31,8 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 					<Image
 						src={IMAGES.pentagram}
 						alt="Ethiopian flag pentagon star symbol"
-						className="h-20 w-20"
+						width={80}
+						height={80}
 					/>
 					<div className="flex w-full flex-col items-center font-serif">
 						<h2 className="text-center text-lg font-bold text-gray-800">
@@ -50,7 +51,8 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 					<Image
 						src={IMAGES.mint}
 						alt="Ministry of Innovation and Technology logo"
-						className="h-20 w-28"
+						width={112}
+						height={80}
 					/>
 				</header>
 
@@ -104,7 +106,8 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 									key={signature.id}
 									src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${signature.e_signature}`}
 									alt="Your Signature"
-									className="ml-auto aspect-square w-20"
+									width={80}
+									height={80}
 								/>
 							))
 						: null}
@@ -152,7 +155,9 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 						<Image
 							src={IMAGES.qr_code}
 							alt="QR code"
-							className="ml-auto aspect-square w-20"
+							className="ml-auto aspect-square"
+							width={80}
+							height={80}
 						/>
 					</div>
 				</footer>

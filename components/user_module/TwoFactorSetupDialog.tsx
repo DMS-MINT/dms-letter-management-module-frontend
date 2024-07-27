@@ -125,8 +125,8 @@ export default function TwoFactorSetupDialog() {
 						<DialogDescription>
 							የQR ኮድን ለመቃኘት የ
 							<Link
-								href={LINKS.google_authenticator}
 								className="text-blue-800"
+								href={LINKS.google_authenticator}
 								target="_blank"
 							>
 								{" Google Authenticator "}
@@ -137,9 +137,11 @@ export default function TwoFactorSetupDialog() {
 					<div className="flex justify-center">
 						{qrCodeImage ? (
 							<Image
+								className="bg-white"
 								src={`data:image/png;base64,${qrCodeImage}`}
 								alt="QR code for two-factor authentication setup"
-								className="w-60 bg-white"
+								width={240}
+								height={240}
 							/>
 						) : (
 							<div className="flex aspect-square w-60 items-center justify-center">
