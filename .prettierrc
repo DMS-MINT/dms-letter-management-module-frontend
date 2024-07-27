@@ -4,8 +4,6 @@
 	"tabWidth": 1,
 	"semi": true,
 	"singleQuote": false,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.formatOnSave": true,
 	"plugins": ["prettier-plugin-tailwindcss"],
 	"tailwindFunctions": ["clsx"],
 	"tailwindPreserveWhitespace": true
