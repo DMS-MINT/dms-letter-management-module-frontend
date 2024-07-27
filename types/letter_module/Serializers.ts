@@ -12,7 +12,7 @@ export type LetterDetailResponseType = {
 	permissions: Array<PermissionsResponseType>;
 };
 
-export type NewLetterType = {
+export type DraftLetterType = {
 	subject: string;
 	content: string;
 	letter_type: "internal" | "outgoing" | "incoming";
