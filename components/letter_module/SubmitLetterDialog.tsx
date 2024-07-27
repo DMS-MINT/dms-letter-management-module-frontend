@@ -92,7 +92,7 @@ export default function SubmitLetterDialog({
 				</DialogHeader>
 				<div className="px-2">
 					{getDefaultSignatureMutation.isSuccess ? (
-						<div className="flex justify-center h-60">
+						<div className="flex h-60 justify-center">
 							<img
 								src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${getDefaultSignatureMutation.data.e_signature}`}
 								alt="Your Signature"

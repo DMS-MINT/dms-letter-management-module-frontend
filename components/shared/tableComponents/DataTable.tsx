@@ -64,8 +64,8 @@ function DataTable({ columns, data }: DataTableProps) {
 	});
 
 	return (
-		<div className="flex flex-col justify-between w-full h-full">
-			<div className="flex flex-wrap items-center  grid-cols-3 gap-4 mb-2">
+		<div className="flex h-full w-full flex-col justify-between">
+			<div className="mb-2 flex grid-cols-3  flex-wrap items-center gap-4">
 				<Input
 					value={
 						(table
@@ -78,12 +78,12 @@ function DataTable({ columns, data }: DataTableProps) {
 							?.setFilterValue(event.target.value)
 					}
 					placeholder="የደብዳቤ ቁጥር"
-					className="max-w-sm py-0 h-9 mr-auto"
+					className="mr-auto h-9 max-w-sm py-0"
 				/>
 				<ViewOptions table={table} />
 			</div>
 
-			<div className="rounded-md border my-3 h-full">
+			<div className="my-3 h-full rounded-md border">
 				<Table className="h-full">
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (

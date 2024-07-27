@@ -42,12 +42,12 @@ export default function ComposeControlPanel() {
 	};
 
 	return (
-		<section className="flex items-center justify-between w-full sticky top-0">
+		<section className="sticky top-0 flex w-full items-center justify-between">
 			<div className="flex gap-2">
 				<h1 className="page-title">አዲስ ደብዳቤ </h1>
 			</div>
 			<Button
-				className="mr-0 RECIPIENTborder-gray-300 rounded-md"
+				className="RECIPIENTborder-gray-300 mr-0 rounded-md"
 				variant="outline"
 				onClick={onSubmit}
 			>

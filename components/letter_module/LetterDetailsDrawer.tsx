@@ -49,7 +49,7 @@ export default function LetterDetailsDrawer({
 							{icon}
 							<p className="text-gray-600">{label}</p>
 						</div>
-						<Badge className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal mb-2">
+						<Badge className="mb-2 h-10 rounded-sm bg-gray-200 text-base font-normal text-gray-900">
 							{value}
 						</Badge>
 					</Fragment>
@@ -61,7 +61,7 @@ export default function LetterDetailsDrawer({
 				{letter.attachments.map((attachment, index) => (
 					<Badge
 						key={attachment.id}
-						className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal"
+						className="h-10 rounded-sm bg-gray-200 text-base font-normal text-gray-900"
 					>
 						<Link
 							key={uuidv4()}
@@ -75,7 +75,7 @@ export default function LetterDetailsDrawer({
 							size="icon"
 							variant="ghost"
 							type="button"
-							className="p-0 hover:bg-transparent ml-auto"
+							className="ml-auto p-0 hover:bg-transparent"
 						>
 							{/* <X size={20} /> */}
 						</Button>
@@ -83,7 +83,7 @@ export default function LetterDetailsDrawer({
 				))}
 			</div>
 			<div className="flex flex-col gap-5">
-				<a className="flex items-center gap-2 w-fit" href="#comment_section">
+				<a className="flex w-fit items-center gap-2" href="#comment_section">
 					<MessageSquareText size={20} className="text-gray-600" />
 					<p className="text-gray-600">{letter.comments?.length || 0}</p>
 				</a>

@@ -40,7 +40,7 @@ export default function Editor() {
 	const percentage = editorEditable
 		? Math.round(
 				(100 / limit) * editorEditable.storage.characterCount.characters()
-		  )
+			)
 		: 0;
 
 	return (

@@ -29,14 +29,14 @@ export default function StatusBadge({
 	return (
 		<div
 			className={clsx(
-				"rounded-md w-fit flex items-center justify-between ml-2 px-2 py-1",
+				"ml-2 flex w-fit items-center justify-between rounded-md px-2 py-1",
 				{
-					"bg-blue-600 text-blue-200 gap-1": current_state === "Draft",
-					"bg-yellow-600 text-yellow-200 gap-1": current_state === "Submitted",
-					"bg-green-600 text-green-200 gap-1": current_state === "Published",
-					"bg-gray-600 text-gray-200 gap-1": current_state === "Closed",
-					"bg-red-600 text-red-200 gap-1": current_state === "Rejected",
-					"bg-red-500 text-red-200 gap-1": current_state === "Trashed",
+					"gap-1 bg-blue-600 text-blue-200": current_state === "Draft",
+					"gap-1 bg-yellow-600 text-yellow-200": current_state === "Submitted",
+					"gap-1 bg-green-600 text-green-200": current_state === "Published",
+					"gap-1 bg-gray-600 text-gray-200": current_state === "Closed",
+					"gap-1 bg-red-600 text-red-200": current_state === "Rejected",
+					"gap-1 bg-red-500 text-red-200": current_state === "Trashed",
 				}
 			)}
 		>

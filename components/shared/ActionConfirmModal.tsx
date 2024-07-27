@@ -92,7 +92,7 @@ function ActionConfirmModal(
 					{triggerButtonText}
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="flex flex-col bg-white p-4 rounded-md shadow-lg">
+			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>

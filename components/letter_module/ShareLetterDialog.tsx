@@ -170,7 +170,7 @@ export default function ShareLetterDialog({
 			<DialogTrigger asChild>
 				<Button variant={"outline"}>ደብዳቤውን አጋራ</Button>
 			</DialogTrigger>
-			<DialogContent className="min-w-[45rem] max-w-[45rem] max-h-[40rem] flex flex-col">
+			<DialogContent className="flex max-h-[40rem] min-w-[45rem] max-w-[45rem] flex-col">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>የደብዳቤ መምሪያ</DialogTitle>
 
@@ -205,13 +205,13 @@ export default function ShareLetterDialog({
 							</Select>
 						) : null}
 					</div>
-					<div className="flex flex-col gap-2 mt-4">
+					<div className="mt-4 flex flex-col gap-2">
 						{formData.to.length === 0 ? (
 							<div className="flex flex-col gap-2">
 								<h4 className="font-semibold">ደብዳቤው ያላቸው ሰዎች</h4>
 
 								<div className="flex items-center gap-3">
-									<Avatar className="w-11 h-11">
+									<Avatar className="h-11 w-11">
 										<AvatarFallback>
 											{letter.owner?.full_name.substring(0, 2)}
 										</AvatarFallback>
@@ -232,7 +232,7 @@ export default function ShareLetterDialog({
 											const { full_name, job_title } = user;
 											return (
 												<div key={id} className="flex items-center gap-3">
-													<Avatar className="w-11 h-11">
+													<Avatar className="h-11 w-11">
 														<AvatarFallback>{full_name.substring(0, 2)}</AvatarFallback>
 													</Avatar>
 													<p>{`${full_name} - ${job_title}`}</p>

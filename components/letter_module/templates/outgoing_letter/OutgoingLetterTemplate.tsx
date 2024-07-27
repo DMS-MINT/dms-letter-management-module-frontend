@@ -15,8 +15,8 @@ export default function OutgoingLetterTemplate({
 	const [pageCount, setPageCount] = useState(0);
 
 	return (
-		<section className="py-2 flex flex-col items-center gap-5">
-			<CoverPage letter={letter}/>
+		<section className="flex flex-col items-center gap-5 py-2">
+			<CoverPage letter={letter} />
 
 			{Array.from({ length: pageCount }).map((_, index) => (
 				<SubsequentPage />

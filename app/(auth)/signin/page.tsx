@@ -68,14 +68,14 @@ export default function SignIn() {
 	}
 
 	return !isSuccess ? (
-		<main className="grid grid-cols-2 h-full">
+		<main className="grid h-full grid-cols-2">
 			<BrandingSection />
-			<section className="flex flex-col gap-7 px-24 h-full justify-center">
+			<section className="flex h-full flex-col justify-center gap-7 px-24">
 				<div>
-					<h2 className="text-gray-900 font-medium text-xl mt-5 mb-2">
+					<h2 className="mb-2 mt-5 text-xl font-medium text-gray-900">
 						እንኳን ደህና መጡ!
 					</h2>
-					<p className="text-gray-700 font-light text-sm">
+					<p className="text-sm font-light text-gray-700">
 						እባክዎ ለመግባት የተጠቃሚ መለያዎን እና የይለፍ ቃልዎን ያስገቡ።
 					</p>
 				</div>
@@ -103,7 +103,7 @@ export default function SignIn() {
 									<FormLabel className="flex justify-between">
 										የይለፍ ቃልዎን ያስገቡ
 										<Link href="/forgot-password" tabIndex={4}>
-											<Button type="button" variant="link" className="py-0 h-fit">
+											<Button type="button" variant="link" className="h-fit py-0">
 												የይለፍ ቃልዎን ረስተዋል?
 											</Button>
 										</Link>
@@ -135,7 +135,7 @@ export default function SignIn() {
 							disabled={isPending || !form.formState.isValid}
 							type="submit"
 							variant="secondary"
-							className="flex gap-2 items-center w-full"
+							className="flex w-full items-center gap-2"
 							tabIndex={3}
 						>
 							<LogIn size={20} />
@@ -144,9 +144,9 @@ export default function SignIn() {
 					</form>
 				</Form>
 
-				<div className="flex gap-2 items-center self-center">
+				<div className="flex items-center gap-2 self-center">
 					<p className="text-gray-800">የቴክኒክ ድጋፍ ለማግኘት </p>
-					<Button variant="link" className="p-0 h-fit text-base">
+					<Button variant="link" className="h-fit p-0 text-base">
 						እኛን ያነጋግሩን
 					</Button>
 				</div>

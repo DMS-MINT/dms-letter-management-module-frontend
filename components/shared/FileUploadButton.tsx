@@ -54,12 +54,12 @@ export default function FileUploadButton() {
 	return (
 		<div
 			className="
-    flex gap-3 items-end"
+    flex items-end gap-3"
 		>
 			<Button
 				type="button"
 				variant="outline"
-				className="flex gap-2 w-fit mt-4"
+				className="mt-4 flex w-fit gap-2"
 				onClick={handleButtonClick}
 			>
 				<Plus size={19} />
@@ -71,7 +71,7 @@ export default function FileUploadButton() {
 				style={{ display: "none" }}
 				onChange={handleFileChange}
 			/>
-			<div className="flex gap-5 flex-wrap">
+			<div className="flex flex-wrap gap-5">
 				{/* {attachments.map((attachment, index) => (
           <Badge
             className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal cursor-pointer"

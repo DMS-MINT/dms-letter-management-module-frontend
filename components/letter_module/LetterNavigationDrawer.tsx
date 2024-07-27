@@ -75,14 +75,14 @@ export default function LetterNavigationDrawer() {
 	}, [myProfile]);
 
 	return (
-		<nav className="flex flex-col gap-2 w-full">
+		<nav className="flex w-full flex-col gap-2">
 			{routes
 				.filter((route) => route.isVisible === true)
 				.map(({ name, icon, path }) => (
 					<Link key={uuidv4()} href={path}>
 						<Button
 							className={clsx(
-								"bg-transparent flex gap-2 text-gray-900 w-full hover:bg-gray-200 justify-start px-2",
+								"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",
 								{ "bg-gray-200": path === pathname }
 							)}
 						>

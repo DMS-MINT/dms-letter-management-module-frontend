@@ -25,14 +25,14 @@ function SelectableInputGroup({
 	return (
 		<div key={groupName} className="flex flex-col">
 			{Array.from({ length: inputCount }).map((_, index) => (
-				<div key={index} className="flex gap-2 items-center">
+				<div key={index} className="flex items-center gap-2">
 					{showLabel ? <Label>{labelText}</Label> : null}
 					<SelectableInput name={groupName} />
 					{index > 0 ? (
 						<Button
 							size="icon"
 							variant="outline"
-							className="w-fit h-fit"
+							className="h-fit w-fit"
 							onClick={removeInput}
 						>
 							<X size={25} />
@@ -41,7 +41,7 @@ function SelectableInputGroup({
 					<Button
 						size="icon"
 						variant="outline"
-						className="w-fit h-fit"
+						className="h-fit w-fit"
 						onClick={addInput}
 					>
 						<Plus size={25} />

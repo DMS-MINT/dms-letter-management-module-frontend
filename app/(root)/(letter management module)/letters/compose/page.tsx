@@ -15,11 +15,11 @@ export default function Compose() {
 			<Subheader>
 				<ComposeControlPanel />
 			</Subheader>
-			<section className="flex px-8 gap-6 h-fit">
+			<section className="flex h-fit gap-6 px-8">
 				<Drawer>
 					<LetterComposeDrawer />
 				</Drawer>
-				<main className="mb-0 flex-1 flex flex-col bg-gray-100">
+				<main className="mb-0 flex flex-1 flex-col bg-gray-100">
 					{true ? <OutgoingLetterTemplate letter={letter} /> : null}
 				</main>
 			</section>

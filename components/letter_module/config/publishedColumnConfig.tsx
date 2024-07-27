@@ -42,7 +42,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 				<Circle
 					size={13}
 					className={
-						has_read ? "bg-primary rounded-full text-transparent" : "text-gray-400"
+						has_read ? "rounded-full bg-primary text-transparent" : "text-gray-400"
 					}
 				/>
 			);
@@ -137,14 +137,14 @@ export const publishedTableColumns: LetterColumnDefType = [
 			<ColumnHeader
 				column={column}
 				title={columnTranslation[LetterTableColumns.SUBMITTED_AT]}
-				className="w-fit ml-auto"
+				className="ml-auto w-fit"
 			/>
 		),
 
 		cell: ({ row }) => {
 			const submitted_at: string = row.getValue(LetterTableColumns.SUBMITTED_AT);
 			return (
-				<div className="text-right font-medium px-4 py-1">
+				<div className="px-4 py-1 text-right font-medium">
 					{convertToEthiopianDate(submitted_at)}
 				</div>
 			);

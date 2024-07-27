@@ -31,7 +31,7 @@ export default function PermanentlyDeleteDialog({
 			<DialogTrigger asChild>
 				<Button variant={"destructive"}>በቋሚነት ያስወግዱ</Button>
 			</DialogTrigger>
-			<DialogContent className="flex flex-col bg-white p-4 rounded-md shadow-lg">
+			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle className="text-lg font-medium">ደብዳቤውን በቋሚነት አጥፋ</DialogTitle>
 					<DialogDescription>

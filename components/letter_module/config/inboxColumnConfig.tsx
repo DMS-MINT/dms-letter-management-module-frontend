@@ -43,7 +43,7 @@ export const inboxTableColumns: LetterColumnDefType = [
 				<Circle
 					size={13}
 					className={
-						has_read ? "bg-primary rounded-full text-transparent" : "text-gray-400"
+						has_read ? "rounded-full bg-primary text-transparent" : "text-gray-400"
 					}
 				/>
 			);
@@ -133,13 +133,13 @@ export const inboxTableColumns: LetterColumnDefType = [
 			<ColumnHeader
 				column={column}
 				title={columnTranslation[LetterTableColumns.RECEIVED_AT]}
-				className="w-fit ml-auto "
+				className="ml-auto w-fit "
 			/>
 		),
 		cell: ({ row }) => {
 			const received_at: string = row.getValue(LetterTableColumns.RECEIVED_AT);
 			return (
-				<div className="text-right font-medium px-4 py-1 limited-rows">
+				<div className="limited-rows px-4 py-1 text-right font-medium">
 					{convertToEthiopianDate(received_at)}
 				</div>
 			);

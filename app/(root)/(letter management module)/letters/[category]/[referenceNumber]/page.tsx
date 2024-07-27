@@ -37,16 +37,16 @@ export default function LetterDetail() {
 	});
 
 	return isSuccess && data ? (
-		<main className="flex flex-col h-full">
+		<main className="flex h-full flex-col">
 			<Subheader>
 				<DetailControlPanel data={data} />
 			</Subheader>
-			<section className="flex px-5 gap-6 mt-2 flex-1">
+			<section className="mt-2 flex flex-1 gap-6 px-5">
 				<Drawer>
 					<LetterDetailsDrawer letter={data.letter} />
 				</Drawer>
 				<section className="flex-1 pb-5">
-					<section className="mb-5 flex-1 flex flex-col bg-gray-100">
+					<section className="mb-5 flex flex-1 flex-col bg-gray-100">
 						{true ? <OutgoingLetterTemplate letter={data.letter} /> : null}
 					</section>
 					<ActivityFeed letter={data.letter} />

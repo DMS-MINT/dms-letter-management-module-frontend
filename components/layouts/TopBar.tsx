@@ -19,7 +19,7 @@ export default function TopBar() {
 	const params = useParams();
 
 	return (
-		<header className="min-h-14 w-full px-5 bg-white flex justify-between items-center">
+		<header className="flex min-h-14 w-full items-center justify-between bg-white px-5">
 			<button className="flex items-center gap-4 hover:cursor-pointer">
 				<Link href="/letters/compose">
 					<Image
@@ -59,7 +59,7 @@ export default function TopBar() {
 					</BreadcrumbList>
 				</Breadcrumb>
 			</button>
-			<div className="flex gap-4 items-center">
+			<div className="flex items-center gap-4">
 				<UserProfileMenu />
 			</div>
 		</header>

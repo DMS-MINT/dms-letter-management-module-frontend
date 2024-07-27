@@ -138,10 +138,10 @@ export default function TwoFactorSetupDialog() {
 							<img
 								src={`data:image/png;base64,${qrCodeImage}`}
 								alt="QR code for two-factor authentication setup"
-								className="bg-white w-60"
+								className="w-60 bg-white"
 							/>
 						) : (
-							<div className="w-60 aspect-square flex justify-center items-center">
+							<div className="flex aspect-square w-60 items-center justify-center">
 								<Spinner />
 							</div>
 						)}

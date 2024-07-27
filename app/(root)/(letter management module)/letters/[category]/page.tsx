@@ -77,7 +77,7 @@ export default function Table() {
 			<Subheader>
 				<TableControlPanel />
 			</Subheader>
-			<section className="flex flex-1 pb-3 px-5 gap-3 mt-2">
+			<section className="mt-2 flex flex-1 gap-3 px-5 pb-3">
 				<Drawer>
 					<LetterNavigationDrawer />
 				</Drawer>
