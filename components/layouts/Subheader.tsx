@@ -1,27 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	selectIsDrawerOpen,
-	toggleDrawerVisibility,
-} from "@/lib/features/ui/uiManagerSlice";
-import { useAppDispatch, useAppSelector } from "@/hooks";
 import { Menu } from "lucide-react";
+import { useUiStore } from "@/stores";
 
 export default function Subheader({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
-	const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
-	const dispatch = useAppDispatch();
+	const toggleDrawerVisibility = useUiStore(
+		(store) => store.toggleDrawerVisibility
+	);
 
 	return (
-		<section className="flex items-center py-2 px-5 bg-gray-50">
-			<Button
-				variant="ghost"
-				size="icon"
-				onClick={() => dispatch(toggleDrawerVisibility(!isDrawerOpen))}
-			>
-				<Menu className="w-6 h-6" />
+		<section className="flex items-center bg-gray-50 px-5 py-2">
+			<Button variant="ghost" size="icon" onClick={toggleDrawerVisibility}>
+				<Menu className="h-6 w-6" />
 			</Button>
 			{children}
 		</section>
