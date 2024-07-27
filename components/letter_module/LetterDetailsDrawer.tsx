@@ -2,19 +2,19 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, MessageSquareText, FileDigit, X, Paperclip } from "lucide-react";
-import { Fragment, useEffect, useState } from "react";
-import Link from "next/link";
-import { v4 as uuidv4 } from "uuid";
 import {
 	LetterDetailType,
 	letterTypeTranslations,
 } from "@/types/letter_module";
+import { FileDigit, Mail, MessageSquareText, Paperclip } from "lucide-react";
+import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface ILetterMetaData {
 	label: string;
 	value: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 }
 
 export default function LetterDetailsDrawer({

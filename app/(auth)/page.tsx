@@ -1,8 +1,9 @@
 "use client";
-import { useEffect } from "react";
-import { redirect } from "next/navigation";
 
-export default function page() {
+import { redirect } from "next/navigation";
+import { useEffect } from "react";
+
+export default function Redirect() {
 	useEffect(() => {
 		redirect("/signin");
 	}, []);

@@ -1,11 +1,11 @@
 "use client";
 
-import CoverPage from "./CoverPage";
-import SubsequentPage from "./SubsequentPage";
 import { Button } from "@/components/ui/button";
-import { LetterDetailType, NewLetterType } from "@/types/letter_module";
+import { LetterDetailType } from "@/types/letter_module";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import CoverPage from "./CoverPage";
+import SubsequentPage from "./SubsequentPage";
 
 export default function OutgoingLetterTemplate({
 	letter,
@@ -19,7 +19,7 @@ export default function OutgoingLetterTemplate({
 			<CoverPage letter={letter} />
 
 			{Array.from({ length: pageCount }).map((_, index) => (
-				<SubsequentPage />
+				<SubsequentPage key={index} />
 			))}
 			<Button
 				variant={"outline"}

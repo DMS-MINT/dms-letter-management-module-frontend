@@ -24,7 +24,7 @@ type OTPInputFormProps = {
 		any,
 		undefined
 	>;
-	onChange: (value: string) => void;
+	onChange: (_value: string) => void;
 };
 
 function OTPInputForm({ form, onChange }: OTPInputFormProps) {

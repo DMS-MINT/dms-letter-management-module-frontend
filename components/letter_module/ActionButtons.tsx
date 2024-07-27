@@ -1,27 +1,26 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { generateUserPermissions } from "@/utils";
-import React, { memo, useMemo, useRef } from "react";
-import { LetterDetailResponseType } from "@/types/letter_module";
-import { useWorkflowDispatcher } from "@/hooks";
 import {
-	PermanentlyDeleteDialog,
 	ShareLetterDialog,
 	SubmitLetterDialog,
 } from "@/components/letter_module";
+import { Button } from "@/components/ui/button";
+import type { ActionType } from "@/hooks";
+import { useWorkflowDispatcher } from "@/hooks";
+import { LetterDetailResponseType } from "@/types/letter_module";
+import { generateUserPermissions } from "@/utils";
 import { Trash } from "lucide-react";
+import React, { memo, useCallback, useMemo, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import type { ActionType, PropType } from "@/hooks";
 import { ActionConfirmModal } from "../shared";
 import { ActionConfirmModalRef } from "../shared/ActionConfirmModal";
 
 export type ButtonConfigType = {
 	id: string;
 	isVisible: boolean;
-	component?: JSX.Element;
+	component?: React.JSX.Element;
 	label?: string | null;
-	icon?: JSX.Element;
+	icon?: React.JSX.Element;
 	variant?: "default" | "destructive" | "outline" | "third";
 	size?: "default" | "icon";
 	style?: string;
@@ -36,12 +35,15 @@ function ActionButtons({
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
 
-	const handleAction = (actionType: ActionType, otp?: number) => {
-		mutate({
-			actionType,
-			params: { referenceNumber: letter.reference_number, otp: otp },
-		});
-	};
+	const handleAction = useCallback(
+		(actionType: ActionType, otp?: number) => {
+			mutate({
+				actionType,
+				params: { referenceNumber: letter.reference_number, otp },
+			});
+		},
+		[mutate, letter.reference_number]
+	);
 
 	const buttonConfigs: ButtonConfigType[] = useMemo(() => {
 		const currentUserPerms = generateUserPermissions(permissions);
@@ -176,7 +178,7 @@ function ActionButtons({
 				action: () => handleAction("reopen_letter"),
 			},
 		];
-	}, [letter, permissions]);
+	}, [letter, permissions, handleAction]);
 
 	return (
 		<>

@@ -1,12 +1,12 @@
 "use client";
 
-import { Subheader, Drawer, Main } from "@/components/layouts";
-import { DataTable } from "@/components/shared/tableComponents";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { getLetters } from "@/actions/letter_module/crudActions";
-import { toast } from "sonner";
-import { LetterColumnDefType } from "@/types/letter_module";
+import { Drawer, Main, Subheader } from "@/components/layouts";
+import {
+	LetterNavigationDrawer,
+	LetterSkeleton,
+	TableControlPanel,
+} from "@/components/letter_module";
 import {
 	draftTableColumns,
 	inboxTableColumns,
@@ -15,12 +15,12 @@ import {
 	publishedTableColumns,
 	trashTableColumns,
 } from "@/components/letter_module/config";
+import { DataTable } from "@/components/shared/tableComponents";
+import { LetterColumnDefType } from "@/types/letter_module";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import {
-	LetterSkeleton,
-	LetterNavigationDrawer,
-	TableControlPanel,
-} from "@/components/letter_module";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const getColumnConfig = (category: string): LetterColumnDefType => {
 	switch (category) {

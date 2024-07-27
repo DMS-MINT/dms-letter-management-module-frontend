@@ -5,7 +5,6 @@ export { default as LetterComposeDrawer } from "./LetterComposeDrawer";
 export { default as LetterDetailsDrawer } from "./LetterDetailsDrawer";
 export { default as LetterNavigationDrawer } from "./LetterNavigationDrawer";
 export { default as LetterSkeleton } from "./LetterSkeleton";
-export { default as PermanentlyDeleteDialog } from "./PermanentlyDeleteDialog";
 export { default as PrintControlPanel } from "./PrintControlPanel";
 export { default as ShareLetterDialog } from "./ShareLetterDialog";
 export { default as StatusBadge } from "./StatusBadge";

@@ -1,18 +1,16 @@
 "use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-	DialogFooter,
-	DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import ReactSelect, { ActionMeta } from "react-select";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -21,13 +19,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { v4 as uuidv4 } from "uuid";
+import { Textarea } from "@/components/ui/textarea";
 import {
 	LetterDetailType,
 	RoleEnum,
 	ShareLetterRequestType,
 } from "@/types/letter_module";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type SelectType = {
 	value: string;
@@ -66,7 +65,7 @@ export default function ShareLetterDialog({
 }: {
 	letter: LetterDetailType;
 }) {
-	const [formData, setFormData] = useState<ShareLetterRequestType>({
+	const [formData] = useState<ShareLetterRequestType>({
 		to: [],
 		message: "",
 		permissions: "can_view_letter",

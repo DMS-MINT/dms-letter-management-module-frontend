@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Noto_Serif_Ethiopic } from "next/font/google";
-import "@/app/globals.css";
 import { StoreProvider } from "@/app/StoreProvider";
+import "@/app/globals.css";
 import { TopBar } from "@/components/layouts";
-import { Toaster } from "sonner";
 import { RequireAuth } from "@/components/shared";
 import Providers from "@/providers/Providers";
+import type { Metadata } from "next";
+import { Noto_Serif_Ethiopic } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner";
 
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 

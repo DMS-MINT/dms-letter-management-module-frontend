@@ -1,23 +1,24 @@
 "use client";
 
-import { Subheader, Drawer } from "@/components/layouts";
-import { ActivityFeed } from "@/components/shared";
-import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
 import { getLetterDetails } from "@/actions/letter_module/crudActions";
-import { LetterDetailResponseType } from "@/types/letter_module";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+import { Drawer, Subheader } from "@/components/layouts";
 import {
 	DetailControlPanel,
 	LetterDetailsDrawer,
 	LetterSkeleton,
 } from "@/components/letter_module";
+import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
+import { ActivityFeed } from "@/components/shared";
+import { LetterDetailResponseType } from "@/types/letter_module";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function LetterDetail() {
 	const { referenceNumber } = useParams();
+	const LETTER_TYPE = "outgoing";
 
-	const { data, isLoading, isSuccess, isError } = useQuery({
+	const { data, isSuccess } = useQuery({
 		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
 			try {
@@ -47,7 +48,9 @@ export default function LetterDetail() {
 				</Drawer>
 				<section className="flex-1 pb-5">
 					<section className="mb-5 flex flex-1 flex-col bg-gray-100">
-						{true ? <OutgoingLetterTemplate letter={data.letter} /> : null}
+						{LETTER_TYPE === "outgoing" ? (
+							<OutgoingLetterTemplate letter={data.letter} />
+						) : null}
 					</section>
 					<ActivityFeed letter={data.letter} />
 				</section>

@@ -2,9 +2,9 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
-import { curdErrorMessages } from "./errorMessages";
+import { DraftLetterType } from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
-import { NewLetterType } from "@/types/letter_module";
+import { curdErrorMessages } from "./errorMessages";
 
 export async function getLetters(category: string) {
 	try {
@@ -26,7 +26,7 @@ export async function getLetterDetails(referenceNumber: string) {
 	}
 }
 
-export async function createLetter(letter: NewLetterType) {
+export async function createLetter(letter: DraftLetterType) {
 	try {
 		const response = await axiosInstance.post("letters/create/", letter);
 

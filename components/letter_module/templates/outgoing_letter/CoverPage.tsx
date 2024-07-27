@@ -1,22 +1,22 @@
 "use client";
 
-import { Download, LaptopMinimal, Mail, Phone } from "lucide-react";
-import { IMAGES } from "@/constants";
 import { Editor, SelectableInputGroup } from "@/components/shared";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-	LetterDetailType,
-	ParticipantType,
-	RoleEnum,
-	SignatureType,
-} from "@/types/letter_module";
+import { Label } from "@/components/ui/label";
+import { IMAGES } from "@/constants";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import {
 	handleSubjectChange,
 	selectNewLetter,
 } from "@/lib/features/letterSlice";
-import { useAppDispatch, useAppSelector } from "@/hooks";
+import {
+	LetterDetailType,
+	RoleEnum,
+	SignatureType,
+} from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
+import { LaptopMinimal, Mail, Phone } from "lucide-react";
+import Image from "next/image";
 
 const ICON_SIZE: number = 14;
 
@@ -28,7 +28,7 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 		<div className=" h-[280mm] w-[797px] border border-gray-300 bg-white px-16 py-14">
 			<div className="flex h-full flex-col">
 				<header className="flex items-center justify-between">
-					<img
+					<Image
 						src={IMAGES.pentagram}
 						alt="Ethiopian flag pentagon star symbol"
 						className="h-20 w-20"
@@ -47,7 +47,7 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 							Minister of Innovation and Technology
 						</p>
 					</div>
-					<img
+					<Image
 						src={IMAGES.mint}
 						alt="Ministry of Innovation and Technology logo"
 						className="h-20 w-28"
@@ -100,10 +100,11 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 				<div className="ml-auto flex h-24 w-64 flex-col items-center justify-center gap-1">
 					{letter?.e_signature
 						? letter.e_signature.map((signature: SignatureType) => (
-								<img
+								<Image
 									key={signature.id}
 									src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${signature.e_signature}`}
 									alt="Your Signature"
+									className="ml-auto aspect-square w-20"
 								/>
 							))
 						: null}
@@ -148,7 +149,7 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 						</p>
 					</div>
 					<div className="flex-1">
-						<img
+						<Image
 							src={IMAGES.qr_code}
 							alt="QR code"
 							className="ml-auto aspect-square w-20"

@@ -1,25 +1,18 @@
 "use client";
 
-import Link from "next/link";
-import {
-	BookDashed,
-	FileText,
-	Inbox,
-	Send,
-	BookCheck,
-	Trash,
-} from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
-import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
 import clsx from "clsx";
+import { FileText, Inbox, Send, Trash } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type RouteType = {
 	name: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 	path: string;
 	isVisible: boolean;
 };

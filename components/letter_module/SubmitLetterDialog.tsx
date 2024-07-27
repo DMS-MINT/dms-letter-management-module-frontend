@@ -1,24 +1,25 @@
 "use client";
 
+import { getDefaultSignature } from "@/actions/signature_module/action";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-	DialogFooter,
-	DialogClose,
 } from "@/components/ui/dialog";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import Link from "next/link";
 import { LINKS } from "@/constants";
-import { getDefaultSignature } from "@/actions/signature_module/action";
 import { useOTP, useWorkflowDispatcher } from "@/hooks";
-import { OTPInputForm } from "../shared";
 import { LetterDetailType } from "@/types/letter_module";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { toast } from "sonner";
+import { OTPInputForm } from "../shared";
 
 export default function SubmitLetterDialog({
 	letter,
@@ -26,7 +27,7 @@ export default function SubmitLetterDialog({
 	letter: LetterDetailType;
 }) {
 	const { form, getOTP, handleInputChange } = useOTP();
-	const { mutate, isPending, isSuccess } = useWorkflowDispatcher();
+	const { mutate, isPending } = useWorkflowDispatcher();
 
 	const getDefaultSignatureMutation = useMutation({
 		mutationKey: ["getDefaultSignature"],
@@ -93,7 +94,7 @@ export default function SubmitLetterDialog({
 				<div className="px-2">
 					{getDefaultSignatureMutation.isSuccess ? (
 						<div className="flex h-60 justify-center">
-							<img
+							<Image
 								src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${getDefaultSignatureMutation.data.e_signature}`}
 								alt="Your Signature"
 							/>

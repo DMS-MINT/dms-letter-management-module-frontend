@@ -1,4 +1,5 @@
 "use client";
+
 import type { AppStore } from "@/lib/redux";
 import { makeStore } from "@/lib/redux";
 import { setupListeners } from "@reduxjs/toolkit/query";

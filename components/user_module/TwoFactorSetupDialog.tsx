@@ -9,16 +9,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { useAppSelector } from "@/hooks";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Spinner } from "../shared";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
 	Form,
 	FormControl,
@@ -32,8 +22,19 @@ import {
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Button } from "../ui/button";
 import { LINKS } from "@/constants";
+import { useAppSelector } from "@/hooks";
+import { selectMyProfile } from "@/lib/features/user/userSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Spinner } from "../shared";
+import { Button } from "../ui/button";
 
 const formSchema = z.object({
 	otp: z
@@ -103,7 +104,7 @@ export default function TwoFactorSetupDialog() {
 			setIsDialogOpen(true);
 			requestQRCodeMutate();
 		}
-	}, [myProfile]);
+	}, [myProfile, requestQRCodeMutate]);
 
 	const oneTimePassword = form.watch("otp");
 
@@ -135,7 +136,7 @@ export default function TwoFactorSetupDialog() {
 					</DialogHeader>
 					<div className="flex justify-center">
 						{qrCodeImage ? (
-							<img
+							<Image
 								src={`data:image/png;base64,${qrCodeImage}`}
 								alt="QR code for two-factor authentication setup"
 								className="w-60 bg-white"

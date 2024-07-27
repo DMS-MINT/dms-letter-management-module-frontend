@@ -1,10 +1,11 @@
 "use client";
 
-import { memo, useState } from "react";
-import {
+import type {
 	ColumnFiltersState,
 	SortingState,
 	VisibilityState,
+} from "@tanstack/react-table";
+import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
@@ -12,7 +13,9 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
+import { memo, useState } from "react";
 
+import { Input } from "@/components/ui/input";
 import {
 	Table,
 	TableBody,
@@ -21,15 +24,14 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import TablePagination from "./TablePagination";
-import ViewOptions from "./ViewOptions";
-import { useRouter, usePathname } from "next/navigation";
 import {
 	LetterColumnDefType,
 	LetterTableColumns,
 	LetterType,
 } from "@/types/letter_module";
+import { usePathname, useRouter } from "next/navigation";
+import TablePagination from "./TablePagination";
+import ViewOptions from "./ViewOptions";
 interface DataTableProps {
 	columns: LetterColumnDefType;
 	data: LetterType[];

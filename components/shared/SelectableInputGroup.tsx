@@ -1,10 +1,10 @@
 "use client";
 
+import { Label } from "@radix-ui/react-label";
 import { Plus, X } from "lucide-react";
+import { memo, useState } from "react";
 import { Button } from "../ui/button";
 import SelectableInput from "./SelectableInput";
-import { memo, useState } from "react";
-import { Label } from "@radix-ui/react-label";
 
 interface ISelectableInputGroup {
 	groupName: string;

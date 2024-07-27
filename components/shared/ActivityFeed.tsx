@@ -1,36 +1,33 @@
 "use client";
 
+import type { CreateCommentParams } from "@/actions/shared/action";
+import { create_comment } from "@/actions/shared/action";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-	Dot,
-	MessageSquare,
-	MessageSquareText,
-	Trash,
-	Check,
-	X,
-	Pen,
-} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChangeEvent, useState } from "react";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAppSelector } from "@/hooks";
+import { selectMyProfile } from "@/lib/features/user/userSlice";
 import { LetterDetailType } from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
-import { create_comment } from "@/actions/shared/action";
-import type {
-	CreateCommentParams,
-	UpdateCommentParams,
-} from "@/actions/shared/action";
+import {
+	Check,
+	Dot,
+	MessageSquare,
+	MessageSquareText,
+	Pen,
+	Trash,
+	X,
+} from "lucide-react";
+import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
-import { useAppSelector } from "@/hooks";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
 
 export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 	const myProfile = useAppSelector(selectMyProfile);
@@ -77,6 +74,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 		// );
 	};
 	const dispatchDeleteComment = (id: string) => {
+		console.log(id);
 		// dispatch(deleteComment(id));
 	};
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -9,11 +8,12 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { UserProfileMenu } from "../user_module";
 import { IMAGES } from "@/constants";
 import { letterCategoryTranslations } from "@/types/letter_module";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { UserProfileMenu } from "../user_module";
 
 export default function TopBar() {
 	const params = useParams();

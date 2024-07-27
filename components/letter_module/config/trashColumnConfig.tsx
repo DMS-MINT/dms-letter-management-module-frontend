@@ -1,8 +1,5 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
-import { Circle } from "lucide-react";
-import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
-import StatusBadge from "../StatusBadge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
 	LetterColumnDefType,
 	LetterTableColumns,
@@ -11,6 +8,9 @@ import {
 	columnTranslation,
 	letterTypeTranslations,
 } from "@/types/letter_module";
+import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
+import { Circle } from "lucide-react";
+import StatusBadge from "../StatusBadge";
 
 export const trashTableColumns: LetterColumnDefType = [
 	{

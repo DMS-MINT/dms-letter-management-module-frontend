@@ -1,9 +1,9 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { NewLetterType, ParticipantType } from "@/types/letter_module";
-import { PayloadAction } from "@reduxjs/toolkit";
+import { DraftLetterType, ParticipantType } from "@/types/letter_module";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 type LetterSliceType = {
-	new_letter: NewLetterType;
+	new_letter: DraftLetterType;
 };
 
 const initialState: LetterSliceType = {

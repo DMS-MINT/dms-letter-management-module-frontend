@@ -1,17 +1,15 @@
 "use client";
 
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
-import { Badge } from "@/components/ui/badge";
+import { Plus } from "lucide-react";
+import { useRef } from "react";
 import { toast } from "sonner";
 
 export default function FileUploadButton() {
 	// const attachments = useAppSelector(selectAttachments);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-	const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleButtonClick = () => {
 		fileInputRef.current?.click();
 	};
 
@@ -36,20 +34,20 @@ export default function FileUploadButton() {
 		}
 	};
 
-	const openFileInBrowser = (attachment: File) => {
-		if (attachment.type === "text/plain") {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else if (attachment.type === "application/pdf") {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else if (attachment.type.startsWith("image/")) {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else {
-			console.error(`Unsupported file type: ${attachment.type}`);
-		}
-	};
+	// const openFileInBrowser = (attachment: File) => {
+	// 	if (attachment.type === "text/plain") {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else if (attachment.type === "application/pdf") {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else if (attachment.type.startsWith("image/")) {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else {
+	// 		console.error(`Unsupported file type: ${attachment.type}`);
+	// 	}
+	// };
 
 	return (
 		<div

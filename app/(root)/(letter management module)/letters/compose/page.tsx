@@ -20,7 +20,7 @@ export default function Compose() {
 					<LetterComposeDrawer />
 				</Drawer>
 				<main className="mb-0 flex flex-1 flex-col bg-gray-100">
-					{true ? <OutgoingLetterTemplate letter={letter} /> : null}
+					{letter ? <OutgoingLetterTemplate letter={letter} /> : null}
 				</main>
 			</section>
 		</>
