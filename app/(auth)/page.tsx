@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { redirect } from "next/navigation";
 
 export default function page() {
-  useEffect(() => {
-    redirect("/signin");
-  }, []);
+	useEffect(() => {
+		redirect("/signin");
+	}, []);
 }

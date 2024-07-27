@@ -1,39 +1,11 @@
 {
-  "folders": [
-    {
-      "path": "."
-    },
-    {
-      "path": "../DMS-MINT/dms-letter-management-module-backend"
-    }
-  ],
-  "settings": {
-    "cSpell.words": [
-      "asgiref",
-      "Formik",
-      "lucide",
-      "uuidv",
-      "መልክት",
-      "መምሪያ",
-      "ማስቀመጫ",
-      "ማዘጋጃ",
-      "ረቂቁን",
-      "ተቀባዮችን",
-      "አያይዝ",
-      "እባክዎን",
-      "እንዲያዉቁት",
-      "የሚገባቸው",
-      "የተቀባይ",
-      "የካርቦን",
-      "የደብዳቤ",
-      "የደብዳቤውን",
-      "ያስቀምጡ",
-      "ያስገቡ",
-      "ያስገቡውን",
-      "ይምረጡ",
-      "ደብዳቤ",
-      "ደብዳቤውን",
-      "ግልባጭ"
-    ]
-  }
+	"folders": [
+		{
+			"path": ".",
+		},
+	],
+	"settings": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+	},
 }
