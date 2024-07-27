@@ -1,11 +1,11 @@
 "use client";
-import { selectIsDrawerOpen } from "@/lib/features/ui/uiManagerSlice";
-import { useAppSelector } from "@/hooks";
+
+import { useUiStore } from "@/stores";
 
 export default function Drawer({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
-	const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
+	const isDrawerOpen = useUiStore((state) => state.isDrawerOpen);
 
 	return isDrawerOpen ? <aside className="w-44">{children}</aside> : null;
 }
