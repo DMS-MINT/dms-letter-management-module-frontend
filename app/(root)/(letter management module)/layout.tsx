@@ -28,11 +28,13 @@ export default function RootLayout({
 				<body className={noto_serif_ethiopic.className}>
 					<Providers>
 						<RequireAuth>
-							<div className="absolute">
-								<Toaster richColors position="top-center" />
-							</div>
-							<TopBar />
-							{children}
+							<main className="flex h-full flex-col">
+								<div className="absolute">
+									<Toaster richColors position="top-center" />
+								</div>
+								<TopBar />
+								{children}
+							</main>
 						</RequireAuth>
 					</Providers>
 				</body>
