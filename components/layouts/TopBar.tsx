@@ -13,7 +13,7 @@ import { letterCategoryTranslations } from "@/types/letter_module";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { UserProfileMenu } from "../user_module";
+import { UserProfileMenu } from "../menu";
 
 export default function TopBar() {
 	const params = useParams();

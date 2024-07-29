@@ -2,7 +2,8 @@
 
 import type { ICredentials } from "@/actions/auth/action";
 import { signIn } from "@/actions/auth/action";
-import { LetterSkeleton } from "@/components/letter_module";
+import { BrandingSection } from "@/components/helpers";
+import { LetterSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -13,7 +14,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BrandingSection } from "@/components/user_module";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn } from "lucide-react";

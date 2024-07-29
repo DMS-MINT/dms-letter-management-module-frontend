@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/components/shared/tableComponents";
+import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
 	LetterColumnDefType,
@@ -12,9 +12,9 @@ import {
 } from "@/types/letter_module";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { Circle } from "lucide-react";
-import StatusBadge from "../StatusBadge";
+import StatusBadge from "../../pills/StatusBadge";
 
-export const pendingTableColumns: LetterColumnDefType = [
+export const trashTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -34,7 +34,7 @@ export const pendingTableColumns: LetterColumnDefType = [
 				aria-label="ረድፍ ይምረጡ"
 			/>
 		),
-		size: 10,
+		size: 30,
 	},
 	{
 		accessorKey: "has_read",
@@ -50,7 +50,7 @@ export const pendingTableColumns: LetterColumnDefType = [
 				/>
 			);
 		},
-		size: 10,
+		size: 30,
 	},
 	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
@@ -60,23 +60,7 @@ export const pendingTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
 			/>
 		),
-		size: 30,
-	},
-	{
-		accessorKey: LetterTableColumns.SENDER,
-		header: ({ column }) => (
-			<ColumnHeader
-				column={column}
-				title={columnTranslation[LetterTableColumns.SENDER]}
-			/>
-		),
-		cell: ({ row }) => {
-			const participants: ParticipantType[] = row.original.participants;
-
-			const senders = getParticipantInfo(RoleEnum.AUTHOR, participants);
-			return <p className="limited-table-chars">{senders ? senders : ""}</p>;
-		},
-		size: 400,
+		size: 350,
 	},
 	{
 		accessorKey: LetterTableColumns.RECIPIENT,
@@ -93,9 +77,10 @@ export const pendingTableColumns: LetterColumnDefType = [
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
 			);
-			return <p className="limited-table-chars">{recipients ? recipients : ""}</p>;
+
+			return <p className="limited-rows">{recipients ? recipients : ""}</p>;
 		},
-		size: 400,
+		size: 350,
 	},
 	{
 		accessorKey: LetterTableColumns.SUBJECT,
@@ -109,7 +94,7 @@ export const pendingTableColumns: LetterColumnDefType = [
 		cell: ({ row }) => {
 			const subject: string = row.getValue(LetterTableColumns.SUBJECT);
 
-			return <p className="limited-table-chars">{subject}</p>;
+			return <p className="limited-chars">{subject}</p>;
 		},
 	},
 	{

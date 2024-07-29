@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/components/shared/tableComponents";
+import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
 	LetterColumnDefType,
@@ -12,9 +12,9 @@ import {
 } from "@/types/letter_module";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { Circle } from "lucide-react";
-import StatusBadge from "../StatusBadge";
+import StatusBadge from "../../pills/StatusBadge";
 
-export const publishedTableColumns: LetterColumnDefType = [
+export const pendingTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -34,6 +34,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 				aria-label="ረድፍ ይምረጡ"
 			/>
 		),
+		size: 10,
 	},
 	{
 		accessorKey: "has_read",
@@ -49,6 +50,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 				/>
 			);
 		},
+		size: 10,
 	},
 	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
@@ -58,6 +60,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
 			/>
 		),
+		size: 30,
 	},
 	{
 		accessorKey: LetterTableColumns.SENDER,
@@ -71,8 +74,9 @@ export const publishedTableColumns: LetterColumnDefType = [
 			const participants: ParticipantType[] = row.original.participants;
 
 			const senders = getParticipantInfo(RoleEnum.AUTHOR, participants);
-			return <p>{senders ? senders : ""}</p>;
+			return <p className="limited-table-chars">{senders ? senders : ""}</p>;
 		},
+		size: 400,
 	},
 	{
 		accessorKey: LetterTableColumns.RECIPIENT,
@@ -89,8 +93,9 @@ export const publishedTableColumns: LetterColumnDefType = [
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
 			);
-			return <p>{recipients ? recipients : ""}</p>;
+			return <p className="limited-table-chars">{recipients ? recipients : ""}</p>;
 		},
+		size: 400,
 	},
 	{
 		accessorKey: LetterTableColumns.SUBJECT,
@@ -100,6 +105,12 @@ export const publishedTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.SUBJECT]}
 			/>
 		),
+		size: 400,
+		cell: ({ row }) => {
+			const subject: string = row.getValue(LetterTableColumns.SUBJECT);
+
+			return <p className="limited-table-chars">{subject}</p>;
+		},
 	},
 	{
 		accessorKey: LetterTableColumns.LETTER_TYPE,
@@ -109,11 +120,15 @@ export const publishedTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.LETTER_TYPE]}
 			/>
 		),
-		size: 10,
+		size: 30,
 		cell: ({ row }) => {
 			const letter_type: string = row.getValue(LetterTableColumns.LETTER_TYPE);
 
-			return <p>{letterTypeTranslations[letter_type.toUpperCase()]}</p>;
+			return (
+				<p className="limited-rows">
+					{letterTypeTranslations[letter_type.toUpperCase()]}
+				</p>
+			);
 		},
 	},
 	{
@@ -127,30 +142,29 @@ export const publishedTableColumns: LetterColumnDefType = [
 		cell: ({ row }) => {
 			const current_state: string = row.getValue(LetterTableColumns.CURRENT_STATE);
 			return (
-				<div className="min-w-36">
+				<div className="min-w-14">
 					<StatusBadge current_state={current_state} />
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: LetterTableColumns.SUBMITTED_AT,
+		accessorKey: LetterTableColumns.CREATED_AT,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.SUBMITTED_AT]}
-				className="ml-auto w-fit"
+				title={columnTranslation[LetterTableColumns.CREATED_AT]}
+				className="limited-rows ml-auto w-fit"
 			/>
 		),
-
 		cell: ({ row }) => {
-			const submitted_at: string = row.getValue(LetterTableColumns.SUBMITTED_AT);
+			const created_at: string = row.getValue(LetterTableColumns.CREATED_AT);
 			return (
-				<div className="px-4 py-1 text-right font-medium">
-					{convertToEthiopianDate(submitted_at)}
+				<div className="limited-rows px-4 py-1 text-right font-medium">
+					{convertToEthiopianDate(created_at)}
 				</div>
 			);
 		},
-		size: 50,
+		size: 30,
 	},
 ];
