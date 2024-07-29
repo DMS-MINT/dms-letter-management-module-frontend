@@ -29,6 +29,8 @@ export type LetterType = {
 export type LetterColumnDefType = ColumnDef<LetterType>[];
 
 export type LetterDetailType = {
+	sender: any;
+	recipient: any;
 	id: string;
 	reference_number: string;
 	subject?: string;

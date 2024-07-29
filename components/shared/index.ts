@@ -1,9 +1,9 @@
-export { default as ActionConfirmModal } from "./ActionConfirmModal";
-export { default as ActivityFeed } from "./ActivityFeed";
+export { default as FileUploadButton } from "../buttons/FileUploadButton";
+export { default as ActionConfirmModal } from "../dialogs/ActionConfirmModal";
+export { default as ActivityFeed } from "../features/ActivityFeed";
+export { default as OTPInputForm } from "../forms/OTPInputForm";
+export { default as SelectableInput } from "../forms/SelectableInput";
+export { default as SelectableInputGroup } from "../forms/SelectableInputGroup";
+export { default as Spinner } from "../helpers/Spinner";
+export { default as RequireAuth } from "../hoc/RequireAuth";
 export { default as Editor } from "./Editor/Editor";
-export { default as FileUploadButton } from "./FileUploadButton";
-export { default as OTPInputForm } from "./OTPInputForm";
-export { default as RequireAuth } from "./RequireAuth";
-export { default as SelectableInput } from "./SelectableInput";
-export { default as SelectableInputGroup } from "./SelectableInputGroup";
-export { default as Spinner } from "./Spinner";

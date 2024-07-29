@@ -1,4 +1,4 @@
-import { LetterSkeleton } from "@/components/letter_module";
+import { LetterSkeleton } from "@/components/skeletons";
 
 export default function loading() {
 	return <LetterSkeleton />;

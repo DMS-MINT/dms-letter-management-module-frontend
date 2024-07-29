@@ -1,12 +1,11 @@
 "use client";
 
 import { getLetters } from "@/actions/letter_module/crudActions";
-import { Drawer, Main, Subheader } from "@/components/layouts";
-import {
-	LetterNavigationDrawer,
-	LetterSkeleton,
-	TableControlPanel,
-} from "@/components/letter_module";
+import { LetterNavigationDrawer } from "@/components/drawers";
+import { Drawer, Subheader } from "@/components/layouts";
+import { TableControlPanel } from "@/components/panels";
+import { LetterSkeleton } from "@/components/skeletons";
+import { DataTable } from "@/components/tables";
 import {
 	draftTableColumns,
 	inboxTableColumns,
@@ -14,8 +13,7 @@ import {
 	pendingTableColumns,
 	publishedTableColumns,
 	trashTableColumns,
-} from "@/components/letter_module/config";
-import { DataTable } from "@/components/shared/tableComponents";
+} from "@/components/tables/config";
 import type { LetterColumnDefType } from "@/types/letter_module";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -81,9 +79,9 @@ export default function Table() {
 				<Drawer>
 					<LetterNavigationDrawer />
 				</Drawer>
-				<Main>
+				<section className="card h-fit min-w-0 flex-1">
 					<DataTable columns={columns} data={letters} />
-				</Main>
+				</section>
 			</section>
 		</>
 	) : (
