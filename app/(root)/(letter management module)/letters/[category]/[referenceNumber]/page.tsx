@@ -1,14 +1,12 @@
 "use client";
 
 import { getLetterDetails } from "@/actions/letter_module/crudActions";
+import { LetterDetailsDrawer } from "@/components/drawers";
 import { Drawer, Subheader } from "@/components/layouts";
-import {
-	DetailControlPanel,
-	LetterDetailsDrawer,
-	LetterSkeleton,
-} from "@/components/letter_module";
-import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
+import { DetailControlPanel } from "@/components/panels";
 import { ActivityFeed } from "@/components/shared";
+import { LetterSkeleton } from "@/components/skeletons";
+import { OutgoingLetterTemplate } from "@/components/templates";
 import type { LetterDetailResponseType } from "@/types/letter_module";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -38,7 +36,7 @@ export default function LetterDetail() {
 	});
 
 	return isSuccess && data ? (
-		<main className="flex h-full flex-col">
+		<section className="flex h-full flex-col">
 			<Subheader>
 				<DetailControlPanel data={data} />
 			</Subheader>
@@ -55,7 +53,7 @@ export default function LetterDetail() {
 					<ActivityFeed letter={data.letter} />
 				</section>
 			</section>
-		</main>
+		</section>
 	) : (
 		<LetterSkeleton />
 	);

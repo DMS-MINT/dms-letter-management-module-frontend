@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/components/shared/tableComponents";
+import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
 	LetterColumnDefType,
@@ -12,9 +12,9 @@ import {
 } from "@/types/letter_module";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { Circle } from "lucide-react";
-import StatusBadge from "../StatusBadge";
+import StatusBadge from "../../pills/StatusBadge";
 
-export const trashTableColumns: LetterColumnDefType = [
+export const outboxTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -60,7 +60,7 @@ export const trashTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
 			/>
 		),
-		size: 350,
+		size: 250,
 	},
 	{
 		accessorKey: LetterTableColumns.RECIPIENT,
@@ -77,10 +77,9 @@ export const trashTableColumns: LetterColumnDefType = [
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
 			);
-
 			return <p className="limited-rows">{recipients ? recipients : ""}</p>;
 		},
-		size: 350,
+		size: 500,
 	},
 	{
 		accessorKey: LetterTableColumns.SUBJECT,
@@ -105,7 +104,7 @@ export const trashTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.LETTER_TYPE]}
 			/>
 		),
-		size: 30,
+		size: 50,
 		cell: ({ row }) => {
 			const letter_type: string = row.getValue(LetterTableColumns.LETTER_TYPE);
 
@@ -127,29 +126,30 @@ export const trashTableColumns: LetterColumnDefType = [
 		cell: ({ row }) => {
 			const current_state: string = row.getValue(LetterTableColumns.CURRENT_STATE);
 			return (
-				<div className="min-w-14">
+				<div className="min-w-36">
 					<StatusBadge current_state={current_state} />
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: LetterTableColumns.CREATED_AT,
+		accessorKey: LetterTableColumns.SUBMITTED_AT,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.CREATED_AT]}
+				title={columnTranslation[LetterTableColumns.SUBMITTED_AT]}
 				className="limited-rows ml-auto w-fit"
 			/>
 		),
+
 		cell: ({ row }) => {
-			const created_at: string = row.getValue(LetterTableColumns.CREATED_AT);
+			const submitted_at: string = row.getValue(LetterTableColumns.SUBMITTED_AT);
 			return (
 				<div className="limited-rows px-4 py-1 text-right font-medium">
-					{convertToEthiopianDate(created_at)}
+					{convertToEthiopianDate(submitted_at)}
 				</div>
 			);
 		},
-		size: 30,
+		size: 50,
 	},
 ];

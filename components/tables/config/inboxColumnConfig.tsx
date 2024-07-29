@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/components/shared/tableComponents";
+import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
 	LetterColumnDefType,
@@ -12,9 +12,9 @@ import {
 } from "@/types/letter_module";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { Circle } from "lucide-react";
-import StatusBadge from "../StatusBadge";
+import StatusBadge from "../../pills/StatusBadge";
 
-export const draftTableColumns: LetterColumnDefType = [
+export const inboxTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -60,27 +60,23 @@ export const draftTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
 			/>
 		),
-		size: 350,
+		size: 250,
 	},
 	{
-		accessorKey: LetterTableColumns.RECIPIENT,
+		accessorKey: LetterTableColumns.SENDER,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.RECIPIENT]}
+				title={columnTranslation[LetterTableColumns.SENDER]}
 			/>
 		),
 		cell: ({ row }) => {
 			const participants: ParticipantType[] = row.original.participants;
 
-			const recipients = getParticipantInfo(
-				RoleEnum["PRIMARY RECIPIENT"],
-				participants
-			);
-
-			return <p className="limited-rows">{recipients ? recipients : ""}</p>;
+			const senders = getParticipantInfo(RoleEnum.AUTHOR, participants);
+			return <p className="limited-rows">{senders ? senders : ""}</p>;
 		},
-		size: 350,
+		size: 450,
 	},
 	{
 		accessorKey: LetterTableColumns.SUBJECT,
@@ -105,7 +101,7 @@ export const draftTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.LETTER_TYPE]}
 			/>
 		),
-		size: 30,
+		size: 10,
 		cell: ({ row }) => {
 			const letter_type: string = row.getValue(LetterTableColumns.LETTER_TYPE);
 
@@ -127,29 +123,29 @@ export const draftTableColumns: LetterColumnDefType = [
 		cell: ({ row }) => {
 			const current_state: string = row.getValue(LetterTableColumns.CURRENT_STATE);
 			return (
-				<div>
+				<div className="min-w-36">
 					<StatusBadge current_state={current_state} />
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: LetterTableColumns.CREATED_AT,
+		accessorKey: LetterTableColumns.RECEIVED_AT,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.CREATED_AT]}
-				className="limited-rows ml-auto w-fit"
+				title={columnTranslation[LetterTableColumns.RECEIVED_AT]}
+				className="ml-auto w-fit "
 			/>
 		),
 		cell: ({ row }) => {
-			const created_at: string = row.getValue(LetterTableColumns.CREATED_AT);
+			const received_at: string = row.getValue(LetterTableColumns.RECEIVED_AT);
 			return (
 				<div className="limited-rows px-4 py-1 text-right font-medium">
-					{convertToEthiopianDate(created_at)}
+					{convertToEthiopianDate(received_at)}
 				</div>
 			);
 		},
-		size: 30,
+		size: 50,
 	},
 ];

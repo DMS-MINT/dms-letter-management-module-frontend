@@ -1,8 +1,8 @@
 "use server";
 
 import { get_session } from "@/actions/auth/action";
+import { TwoFactorSetupDialog } from "@/components/dialogs";
 import { redirect } from "next/navigation";
-import { TwoFactorSetupDialog } from "../user_module";
 
 interface Props {
 	children: React.ReactNode;

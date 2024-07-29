@@ -1,9 +1,5 @@
 "use client";
 
-import {
-	ShareLetterDialog,
-	SubmitLetterDialog,
-} from "@/components/letter_module";
 import { Button } from "@/components/ui/button";
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
@@ -12,8 +8,9 @@ import { generateUserPermissions } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
+import { ShareLetterDialog, SubmitLetterDialog } from "../dialogs";
+import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
 import { ActionConfirmModal } from "../shared";
-import type { ActionConfirmModalRef } from "../shared/ActionConfirmModal";
 
 export type ButtonConfigType = {
 	id: string;

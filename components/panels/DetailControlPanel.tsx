@@ -1,5 +1,6 @@
+import { ActionButtons } from "@/components/buttons";
+import { StatusBadge } from "@/components/pills";
 import type { LetterDetailResponseType } from "@/types/letter_module";
-import { ActionButtons, StatusBadge } from ".";
 
 export default function DetailControlPanel({
 	data,

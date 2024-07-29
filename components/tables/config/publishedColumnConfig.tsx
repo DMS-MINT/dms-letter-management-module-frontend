@@ -1,4 +1,4 @@
-import { ColumnHeader } from "@/components/shared/tableComponents";
+import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import type {
 	LetterColumnDefType,
@@ -12,9 +12,9 @@ import {
 } from "@/types/letter_module";
 import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { Circle } from "lucide-react";
-import StatusBadge from "../StatusBadge";
+import StatusBadge from "../../pills/StatusBadge";
 
-export const outboxTableColumns: LetterColumnDefType = [
+export const publishedTableColumns: LetterColumnDefType = [
 	{
 		id: "select",
 		header: ({ table }) => (
@@ -34,7 +34,6 @@ export const outboxTableColumns: LetterColumnDefType = [
 				aria-label="ረድፍ ይምረጡ"
 			/>
 		),
-		size: 30,
 	},
 	{
 		accessorKey: "has_read",
@@ -50,7 +49,6 @@ export const outboxTableColumns: LetterColumnDefType = [
 				/>
 			);
 		},
-		size: 30,
 	},
 	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
@@ -60,7 +58,21 @@ export const outboxTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
 			/>
 		),
-		size: 250,
+	},
+	{
+		accessorKey: LetterTableColumns.SENDER,
+		header: ({ column }) => (
+			<ColumnHeader
+				column={column}
+				title={columnTranslation[LetterTableColumns.SENDER]}
+			/>
+		),
+		cell: ({ row }) => {
+			const participants: ParticipantType[] = row.original.participants;
+
+			const senders = getParticipantInfo(RoleEnum.AUTHOR, participants);
+			return <p>{senders ? senders : ""}</p>;
+		},
 	},
 	{
 		accessorKey: LetterTableColumns.RECIPIENT,
@@ -77,9 +89,8 @@ export const outboxTableColumns: LetterColumnDefType = [
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
 			);
-			return <p className="limited-rows">{recipients ? recipients : ""}</p>;
+			return <p>{recipients ? recipients : ""}</p>;
 		},
-		size: 500,
 	},
 	{
 		accessorKey: LetterTableColumns.SUBJECT,
@@ -89,12 +100,6 @@ export const outboxTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.SUBJECT]}
 			/>
 		),
-		size: 400,
-		cell: ({ row }) => {
-			const subject: string = row.getValue(LetterTableColumns.SUBJECT);
-
-			return <p className="limited-chars">{subject}</p>;
-		},
 	},
 	{
 		accessorKey: LetterTableColumns.LETTER_TYPE,
@@ -104,15 +109,11 @@ export const outboxTableColumns: LetterColumnDefType = [
 				title={columnTranslation[LetterTableColumns.LETTER_TYPE]}
 			/>
 		),
-		size: 50,
+		size: 10,
 		cell: ({ row }) => {
 			const letter_type: string = row.getValue(LetterTableColumns.LETTER_TYPE);
 
-			return (
-				<p className="limited-rows">
-					{letterTypeTranslations[letter_type.toUpperCase()]}
-				</p>
-			);
+			return <p>{letterTypeTranslations[letter_type.toUpperCase()]}</p>;
 		},
 	},
 	{
@@ -138,14 +139,14 @@ export const outboxTableColumns: LetterColumnDefType = [
 			<ColumnHeader
 				column={column}
 				title={columnTranslation[LetterTableColumns.SUBMITTED_AT]}
-				className="limited-rows ml-auto w-fit"
+				className="ml-auto w-fit"
 			/>
 		),
 
 		cell: ({ row }) => {
 			const submitted_at: string = row.getValue(LetterTableColumns.SUBMITTED_AT);
 			return (
-				<div className="limited-rows px-4 py-1 text-right font-medium">
+				<div className="px-4 py-1 text-right font-medium">
 					{convertToEthiopianDate(submitted_at)}
 				</div>
 			);
