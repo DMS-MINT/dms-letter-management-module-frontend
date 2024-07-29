@@ -4,9 +4,33 @@
 	"globals": {
 		"React": "readonly"
 	},
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
 	"rules": {
 		"no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }],
 		"import/no-unresolved": "error",
-		"import/named": "error"
+		"import/named": "error",
+		"@typescript-eslint/ban-ts-comment": [
+			"error",
+			{
+				"ts-expect-error": "allow-with-description",
+				"minimumDescriptionLength": 10
+			}
+		],
+		"@typescript-eslint/consistent-type-definitions": "off",
+		"@typescript-eslint/consistent-type-exports": "error",
+		"@typescript-eslint/consistent-type-imports": [
+			"warn",
+			{ "fixStyle": "inline-type-imports" }
+		],
+		"@typescript-eslint/no-import-type-side-effects": "error"
+	},
+	"settings": {
+		"import/resolver": {
+			"typescript": {
+				"project": "tsconfig.json"
+			}
+		}
 	}
 }
