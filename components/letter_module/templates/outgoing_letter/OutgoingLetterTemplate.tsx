@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { LetterDetailType } from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import CoverPage from "./CoverPage";

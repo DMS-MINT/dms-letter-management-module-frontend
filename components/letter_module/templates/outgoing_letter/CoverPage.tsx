@@ -9,11 +9,8 @@ import {
 	handleSubjectChange,
 	selectNewLetter,
 } from "@/lib/features/letterSlice";
-import {
-	LetterDetailType,
-	RoleEnum,
-	SignatureType,
-} from "@/types/letter_module";
+import type { LetterDetailType, SignatureType } from "@/types/letter_module";
+import { RoleEnum } from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
 import { LaptopMinimal, Mail, Phone } from "lucide-react";
 import Image from "next/image";
@@ -106,7 +103,7 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 									key={signature.id}
 									src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${signature.e_signature}`}
 									alt="Your Signature"
-									width={80}
+									width={200}
 									height={80}
 								/>
 							))

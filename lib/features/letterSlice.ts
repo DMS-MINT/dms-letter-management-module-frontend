@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { DraftLetterType, ParticipantType } from "@/types/letter_module";
+import type { DraftLetterType, ParticipantType } from "@/types/letter_module";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type LetterSliceType = {

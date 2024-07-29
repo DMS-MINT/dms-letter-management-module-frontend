@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { LINKS } from "@/constants";
 import { useOTP, useWorkflowDispatcher } from "@/hooks";
-import { LetterDetailType } from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -97,6 +97,8 @@ export default function SubmitLetterDialog({
 							<Image
 								src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${getDefaultSignatureMutation.data.e_signature}`}
 								alt="Your Signature"
+								width={446}
+								height={260}
 							/>
 						</div>
 					) : (

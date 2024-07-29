@@ -8,9 +8,10 @@ import { FileText, Inbox, Send, Trash } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { v4 as uuidv4 } from "uuid";
+import * as uuidv4 from "uuid";
 
 type RouteType = {
+	id: string;
 	name: string;
 	icon: React.JSX.Element;
 	path: string;
@@ -29,36 +30,42 @@ export default function LetterNavigationDrawer() {
 
 		return [
 			{
+				id: uuidv4.v4(),
 				name: "ገቢ ደብዳቤዎች",
 				icon: <Inbox size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/inbox",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "የተላኩ ደብዳቤዎች",
 				icon: <Send size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/outbox",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "ረቂቆች",
 				icon: <FileText size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/draft",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "መጣያ",
 				icon: <Trash size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/trash",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "መጽደቅን በመጠባበቅ ላይ",
 				icon: <></>,
 				path: "/letters/pending",
 				isVisible: myProfile.is_staff,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "የታተሙ ደብዳቤዎች",
 				icon: <></>,
 				path: "/letters/published",
@@ -71,8 +78,8 @@ export default function LetterNavigationDrawer() {
 		<nav className="flex w-full flex-col gap-2">
 			{routes
 				.filter((route) => route.isVisible === true)
-				.map(({ name, icon, path }) => (
-					<Link key={uuidv4()} href={path}>
+				.map(({ id, name, icon, path }) => (
+					<Link key={id} href={path}>
 						<Button
 							className={clsx(
 								"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",

@@ -6,7 +6,7 @@ import {
 	LetterComposeDrawer,
 } from "@/components/letter_module";
 import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
-import { LetterDetailType } from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
 
 export default function Compose() {
 	const letter = {} as LetterDetailType;

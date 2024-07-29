@@ -123,7 +123,7 @@ export default function SignIn() {
 												className="absolute right-1 top-0 hover:bg-transparent"
 												onClick={() => setShowPassword(!showPassword)}
 											>
-												{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+												{showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
 											</Button>
 										</div>
 									</FormControl>

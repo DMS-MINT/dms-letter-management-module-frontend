@@ -20,41 +20,48 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
+import type {
 	LetterDetailType,
-	RoleEnum,
 	ShareLetterRequestType,
 } from "@/types/letter_module";
+import { RoleEnum } from "@/types/letter_module";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import * as uuidv4 from "uuid";
 
 type SelectType = {
+	id: string;
 	value: string;
 	label: string;
 };
 
 const permissions: SelectType[] = [
 	{
+		id: uuidv4.v4(),
 		value: "can_view_letter",
 		label: "ማየት ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_update_letter",
 		label: "ማረም ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_comment_letter",
 		label: "አስተያየት መስጠት ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_share_letter",
 		label: "ማጋራት ይችላል",
 	},
 	// {
+	// 	 id:uuidv4.v4(),
 	//   value: "transfer_ownership",
 	//   label: "ባለቤትነትን ያስተላልፉ",
 	// },
 	// {
+	//   id:uuidv4.v4(),
 	//   value: "remove_access",
 	//   label: "ፈቃድን ያስወግዱ",
 	// },
@@ -195,8 +202,8 @@ export default function ShareLetterDialog({
 									<SelectValue placeholder="ማየት ይችላል" />
 								</SelectTrigger>
 								<SelectContent>
-									{permissions.map(({ label, value }) => (
-										<SelectItem key={uuidv4()} value={value}>
+									{permissions.map(({ id, label, value }) => (
+										<SelectItem key={id} value={value}>
 											{label}
 										</SelectItem>
 									))}

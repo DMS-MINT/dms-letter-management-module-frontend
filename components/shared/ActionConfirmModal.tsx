@@ -25,8 +25,8 @@ import {
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useOTP } from "@/hooks";
+import type { Ref } from "react";
 import {
-	Ref,
 	forwardRef,
 	memo,
 	useCallback,

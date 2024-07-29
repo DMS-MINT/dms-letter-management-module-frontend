@@ -7,13 +7,13 @@ import {
 import { Button } from "@/components/ui/button";
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
-import { LetterDetailResponseType } from "@/types/letter_module";
+import type { LetterDetailResponseType } from "@/types/letter_module";
 import { generateUserPermissions } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
+import * as uuidv4 from "uuid";
 import { ActionConfirmModal } from "../shared";
-import { ActionConfirmModalRef } from "../shared/ActionConfirmModal";
+import type { ActionConfirmModalRef } from "../shared/ActionConfirmModal";
 
 export type ButtonConfigType = {
 	id: string;
@@ -50,7 +50,7 @@ function ActionButtons({
 
 		return [
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_trash_letter,
 				variant: "outline",
 				size: "icon",
@@ -58,12 +58,12 @@ function ActionButtons({
 				action: () => handleAction("trash_letter"),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_share_letter,
 				component: <ShareLetterDialog letter={letter} />,
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_restore_letter,
 				label: "ወደነበረበት መልስ",
 				variant: "default",
@@ -71,7 +71,7 @@ function ActionButtons({
 				action: () => handleAction("restore_letter"),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_permanently_delete_letter,
 				component: (
 					<ActionConfirmModal
@@ -92,12 +92,12 @@ function ActionButtons({
 				),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_submit_letter,
 				component: <SubmitLetterDialog letter={letter} />,
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_retract_letter,
 				component: (
 					<ActionConfirmModal
@@ -118,7 +118,7 @@ function ActionButtons({
 				),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible:
 					letter.letter_type !== "incoming" && currentUserPerms.can_reject_letter,
 				component: (
@@ -140,7 +140,7 @@ function ActionButtons({
 				),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible:
 					letter.letter_type !== "incoming" && currentUserPerms.can_publish_letter,
 				component: (
@@ -162,7 +162,7 @@ function ActionButtons({
 				),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_close_letter,
 				label: "የደብዳቤውን የስራ ሂደት አጠናቅ",
 				variant: "third",
@@ -170,7 +170,7 @@ function ActionButtons({
 				action: () => handleAction("close_letter"),
 			},
 			{
-				id: uuidv4(),
+				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_reopen_letter,
 				label: "የደብዳቤውን የስራ ሂደት እንደገና ክፈት",
 				variant: "default",

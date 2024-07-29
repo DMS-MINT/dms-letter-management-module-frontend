@@ -6,10 +6,8 @@ import {
 	selectNewLetter,
 } from "@/lib/features/letterSlice";
 import CharacterCount from "@tiptap/extension-character-count";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
 import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 
 export default function Editor() {
 	const { content } = useAppSelector(selectNewLetter);
@@ -20,9 +18,7 @@ export default function Editor() {
 		editable: true,
 		content: content,
 		extensions: [
-			Document,
-			Paragraph,
-			Text,
+			StarterKit,
 			CharacterCount.configure({
 				limit,
 			}),

@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { CurrentUserType } from "@/types/user_module";
+import type { CurrentUserType } from "@/types/user_module";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface IUserSlice {

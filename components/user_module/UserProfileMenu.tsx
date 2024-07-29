@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppDispatch } from "@/hooks";
 import { storeMyProfile } from "@/lib/features/user/userSlice";
-import { CurrentUserType } from "@/types/user_module";
+import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

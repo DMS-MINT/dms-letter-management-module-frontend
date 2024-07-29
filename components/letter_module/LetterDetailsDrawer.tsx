@@ -2,14 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	LetterDetailType,
-	letterTypeTranslations,
-} from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
+import { letterTypeTranslations } from "@/types/letter_module";
 import { FileDigit, Mail, MessageSquareText, Paperclip } from "lucide-react";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import * as uuidv4 from "uuid";
 
 interface ILetterMetaData {
 	label: string;
@@ -64,7 +62,7 @@ export default function LetterDetailsDrawer({
 						className="h-10 rounded-sm bg-gray-200 text-base font-normal text-gray-900"
 					>
 						<Link
-							key={uuidv4()}
+							key={uuidv4.v4()}
 							href={`${process.env.NEXT_PUBLIC_API_BASE_URL}${attachment.file}`}
 							target="_blank"
 							rel="noopener noreferrer"

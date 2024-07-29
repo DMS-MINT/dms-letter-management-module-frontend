@@ -24,11 +24,8 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {
-	LetterColumnDefType,
-	LetterTableColumns,
-	LetterType,
-} from "@/types/letter_module";
+import type { LetterColumnDefType, LetterType } from "@/types/letter_module";
+import { LetterTableColumns } from "@/types/letter_module";
 import { usePathname, useRouter } from "next/navigation";
 import TablePagination from "./TablePagination";
 import ViewOptions from "./ViewOptions";

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { LetterDetailType } from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
 import { convertToEthiopianDate } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -26,7 +26,7 @@ import {
 	Trash,
 	X,
 } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 
 export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {

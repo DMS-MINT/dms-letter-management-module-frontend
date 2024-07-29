@@ -3,7 +3,7 @@
 import { createLetter } from "@/actions/letter_module/crudActions";
 import { useAppSelector } from "@/hooks";
 import { selectNewLetter } from "@/lib/features/letterSlice";
-import { LetterDetailType } from "@/types/letter_module";
+import type { LetterDetailType } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

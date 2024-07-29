@@ -16,7 +16,7 @@ import {
 	trashTableColumns,
 } from "@/components/letter_module/config";
 import { DataTable } from "@/components/shared/tableComponents";
-import { LetterColumnDefType } from "@/types/letter_module";
+import type { LetterColumnDefType } from "@/types/letter_module";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useState } from "react";

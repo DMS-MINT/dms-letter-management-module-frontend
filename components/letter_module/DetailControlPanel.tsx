@@ -1,4 +1,4 @@
-import { LetterDetailResponseType } from "@/types/letter_module";
+import type { LetterDetailResponseType } from "@/types/letter_module";
 import { ActionButtons, StatusBadge } from ".";
 
 export default function DetailControlPanel({

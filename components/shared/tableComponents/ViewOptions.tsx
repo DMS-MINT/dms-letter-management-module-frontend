@@ -11,7 +11,8 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { LetterTableColumns, columnTranslation } from "@/types/letter_module";
+import type { LetterTableColumns } from "@/types/letter_module";
+import { columnTranslation } from "@/types/letter_module";
 import { Settings2 } from "lucide-react";
 
 interface ViewOptionsProps<TData> {

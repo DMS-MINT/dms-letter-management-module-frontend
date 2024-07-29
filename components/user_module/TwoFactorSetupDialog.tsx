@@ -183,6 +183,7 @@ export default function TwoFactorSetupDialog() {
 						</Form>
 					</div>
 					<DialogFooter>
+						<Button variant={"outline"}>Logout</Button>
 						<Button
 							disabled={
 								!oneTimePassword || oneTimePassword.toString().length !== 6 || isPending

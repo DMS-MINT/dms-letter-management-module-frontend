@@ -1,9 +1,11 @@
 import { ColumnHeader } from "@/components/shared/tableComponents";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
+import type {
 	LetterColumnDefType,
-	LetterTableColumns,
 	ParticipantType,
+} from "@/types/letter_module";
+import {
+	LetterTableColumns,
 	RoleEnum,
 	columnTranslation,
 	letterTypeTranslations,
