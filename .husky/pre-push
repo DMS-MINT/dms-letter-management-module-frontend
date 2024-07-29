@@ -3,7 +3,7 @@ echo "Starting pre-push checks..."
 
 # Build
 echo "Running build process..."
-yarn build || {
+pnpm run build || {
   echo "Build process failed. Ensure all build tasks complete successfully. Address any issues, make the necessary adjustments, and try pushing again."
   exit 1
 }
