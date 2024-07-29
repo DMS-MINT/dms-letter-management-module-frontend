@@ -87,40 +87,8 @@ input[type="number"]::-webkit-inner-spin-button {
 	@apply h-full rounded-lg border bg-card p-3 text-card-foreground shadow-sm;
 }
 
-/* Heading styles */
-.editor h1,
-.editor h2,
-.editor h3,
-.editor h4,
-.editor h5,
-.editor h6 {
-	line-height: 1.1;
-	margin-top: 2.5rem;
-	text-wrap: pretty;
-}
-
-.editor h1,
-.editor h2 {
-	margin-top: 3.5rem;
-	margin-bottom: 1.5rem;
-}
-
-.editor h1 {
-	font-size: 1.4rem;
-}
-
-.editor h2 {
-	font-size: 1.2rem;
-}
-
-.editor h3 {
-	font-size: 1.1rem;
-}
-
-.editor h4,
-.editor h5,
-.editor h6 {
-	font-size: 1rem;
+.mention {
+	@apply rounded-md bg-[#f8f2ff] box-decoration-clone px-1 py-0.5 text-[#9d30f8];
 }
 
 .limited-rows {
@@ -151,66 +119,4 @@ input[type="number"]::-webkit-inner-spin-button {
 	max-width: 35ch; /* Set the width to accommodate 10 characters */
 	display: inline-block;
 	box-sizing: border-box;
-}
-#letter-content h1,
-#letter-content h2,
-#letter-content h3,
-#letter-content h4,
-#letter-content h5,
-#letter-content h6 {
-	line-height: 1.1;
-	margin-top: 2.5rem;
-	text-wrap: pretty;
-}
-
-#letter-content h1,
-#letter-content h2 {
-	margin-top: 3.5rem;
-	margin-bottom: 1.5rem;
-}
-
-#letter-content h1 {
-	font-size: 1.4rem;
-}
-
-#letter-content h2 {
-	font-size: 1.2rem;
-}
-
-#letter-content h3 {
-	font-size: 1.1rem;
-}
-
-#letter-content h4,
-#letter-content h5,
-#letter-content h6 {
-	font-size: 1rem;
-}
-
-#letter-content u {
-	text-decoration: underline;
-}
-
-#letter-content em {
-	font-style: italic;
-}
-
-#letter-content strong {
-	font-weight: bold;
-}
-
-#letter-content {
-	line-height: 1.5;
-}
-
-#letter-content p {
-	margin-bottom: 1em;
-}
-
-#letter-content p + p {
-	margin-top: 1em;
-}
-
-#letter-content br {
-	margin-bottom: 1rem;
 }
