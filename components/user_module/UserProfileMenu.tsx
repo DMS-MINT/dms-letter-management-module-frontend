@@ -1,20 +1,20 @@
 "use client";
 
+import { signOut } from "@/actions/auth/action";
+import { getMyProfile } from "@/actions/user_module/action";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { signOut } from "@/actions/auth/action";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { getMyProfile } from "@/actions/user_module/action";
 import { useAppDispatch } from "@/hooks";
 import { storeMyProfile } from "@/lib/features/user/userSlice";
-import { CurrentUserType } from "@/types/user_module";
+import type { CurrentUserType } from "@/types/user_module";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
@@ -50,7 +50,7 @@ export default function UserProfileMenu() {
 	});
 
 	return isSuccess && myProfile ? (
-		<div className="flex gap-4 items-center">
+		<div className="flex items-center gap-4">
 			<div className="flex items-end gap-2">
 				<p className="text-sm">{myProfile.full_name}</p>
 			</div>

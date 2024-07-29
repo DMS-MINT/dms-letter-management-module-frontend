@@ -1,9 +1,9 @@
+import { StoreProvider } from "@/app/StoreProvider";
+import "@/app/globals.css";
+import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Noto_Serif_Ethiopic } from "next/font/google";
-import "@/app/globals.css";
-import { StoreProvider } from "@/app/StoreProvider";
 import { Toaster } from "sonner";
-import Providers from "@/providers/Providers";
 
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 

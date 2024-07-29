@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -9,17 +8,18 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { UserProfileMenu } from "../user_module";
 import { IMAGES } from "@/constants";
 import { letterCategoryTranslations } from "@/types/letter_module";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { UserProfileMenu } from "../user_module";
 
 export default function TopBar() {
 	const params = useParams();
 
 	return (
-		<header className="min-h-14 w-full px-5 bg-white flex justify-between items-center">
+		<header className="flex min-h-14 w-full items-center justify-between bg-white px-5">
 			<button className="flex items-center gap-4 hover:cursor-pointer">
 				<Link href="/letters/compose">
 					<Image
@@ -59,7 +59,7 @@ export default function TopBar() {
 					</BreadcrumbList>
 				</Breadcrumb>
 			</button>
-			<div className="flex gap-4 items-center">
+			<div className="flex items-center gap-4">
 				<UserProfileMenu />
 			</div>
 		</header>

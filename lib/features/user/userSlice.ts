@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { CurrentUserType } from "@/types/user_module";
+import type { CurrentUserType } from "@/types/user_module";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface IUserSlice {
 	myProfile: CurrentUserType | null;

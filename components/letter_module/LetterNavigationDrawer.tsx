@@ -1,25 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import {
-	BookDashed,
-	FileText,
-	Inbox,
-	Send,
-	BookCheck,
-	Trash,
-} from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
-import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
 import clsx from "clsx";
+import { FileText, Inbox, Send, Trash } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import * as uuidv4 from "uuid";
 
 type RouteType = {
+	id: string;
 	name: string;
-	icon: JSX.Element;
+	icon: React.JSX.Element;
 	path: string;
 	isVisible: boolean;
 };
@@ -36,36 +30,42 @@ export default function LetterNavigationDrawer() {
 
 		return [
 			{
+				id: uuidv4.v4(),
 				name: "ገቢ ደብዳቤዎች",
 				icon: <Inbox size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/inbox",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "የተላኩ ደብዳቤዎች",
 				icon: <Send size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/outbox",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "ረቂቆች",
 				icon: <FileText size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/draft",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "መጣያ",
 				icon: <Trash size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/trash",
 				isVisible: true,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "መጽደቅን በመጠባበቅ ላይ",
 				icon: <></>,
 				path: "/letters/pending",
 				isVisible: myProfile.is_staff,
 			},
 			{
+				id: uuidv4.v4(),
 				name: "የታተሙ ደብዳቤዎች",
 				icon: <></>,
 				path: "/letters/published",
@@ -75,14 +75,14 @@ export default function LetterNavigationDrawer() {
 	}, [myProfile]);
 
 	return (
-		<nav className="flex flex-col gap-2 w-full">
+		<nav className="flex w-full flex-col gap-2">
 			{routes
 				.filter((route) => route.isVisible === true)
-				.map(({ name, icon, path }) => (
-					<Link key={uuidv4()} href={path}>
+				.map(({ id, name, icon, path }) => (
+					<Link key={id} href={path}>
 						<Button
 							className={clsx(
-								"bg-transparent flex gap-2 text-gray-900 w-full hover:bg-gray-200 justify-start px-2",
+								"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",
 								{ "bg-gray-200": path === pathname }
 							)}
 						>

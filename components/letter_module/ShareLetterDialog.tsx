@@ -1,18 +1,16 @@
 "use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-	DialogFooter,
-	DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
-import ReactSelect, { ActionMeta } from "react-select";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -21,41 +19,49 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { v4 as uuidv4 } from "uuid";
-import {
+import { Textarea } from "@/components/ui/textarea";
+import type {
 	LetterDetailType,
-	RoleEnum,
 	ShareLetterRequestType,
 } from "@/types/letter_module";
+import { RoleEnum } from "@/types/letter_module";
+import { useState } from "react";
+import * as uuidv4 from "uuid";
 
 type SelectType = {
+	id: string;
 	value: string;
 	label: string;
 };
 
 const permissions: SelectType[] = [
 	{
+		id: uuidv4.v4(),
 		value: "can_view_letter",
 		label: "ማየት ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_update_letter",
 		label: "ማረም ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_comment_letter",
 		label: "አስተያየት መስጠት ይችላል",
 	},
 	{
+		id: uuidv4.v4(),
 		value: "can_share_letter",
 		label: "ማጋራት ይችላል",
 	},
 	// {
+	// 	 id:uuidv4.v4(),
 	//   value: "transfer_ownership",
 	//   label: "ባለቤትነትን ያስተላልፉ",
 	// },
 	// {
+	//   id:uuidv4.v4(),
 	//   value: "remove_access",
 	//   label: "ፈቃድን ያስወግዱ",
 	// },
@@ -66,7 +72,7 @@ export default function ShareLetterDialog({
 }: {
 	letter: LetterDetailType;
 }) {
-	const [formData, setFormData] = useState<ShareLetterRequestType>({
+	const [formData] = useState<ShareLetterRequestType>({
 		to: [],
 		message: "",
 		permissions: "can_view_letter",
@@ -170,7 +176,7 @@ export default function ShareLetterDialog({
 			<DialogTrigger asChild>
 				<Button variant={"outline"}>ደብዳቤውን አጋራ</Button>
 			</DialogTrigger>
-			<DialogContent className="min-w-[45rem] max-w-[45rem] max-h-[40rem] flex flex-col">
+			<DialogContent className="flex max-h-[40rem] min-w-[45rem] max-w-[45rem] flex-col">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>የደብዳቤ መምሪያ</DialogTitle>
 
@@ -196,8 +202,8 @@ export default function ShareLetterDialog({
 									<SelectValue placeholder="ማየት ይችላል" />
 								</SelectTrigger>
 								<SelectContent>
-									{permissions.map(({ label, value }) => (
-										<SelectItem key={uuidv4()} value={value}>
+									{permissions.map(({ id, label, value }) => (
+										<SelectItem key={id} value={value}>
 											{label}
 										</SelectItem>
 									))}
@@ -205,13 +211,13 @@ export default function ShareLetterDialog({
 							</Select>
 						) : null}
 					</div>
-					<div className="flex flex-col gap-2 mt-4">
+					<div className="mt-4 flex flex-col gap-2">
 						{formData.to.length === 0 ? (
 							<div className="flex flex-col gap-2">
 								<h4 className="font-semibold">ደብዳቤው ያላቸው ሰዎች</h4>
 
 								<div className="flex items-center gap-3">
-									<Avatar className="w-11 h-11">
+									<Avatar className="h-11 w-11">
 										<AvatarFallback>
 											{letter.owner?.full_name.substring(0, 2)}
 										</AvatarFallback>
@@ -232,7 +238,7 @@ export default function ShareLetterDialog({
 											const { full_name, job_title } = user;
 											return (
 												<div key={id} className="flex items-center gap-3">
-													<Avatar className="w-11 h-11">
+													<Avatar className="h-11 w-11">
 														<AvatarFallback>{full_name.substring(0, 2)}</AvatarFallback>
 													</Avatar>
 													<p>{`${full_name} - ${job_title}`}</p>

@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import { Noto_Serif_Ethiopic } from "next/font/google";
-import "@/app/globals.css";
 import { StoreProvider } from "@/app/StoreProvider";
+import "@/app/globals.css";
 import { TopBar } from "@/components/layouts";
-import { Toaster } from "sonner";
 import { RequireAuth } from "@/components/shared";
 import Providers from "@/providers/Providers";
+import type { Metadata } from "next";
+import { Noto_Serif_Ethiopic } from "next/font/google";
+import { Toaster } from "sonner";
 
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
@@ -28,11 +28,13 @@ export default function RootLayout({
 				<body className={noto_serif_ethiopic.className}>
 					<Providers>
 						<RequireAuth>
-							<div className="absolute">
-								<Toaster richColors position="top-center" />
-							</div>
-							<TopBar />
-							{children}
+							<main className="flex h-full flex-col">
+								<div className="absolute">
+									<Toaster richColors position="top-center" />
+								</div>
+								<TopBar />
+								{children}
+							</main>
 						</RequireAuth>
 					</Providers>
 				</body>

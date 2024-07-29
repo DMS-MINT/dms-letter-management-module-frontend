@@ -1,23 +1,24 @@
 "use client";
 
-import { Subheader, Drawer } from "@/components/layouts";
-import { ActivityFeed } from "@/components/shared";
-import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
 import { getLetterDetails } from "@/actions/letter_module/crudActions";
-import { LetterDetailResponseType } from "@/types/letter_module";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
-import { toast } from "sonner";
+import { Drawer, Subheader } from "@/components/layouts";
 import {
 	DetailControlPanel,
 	LetterDetailsDrawer,
 	LetterSkeleton,
 } from "@/components/letter_module";
+import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
+import { ActivityFeed } from "@/components/shared";
+import type { LetterDetailResponseType } from "@/types/letter_module";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function LetterDetail() {
 	const { referenceNumber } = useParams();
+	const LETTER_TYPE = "outgoing";
 
-	const { data, isLoading, isSuccess, isError } = useQuery({
+	const { data, isSuccess } = useQuery({
 		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
 			try {
@@ -37,17 +38,19 @@ export default function LetterDetail() {
 	});
 
 	return isSuccess && data ? (
-		<main className="flex flex-col h-full">
+		<main className="flex h-full flex-col">
 			<Subheader>
 				<DetailControlPanel data={data} />
 			</Subheader>
-			<section className="flex px-5 gap-6 mt-2 flex-1">
+			<section className="mt-2 flex flex-1 gap-6 px-5">
 				<Drawer>
 					<LetterDetailsDrawer letter={data.letter} />
 				</Drawer>
 				<section className="flex-1 pb-5">
-					<section className="mb-5 flex-1 flex flex-col bg-gray-100">
-						{true ? <OutgoingLetterTemplate /> : null}
+					<section className="mb-5 flex flex-1 flex-col bg-gray-100">
+						{LETTER_TYPE === "outgoing" ? (
+							<OutgoingLetterTemplate letter={data.letter} />
+						) : null}
 					</section>
 					<ActivityFeed letter={data.letter} />
 				</section>

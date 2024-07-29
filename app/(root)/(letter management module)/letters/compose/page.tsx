@@ -1,23 +1,26 @@
+"use client";
+
 import { Drawer, Subheader } from "@/components/layouts";
 import {
 	ComposeControlPanel,
 	LetterComposeDrawer,
 } from "@/components/letter_module";
 import { OutgoingLetterTemplate } from "@/components/letter_module/templates";
+import type { LetterDetailType } from "@/types/letter_module";
 
 export default function Compose() {
+	const letter = {} as LetterDetailType;
 	return (
 		<>
 			<Subheader>
 				<ComposeControlPanel />
 			</Subheader>
-			<section className="flex px-8 gap-6 h-fit">
+			<section className="flex h-fit gap-6 px-8">
 				<Drawer>
 					<LetterComposeDrawer />
 				</Drawer>
-				<main className="mb-0 flex-1 flex flex-col bg-gray-100">
-					<div className="h-10 sticky top-0 bg-gray-100"></div>
-					{true ? <OutgoingLetterTemplate /> : null}
+				<main className="mb-0 flex flex-1 flex-col bg-gray-100">
+					{letter ? <OutgoingLetterTemplate letter={letter} /> : null}
 				</main>
 			</section>
 		</>

@@ -1,17 +1,15 @@
 "use client";
 
-import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
-import { Badge } from "@/components/ui/badge";
+import { Plus } from "lucide-react";
+import { useRef } from "react";
 import { toast } from "sonner";
 
 export default function FileUploadButton() {
 	// const attachments = useAppSelector(selectAttachments);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-	const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleButtonClick = () => {
 		fileInputRef.current?.click();
 	};
 
@@ -36,30 +34,30 @@ export default function FileUploadButton() {
 		}
 	};
 
-	const openFileInBrowser = (attachment: File) => {
-		if (attachment.type === "text/plain") {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else if (attachment.type === "application/pdf") {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else if (attachment.type.startsWith("image/")) {
-			const fileURL = URL.createObjectURL(attachment);
-			window.open(fileURL, "_blank");
-		} else {
-			console.error(`Unsupported file type: ${attachment.type}`);
-		}
-	};
+	// const openFileInBrowser = (attachment: File) => {
+	// 	if (attachment.type === "text/plain") {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else if (attachment.type === "application/pdf") {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else if (attachment.type.startsWith("image/")) {
+	// 		const fileURL = URL.createObjectURL(attachment);
+	// 		window.open(fileURL, "_blank");
+	// 	} else {
+	// 		console.error(`Unsupported file type: ${attachment.type}`);
+	// 	}
+	// };
 
 	return (
 		<div
 			className="
-    flex gap-3 items-end"
+    flex items-end gap-3"
 		>
 			<Button
 				type="button"
 				variant="outline"
-				className="flex gap-2 w-fit mt-4"
+				className="mt-4 flex w-fit gap-2"
 				onClick={handleButtonClick}
 			>
 				<Plus size={19} />
@@ -71,7 +69,7 @@ export default function FileUploadButton() {
 				style={{ display: "none" }}
 				onChange={handleFileChange}
 			/>
-			<div className="flex gap-5 flex-wrap">
+			<div className="flex flex-wrap gap-5">
 				{/* {attachments.map((attachment, index) => (
           <Badge
             className="rounded-sm text-gray-900 bg-gray-200 h-10 text-base font-normal cursor-pointer"

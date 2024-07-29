@@ -1,4 +1,5 @@
 import { LetterDetailType } from "./LetterType";
+import { ParticipantType } from "./ParticipantType";
 
 export type PermissionsResponseType = {
 	user_id: string;
@@ -11,7 +12,12 @@ export type LetterDetailResponseType = {
 	permissions: Array<PermissionsResponseType>;
 };
 
-export type NewLetterType = {};
+export type DraftLetterType = {
+	subject: string;
+	content: string;
+	letter_type: "internal" | "outgoing" | "incoming";
+	participants: ParticipantType[];
+};
 
 export type UpdatedLetterType = {};
 

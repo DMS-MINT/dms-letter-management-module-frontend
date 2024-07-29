@@ -1,5 +1,5 @@
+import { GuestType, MemberType } from "../user_module";
 import { RoleEnum } from "./RoleEnum";
-import { MemberType, GuestType } from "../user_module";
 
 export type ParticipantType = {
 	id: string;

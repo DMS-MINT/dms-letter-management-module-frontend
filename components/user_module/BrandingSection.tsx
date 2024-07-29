@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function BrandingSection() {
 	return (
-		<section className="bg-gradient px-14 pt-20 pb-14 flex flex-col justify-between">
+		<section className="flex flex-col justify-between bg-gradient px-14 pb-14 pt-20">
 			<div>
 				<Image
 					src={IMAGES.mint}
@@ -12,14 +12,14 @@ export default function BrandingSection() {
 					height={80}
 				/>
 
-				<h2 className="text-white font-medium text-xl mt-5 mb-2">
+				<h2 className="mb-2 mt-5 text-xl font-medium text-white">
 					የሰነድ አስተዳደር እና ኢ-ፊርማ
 				</h2>
-				<p className="text-gray-200 font-light text-sm">
+				<p className="text-sm font-light text-gray-200">
 					ጥረት የለሽ ሰነድ እና የደብዳቤ አስተዳደር፣ እንከን የለሽ ፊርማዎች።
 				</p>
 			</div>
-			<div className="flex gap-2 items-end">
+			<div className="flex items-end gap-2">
 				<p className="text-gray-200">በኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር በኩራት የተደገፈ</p>
 				<Image
 					src={IMAGES.mint_logo}

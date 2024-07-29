@@ -1,16 +1,18 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnHeader } from "@/components/shared/tableComponents";
-import { Circle } from "lucide-react";
-import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
-import StatusBadge from "../StatusBadge";
-import {
+import { Checkbox } from "@/components/ui/checkbox";
+import type {
 	LetterColumnDefType,
-	LetterTableColumns,
 	ParticipantType,
+} from "@/types/letter_module";
+import {
+	LetterTableColumns,
 	RoleEnum,
 	columnTranslation,
 	letterTypeTranslations,
 } from "@/types/letter_module";
+import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
+import { Circle } from "lucide-react";
+import StatusBadge from "../StatusBadge";
 
 export const draftTableColumns: LetterColumnDefType = [
 	{
@@ -43,7 +45,7 @@ export const draftTableColumns: LetterColumnDefType = [
 				<Circle
 					size={13}
 					className={
-						has_read ? "bg-primary rounded-full text-transparent" : "text-gray-400"
+						has_read ? "rounded-full bg-primary text-transparent" : "text-gray-400"
 					}
 				/>
 			);
@@ -137,13 +139,13 @@ export const draftTableColumns: LetterColumnDefType = [
 			<ColumnHeader
 				column={column}
 				title={columnTranslation[LetterTableColumns.CREATED_AT]}
-				className="w-fit ml-auto limited-rows"
+				className="limited-rows ml-auto w-fit"
 			/>
 		),
 		cell: ({ row }) => {
 			const created_at: string = row.getValue(LetterTableColumns.CREATED_AT);
 			return (
-				<div className="text-right font-medium px-4 py-1 limited-rows">
+				<div className="limited-rows px-4 py-1 text-right font-medium">
 					{convertToEthiopianDate(created_at)}
 				</div>
 			);

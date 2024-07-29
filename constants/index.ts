@@ -3,6 +3,7 @@ export const IMAGES = Object.freeze({
 	mint: "/images/mint.png",
 	pentagram: "/images/pentagram.png",
 	qr_code: "/images/qr_code.png",
+	"halftone-pattern": "/images/halftone-pattern.svg",
 });
 
 export const LINKS = Object.freeze({

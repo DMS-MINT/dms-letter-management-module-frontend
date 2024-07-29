@@ -14,7 +14,7 @@ import {
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { memo } from "react";
-import { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 
 type OTPInputFormProps = {
 	form: UseFormReturn<
@@ -24,7 +24,7 @@ type OTPInputFormProps = {
 		any,
 		undefined
 	>;
-	onChange: (value: string) => void;
+	onChange: (_value: string) => void;
 };
 
 function OTPInputForm({ form, onChange }: OTPInputFormProps) {

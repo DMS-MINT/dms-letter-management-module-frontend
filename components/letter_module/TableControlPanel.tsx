@@ -38,11 +38,11 @@ export default function TableControlPanel() {
 	}, [isValidCategory, router]);
 
 	return (
-		<section className="flex items-center justify-between w-full">
+		<section className="flex w-full items-center justify-between">
 			<h1 className="page-title">{categoryTitle}</h1>
 			<div className="flex items-center gap-4">
 				<Link href="/letters/compose">
-					<Button className="flex gap-1 w-fit items-center">
+					<Button className="flex w-fit items-center gap-1">
 						<Plus size={19} />
 						አዲስ ደብዳቤ
 					</Button>

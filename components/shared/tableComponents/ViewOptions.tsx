@@ -1,7 +1,7 @@
 "use client";
 
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +11,9 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Filter, FilterX, Settings2 } from "lucide-react";
-import { LetterTableColumns, columnTranslation } from "@/types/letter_module";
+import type { LetterTableColumns } from "@/types/letter_module";
+import { columnTranslation } from "@/types/letter_module";
+import { Settings2 } from "lucide-react";
 
 interface ViewOptionsProps<TData> {
 	table: Table<TData>;

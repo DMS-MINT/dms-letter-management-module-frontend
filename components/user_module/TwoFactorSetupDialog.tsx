@@ -9,16 +9,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { useAppSelector } from "@/hooks";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Spinner } from "../shared";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
 	Form,
 	FormControl,
@@ -32,8 +22,19 @@ import {
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Button } from "../ui/button";
 import { LINKS } from "@/constants";
+import { useAppSelector } from "@/hooks";
+import { selectMyProfile } from "@/lib/features/user/userSlice";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Spinner } from "../shared";
+import { Button } from "../ui/button";
 
 const formSchema = z.object({
 	otp: z
@@ -103,7 +104,7 @@ export default function TwoFactorSetupDialog() {
 			setIsDialogOpen(true);
 			requestQRCodeMutate();
 		}
-	}, [myProfile]);
+	}, [myProfile, requestQRCodeMutate]);
 
 	const oneTimePassword = form.watch("otp");
 
@@ -124,8 +125,8 @@ export default function TwoFactorSetupDialog() {
 						<DialogDescription>
 							የQR ኮድን ለመቃኘት የ
 							<Link
-								href={LINKS.google_authenticator}
 								className="text-blue-800"
+								href={LINKS.google_authenticator}
 								target="_blank"
 							>
 								{" Google Authenticator "}
@@ -135,13 +136,15 @@ export default function TwoFactorSetupDialog() {
 					</DialogHeader>
 					<div className="flex justify-center">
 						{qrCodeImage ? (
-							<img
+							<Image
+								className="bg-white"
 								src={`data:image/png;base64,${qrCodeImage}`}
 								alt="QR code for two-factor authentication setup"
-								className="bg-white w-60"
+								width={240}
+								height={240}
 							/>
 						) : (
-							<div className="w-60 aspect-square flex justify-center items-center">
+							<div className="flex aspect-square w-60 items-center justify-center">
 								<Spinner />
 							</div>
 						)}
@@ -180,6 +183,7 @@ export default function TwoFactorSetupDialog() {
 						</Form>
 					</div>
 					<DialogFooter>
+						<Button variant={"outline"}>Logout</Button>
 						<Button
 							disabled={
 								!oneTimePassword || oneTimePassword.toString().length !== 6 || isPending

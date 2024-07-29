@@ -1,6 +1,6 @@
 export default function CoverPage() {
 	return (
-		<div className=" bg-white px-16 py-14 w-[797px] h-[280mm] border border-gray-300">
+		<div className=" h-[280mm] w-[797px] border border-gray-300 bg-white px-16 py-14">
 			<textarea name="" id="" className="h-full w-full"></textarea>
 		</div>
 	);

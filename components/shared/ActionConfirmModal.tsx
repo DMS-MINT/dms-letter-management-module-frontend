@@ -1,24 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
+	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-	DialogFooter,
-	DialogDescription,
-	DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import {
-	Ref,
-	forwardRef,
-	memo,
-	useCallback,
-	useImperativeHandle,
-	useState,
-} from "react";
 import {
 	Form,
 	FormControl,
@@ -33,6 +25,14 @@ import {
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useOTP } from "@/hooks";
+import type { Ref } from "react";
+import {
+	forwardRef,
+	memo,
+	useCallback,
+	useImperativeHandle,
+	useState,
+} from "react";
 
 export type ActionConfirmModalRef = {
 	getOTP: () => number;
@@ -92,7 +92,7 @@ function ActionConfirmModal(
 					{triggerButtonText}
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="flex flex-col bg-white p-4 rounded-md shadow-lg">
+			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
