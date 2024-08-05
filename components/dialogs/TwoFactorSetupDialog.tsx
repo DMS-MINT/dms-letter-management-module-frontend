@@ -33,7 +33,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Spinner } from "../shared";
+import { Spinner } from "../helpers";
 import { Button } from "../ui/button";
 
 const formSchema = z.object({

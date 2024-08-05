@@ -53,7 +53,9 @@ export default function TopBar() {
 						)}
 						{params.referenceNumber ? (
 							<BreadcrumbItem>
-								<BreadcrumbPage>{params.referenceNumber}</BreadcrumbPage>
+								<BreadcrumbPage className="text-sm">
+									{params.referenceNumber}
+								</BreadcrumbPage>
 							</BreadcrumbItem>
 						) : null}
 					</BreadcrumbList>
