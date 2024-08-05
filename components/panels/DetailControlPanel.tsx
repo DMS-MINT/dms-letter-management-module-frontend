@@ -1,6 +1,7 @@
 import { ActionButtons } from "@/components/buttons";
 import { StatusBadge } from "@/components/pills";
 import type { LetterDetailResponseType } from "@/types/letter_module";
+import { PrintPreviewButton } from "../buttons";
 
 export default function DetailControlPanel({
 	data,
@@ -14,9 +15,10 @@ export default function DetailControlPanel({
 			</h1>
 			<StatusBadge current_state={data.letter.current_state} />
 			<div className="ml-auto flex items-center gap-2">
-				{/* <PrintPreviewButton /> */}
+				<PrintPreviewButton pdf_version={data.letter.pdf_version} />
 				<ActionButtons data={data} />
 			</div>
 		</section>
 	);
 }
+PrintPreviewButton;
