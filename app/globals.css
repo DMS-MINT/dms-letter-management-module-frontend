@@ -87,3 +87,20 @@ input[type="number"]::-webkit-inner-spin-button {
 .card {
 	@apply h-full rounded-lg border bg-card p-3 text-card-foreground shadow-sm;
 }
+
+/* Style for react-select when it is used in vertical mode */
+.vertical__control {
+	@apply !border-none !bg-transparent;
+	box-shadow: none !important;
+}
+.vertical__value-container {
+	@apply !flex !flex-col !items-start !p-0;
+}
+
+.vertical__multi-value {
+	@apply !bg-transparent;
+}
+
+.vertical__multi-value__label {
+	@apply !text-base;
+}
