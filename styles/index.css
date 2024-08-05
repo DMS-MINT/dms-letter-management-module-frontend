@@ -1,9 +1,5 @@
 .ProseMirror {
-	@apply z-0 py-16 pl-20 pr-8 caret-black outline-0 dark:caret-white lg:pl-8 lg:pr-8;
-
-	& > * {
-		@apply mx-auto max-w-2xl;
-	}
+	@apply mx-auto min-h-[2in] w-full outline-0;
 
 	.selection {
 		@apply inline;
@@ -31,8 +27,25 @@
 	}
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
 [data-theme="slash-command"] {
 	width: 1000vw;
+}
+
+[data-type="customNode"] {
+	@apply border-2 border-dashed border-yellow-400 p-6;
+}
+
+.prefix {
+	font-weight: bold;
+	margin-right: 5px;
 }
 
 @import "./partials/animations.css";
