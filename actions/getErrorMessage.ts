@@ -1,4 +1,4 @@
-import { ErrorCodeEnum, ErrorMessageType } from "@/types/shared";
+import type { ErrorCodeEnum, ErrorMessageType } from "@/types/shared";
 
 const DEFAULT_MESSAGE: string =
 	"ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ። ችግሩ ከቀጠለ፣ እባክዎ ድጋፍን ያግኙ።";
@@ -18,7 +18,7 @@ export default function getErrorMessage(
 
 	// console.log(error_code);
 	// console.log(error.code);
-	// console.log(error.response.data);
+	// console.log(error.response.data.extra);
 
 	return errorMessages[error_code] || DEFAULT_MESSAGE;
 }

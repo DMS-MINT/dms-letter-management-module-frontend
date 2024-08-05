@@ -60,8 +60,6 @@ export default function Table() {
 
 				if (!response.ok) throw response;
 
-				console.log(response.message);
-
 				return response.message.letters;
 			} catch (error: any) {
 				toast.dismiss();

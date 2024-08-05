@@ -1,8 +1,8 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import { ParamsType } from "@/hooks";
-import { ShareLetterRequestType } from "@/types/letter_module";
+import type { ParamsType } from "@/hooks";
+import type { ShareLetterRequestType } from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
 import { workflowErrorMessages } from "./errorMessages";
 
