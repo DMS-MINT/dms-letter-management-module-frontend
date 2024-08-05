@@ -33,10 +33,10 @@ function ActionButtons({
 	const { mutate } = useWorkflowDispatcher();
 
 	const handleAction = useCallback(
-		(actionType: ActionType, otp?: number) => {
+		(actionType: ActionType, otp?: number, message?: string) => {
 			mutate({
 				actionType,
-				params: { referenceNumber: letter.reference_number, otp },
+				params: { referenceNumber: letter.reference_number, otp, message },
 			});
 		},
 		[mutate, letter.reference_number]
@@ -121,6 +121,7 @@ function ActionButtons({
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
+						requriresMessage={true}
 						triggerButtonText="ደብዳቤውን አትቀበል"
 						triggerButtonVariant="destructive"
 						dialogTitle="ደብዳቤውን አትቀበል"
@@ -129,8 +130,9 @@ function ActionButtons({
 						confirmButtonText="አዎ"
 						onConfirm={() => {
 							const otp: number | undefined = modelRef.current?.getOTP();
-							if (!otp) return;
-							handleAction("reject_letter", otp);
+							const message: string | undefined = modelRef.current?.message;
+							if (!otp || !message) return;
+							handleAction("reject_letter", otp, message);
 						}}
 						requiresAuth={true}
 					/>
