@@ -2,26 +2,20 @@ import type { LetterStoreType } from "@/stores";
 import type { ParticipantType } from "@/types/letter_module";
 import { RoleEnum } from "@/types/letter_module";
 
-function isHtmlStringEmpty(htmlString: string): boolean {
-	const parser = new DOMParser();
-	const doc = parser.parseFromString(htmlString, "text/html");
-
-	function isElementEmpty(element: HTMLElement): boolean {
-		if (element.textContent?.trim() !== "") {
-			return false;
-		}
-
-		const children = Array.from(element.children);
-		for (const child of children) {
-			if (!isElementEmpty(child as HTMLElement)) {
-				return false;
-			}
-		}
-
-		return true;
+function isContentEmpty(html: string): boolean {
+	if (typeof document === "undefined") {
+		// If document is not defined (e.g., during SSR), return false
+		return false;
 	}
 
-	return isElementEmpty(doc.body);
+	const tempDiv: HTMLDivElement = document.createElement("div");
+	tempDiv.innerHTML = html;
+
+	const textContent = tempDiv.textContent?.trim() || "";
+
+	return (
+		textContent === "" && !tempDiv.querySelector("img, iframe, video, audio")
+	);
 }
 
 export default function canSubmitLetter(
@@ -34,7 +28,7 @@ export default function canSubmitLetter(
 
 	const hasSubject = letter.subject.trim() !== "";
 
-	const hasContent = !isHtmlStringEmpty(letter.content);
+	const hasContent = !isContentEmpty(letter.content);
 
 	return hasPrimaryRecipient && hasContent && hasSubject;
 }
