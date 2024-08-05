@@ -1,6 +1,9 @@
 "use client";
 
-import { getDefaultSignature } from "@/actions/signature_module/action";
+import {
+	createAndPublishLetter,
+	createAndSubmitLetter,
+} from "@/actions/letter_module/crudActions";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -13,50 +16,105 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { LINKS } from "@/constants";
-import { useOTP, useWorkflowDispatcher } from "@/hooks";
-import type { LetterDetailType } from "@/types/letter_module";
+import { useOTP } from "@/hooks";
+import { useLetterStore, useParticipantStore } from "@/stores";
+import type {
+	DraftLetterType,
+	LetterDetailResponseType,
+} from "@/types/letter_module";
+import { canSubmitLetter } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { OTPInputForm } from "../shared";
+import { OTPInputForm } from "../forms";
+
+export type ActionType = "create_and_submit" | "create_and_publish";
+
+export type CreateLetterParams = {
+	letter: DraftLetterType;
+	otp: number;
+};
+
+export type LetterActionProps = {
+	actionType: ActionType;
+	params: CreateLetterParams;
+};
 
 export default function SubmitLetterDialog({
-	letter,
+	actionType,
 }: {
-	letter: LetterDetailType;
+	actionType: ActionType;
 }) {
-	const { form, getOTP, handleInputChange } = useOTP();
-	const { mutate, isPending } = useWorkflowDispatcher();
+	const participants = useParticipantStore((state) => state.participants);
+	const letter = useLetterStore((state) => ({
+		subject: state.subject,
+		content: state.content,
+		letter_type: state.letter_type,
+		language: state.language,
+	}));
 
-	const getDefaultSignatureMutation = useMutation({
-		mutationKey: ["getDefaultSignature"],
-		mutationFn: async (otp: number) => {
-			const response = await getDefaultSignature(otp);
+	const { form, getOTP, handleInputChange } = useOTP();
+	const router = useRouter();
+
+	const actionDispatcher = async ({ actionType, params }: LetterActionProps) => {
+		switch (actionType) {
+			case "create_and_submit":
+				return await createAndSubmitLetter(params);
+			case "create_and_publish":
+				return await createAndPublishLetter(params);
+			default:
+				throw new Error("Invalid action type");
+		}
+	};
+
+	const { mutate, isPending } = useMutation({
+		mutationKey: ["createLetter"],
+		mutationFn: async (action: LetterActionProps) => {
+			const response = await actionDispatcher(action);
 
 			if (!response.ok) throw response;
 
-			return response.message;
+			return response.message as LetterDetailResponseType;
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("የእርስዎን የማረጋገጫ ኮድ በማረጋገጥ ላይ። እባክዎ ይጠብቁ...");
+			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
-			return data.e_signature;
+			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
+			router.push(`/letters/draft/${data.letter.reference_number}`);
 		},
-		onError: (error) => {
+		onError: (error: any) => {
 			toast.dismiss();
 			toast.error(error.message);
 		},
 	});
+
+	const onContinue = (otp: number) => {
+		const action: LetterActionProps = {
+			actionType,
+			params: {
+				letter: {
+					subject: letter.subject,
+					content: letter.content,
+					letter_type: letter.letter_type,
+					language: letter.language,
+					participants,
+				},
+				otp: otp,
+			},
+		};
+		mutate(action);
+	};
 
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button
 					type="button"
+					disabled={!canSubmitLetter(letter, participants)}
 					onClick={() => {
 						form.reset();
 					}}
@@ -66,83 +124,38 @@ export default function SubmitLetterDialog({
 			</DialogTrigger>
 			<DialogContent className="">
 				<DialogHeader className="gap-2">
-					{getDefaultSignatureMutation.isSuccess ? (
-						<DialogTitle>ወደ መዝገብ ቢሮ አስተላልፍ</DialogTitle>
-					) : (
-						<DialogTitle>ማንነትዎን ያረጋግጡ</DialogTitle>
-					)}
-					{getDefaultSignatureMutation.isSuccess ? (
-						<DialogDescription>
-							እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።
-						</DialogDescription>
-					) : (
-						<DialogDescription>
-							ይህን ደብዳቤ ደህንነቱ በተጠበቀ መልኩ ለመፈረም፣ እባክዎ በእርስዎ
-							{
-								<Link
-									href={LINKS.google_authenticator}
-									className="text-blue-800"
-									target="_blank"
-								>
-									{" Google Authenticator "}
-								</Link>
-							}
-							መተግበሪያ የመነጨውን የአንድ ጊዜ የይለፍ ቃል ያስገቡ።
-						</DialogDescription>
-					)}
+					<DialogTitle>ማንነትዎን ያረጋግጡ</DialogTitle>
+					<DialogDescription>
+						ይህን ደብዳቤ ደህንነቱ በተጠበቀ መልኩ ለመፈረም፣ እባክዎ በእርስዎ
+						{
+							<Link
+								href={LINKS.google_authenticator}
+								className="text-blue-800"
+								target="_blank"
+							>
+								{" Google Authenticator "}
+							</Link>
+						}
+						መተግበሪያ የመነጨውን የአንድ ጊዜ የይለፍ ቃል ያስገቡ።
+					</DialogDescription>
 				</DialogHeader>
 				<div className="px-2">
-					{getDefaultSignatureMutation.isSuccess ? (
-						<div className="flex h-60 justify-center">
-							<Image
-								src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${getDefaultSignatureMutation.data.e_signature}`}
-								alt="Your Signature"
-								width={446}
-								height={260}
-							/>
-						</div>
-					) : (
-						<OTPInputForm form={form} onChange={handleInputChange} />
-					)}
+					<OTPInputForm form={form} onChange={handleInputChange} />
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>
-						{getDefaultSignatureMutation.isSuccess ? (
-							<Button variant="outline" onClick={getDefaultSignatureMutation.reset}>
-								አይ
-							</Button>
-						) : (
-							<Button variant="outline">ሰርዝ</Button>
-						)}
+						<Button variant="outline">ሰርዝ</Button>
 					</DialogClose>
-					{getDefaultSignatureMutation.isSuccess ? (
-						<Button
-							disabled={isPending}
-							type="button"
-							onClick={() => {
-								mutate({
-									actionType: "submit_letter",
-									params: { referenceNumber: letter.reference_number },
-								});
-							}}
-						>
-							አዎ
-						</Button>
-					) : (
-						<Button
-							disabled={
-								getOTP()?.toString().length !== 6 ||
-								getDefaultSignatureMutation.isPending
-							}
-							type="submit"
-							onClick={() => {
-								const otp = getOTP();
-								getDefaultSignatureMutation.mutate(otp);
-							}}
-						>
-							ቀጥል
-						</Button>
-					)}
+					<Button
+						disabled={getOTP()?.toString().length !== 6 || isPending}
+						type="submit"
+						onClick={() => {
+							const otp = getOTP();
+							onContinue(otp);
+						}}
+					>
+						ቀጥል
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
