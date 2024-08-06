@@ -11,7 +11,11 @@ export default function DetailControlPanel({
 	return (
 		<section className="flex w-full items-center justify-between">
 			<h1 className="page-title limited-chars ">
-				{data.letter.subject ? data.letter.subject : "ርዕሰ ጉዳይ የሌለው ደብዳቤ"}
+				{data.letter.subject ? (
+					data.letter.subject
+				) : (
+					<span className="text-gray-400">ርዕሰ ጉዳይ የሌለው ደብዳቤ</span>
+				)}
 			</h1>
 			<StatusBadge current_state={data.letter.current_state} />
 			<div className="ml-auto flex items-center gap-2">
