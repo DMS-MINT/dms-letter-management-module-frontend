@@ -11,7 +11,7 @@ import {
 } from "@/lib/features/letterSlice";
 import type { LetterDetailType, SignatureType } from "@/types/letter_module";
 import { RoleEnum } from "@/types/letter_module";
-import { convertToEthiopianDate } from "@/utils";
+import { convertToEthiopianDateonly } from "@/utils/convertToEthiopianDate";
 import { LaptopMinimal, Mail, Phone } from "lucide-react";
 import Image from "next/image";
 
@@ -71,7 +71,9 @@ export default function CoverPage({ letter }: { letter: LetterDetailType }) {
 						</div>
 						<div className="flex w-32 flex-col font-mono  ">
 							<p>
-								{letter?.created_at ? convertToEthiopianDate(letter.created_at) : ""}
+								{letter?.created_at
+									? convertToEthiopianDateonly(letter.created_at)
+									: ""}
 							</p>
 							<hr />
 						</div>

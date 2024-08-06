@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { AttachmentType, CommentType } from "../shared";
-import { MemberType } from "../user_module";
-import { ParticipantType } from "./ParticipantType";
+import type { AttachmentType, CommentType } from "../shared";
+import type { MemberType } from "../user_module";
+import type { ParticipantType } from "./ParticipantType";
 
 export type SignatureType = {
 	id: string;
@@ -26,7 +26,8 @@ export type LetterType = {
 	participants: ParticipantType[];
 };
 
-export type LetterColumnDefType = ColumnDef<LetterType>[];
+// export type LetterColumnDefType = ColumnDef<LetterType>[];
+export type LetterColumnDefType = ColumnDef<LetterType, any>[];
 
 export type LetterDetailType = {
 	id: string;
