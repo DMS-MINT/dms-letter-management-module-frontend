@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import {
 	Select,
 	SelectContent,
@@ -9,11 +8,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useLetterStore } from "@/stores";
+import { useLetterStore, useUserStore } from "@/stores";
 import { LanguageEnum } from "@/types/shared";
 import { Languages, Mail, Paperclip } from "lucide-react";
 
 export default function LetterComposeDrawer() {
+	const is_staff = useUserStore((state) => state.currentUser.is_staff);
 	const { updateLetterField, letter_type, language } = useLetterStore(
 		(state) => ({
 			letter_type: state.letter_type,
@@ -49,9 +49,11 @@ export default function LetterComposeDrawer() {
 							<SelectItem value="outgoing" className="pr-2">
 								ወደ ውጪ የሚላክ
 							</SelectItem>
-							<SelectItem value="incoming" className="pr-2">
-								ከውጭ የተላከ
-							</SelectItem>
+							{is_staff ? (
+								<SelectItem value="incoming" className="pr-2">
+									ከውጭ የተላከ
+								</SelectItem>
+							) : null}
 						</SelectGroup>
 					</SelectContent>
 				</Select>
@@ -77,7 +79,6 @@ export default function LetterComposeDrawer() {
 					<Paperclip size={20} className="text-gray-600" />
 					<p className="text-gray-600">የተያያዙ ፋይሎች</p>
 				</div>
-				<Badge className="mb-2 h-10 rounded-sm bg-gray-200 text-base font-normal text-gray-900"></Badge>
 			</div>
 		</section>
 	);
