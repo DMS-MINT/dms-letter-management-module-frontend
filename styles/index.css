@@ -1,0 +1,58 @@
+.ProseMirror {
+	@apply mx-auto min-h-[2in] w-full outline-0;
+
+	.selection {
+		@apply inline;
+	}
+
+	.selection,
+	*::selection {
+		@apply bg-black/10 dark:bg-white/20;
+	}
+
+	& > .react-renderer {
+		@apply my-12 first:mt-0 last:mb-0;
+	}
+
+	&.resize-cursor {
+		@apply cursor-col-resize;
+	}
+
+	.ProseMirror-gapcursor {
+		@apply relative mx-auto w-full max-w-2xl;
+
+		&:after {
+			@apply -top-[1.5em] left-0 right-0 mx-auto w-full max-w-2xl border-t-black/40 dark:border-t-white/40;
+		}
+	}
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+	color: #adb5bd;
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+}
+
+[data-theme="slash-command"] {
+	width: 1000vw;
+}
+
+[data-type="customNode"] {
+	@apply border-2 border-dashed border-yellow-400 p-6;
+}
+
+.prefix {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+@import "./partials/animations.css";
+@import "./partials/blocks.css";
+@import "./partials/code.css";
+@import "./partials/collab.css";
+@import "./partials/lists.css";
+@import "./partials/placeholder.css";
+@import "./partials/table.css";
+@import "./partials/typography.css";

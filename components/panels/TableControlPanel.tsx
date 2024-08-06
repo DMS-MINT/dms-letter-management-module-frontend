@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLetterStore, useUserStore } from "@/stores";
 import { letterCategoryTranslations } from "@/types/letter_module";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 const whitelist: string[] = [
@@ -25,6 +25,8 @@ export default function TableControlPanel() {
 	const params = useParams();
 	const router = useRouter();
 	const category: string = params.category as string;
+	const updateLetterField = useLetterStore((state) => state.updateLetterField);
+	const is_staff = useUserStore((state) => state.currentUser.is_staff);
 
 	const isValidCategory = useMemo(
 		() => whitelist.includes(category),
@@ -42,25 +44,36 @@ export default function TableControlPanel() {
 		}
 	}, [isValidCategory, router]);
 
+	const handleClick = (type: string): void => {
+		updateLetterField("letter_type", type);
+		router.push("/letters/compose");
+	};
+
 	return (
 		<section className="flex w-full items-center justify-between">
 			<h1 className="page-title">{categoryTitle}</h1>
 			<div className="flex items-center gap-4">
-				<TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger>
-							<Link href="/letters/compose">
-								<Button className="flex w-fit items-center gap-1">
-									<Plus size={19} />
-									አዲስ ደብዳቤ
-								</Button>
-							</Link>
-						</TooltipTrigger>
-						<TooltipContent>
-							<p>አዲስ ደብዳቤ</p>
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button className="flex w-fit items-center gap-1">
+							<Plus size={19} />
+							አዲስ ደብዳቤ
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuItem onClick={() => handleClick("internal")}>
+							የውስጥ ደብዳቤ
+						</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => handleClick("outgoing")}>
+							ወደ ውጪ የሚላክ ደብዳቤ
+						</DropdownMenuItem>
+						{is_staff ? (
+							<DropdownMenuItem onClick={() => handleClick("incoming")}>
+								ከውጭ የተላከ ደብዳቤ
+							</DropdownMenuItem>
+						) : null}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 		</section>
 	);

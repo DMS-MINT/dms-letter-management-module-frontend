@@ -90,7 +90,8 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 			return await restoreFromTrash(referenceNumbers[0]);
 		case "submit_letter":
 			return await submitLetter({
-				referenceNumber: referenceNumbers[0],
+				referenceNumber: params.referenceNumber,
+				otp: params.otp,
 			});
 		case "trash_letter":
 			return await moveToTrash(referenceNumbers[0]);

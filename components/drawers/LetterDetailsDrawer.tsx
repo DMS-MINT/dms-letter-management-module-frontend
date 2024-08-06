@@ -1,19 +1,22 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import type { LetterDetailType } from "@/types/letter_module";
-import { letterTypeTranslations } from "@/types/letter_module";
-import { FileDigit, Mail, MessageSquareText, Paperclip } from "lucide-react";
-import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
-import * as uuidv4 from "uuid";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { LetterDetailType } from "@/types/letter_module";
+import { letterTypeTranslations } from "@/types/letter_module";
+import {
+	FileDigit,
+	Languages,
+	Mail,
+	MessageSquareText,
+	Paperclip,
+} from "lucide-react";
+import React, { Fragment, useEffect, useState } from "react";
 
 interface ILetterMetaData {
 	label: string;
@@ -37,8 +40,16 @@ export default function LetterDetailsDrawer({
 			},
 			{
 				label: "የመዝገብ ቁጥር",
-				value: letter.reference_number,
+				value:
+					letter.language === "English"
+						? letter.reference_number
+						: letter.reference_number_am,
 				icon: <FileDigit size={20} className="text-gray-600" />,
+			},
+			{
+				label: "ቋንቋ",
+				value: letter.language,
+				icon: <Languages size={20} className="text-gray-600" />,
 			},
 		];
 		setLetterMeta(LetterMetaData);
@@ -62,29 +73,6 @@ export default function LetterDetailsDrawer({
 					<Paperclip size={20} className="text-gray-600" />
 					<p className="text-gray-600">የተያያዙ ፋይሎች</p>
 				</div>
-				{letter.attachments.map((attachment, index) => (
-					<Badge
-						key={attachment.id}
-						className="h-10 rounded-sm bg-gray-200 text-base font-normal text-gray-900"
-					>
-						<Link
-							key={uuidv4.v4()}
-							href={`${process.env.NEXT_PUBLIC_API_BASE_URL}${attachment.file}`}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							{`አባሪ ${index + 1}`}
-						</Link>
-						<Button
-							size="icon"
-							variant="ghost"
-							type="button"
-							className="ml-auto p-0 hover:bg-transparent"
-						>
-							{/* <X size={20} /> */}
-						</Button>
-					</Badge>
-				))}
 			</div>
 			<TooltipProvider>
 				<Tooltip>

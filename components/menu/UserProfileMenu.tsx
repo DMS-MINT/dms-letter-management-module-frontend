@@ -84,7 +84,7 @@ export default function UserProfileMenu() {
 						<div className="flex flex-col items-center ">
 							<p className="text-sm">{myProfile.full_name}</p>
 							<span className="text-xs text-muted-foreground">
-								{myProfile.department}
+								{myProfile.department.name_en}
 							</span>
 						</div>
 					</DropdownMenuItem>

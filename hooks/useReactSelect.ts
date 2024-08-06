@@ -1,22 +1,23 @@
 "use client";
 
 import { getAllUsers } from "@/actions/user_module/action";
-import { addParticipant } from "@/lib/features/letterSlice";
+import { useParticipantStore } from "@/stores";
 import type { RoleEnum } from "@/types/letter_module";
 import type { GuestType, MemberType } from "@/types/user_module";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import type { ActionMeta } from "react-select";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
-import { useAppDispatch } from "./reduxHooks";
+import * as uuidv4 from "uuid";
 
-export type ReactSelectPropType = {
-	isMulti: boolean;
-};
+export default function useReactSelect() {
+	const { removeParticipant, addParticipant, participants } =
+		useParticipantStore((state) => ({
+			participants: state.participants,
+			addParticipant: state.addParticipant,
+			removeParticipant: state.removeParticipant,
+		}));
 
-export default function useReactSelect({ isMulti }: ReactSelectPropType) {
-	const dispatch = useAppDispatch();
 	type OptionType = MemberType | GuestType;
 
 	const {
@@ -50,7 +51,7 @@ export default function useReactSelect({ isMulti }: ReactSelectPropType) {
 		const role = name as RoleEnum;
 
 		const handleSelectOption = (option: OptionType) => {
-			dispatch(addParticipant({ id: uuidv4(), user: option, role }));
+			addParticipant({ id: uuidv4.v4(), user: option, role });
 		};
 
 		switch (action) {
@@ -79,29 +80,27 @@ export default function useReactSelect({ isMulti }: ReactSelectPropType) {
 		const role = name as RoleEnum;
 
 		const handleSelectOption = (selectedOption: OptionType) => {
-			// dispatch(addParticipant({ id: uuidv4(), user: selectedOption, role }));
+			addParticipant({ id: uuidv4.v4(), user: selectedOption, role });
 		};
 
 		const handleCreateOption = (selectedOption: OptionType) => {
 			const { value } = selectedOption as unknown as { value: string };
 			const user_type = "guest";
-			// dispatch(
-			// 	addParticipant({
-			// 		id: uuidv4(),
-			// 		user: { id: value, name: value, user_type },
-			// 		role,
-			// 	})
-			// );
+			addParticipant({
+				id: uuidv4.v4(),
+				user: { id: value, name: value, user_type },
+				role,
+			});
 		};
 
 		const handleRemoveValue = (removedValue: OptionType) => {
 			const user_id = removedValue.id;
 
 			if (user_id) {
-				// dispatch(removeParticipant(user_id));
+				removeParticipant(user_id);
 			} else {
 				const { value } = removedValue as unknown as { value: string };
-				// dispatch(removeParticipant(value));
+				removeParticipant(value);
 			}
 		};
 
@@ -109,12 +108,12 @@ export default function useReactSelect({ isMulti }: ReactSelectPropType) {
 			removedValues.forEach((removedValue) => {
 				const user_id = removedValue.id;
 
-				// if (user_id) {
-				// 	dispatch(removeParticipant(user_id));
-				// } else {
-				// 	const { value } = removedValue as unknown as { value: string };
-				// 	dispatch(removeParticipant(value));
-				// }
+				if (user_id) {
+					removeParticipant(user_id);
+				} else {
+					const { value } = removedValue as unknown as { value: string };
+					removeParticipant(value);
+				}
 			});
 		};
 
@@ -168,11 +167,18 @@ export default function useReactSelect({ isMulti }: ReactSelectPropType) {
 		return `${option.value}`;
 	};
 
+	const getDefaultValue = (role: RoleEnum) => {
+		return participants
+			.filter((participant) => participant.role === role)
+			.map((participant) => participant.user);
+	};
+
 	return {
 		users,
 		getValue,
 		getLabel,
 		isSuccess,
+		getDefaultValue,
 		handleSingleSelectChange,
 		handleMultiSelectChange,
 	};

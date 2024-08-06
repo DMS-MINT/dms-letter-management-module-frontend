@@ -2,7 +2,10 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
-import type { DraftLetterType } from "@/types/letter_module";
+import type {
+	DraftLetterType,
+	ModifiedLetterType,
+} from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
 import { curdErrorMessages } from "./errorMessages";
 
@@ -41,17 +44,18 @@ export async function createLetter(letter: DraftLetterType) {
 	}
 }
 
-export async function createAndSubmitLetter(letter: FormData) {
+export async function createAndSubmitLetter({
+	letter,
+	otp,
+}: {
+	letter: DraftLetterType;
+	otp: number;
+}) {
 	try {
-		const response = await axiosInstance.post(
-			"letters/create_and_submit/",
+		const response = await axiosInstance.post("letters/create_and_submit/", {
 			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
-		);
+			otp,
+		});
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -59,17 +63,18 @@ export async function createAndSubmitLetter(letter: FormData) {
 	}
 }
 
-export async function createAndPublishLetter(letter: FormData) {
+export async function createAndPublishLetter({
+	letter,
+	otp,
+}: {
+	letter: DraftLetterType;
+	otp: number;
+}) {
 	try {
-		const response = await axiosInstance.post(
-			"letters/create_and_publish/",
+		const response = await axiosInstance.post("letters/create_and_publish/", {
 			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
-		);
+			otp,
+		});
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -77,16 +82,14 @@ export async function createAndPublishLetter(letter: FormData) {
 	}
 }
 
-export async function updateLetter(referenceNumber: string, letter: FormData) {
+export async function updateLetter(
+	referenceNumber: string,
+	letter: ModifiedLetterType
+) {
 	try {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/update/`,
-			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
+			letter
 		);
 
 		return { ok: true, message: response.data };

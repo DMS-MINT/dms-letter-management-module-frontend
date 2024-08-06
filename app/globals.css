@@ -70,15 +70,17 @@
 
 html {
 	scroll-behavior: smooth;
+	@apply h-full;
 }
 
 body {
-	@apply flex h-screen flex-col bg-gray-50;
+	@apply flex h-full flex-col bg-gray-50;
 }
 
 input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 }
+
 .page-title {
 	@apply text-xl font-bold text-gray-900;
 }
@@ -87,36 +89,19 @@ input[type="number"]::-webkit-inner-spin-button {
 	@apply h-full rounded-lg border bg-card p-3 text-card-foreground shadow-sm;
 }
 
-.mention {
-	@apply rounded-md bg-[#f8f2ff] box-decoration-clone px-1 py-0.5 text-[#9d30f8];
+/* Style for react-select when it is used in vertical mode */
+.vertical__control {
+	@apply !border-none !bg-transparent;
+	box-shadow: none !important;
+}
+.vertical__value-container {
+	@apply !flex !flex-col !items-start !p-0;
 }
 
-.limited-rows {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2; /* Limit text to 2 lines */
-	overflow: hidden; /* Hide overflow text */
-	text-overflow: ellipsis; /* Add ellipsis (...) at the end */
-	line-height: 1.5em; /* Adjust line height */
-	max-height: 3em; /* Ensure the height doesn't exceed two lines */
-	height: 3em; /* Set height to two lines */
-	box-sizing: border-box; /* Include padding and border in the height calculation */
+.vertical__multi-value {
+	@apply !bg-transparent;
 }
 
-.limited-chars {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	max-width: 35ch; /* Set the width to accommodate 10 characters */
-	display: inline-block;
-	box-sizing: border-box;
-}
-
-.limited-table-chars {
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	max-width: 35ch; /* Set the width to accommodate 10 characters */
-	display: inline-block;
-	box-sizing: border-box;
+.vertical__multi-value__label {
+	@apply !text-base;
 }

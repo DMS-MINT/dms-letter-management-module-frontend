@@ -1,28 +1,32 @@
-import { DraftLetterType } from "@/types/letter_module";
+import { LanguageEnum } from "@/types/shared";
 import { create } from "zustand";
 
-export type DraftLetterStoreType = {
-	draftLetter: DraftLetterType;
+export type LetterStoreType = {
+	subject: string;
+	content: string;
+	letter_type: "internal" | "outgoing" | "incoming";
+	language: LanguageEnum;
 };
 
-export type DraftLetterActions = {
-	setDraftLetter: (draftLetter: DraftLetterType) => void;
-	updateDraftField: (field: keyof DraftLetterType, value: any) => void;
-	resetDraft: () => void;
+export type LetterActions = {
+	setLetter: (_message: LetterStoreType) => void;
+	updateLetterField: (
+		_field: keyof LetterStoreType,
+		_value: string | LanguageEnum
+	) => void;
+	resetContent: () => void;
 };
 
-export const useDraftLetterStore = create<
-	DraftLetterStoreType & DraftLetterActions
->()((set) => ({
-	draftLetter: {
+export const useLetterStore = create<LetterStoreType & LetterActions>(
+	(set) => ({
 		subject: "",
 		content: "",
 		letter_type: "internal",
-		participants: [],
-	},
-	setDraftLetter: () => {},
-	updateDraftField: () => {},
-	resetDraft: () => {},
-}));
+		language: LanguageEnum.English,
+		setLetter: (message) => set({ ...message }),
+		updateLetterField: (field, value) =>
+			set((state) => ({ ...state, [field]: value })),
 
-export const useLetterStore = create((set) => ({}));
+		resetContent: () => set({ subject: "", content: "" }),
+	})
+);

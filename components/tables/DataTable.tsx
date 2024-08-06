@@ -17,6 +17,7 @@ import {
 } from "@tanstack/react-table";
 import { memo, useCallback, useRef, useState } from "react";
 
+import { ActionConfirmModal } from "@/components/dialogs";
 import { Input } from "@/components/ui/input";
 import {
 	Table,
@@ -26,13 +27,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { type ActionType, useWorkflowDispatcher } from "@/hooks";
+import { useWorkflowDispatcher, type ActionType } from "@/hooks";
 import type { LetterColumnDefType, LetterType } from "@/types/letter_module";
 import { Trash, UndoDot } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
-import { ActionConfirmModal } from "../shared";
 import {
 	AlertDialog,
 	AlertDialogAction,

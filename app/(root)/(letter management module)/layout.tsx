@@ -1,7 +1,7 @@
 import { StoreProvider } from "@/app/StoreProvider";
 import "@/app/globals.css";
+import { RequireAuth } from "@/components/hoc";
 import { TopBar } from "@/components/layouts";
-import { RequireAuth } from "@/components/shared";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Noto_Serif_Ethiopic } from "next/font/google";
@@ -28,13 +28,13 @@ export default function RootLayout({
 				<body className={noto_serif_ethiopic.className}>
 					<Providers>
 						<RequireAuth>
-							<main className="flex h-full flex-col">
+							<div className="flex h-full flex-col">
 								<div className="absolute">
 									<Toaster richColors position="top-center" />
 								</div>
 								<TopBar />
 								{children}
-							</main>
+							</div>
 						</RequireAuth>
 					</Providers>
 				</body>

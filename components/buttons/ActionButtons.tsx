@@ -3,14 +3,15 @@
 import { Button } from "@/components/ui/button";
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
+import { useUiStore } from "@/stores";
 import type { LetterDetailResponseType } from "@/types/letter_module";
 import { generateUserPermissions } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
-import { ShareLetterDialog, SubmitLetterDialog } from "../dialogs";
+import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
-import { ActionConfirmModal } from "../shared";
+import SaveUpdatedLetter from "./SaveUpdatedLetter";
 
 export type ButtonConfigType = {
 	id: string;
@@ -31,6 +32,7 @@ function ActionButtons({
 }) {
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
+	const setLetterReadOnly = useUiStore((state) => state.setLetterReadOnly);
 
 	const handleAction = useCallback(
 		(actionType: ActionType, otp?: number, message?: string) => {
@@ -44,6 +46,7 @@ function ActionButtons({
 
 	const buttonConfigs: ButtonConfigType[] = useMemo(() => {
 		const currentUserPerms = generateUserPermissions(permissions);
+		setLetterReadOnly(!currentUserPerms.can_update_letter);
 
 		return [
 			{
@@ -53,6 +56,11 @@ function ActionButtons({
 				size: "icon",
 				icon: <Trash size={20} />,
 				action: () => handleAction("trash_letter"),
+			},
+			{
+				id: uuidv4.v4(),
+				isVisible: currentUserPerms.can_update_letter,
+				component: <SaveUpdatedLetter />,
 			},
 			{
 				id: uuidv4.v4(),
@@ -91,7 +99,23 @@ function ActionButtons({
 			{
 				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_submit_letter,
-				component: <SubmitLetterDialog letter={letter} />,
+				component: (
+					<ActionConfirmModal
+						ref={modelRef}
+						triggerButtonText="ወደ መዝገብ ቢሮ አስተላልፍ"
+						triggerButtonVariant="default"
+						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"
+						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
+						cancelButtonText="አይ"
+						confirmButtonText="አዎ"
+						onConfirm={() => {
+							const otp: number | undefined = modelRef.current?.getOTP();
+							if (!otp) return;
+							handleAction("submit_letter", otp);
+						}}
+						requiresAuth={true}
+					/>
+				),
 			},
 			{
 				id: uuidv4.v4(),
@@ -177,7 +201,7 @@ function ActionButtons({
 				action: () => handleAction("reopen_letter"),
 			},
 		];
-	}, [letter, permissions, handleAction]);
+	}, [letter, permissions, handleAction, setLetterReadOnly]);
 
 	return (
 		<>

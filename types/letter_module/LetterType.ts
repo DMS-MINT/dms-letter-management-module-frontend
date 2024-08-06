@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { AttachmentType, CommentType } from "../shared";
+import type { CommentType, LanguageEnum } from "../shared";
 import type { MemberType } from "../user_module";
 import type { ParticipantType } from "./ParticipantType";
 
@@ -12,6 +12,7 @@ export type SignatureType = {
 export type LetterType = {
 	id: string;
 	reference_number: string;
+	reference_number_am: string;
 	subject: string;
 	content: string;
 	current_state: string;
@@ -34,18 +35,18 @@ export type LetterDetailType = {
 	recipient: any;
 	id: string;
 	reference_number: string;
+	reference_number_am: string;
 	subject?: string;
 	content?: string;
 	letter_type: "internal" | "outgoing" | "incoming";
+	language: keyof typeof LanguageEnum;
 	current_state: string;
 	owner: MemberType;
-	signature: string;
+	pdf_version: string;
 	submitted_at: string;
 	published_at: string;
 	created_at: string;
 	updated_at: string;
 	participants: ParticipantType[];
 	comments: CommentType[];
-	attachments: AttachmentType[];
-	e_signature: SignatureType[];
 };
