@@ -16,9 +16,9 @@ export default function getErrorMessage(
 
 	const error_code = error.response.data.error_code as ErrorCodeEnum;
 
-	// console.log(error_code);
-	// console.log(error.code);
-	// console.log(error.response.data.extra);
+	console.log(error_code);
+	console.log(error.code);
+	console.log(error.response.data.extra);
 
 	return errorMessages[error_code] || DEFAULT_MESSAGE;
 }

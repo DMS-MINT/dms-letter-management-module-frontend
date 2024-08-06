@@ -43,7 +43,7 @@ export const monthTranslations: Record<number, string> = {
 
 export const columnTranslation: Record<LetterTableColumns, string> = {
 	[LetterTableColumns.ID]: "የደብዳቤ ቁጥር",
-	[LetterTableColumns.REFERENCE_NUMBER]: "የደብዳቤ ቁጥር",
+	[LetterTableColumns.REFERENCE_NUMBER]: "የመዝገብ ቁጥር",
 	[LetterTableColumns.HAS_READ]: "የንባብ ሁኔታ",
 	[LetterTableColumns.SUBJECT]: "ጉዳዩ",
 	[LetterTableColumns.CURRENT_STATE]: "የደብዳቤ ሁኔታ",

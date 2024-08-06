@@ -72,7 +72,7 @@ export default function ComposeControlPanel() {
 	}, [letter_type]);
 
 	return (
-		<section className="sticky top-0 flex w-full items-center justify-between bg-gray-100 p-4">
+		<section className="top-0 flex w-full items-center justify-between">
 			<div className="flex items-center gap-4">
 				<h1 className="text-xl font-semibold">አዲስ ደብዳቤ</h1>
 			</div>
