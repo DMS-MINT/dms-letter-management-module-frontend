@@ -7,7 +7,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLetterStore } from "@/stores";
+import { useLetterStore, useUserStore } from "@/stores";
 import { letterCategoryTranslations } from "@/types/letter_module";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ export default function TableControlPanel() {
 	const router = useRouter();
 	const category: string = params.category as string;
 	const updateLetterField = useLetterStore((state) => state.updateLetterField);
+	const is_staff = useUserStore((state) => state.currentUser.is_staff);
 
 	const isValidCategory = useMemo(
 		() => whitelist.includes(category),
@@ -67,9 +68,11 @@ export default function TableControlPanel() {
 						<DropdownMenuItem onClick={() => handleClick("outgoing")}>
 							ወደ ውጪ የሚላክ ደብዳቤ
 						</DropdownMenuItem>
-						<DropdownMenuItem onClick={() => handleClick("incoming")}>
-							ከውጭ የተላከ ደብዳቤ
-						</DropdownMenuItem>
+						{is_staff ? (
+							<DropdownMenuItem onClick={() => handleClick("incoming")}>
+								ከውጭ የተላከ ደብዳቤ
+							</DropdownMenuItem>
+						) : null}
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
