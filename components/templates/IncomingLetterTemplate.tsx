@@ -5,7 +5,7 @@ import { RoleEnum } from "@/types/letter_module";
 import { Label } from "@radix-ui/react-label";
 import Paper from "./Paper";
 
-export default function InternalLetterTemplate() {
+export default function IncomingLetterTemplate() {
 	const { subject, updateLetterField } = useLetterStore((state) => ({
 		subject: state.subject,
 		updateLetterField: state.updateLetterField,
@@ -34,10 +34,18 @@ export default function InternalLetterTemplate() {
 				/>
 			</div>
 			<SelectableInput
+				name={RoleEnum["AUTHOR"]}
+				isClearable={true}
+				placeholder="እባክዎ የደብዳቤው ከማን እንደተላከ ያስገቡ"
+				orientation="vertical"
+				prefix="ከ"
+			/>
+			<SelectableInput
 				name={RoleEnum["PRIMARY RECIPIENT"]}
 				isClearable={true}
 				placeholder="እባክዎ የደብዳቤው ለማን እንደተላከ ያስገቡ"
 				orientation="vertical"
+				prefix="ለ"
 			/>
 			<CCAndBCCInputs />
 		</Paper>

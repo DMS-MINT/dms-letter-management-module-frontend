@@ -1,8 +1,10 @@
 import type { LetterDetailType } from "@/types/letter_module";
 import { memo } from "react";
-import { IncomingLetterTemplate } from ".";
-import InternalLetterTemplate from "./IncomingLetterTemplate";
-import OutgoingLetterTemplate from "./OutgoingLetterTemplate";
+import {
+	IncomingLetterTemplate,
+	InternalLetterTemplate,
+	OutgoingLetterTemplate,
+} from ".";
 
 function EditableLetter({ letter }: { letter: LetterDetailType }) {
 	return (
