@@ -12,7 +12,6 @@ import { letterCategoryTranslations } from "@/types/letter_module";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
-
 const whitelist: string[] = [
 	"inbox",
 	"outbox",

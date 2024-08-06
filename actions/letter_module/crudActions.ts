@@ -9,6 +9,11 @@ import type {
 import getErrorMessage from "../getErrorMessage";
 import { curdErrorMessages } from "./errorMessages";
 
+interface BatchParamsType {
+	referenceNumbers: string[];
+	otp?: number;
+}
+
 export async function getLetters(category: string) {
 	try {
 		const response = await axiosInstance.get(`letters/?category=${category}`);
@@ -120,6 +125,57 @@ export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/permanently_delete/`,
 			{ otp }
+		);
+		const data = await response.data.message;
+		return data;
+	} catch (error: any) {
+		throw getErrorMessage(curdErrorMessages, error);
+	}
+}
+
+// Move multiple rows to trash
+export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
+	try {
+		const reference_numbers = referenceNumbers;
+		console.log("reference_number", reference_numbers);
+		const response = await axiosInstance.put("letters/batch/trash/", {
+			reference_numbers,
+		});
+
+		const data = await response.data.message;
+		return data;
+	} catch (error: any) {
+		throw getErrorMessage(curdErrorMessages, error);
+	}
+}
+
+// Restore multiple rows from trash
+export async function restoreFromTrashBatch({
+	referenceNumbers,
+}: BatchParamsType) {
+	try {
+		const response = await axiosInstance.put("letters/batch/restore/", {
+			referenceNumbers,
+		});
+		const data = await response.data.message;
+		return data;
+	} catch (error: any) {
+		throw getErrorMessage(curdErrorMessages, error);
+	}
+}
+
+// Permanently delete multiple rows
+export async function permanentlyDeleteBatch({
+	referenceNumbers,
+	otp,
+}: BatchParamsType) {
+	try {
+		const response = await axiosInstance.put(
+			"letters/batch/permanently_delete/",
+			{
+				referenceNumbers,
+				otp,
+			}
 		);
 		const data = await response.data.message;
 		return data;

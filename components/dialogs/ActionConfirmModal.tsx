@@ -33,14 +33,20 @@ import {
 	useImperativeHandle,
 	useState,
 } from "react";
+import { Textarea } from "../ui/textarea";
 
 export type ActionConfirmModalRef = {
 	getOTP: () => number;
+	message: string;
 };
 
 type ActionConfirmModalProps = {
+	triggerButtonIcon?: React.ReactNode;
+
+	disabledButton?: boolean;
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
+	requriresMessage?: boolean;
 	dialogTitle: string;
 	dialogDescription: string;
 	confirmButtonText: string;
@@ -51,6 +57,8 @@ type ActionConfirmModalProps = {
 
 function ActionConfirmModal(
 	{
+		triggerButtonIcon,
+		disabledButton,
 		triggerButtonText,
 		triggerButtonVariant,
 		dialogTitle,
@@ -59,14 +67,17 @@ function ActionConfirmModal(
 		cancelButtonText,
 		onConfirm,
 		requiresAuth,
+		requriresMessage,
 	}: ActionConfirmModalProps,
 	ref: Ref<ActionConfirmModalRef>
 ) {
 	const { form, getOTP, handleInputChange } = useOTP();
 	const [hasBeenClicked, setHasBeenClicked] = useState<boolean>(false);
+	const [message, setMessage] = useState<string>("");
 
 	useImperativeHandle(ref, () => ({
 		getOTP,
+		message,
 	}));
 
 	const handleInputChangeWrapper = useCallback(
@@ -88,7 +99,11 @@ function ActionConfirmModal(
 					onClick={() => {
 						form.reset();
 					}}
+					disabled={disabledButton}
+					className="flex gap-2"
+					size="sm"
 				>
+					{triggerButtonIcon && triggerButtonIcon}
 					{triggerButtonText}
 				</Button>
 			</DialogTrigger>
@@ -97,7 +112,13 @@ function ActionConfirmModal(
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
 				</DialogHeader>
-
+				{requriresMessage ? (
+					<Textarea
+						value={message}
+						onChange={(e) => setMessage(e.target.value)}
+						placeholder="እባክዎን ያልተቀበሉበትን ምክንያት ያብራሩ።."
+					/>
+				) : null}
 				{requiresAuth ? (
 					<Form {...form}>
 						<form

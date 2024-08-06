@@ -49,11 +49,15 @@ export async function publishLetter({ referenceNumber, otp }: ParamsType) {
 	}
 }
 
-export async function rejectLetter({ referenceNumber, otp }: ParamsType) {
+export async function rejectLetter({
+	referenceNumber,
+	otp,
+	message,
+}: ParamsType) {
 	try {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/reject/`,
-			{ otp }
+			{ otp, message }
 		);
 
 		return { ok: true, message: response.data.message };

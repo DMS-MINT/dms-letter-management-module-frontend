@@ -1,8 +1,14 @@
 "use client";
 
 import { createLetter } from "@/actions/letter_module/crudActions";
+import {
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useLetterStore, useParticipantStore } from "@/stores";
 import type { DraftLetterType, LetterDetailType } from "@/types/letter_module";
+import { Tooltip } from "@radix-ui/react-tooltip";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -47,6 +53,14 @@ export default function ComposeControlPanel() {
 		},
 	});
 
+	const validateFields = () => {
+		if (!newLetter.participants) {
+			toast.error("እባክዎ ሁሉንም ዝርዝሮች ይሙሉ።");
+			return false;
+		}
+		return true;
+	};
+
 	const onSubmit = () => {
 		const letter: DraftLetterType = {
 			subject,
@@ -72,21 +86,26 @@ export default function ComposeControlPanel() {
 	}, [letter_type]);
 
 	return (
-		<section className="sticky top-0 flex w-full items-center justify-between">
-			<div className="flex gap-2">
-				<h1 className="page-title">አዲስ ደብዳቤ </h1>
+		<section className="sticky top-0 flex w-full items-center justify-between bg-gray-100 p-4">
+			<div className="flex items-center gap-4">
+				<h1 className="text-xl font-semibold">አዲስ ደብዳቤ</h1>
 			</div>
-
-			<div className="flex items-center gap-2">
-				<Button
-					className="mr-0 rounded-md border-gray-300"
-					variant="outline"
-					onClick={onSubmit}
-				>
-					ረቂቁን ያስቀምጡ
-				</Button>
-				{renderDialog}
-			</div>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							className="rounded-md border-gray-300 px-4 py-2 text-sm font-medium"
+							variant="outline"
+							onClick={onSubmit}
+						>
+							ረቂቁን ያስቀምጡ
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<p>ረቂቁን ያስቀምጡ</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 		</section>
 	);
 }

@@ -1,6 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { LetterDetailType } from "@/types/letter_module";
 import { letterTypeTranslations } from "@/types/letter_module";
 import {
@@ -65,12 +71,19 @@ export default function LetterDetailsDrawer({
 					<p className="text-gray-600">የተያያዙ ፋይሎች</p>
 				</div>
 			</div>
-			<div className="flex flex-col gap-5">
-				<a className="flex w-fit items-center gap-2" href="#comment_section">
-					<MessageSquareText size={20} className="text-gray-600" />
-					<p className="text-gray-600">{letter.comments?.length || 0}</p>
-				</a>
-			</div>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger>
+						<div className="flex flex-col gap-5">
+							<a className="flex w-fit items-center gap-2" href="#comment_section">
+								<MessageSquareText size={20} className="text-gray-600" />
+								<p className="text-gray-600">{letter.comments?.length || 0}</p>
+							</a>
+						</div>
+					</TooltipTrigger>
+					<TooltipContent>አስተያየት</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 		</section>
 	);
 }

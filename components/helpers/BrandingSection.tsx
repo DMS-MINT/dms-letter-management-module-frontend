@@ -8,15 +8,15 @@ export default function BrandingSection() {
 				<Image
 					src={IMAGES.mint}
 					alt="Ministry of Innovation and Technology logo"
-					width={80}
-					height={80}
+					width={110}
+					height={120}
 				/>
 
 				<h2 className="mb-2 mt-5 text-xl font-medium text-white">
 					የሰነድ አስተዳደር እና ኢ-ፊርማ
 				</h2>
 				<p className="text-sm font-light text-gray-200">
-					ጥረት የለሽ ሰነድ እና የደብዳቤ አስተዳደር፣ እንከን የለሽ ፊርማዎች።
+					ለተጠቃሚ ምቹ የሆነ ሰነድ እና የፖስታ አስተዳደር፣ ፈጣን ፊርማዎች።
 				</p>
 			</div>
 			<div className="flex items-end gap-2">

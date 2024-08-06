@@ -13,6 +13,7 @@ export default function FileUploadButton() {
 		fileInputRef.current?.click();
 	};
 
+	//base64 format
 	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const files = e.target.files;
 		if (files && files.length > 0) {

@@ -15,7 +15,7 @@ import {
 import { useAppSelector } from "@/hooks";
 import { selectMyProfile } from "@/lib/features/user/userSlice";
 import type { LetterDetailType } from "@/types/letter_module";
-import { convertToEthiopianDate } from "@/utils";
+import { convertToEthiopianDateonly } from "@/utils/convertToEthiopianDate";
 import { useMutation } from "@tanstack/react-query";
 import {
 	Check,
@@ -175,7 +175,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 										<MessageSquareText size={18} className="text-gray-500" />
 									</TooltipTrigger>
 									<TooltipContent>
-										<p>{convertToEthiopianDate(created_at)}</p>
+										<p>{convertToEthiopianDateonly(created_at)}</p>
 									</TooltipContent>
 								</Tooltip>
 							</TooltipProvider>
@@ -265,7 +265,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 				<div className="flex items-center px-1">
 					<p className="text-gray-700">
 						{`${letter.owner.full_name} ይህን ደብዳቤ 
-            ${convertToEthiopianDate(letter.created_at)} ፈጥረዋል።`}
+            ${convertToEthiopianDateonly(letter.created_at)} ፈጥረዋል።`}
 					</p>
 				</div>
 			</div>

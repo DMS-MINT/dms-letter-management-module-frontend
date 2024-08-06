@@ -26,9 +26,12 @@ export type LetterType = {
 	participants: ParticipantType[];
 };
 
-export type LetterColumnDefType = ColumnDef<LetterType>[];
+// export type LetterColumnDefType = ColumnDef<LetterType>[];
+export type LetterColumnDefType = ColumnDef<LetterType, any>[];
 
 export type LetterDetailType = {
+	sender: any;
+	recipient: any;
 	id: string;
 	reference_number: string;
 	subject?: string;
