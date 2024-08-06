@@ -44,7 +44,7 @@ export default function ComposeControlPanel() {
 	});
 
 	const validateFields = () => {
-		if (!newLetter.subject || !newLetter.content || !newLetter.participants) {
+		if (!newLetter.participants) {
 			toast.error("እባክዎ ሁሉንም ዝርዝሮች ይሙሉ።");
 			return false;
 		}
