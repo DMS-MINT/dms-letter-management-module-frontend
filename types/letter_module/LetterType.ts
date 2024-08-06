@@ -12,6 +12,7 @@ export type SignatureType = {
 export type LetterType = {
 	id: string;
 	reference_number: string;
+	reference_number_am: string;
 	subject: string;
 	content: string;
 	current_state: string;
@@ -31,6 +32,7 @@ export type LetterColumnDefType = ColumnDef<LetterType>[];
 export type LetterDetailType = {
 	id: string;
 	reference_number: string;
+	reference_number_am: string;
 	subject?: string;
 	content?: string;
 	letter_type: "internal" | "outgoing" | "incoming";
