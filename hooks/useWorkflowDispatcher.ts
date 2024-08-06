@@ -28,6 +28,7 @@ export type ActionType =
 export type ParamsType = {
 	referenceNumber: string;
 	otp?: number;
+	message?: string;
 };
 
 export type PropType = {
@@ -48,6 +49,7 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 			return await rejectLetter({
 				referenceNumber: params.referenceNumber,
 				otp: params.otp,
+				message: params.message,
 			});
 		case "permanently_delete":
 			return await permanentlyDelete({

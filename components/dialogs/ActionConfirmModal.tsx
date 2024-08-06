@@ -33,14 +33,17 @@ import {
 	useImperativeHandle,
 	useState,
 } from "react";
+import { Textarea } from "../ui/textarea";
 
 export type ActionConfirmModalRef = {
 	getOTP: () => number;
+	message: string;
 };
 
 type ActionConfirmModalProps = {
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
+	requriresMessage?: boolean;
 	dialogTitle: string;
 	dialogDescription: string;
 	confirmButtonText: string;
@@ -59,14 +62,17 @@ function ActionConfirmModal(
 		cancelButtonText,
 		onConfirm,
 		requiresAuth,
+		requriresMessage,
 	}: ActionConfirmModalProps,
 	ref: Ref<ActionConfirmModalRef>
 ) {
 	const { form, getOTP, handleInputChange } = useOTP();
 	const [hasBeenClicked, setHasBeenClicked] = useState<boolean>(false);
+	const [message, setMessage] = useState<string>("");
 
 	useImperativeHandle(ref, () => ({
 		getOTP,
+		message,
 	}));
 
 	const handleInputChangeWrapper = useCallback(
@@ -97,7 +103,13 @@ function ActionConfirmModal(
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
 				</DialogHeader>
-
+				{requriresMessage ? (
+					<Textarea
+						value={message}
+						onChange={(e) => setMessage(e.target.value)}
+						placeholder="Type your message here."
+					/>
+				) : null}
 				{requiresAuth ? (
 					<Form {...form}>
 						<form
