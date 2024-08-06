@@ -66,6 +66,7 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 		case "submit_letter":
 			return await submitLetter({
 				referenceNumber: params.referenceNumber,
+				otp: params.otp,
 			});
 		case "trash_letter":
 			return await moveToTrash(params.referenceNumber);
