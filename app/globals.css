@@ -70,6 +70,7 @@
 
 html {
 	scroll-behavior: smooth;
+	@apply h-full;
 }
 
 body {
