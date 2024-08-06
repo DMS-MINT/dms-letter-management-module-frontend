@@ -1,6 +1,6 @@
 import { ExtensionKit } from "@/extensions/extension-kit";
 import { useLetterStore, useUiStore } from "@/stores";
-import { useEditor } from "@tiptap/react";
+import { useEditor, type AnyExtension } from "@tiptap/react";
 import { useEffect } from "react";
 
 export default function useBlockEditor() {
@@ -19,7 +19,7 @@ export default function useBlockEditor() {
 
 	const editor = useEditor({
 		editable: true,
-		extensions: [...ExtensionKit()],
+		extensions: [...ExtensionKit()] as AnyExtension[],
 		content: content,
 		immediatelyRender: false,
 		onUpdate: ({ editor }) => handleUpdate(editor.getHTML()),
