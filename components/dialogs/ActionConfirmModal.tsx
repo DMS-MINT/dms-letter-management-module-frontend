@@ -107,7 +107,7 @@ function ActionConfirmModal(
 					<Textarea
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
-						placeholder="Type your message here."
+						placeholder="እባክዎን ያልተቀበሉበትን ምክንያት ያብራሩ።."
 					/>
 				) : null}
 				{requiresAuth ? (
