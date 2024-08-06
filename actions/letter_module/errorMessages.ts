@@ -12,6 +12,16 @@ export const curdErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.SIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
 };
 
+export const deleteErrorMessages: ErrorMessageType = {
+	[ErrorCodeEnum.INTERNAL_SERVER_ERROR]:
+		"ቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
+	[ErrorCodeEnum.VALIDATION_ERROR]: "የተጠቀሰው የመዝገብ ቁጥር ያለው ደብዳቤ የለም።",
+	[ErrorCodeEnum.INVALID_OTP]:
+		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
+	[ErrorCodeEnum.BATCH_OPERATION_FAILED]:
+		"ባች ማጥፋት በከፊል አልተሳካም። አንዳንድ ደብዳቤዎች አልተወገዱም።",
+};
+
 export const workflowErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.INTERNAL_SERVER_ERROR]:
 		"ቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
