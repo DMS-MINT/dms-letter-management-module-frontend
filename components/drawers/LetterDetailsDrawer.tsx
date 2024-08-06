@@ -34,7 +34,10 @@ export default function LetterDetailsDrawer({
 			},
 			{
 				label: "የመዝገብ ቁጥር",
-				value: letter.reference_number,
+				value:
+					letter.language === "English"
+						? letter.reference_number
+						: letter.reference_number_am,
 				icon: <FileDigit size={20} className="text-gray-600" />,
 			},
 			{
