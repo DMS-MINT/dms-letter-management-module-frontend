@@ -11,6 +11,7 @@ export default function InternalLetterTemplate() {
 				isClearable={true}
 				placeholder="እባክዎ የደብዳቤውን ለማን እንደሚልኩ ያስገቡ"
 				orientation="vertical"
+				prefix="ለ"
 			/>
 			<SubjectAndContent />
 			<CCAndBCCInputs />

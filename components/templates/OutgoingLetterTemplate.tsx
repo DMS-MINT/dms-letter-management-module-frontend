@@ -19,6 +19,7 @@ export default function OutgoingLetterTemplate() {
 				isClearable={true}
 				placeholder="እባክዎ የደብዳቤውን ለማን እንደሚልኩ ይምረጡ"
 				orientation="vertical"
+				prefix="ለ"
 			/>
 			<SubjectAndContent />
 			<CCAndBCCInputs />

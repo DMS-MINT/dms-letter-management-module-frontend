@@ -8,6 +8,7 @@ import ReactSelect, {
 	components,
 	type IndicatorsContainerProps,
 	type MultiValueGenericProps,
+	type MultiValueRemoveProps,
 } from "react-select";
 
 interface ISelectableInputProps {
@@ -15,6 +16,7 @@ interface ISelectableInputProps {
 	placeholder: string;
 	isClearable: boolean;
 	orientation: "vertical" | "horizontal";
+	prefix: string;
 }
 
 export default function SelectableInput({
@@ -22,7 +24,9 @@ export default function SelectableInput({
 	placeholder,
 	isClearable,
 	orientation,
+	prefix,
 }: ISelectableInputProps) {
+	const isLetterReadOnly = useUiStore((state) => state.isLetterReadOnly);
 	const participants = useParticipantStore((state) => state.participants);
 	const { users, handleMultiSelectChange, getLabel, getValue, getDefaultValue } =
 		useReactSelect();
@@ -32,7 +36,7 @@ export default function SelectableInput({
 	) => {
 		return (
 			<div className="flex items-center text-lg text-black">
-				<span>ለ</span>
+				<span>{prefix}</span>
 				<components.MultiValueLabel {...props} />
 			</div>
 		);
@@ -44,7 +48,15 @@ export default function SelectableInput({
 		return <></>;
 	};
 
-	const isLetterReadOnly = useUiStore((state) => state.isLetterReadOnly);
+	const MultiValueRemove = (
+		props: MultiValueRemoveProps<MemberType | GuestType>
+	) => {
+		return isLetterReadOnly ? (
+			<></>
+		) : (
+			<components.MultiValueRemove {...props}></components.MultiValueRemove>
+		);
+	};
 
 	return (
 		<ReactSelect
@@ -53,7 +65,7 @@ export default function SelectableInput({
 			name={name}
 			isDisabled={isLetterReadOnly}
 			onChange={handleMultiSelectChange}
-			components={{ MultiValueLabel, IndicatorsContainer }}
+			components={{ MultiValueLabel, IndicatorsContainer, MultiValueRemove }}
 			options={users}
 			value={getDefaultValue(name)}
 			placeholder={placeholder}

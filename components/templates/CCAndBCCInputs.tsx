@@ -13,6 +13,7 @@ export default function CCAndBCCInputs() {
 							isClearable={true}
 							placeholder="እባክዎ ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
 							orientation="vertical"
+							prefix="ለ"
 						/>
 					</div>
 				</ul>
@@ -26,6 +27,7 @@ export default function CCAndBCCInputs() {
 							isClearable={true}
 							placeholder="እባክዎ የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
 							orientation="vertical"
+							prefix="ለ"
 						/>
 					</div>
 				</ul>
