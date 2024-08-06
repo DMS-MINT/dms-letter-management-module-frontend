@@ -1,8 +1,8 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import { ParamsType } from "@/hooks";
-import { ShareLetterRequestType } from "@/types/letter_module";
+import type { ParamsType } from "@/hooks";
+import type { ShareLetterRequestType } from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
 import { workflowErrorMessages } from "./errorMessages";
 
@@ -22,13 +22,11 @@ export async function shareLetter(
 	}
 }
 
-export async function submitLetter({
-	referenceNumber,
-}: {
-	referenceNumber: string;
-}) {
+export async function submitLetter({ referenceNumber, otp }: ParamsType) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/submit/`);
+		await axiosInstance.put(`letters/${referenceNumber}/submit/`, {
+			otp,
+		});
 
 		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መዝገብ ቤት ገብቷል።" };
 	} catch (error: any) {
@@ -49,11 +47,15 @@ export async function publishLetter({ referenceNumber, otp }: ParamsType) {
 	}
 }
 
-export async function rejectLetter({ referenceNumber, otp }: ParamsType) {
+export async function rejectLetter({
+	referenceNumber,
+	otp,
+	message,
+}: ParamsType) {
 	try {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/reject/`,
-			{ otp }
+			{ otp, message }
 		);
 
 		return { ok: true, message: response.data.message };

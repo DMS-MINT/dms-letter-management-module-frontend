@@ -1,6 +1,10 @@
 "use client";
 
-import { requestQRCode, validateOneTimePassword } from "@/actions/auth/action";
+import {
+	requestQRCode,
+	signOut,
+	validateOneTimePassword,
+} from "@/actions/auth/action";
 import {
 	Dialog,
 	DialogContent,
@@ -29,11 +33,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Spinner } from "../shared";
+import { Spinner } from "../helpers";
 import { Button } from "../ui/button";
 
 const formSchema = z.object({
@@ -54,6 +59,7 @@ const formSchema = z.object({
 export default function TwoFactorSetupDialog() {
 	const myProfile = useAppSelector(selectMyProfile);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 	});
@@ -115,6 +121,22 @@ export default function TwoFactorSetupDialog() {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		validateOTPMutate(values.otp);
 	}
+
+	const { mutate: logOut } = useMutation({
+		mutationKey: ["signOut"],
+		mutationFn: signOut,
+		onMutate: () => {
+			toast.dismiss();
+			toast.loading("እርስዎን በማስወጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
+		},
+		onSuccess: () => {
+			router.push("/signin");
+		},
+		onError: (errorMessage: string) => {
+			toast.dismiss();
+			toast.error(errorMessage);
+		},
+	});
 
 	return (
 		<section>
@@ -183,7 +205,9 @@ export default function TwoFactorSetupDialog() {
 						</Form>
 					</div>
 					<DialogFooter>
-						<Button variant={"outline"}>Logout</Button>
+						<Button variant={"outline"} onClick={() => logOut()}>
+							ከመተበሪያው ውጣ
+						</Button>
 						<Button
 							disabled={
 								!oneTimePassword || oneTimePassword.toString().length !== 6 || isPending

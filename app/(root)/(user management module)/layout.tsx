@@ -1,7 +1,7 @@
 import { StoreProvider } from "@/app/StoreProvider";
 import "@/app/globals.css";
+import { RequireAuth } from "@/components/hoc";
 import { TopBar } from "@/components/layouts";
-import { RequireAuth } from "@/components/shared";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Noto_Serif_Ethiopic } from "next/font/google";

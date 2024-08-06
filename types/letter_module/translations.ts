@@ -2,8 +2,8 @@ import { LetterTableColumns } from "./LetterTableColumns";
 
 export const letterTypeTranslations: Record<string, string> = {
 	INTERNAL: "የውስጥ ደብዳቤ",
-	INCOMING: "ከውጭ የተላከ ደብዳቤ",
-	OUTGOING: "ወደ ውጪ የሚላክ ደብዳቤ",
+	INCOMING: "ከውጭ የተላከ",
+	OUTGOING: "ወደ ውጪ የሚላክ",
 };
 
 export const letterCategoryTranslations: Record<string, string> = {
@@ -13,14 +13,14 @@ export const letterCategoryTranslations: Record<string, string> = {
 	ARCHIVE: "ማህደር",
 	TRASH: "መጣያ",
 	PENDING: "መጽደቅን በመጠባበቅ ላይ",
-	PUBLISHED: "የታተሙ ደብዳቤዎች",
+	PUBLISHED: "የጸደቀ ደብዳቤ",
 };
 
 export const letterStatusTranslations: Record<string, string> = {
 	DRAFT: "ረቂቅ",
 	SUBMITTED: "በመጠባበቅ ላይ",
-	PUBLISHED: "የታተመ ደብዳቤ",
-	CLOSED: "የተዘጋ ደብዳቤ",
+	PUBLISHED: "የጸደቀ",
+	CLOSED: "የተዘጋ",
 	REJECTED: "ውድቅ ተደርጓል",
 	TRASHED: "የተጣለ",
 };
@@ -43,7 +43,7 @@ export const monthTranslations: Record<number, string> = {
 
 export const columnTranslation: Record<LetterTableColumns, string> = {
 	[LetterTableColumns.ID]: "የደብዳቤ ቁጥር",
-	[LetterTableColumns.REFERENCE_NUMBER]: "የደብዳቤ ቁጥር",
+	[LetterTableColumns.REFERENCE_NUMBER]: "የመዝገብ ቁጥር",
 	[LetterTableColumns.HAS_READ]: "የንባብ ሁኔታ",
 	[LetterTableColumns.SUBJECT]: "ጉዳዩ",
 	[LetterTableColumns.CURRENT_STATE]: "የደብዳቤ ሁኔታ",

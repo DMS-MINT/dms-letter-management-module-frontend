@@ -2,9 +2,17 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
-import { DraftLetterType } from "@/types/letter_module";
+import type {
+	DraftLetterType,
+	ModifiedLetterType,
+} from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
-import { curdErrorMessages } from "./errorMessages";
+import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
+
+interface BatchParamsType {
+	referenceNumbers: string[];
+	otp?: number;
+}
 
 export async function getLetters(category: string) {
 	try {
@@ -36,17 +44,18 @@ export async function createLetter(letter: DraftLetterType) {
 	}
 }
 
-export async function createAndSubmitLetter(letter: FormData) {
+export async function createAndSubmitLetter({
+	letter,
+	otp,
+}: {
+	letter: DraftLetterType;
+	otp: number;
+}) {
 	try {
-		const response = await axiosInstance.post(
-			"letters/create_and_submit/",
+		const response = await axiosInstance.post("letters/create_and_submit/", {
 			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
-		);
+			otp,
+		});
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -54,17 +63,18 @@ export async function createAndSubmitLetter(letter: FormData) {
 	}
 }
 
-export async function createAndPublishLetter(letter: FormData) {
+export async function createAndPublishLetter({
+	letter,
+	otp,
+}: {
+	letter: DraftLetterType;
+	otp: number;
+}) {
 	try {
-		const response = await axiosInstance.post(
-			"letters/create_and_publish/",
+		const response = await axiosInstance.post("letters/create_and_publish/", {
 			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
-		);
+			otp,
+		});
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -72,16 +82,14 @@ export async function createAndPublishLetter(letter: FormData) {
 	}
 }
 
-export async function updateLetter(referenceNumber: string, letter: FormData) {
+export async function updateLetter(
+	referenceNumber: string,
+	letter: ModifiedLetterType
+) {
 	try {
 		const response = await axiosInstance.put(
 			`letters/${referenceNumber}/update/`,
-			letter,
-			{
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			}
+			letter
 		);
 
 		return { ok: true, message: response.data };
@@ -92,35 +100,80 @@ export async function updateLetter(referenceNumber: string, letter: FormData) {
 
 export async function moveToTrash(referenceNumber: string) {
 	try {
-		const response = await axiosInstance.put(`letters/${referenceNumber}/trash/`);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/trash/`);
+
+		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መጣያው ተወስዷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
 export async function restoreFromTrash(referenceNumber: string) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/restore/`
-		);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/restore/`);
+
+		return { ok: true, message: "ደብዳቤው ከመጣያው ተመልሷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
 export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/permanently_delete/`,
-			{ otp }
-		);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/permanently_delete/`, {
+			otp,
+		});
+
+		return { ok: true, message: "ደብዳቤው በቋሚነት ተሰርዟል። ወደነበረበት መመለስ አይቻልም.።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
+	}
+}
+
+// Move multiple rows to trash
+export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
+	try {
+		const reference_numbers = referenceNumbers;
+		await axiosInstance.put("letters/batch/trash/", {
+			reference_numbers,
+		});
+
+		return { ok: true, message: "ደብዳቤዎቹ በተሳካ ሁኔታ ወደ መጣያው ተወስደዋል።" };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
+	}
+}
+
+// Restore multiple rows from trash
+export async function restoreFromTrashBatch({
+	referenceNumbers,
+}: BatchParamsType) {
+	try {
+		const reference_numbers = referenceNumbers;
+		await axiosInstance.put("letters/batch/restore/", {
+			reference_numbers,
+		});
+
+		return { ok: true, message: "ደብዳቤዎቹ ከመጣያው ተመልሰዋል።" };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
+	}
+}
+
+// Permanently delete multiple rows
+export async function permanentlyDeleteBatch({
+	referenceNumbers,
+	otp,
+}: BatchParamsType) {
+	try {
+		const reference_numbers = referenceNumbers;
+		await axiosInstance.put("letters/batch/permanently_delete/", {
+			reference_numbers,
+			otp,
+		});
+
+		return { ok: true, message: "ደብዳቤዎቹ በቋሚነት ተሰርዘዋል። ወደነበረበት መመለስ አይቻልም.።" };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }

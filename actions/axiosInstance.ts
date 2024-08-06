@@ -1,11 +1,12 @@
-import axios, { AxiosInstance } from "axios";
+import type { AxiosInstance } from "axios";
+import axios from "axios";
 import { get_session } from "./auth/action";
 
 axios.defaults.withCredentials = true;
 
 const axiosInstance: AxiosInstance = axios.create({
 	baseURL: process.env.DJANGO_API_BASE_URL,
-	timeout: 10000,
+	timeout: 20000,
 	headers: {
 		"Content-Type": "application/json",
 	},

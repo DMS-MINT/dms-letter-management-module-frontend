@@ -39,7 +39,7 @@ export default function StatusBadge({
 				}
 			)}
 		>
-			<StatusIcon size={18} />
+			{/* <StatusIcon size={18} /> */}
 			<p>{letterStatusTranslations[current_state.toUpperCase()]}</p>
 		</div>
 	);

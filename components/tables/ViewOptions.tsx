@@ -23,27 +23,23 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
 	return (
 		<DropdownMenu>
 			{/* <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex gap-2.5  ml-auto h-8 lg:flex"
-        >
-          <Filter size={15} className="mr-2" />
-          አጣራ
-          <Separator orientation="vertical" className="h-8" />
-          <FilterX size={15} className="mr-2 " />
-        </Button>
-      </DropdownMenuTrigger> */}
-			{/* <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="ml-auto hidden h-8 lg:flex"
-        >
-          <Settings2 size={15} className="mr-2" />
-          ደብዳቤዎችን መድብ
-        </Button>
-      </DropdownMenuTrigger> */}
+				<Button
+					variant="outline"
+					size="sm"
+					className="ml-auto flex  h-8 gap-2.5 lg:flex"
+				>
+					<Filter size={15} className="mr-2" />
+					አጣራ
+					<Separator orientation="vertical" className="h-8" />
+					<FilterX size={15} className="mr-2 " />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuTrigger asChild>
+				<Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">
+					<Settings2 size={15} className="mr-2" />
+					ደብዳቤዎችን መድብ
+				</Button>
+			</DropdownMenuTrigger> */}
 
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" size="sm" className="ml-auto hidden h-8 lg:flex">

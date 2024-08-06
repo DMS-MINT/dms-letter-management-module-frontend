@@ -66,7 +66,7 @@ export default function LetterNavigationDrawer() {
 			},
 			{
 				id: uuidv4.v4(),
-				name: "የታተሙ ደብዳቤዎች",
+				name: "የጸደቀ ደብዳቤ",
 				icon: <></>,
 				path: "/letters/published",
 				isVisible: myProfile.is_staff,

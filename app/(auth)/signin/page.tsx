@@ -132,7 +132,7 @@ export default function SignIn() {
 							)}
 						/>
 						<Button
-							disabled={isPending || !form.formState.isValid}
+							disabled={isPending}
 							type="submit"
 							variant="secondary"
 							className="flex w-full items-center gap-2"

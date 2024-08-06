@@ -15,6 +15,7 @@ export enum ErrorCodeEnum {
 	"UNSIGNED_LETTER" = "UNSIGNED_LETTER", // 400
 	"SIGNATURE_NOT_FOUND" = "SIGNATURE_NOT_FOUND", // 404
 	"Letter_NOT_FOUND" = "Letter_NOT_FOUND", // 404
+	"BATCH_OPERATION_FAILED" = "BATCH_OPERATION_FAILED", // 400
 }
 
 export type ErrorMessageType = Partial<Record<ErrorCodeEnum, string>>;

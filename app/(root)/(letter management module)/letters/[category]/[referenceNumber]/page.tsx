@@ -2,20 +2,23 @@
 
 import { getLetterDetails } from "@/actions/letter_module/crudActions";
 import { LetterDetailsDrawer } from "@/components/drawers";
+import { ActivityFeed } from "@/components/features";
 import { Drawer, Subheader } from "@/components/layouts";
 import { DetailControlPanel } from "@/components/panels";
-import { ActivityFeed } from "@/components/shared";
 import { LetterSkeleton } from "@/components/skeletons";
-import { OutgoingLetterTemplate } from "@/components/templates";
+import { EditableLetter } from "@/components/templates";
+import type { LetterStoreType } from "@/stores";
+import { useLetterStore, useParticipantStore } from "@/stores";
 import type { LetterDetailResponseType } from "@/types/letter_module";
+import { LanguageEnum } from "@/types/shared";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 export default function LetterDetail() {
+	const setLetter = useLetterStore((state) => state.setLetter);
+	const setParticipants = useParticipantStore((state) => state.setParticipants);
 	const { referenceNumber } = useParams();
-	const LETTER_TYPE = "outgoing";
-
 	const { data, isSuccess } = useQuery({
 		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
@@ -26,6 +29,18 @@ export default function LetterDetail() {
 
 				toast.dismiss();
 				if (!response.ok) throw response;
+
+				const data = response.message as LetterDetailResponseType;
+
+				const message: LetterStoreType = {
+					subject: data.letter.subject || "",
+					content: data.letter.content || "",
+					letter_type: data.letter.letter_type,
+					language: LanguageEnum[data.letter.language],
+				};
+
+				setLetter(message);
+				setParticipants(data.letter.participants);
 
 				return response.message as LetterDetailResponseType;
 			} catch (error: any) {
@@ -45,10 +60,8 @@ export default function LetterDetail() {
 					<LetterDetailsDrawer letter={data.letter} />
 				</Drawer>
 				<section className="flex-1 pb-5">
-					<section className="mb-5 flex flex-1 flex-col bg-gray-100">
-						{LETTER_TYPE === "outgoing" ? (
-							<OutgoingLetterTemplate letter={data.letter} />
-						) : null}
+					<section className="mb-5 flex flex-1 flex-col items-center bg-gray-100 py-5">
+						<EditableLetter letter={data.letter} />
 					</section>
 					<ActivityFeed letter={data.letter} />
 				</section>

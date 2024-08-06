@@ -1,3 +1,5 @@
+import type { DepartmentType } from "./DepartmentType";
+
 export type MemberType = {
 	id: string;
 	full_name: string;
@@ -19,7 +21,7 @@ export type CurrentUserType = {
 	last_name: string;
 	full_name: string;
 	job_title: string;
-	department: string;
+	department: DepartmentType;
 	phone_number: string;
 	is_staff: boolean;
 	is_2fa_enabled: boolean;
