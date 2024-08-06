@@ -23,7 +23,12 @@ export default function PrintPreviewButton({
 	};
 
 	return category !== "trash" ? (
-		<Button size={"icon"} variant={"outline"} onClick={handlePrint}>
+		<Button
+			disabled={pdf_version ? false : true}
+			size={"icon"}
+			variant={"outline"}
+			onClick={handlePrint}
+		>
 			<Printer size={20} />
 		</Button>
 	) : null;
