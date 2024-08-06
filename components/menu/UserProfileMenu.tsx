@@ -78,26 +78,7 @@ export default function UserProfileMenu() {
 						<AvatarFallback>{myProfile.full_name.substring(0, 2)}</AvatarFallback>
 					</Avatar>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent className="flex transform flex-col rounded-lg border border-gray-300 bg-white p-2 shadow-lg transition-transform duration-300 ease-in-out hover:scale-105">
-					<DropdownMenuItem
-						onClick={() => logOut()}
-						className="flex items-center gap-3 rounded-md bg-gray-300 px-4 py-3 text-white transition-transform duration-200 ease-in-out hover:scale-105 hover:bg-blue-600"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M10 17l5 5 5-5H10z"></path>
-							<path d="M5 12H2V2h20v10h-3"></path>
-						</svg>
-						<span className="font-medium">ውጣ</span>
-					</DropdownMenuItem>
+
 				<DropdownMenuContent className="mr-2 flex flex-col">
 					<DropdownMenuItem className="flex w-full gap-3">
 						<div className="flex flex-col items-center ">
