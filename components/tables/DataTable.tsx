@@ -140,13 +140,16 @@ function DataTable({ columns, data, param }: DataTableProps) {
 							otp
 						);
 					} else {
+						toast.dismiss();
 						toast.error("OTP ይህ ቅድሚያ የማስወገጃ ስርዓት የሚፈልጉትን ማነስ አልተቻለም።");
 					}
 					break;
 				default:
+					toast.dismiss();
 					toast.error("እባክዎን ከዚህ ስርዓት እንደገና ይሞክሩ።");
 			}
 		} else {
+			toast.dismiss();
 			toast.error("እባክዎን የተመረጡ ደብዳቤዎች አልተገኙም።");
 		}
 	};
@@ -181,8 +184,10 @@ function DataTable({ columns, data, param }: DataTableProps) {
 					actionType,
 					params: { referenceNumber, otp },
 				});
+				toast.dismiss();
 				toast.success("የተመረጡት ደብዳቤዎች በቋሚነት እንዲጠፉ ተደርጓል።");
 			} catch (error) {
+				toast.dismiss();
 				toast.error("የተመረጡት ደብዳቤዎችን በቋሚነት ማስወግድ አልተቻለም።");
 			}
 		},
