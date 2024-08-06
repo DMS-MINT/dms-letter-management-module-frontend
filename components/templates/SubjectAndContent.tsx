@@ -20,14 +20,15 @@ export default function SubjectAndContent() {
 
 	return (
 		<>
-			<div className="mb-2 flex w-full items-center gap-2 self-center">
+			<div className="mb-2 flex w-full items-center justify-center gap-2 self-center">
 				<Label>ጉዳዩ:-</Label>
 				<input
 					type="text"
 					value={subject}
 					disabled={isLetterReadOnly}
-					className="w-full rounded-none focus:border-b focus:outline-0"
+					className="min-w-20 flex-grow rounded-none focus:border-b focus:outline-0 disabled:bg-transparent"
 					onChange={(e) => handleSubjectChange(e.target.value)}
+					placeholder="የደብዳቤዎን ርዕሰ ጉዳይ እዚህ ያስገቡ..."
 				/>
 			</div>
 			<BlockEditor />
