@@ -7,7 +7,7 @@ import type {
 	ModifiedLetterType,
 } from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
-import { curdErrorMessages } from "./errorMessages";
+import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
 interface BatchParamsType {
 	referenceNumbers: string[];
@@ -100,36 +100,33 @@ export async function updateLetter(
 
 export async function moveToTrash(referenceNumber: string) {
 	try {
-		const response = await axiosInstance.put(`letters/${referenceNumber}/trash/`);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/trash/`);
+
+		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መጣያው ተወስዷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
 export async function restoreFromTrash(referenceNumber: string) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/restore/`
-		);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/restore/`);
+
+		return { ok: true, message: "ደብዳቤው ከመጣያው ተመልሷል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
 export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/permanently_delete/`,
-			{ otp }
-		);
-		const data = await response.data.message;
-		return data;
+		await axiosInstance.put(`letters/${referenceNumber}/permanently_delete/`, {
+			otp,
+		});
+
+		return { ok: true, message: "ደብዳቤው በቋሚነት ተሰርዟል። ወደነበረበት መመለስ አይቻልም.።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
@@ -137,15 +134,13 @@ export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
 	try {
 		const reference_numbers = referenceNumbers;
-		console.log("reference_number", reference_numbers);
-		const response = await axiosInstance.put("letters/batch/trash/", {
+		await axiosInstance.put("letters/batch/trash/", {
 			reference_numbers,
 		});
 
-		const data = await response.data.message;
-		return data;
+		return { ok: true, message: "ደብዳቤዎቹ በተሳካ ሁኔታ ወደ መጣያው ተወስደዋል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
@@ -154,13 +149,14 @@ export async function restoreFromTrashBatch({
 	referenceNumbers,
 }: BatchParamsType) {
 	try {
-		const response = await axiosInstance.put("letters/batch/restore/", {
-			referenceNumbers,
+		const reference_numbers = referenceNumbers;
+		await axiosInstance.put("letters/batch/restore/", {
+			reference_numbers,
 		});
-		const data = await response.data.message;
-		return data;
+
+		return { ok: true, message: "ደብዳቤዎቹ ከመጣያው ተመልሰዋል።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
 
@@ -170,16 +166,14 @@ export async function permanentlyDeleteBatch({
 	otp,
 }: BatchParamsType) {
 	try {
-		const response = await axiosInstance.put(
-			"letters/batch/permanently_delete/",
-			{
-				referenceNumbers,
-				otp,
-			}
-		);
-		const data = await response.data.message;
-		return data;
+		const reference_numbers = referenceNumbers;
+		await axiosInstance.put("letters/batch/permanently_delete/", {
+			reference_numbers,
+			otp,
+		});
+
+		return { ok: true, message: "ደብዳቤዎቹ በቋሚነት ተሰርዘዋል። ወደነበረበት መመለስ አይቻልም.።" };
 	} catch (error: any) {
-		throw getErrorMessage(curdErrorMessages, error);
+		return { ok: false, message: getErrorMessage(deleteErrorMessages, error) };
 	}
 }
