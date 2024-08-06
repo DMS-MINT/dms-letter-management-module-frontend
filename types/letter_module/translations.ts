@@ -2,8 +2,8 @@ import { LetterTableColumns } from "./LetterTableColumns";
 
 export const letterTypeTranslations: Record<string, string> = {
 	INTERNAL: "የውስጥ ደብዳቤ",
-	INCOMING: "ከውጭ የተላከ ደብዳቤ",
-	OUTGOING: "ወደ ውጪ የሚላክ ደብዳቤ",
+	INCOMING: "ከውጭ የተላከ",
+	OUTGOING: "ወደ ውጪ የሚላክ",
 };
 
 export const letterCategoryTranslations: Record<string, string> = {
@@ -19,8 +19,8 @@ export const letterCategoryTranslations: Record<string, string> = {
 export const letterStatusTranslations: Record<string, string> = {
 	DRAFT: "ረቂቅ",
 	SUBMITTED: "በመጠባበቅ ላይ",
-	PUBLISHED: "የጸደቀ ደብዳቤ",
-	CLOSED: "የተዘጋ ደብዳቤ",
+	PUBLISHED: "የጸደቀ",
+	CLOSED: "የተዘጋ",
 	REJECTED: "ውድቅ ተደርጓል",
 	TRASHED: "የተጣለ",
 };

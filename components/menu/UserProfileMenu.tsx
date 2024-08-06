@@ -13,12 +13,18 @@ import { useAppDispatch } from "@/hooks";
 import { storeMyProfile } from "@/lib/features/user/userSlice";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { CircleHelp, LogOut, MonitorPlay } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Separator } from "../ui/separator";
+import { VideoDialog } from "./VideoDialog";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const [isVideoDialogOpen, setVideoDialogOpen] = useState(false);
+
 	const { isSuccess, data: myProfile } = useQuery({
 		queryKey: ["getMyProfile"],
 		queryFn: async () => {
@@ -49,11 +55,23 @@ export default function UserProfileMenu() {
 		},
 	});
 
+	const handleSupport = () => {
+		// Open the PDF file located in the public folder
+		window.open("/Training.pdf", "_blank");
+	};
+	const handleSupportVideo = () => {
+		setVideoDialogOpen(true);
+	};
+
+	const closeVideoDialog = () => {
+		setVideoDialogOpen(false);
+	};
+
 	return isSuccess && myProfile ? (
 		<div className="flex items-center gap-4">
-			<div className="flex items-end gap-2">
+			{/* <div className="flex items-end gap-2">
 				<p className="text-sm">{myProfile.full_name}</p>
-			</div>
+			</div> */}
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">
@@ -80,8 +98,39 @@ export default function UserProfileMenu() {
 						</svg>
 						<span className="font-medium">ውጣ</span>
 					</DropdownMenuItem>
+				<DropdownMenuContent className="mr-2 flex flex-col">
+					<DropdownMenuItem className="flex w-full gap-3">
+						<div className="flex flex-col items-center ">
+							<p className="text-sm">{myProfile.full_name}</p>
+							<span className="text-xs text-muted-foreground">
+								{myProfile.department}
+							</span>
+						</div>
+					</DropdownMenuItem>
+					<Separator className="mb-1 h-1" />
+
+					<DropdownMenuItem
+						onClick={() => handleSupport()}
+						className="flex w-full gap-4"
+					>
+						<CircleHelp size={20} />
+						እርዳታ
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						onClick={() => handleSupportVideo()}
+						className="flex w-full gap-4"
+					>
+						<MonitorPlay size={20} />
+						የቪዲዮ እርዳታ
+					</DropdownMenuItem>
+					<Separator />
+					<DropdownMenuItem onClick={() => logOut()} className="flex w-full gap-4">
+						<LogOut size={20} />
+						ውጣ
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
+			<VideoDialog isOpen={isVideoDialogOpen} onClose={closeVideoDialog} />
 		</div>
 	) : null;
 }

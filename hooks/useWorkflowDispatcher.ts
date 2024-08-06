@@ -1,7 +1,10 @@
 import {
 	moveToTrash,
+	moveToTrashBatch,
 	permanentlyDelete,
+	permanentlyDeleteBatch,
 	restoreFromTrash,
+	restoreFromTrashBatch,
 } from "@/actions/letter_module/crudActions";
 import {
 	closeLetter,
@@ -23,10 +26,13 @@ export type ActionType =
 	| "retract_letter"
 	| "restore_letter"
 	| "trash_letter"
-	| "submit_letter";
+	| "submit_letter"
+	| "moveToTrash_batch"
+	| "restoreFromTrash_batch"
+	| "permanently_delete_batch";
 
 export type ParamsType = {
-	referenceNumber: string;
+	referenceNumber: string | string[]; // Adjusted to handle both single and multiple reference numbers
 	otp?: number;
 	message?: string;
 };
@@ -37,40 +43,57 @@ export type PropType = {
 };
 
 const actionDispatcher = async ({ actionType, params }: PropType) => {
+	const referenceNumbers = Array.isArray(params.referenceNumber)
+		? params.referenceNumber
+		: [params.referenceNumber];
+
 	switch (actionType) {
 		case "close_letter":
-			return await closeLetter(params.referenceNumber);
+			return await closeLetter(referenceNumbers[0]);
 		case "publish_letter":
 			return await publishLetter({
-				referenceNumber: params.referenceNumber,
+				referenceNumber: referenceNumbers[0],
 				otp: params.otp,
 			});
 		case "reject_letter":
 			return await rejectLetter({
-				referenceNumber: params.referenceNumber,
+				referenceNumber: referenceNumbers[0],
 				otp: params.otp,
 				message: params.message,
 			});
 		case "permanently_delete":
 			return await permanentlyDelete({
-				referenceNumber: params.referenceNumber,
+				referenceNumber: referenceNumbers[0],
+				otp: params.otp,
+			});
+		case "moveToTrash_batch":
+			return await moveToTrashBatch({
+				referenceNumbers,
+			});
+		case "restoreFromTrash_batch":
+			return await restoreFromTrashBatch({
+				referenceNumbers,
+			});
+		case "permanently_delete_batch":
+			return await permanentlyDeleteBatch({
+				referenceNumbers,
 				otp: params.otp,
 			});
 		case "reopen_letter":
-			return await reopenLetter(params.referenceNumber);
+			return await reopenLetter(referenceNumbers[0]);
 		case "retract_letter":
 			return await retractLetter({
-				referenceNumber: params.referenceNumber,
+				referenceNumber: referenceNumbers[0],
 				otp: params.otp,
 			});
 		case "restore_letter":
-			return await restoreFromTrash(params.referenceNumber);
+			return await restoreFromTrash(referenceNumbers[0]);
 		case "submit_letter":
 			return await submitLetter({
-				referenceNumber: params.referenceNumber,
+				referenceNumber: referenceNumbers[0],
 			});
 		case "trash_letter":
-			return await moveToTrash(params.referenceNumber);
+			return await moveToTrash(referenceNumbers[0]);
 		default:
 			throw new Error("Invalid action type");
 	}

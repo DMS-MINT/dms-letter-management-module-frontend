@@ -41,6 +41,9 @@ export type ActionConfirmModalRef = {
 };
 
 type ActionConfirmModalProps = {
+	triggerButtonIcon?: React.ReactNode;
+
+	disabledButton?: boolean;
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
 	requriresMessage?: boolean;
@@ -54,6 +57,8 @@ type ActionConfirmModalProps = {
 
 function ActionConfirmModal(
 	{
+		triggerButtonIcon,
+		disabledButton,
 		triggerButtonText,
 		triggerButtonVariant,
 		dialogTitle,
@@ -94,7 +99,11 @@ function ActionConfirmModal(
 					onClick={() => {
 						form.reset();
 					}}
+					disabled={disabledButton}
+					className="flex gap-2"
+					size="sm"
 				>
+					{triggerButtonIcon && triggerButtonIcon}
 					{triggerButtonText}
 				</Button>
 			</DialogTrigger>
