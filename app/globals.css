@@ -89,6 +89,15 @@ input[type="number"]::-webkit-inner-spin-button {
 	@apply h-full rounded-lg border bg-card p-3 text-card-foreground shadow-sm;
 }
 
+.limited-chars {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 35ch;
+	display: inline-block;
+	box-sizing: border-box;
+}
+
 /* Style for react-select when it is used in vertical mode */
 .vertical__control {
 	@apply !border-none !bg-transparent;

@@ -10,7 +10,7 @@ export default function DetailControlPanel({
 }) {
 	return (
 		<section className="flex w-full items-center justify-between">
-			<h1 className="page-title limited-chars ">
+			<h1 className="page-title limited-chars">
 				{data.letter.subject ? (
 					data.letter.subject
 				) : (
