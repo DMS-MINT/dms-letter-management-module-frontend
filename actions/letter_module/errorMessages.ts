@@ -9,7 +9,7 @@ export const curdErrorMessages: ErrorMessageType = {
 		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
 	[ErrorCodeEnum.EMPTY_CONTENT]: "የደብዳቤው ይዘት ባዶ ሊሆን አይችልም።",
 	[ErrorCodeEnum.UNSIGNED_LETTER]: "ደብዳቤው ከመቀጠልዎ በፊት መፈረም አለበት።",
-	[ErrorCodeEnum.SIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
+	[ErrorCodeEnum.USERDEFAULTSIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
 };
 
 export const deleteErrorMessages: ErrorMessageType = {
@@ -30,6 +30,6 @@ export const workflowErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.EMPTY_CONTENT]: "የደብዳቤው ይዘት ባዶ ሊሆን አይችልም።",
 	[ErrorCodeEnum.MISSING_ATTACHMENT]: "ደብዳቤው ቢያንስ አንድ አባሪ ሊኖረው ይገባል።",
 	[ErrorCodeEnum.UNSIGNED_LETTER]: "ደብዳቤው ከመቀጠልዎ በፊት መፈረም አለበት።",
-	[ErrorCodeEnum.SIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
+	[ErrorCodeEnum.USERDEFAULTSIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
 	[ErrorCodeEnum.Letter_NOT_FOUND]: "የተሰጠው የመዝገብ ቁጥር ያለው ደብዳቤ ሊገኝ አልቻለም።",
 };
