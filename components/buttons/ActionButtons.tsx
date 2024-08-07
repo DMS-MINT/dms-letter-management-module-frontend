@@ -5,7 +5,8 @@ import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
 import { useUiStore } from "@/stores";
 import type { LetterDetailResponseType } from "@/types/letter_module";
-import { generateUserPermissions } from "@/utils";
+import type { LanguageEnum } from "@/types/shared";
+import { canSubmitLetter, generateUserPermissions } from "@/utils";
 import { Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
@@ -102,6 +103,17 @@ function ActionButtons({
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
+						disabledButton={
+							!canSubmitLetter(
+								{
+									subject: letter.subject as string,
+									content: letter.content as string,
+									letter_type: letter.letter_type,
+									language: letter.language as LanguageEnum,
+								},
+								letter.participants
+							)
+						}
 						triggerButtonText="ወደ መዝገብ ቢሮ አስተላልፍ"
 						triggerButtonVariant="default"
 						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"

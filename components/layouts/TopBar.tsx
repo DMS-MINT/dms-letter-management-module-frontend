@@ -62,7 +62,7 @@ export default function TopBar() {
 							</Link>
 						</TooltipTrigger>
 						<TooltipContent>
-							<p>የገቢ መልእክት ሳጥን</p>
+							<p>ገቢ ደብዳቤዎች</p>
 						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>

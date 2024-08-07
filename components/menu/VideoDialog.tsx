@@ -1,3 +1,8 @@
+"use client";
+
+import clsx from "clsx";
+import { useState } from "react";
+import { Spinner } from "../helpers";
 import { Button } from "../ui/button";
 import {
 	Dialog,
@@ -14,8 +19,13 @@ interface VideoDialogProps {
 }
 
 export function VideoDialog({ isOpen, onClose }: VideoDialogProps) {
+	const [isLoading, setIsLoading] = useState(true);
 	const videoUrl =
 		"https://drive.google.com/file/d/1Lj23UNXBDmNSfLuo8UtnacY5U4JjShh7/preview";
+
+	const handleIframeLoad = () => {
+		setIsLoading(false);
+	};
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
@@ -25,13 +35,19 @@ export function VideoDialog({ isOpen, onClose }: VideoDialogProps) {
 					<DialogDescription>የቪዲዮ እርዳታውን በመክፈት ይከታተሉ.</DialogDescription>
 				</DialogHeader>
 				<div className="flex justify-center">
+					{isLoading ? (
+						<div className="flex h-[450px] w-[640px] items-center justify-center">
+							<Spinner />
+						</div>
+					) : null}
 					<iframe
 						src={videoUrl}
 						width="640"
 						height="450"
 						allow="autoplay"
 						frameBorder="0"
-						className="w-full"
+						className={clsx("w-full", { hidden: isLoading })}
+						onLoad={handleIframeLoad}
 					></iframe>
 				</div>
 				<DialogFooter>
