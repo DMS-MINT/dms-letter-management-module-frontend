@@ -8,7 +8,7 @@ import {
 	InternalLetterTemplate,
 	OutgoingLetterTemplate,
 } from "@/components/templates";
-import { useLetterStore } from "@/stores";
+import { useLetterStore, useParticipantStore } from "@/stores";
 import { useEffect } from "react";
 
 export default function Compose() {
@@ -17,9 +17,14 @@ export default function Compose() {
 		resetContent: state.resetContent,
 	}));
 
+	const resetParticipantStore = useParticipantStore(
+		(state) => state.resetParticipantStore
+	);
+
 	useEffect(() => {
 		resetContent();
-	}, [resetContent]);
+		resetParticipantStore();
+	}, [resetContent, resetParticipantStore]);
 
 	const renderTemplate = () => {
 		switch (letter_type) {
