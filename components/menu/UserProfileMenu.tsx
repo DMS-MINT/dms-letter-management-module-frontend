@@ -17,6 +17,7 @@ import { CircleHelp, LogOut, MonitorPlay } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import NotificationPopover from "../drawers/NotificationDrawer";
 import { Separator } from "../ui/separator";
 import { VideoDialog } from "./VideoDialog";
 
@@ -72,6 +73,9 @@ export default function UserProfileMenu() {
 			{/* <div className="flex items-end gap-2">
 				<p className="text-sm">{myProfile.full_name}</p>
 			</div> */}
+			<div>
+				<NotificationPopover />
+			</div>
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">

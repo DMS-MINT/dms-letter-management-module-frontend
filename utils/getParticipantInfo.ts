@@ -1,4 +1,4 @@
-import { ParticipantType, RoleEnum } from "@/types/letter_module";
+import type { ParticipantType, RoleEnum } from "@/types/letter_module";
 
 const getParticipantInfo = (
 	role: RoleEnum,

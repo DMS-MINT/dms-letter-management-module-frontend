@@ -25,8 +25,15 @@ import type {
 	ShareLetterRequestType,
 } from "@/types/letter_module";
 import { RoleEnum } from "@/types/letter_module";
+import { Share2 } from "lucide-react";
 import { useState } from "react";
 import * as uuidv4 from "uuid";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 type SelectType = {
 	id: string;
@@ -174,7 +181,19 @@ export default function ShareLetterDialog({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant={"outline"}>ደብዳቤውን አጋራ</Button>
+				{/* <Button variant={"outline"}>ደብዳቤውን አጋራ</Button> */}
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger>
+							<Button variant={"outline"} size={"sm"}>
+								<Share2 size={15} />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent side="bottom" align="center">
+							<p>ደብዳቤውን አጋራ</p>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 			</DialogTrigger>
 			<DialogContent className="flex max-h-[40rem] min-w-[45rem] max-w-[45rem] flex-col">
 				<DialogHeader className="flex-1 p-2">

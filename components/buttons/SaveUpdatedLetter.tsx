@@ -5,9 +5,16 @@ import type {
 	ModifiedLetterType,
 } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
+import { Pencil } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 export default function SaveUpdatedLetter() {
 	const { referenceNumber } = useParams();
@@ -50,8 +57,17 @@ export default function SaveUpdatedLetter() {
 	};
 
 	return (
-		<Button variant={"outline"} onClick={onSubmit}>
-			ደብዳቤውን አርም
-		</Button>
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger>
+					<Button variant={"outline"} onClick={onSubmit} size={"sm"}>
+						<Pencil size={15} className="text-green-500" />
+					</Button>
+				</TooltipTrigger>
+				<TooltipContent side="bottom" align="center">
+					<p>ደብዳቤውን አርም</p>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
 	);
 }

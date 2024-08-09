@@ -92,7 +92,7 @@ export const draftTableColumns: LetterColumnDefType = [
 			return (
 				<HoverCard>
 					<HoverCardTrigger asChild>
-						<p className="line-clamp-1 w-full items-start justify-start text-blue-500 ">
+						<p className="line-clamp-1 w-full items-start justify-start hover:text-blue-700 hover:underline ">
 							{recipientList.length > 0 ? recipientList[0] : "No Recipients"}
 						</p>
 					</HoverCardTrigger>
@@ -138,7 +138,7 @@ export const draftTableColumns: LetterColumnDefType = [
 			return (
 				<HoverCard>
 					<HoverCardTrigger asChild>
-						<p className="line-clamp-1 w-[300px] items-start justify-start text-blue-500 ">
+						<p className="line-clamp-1 w-[300px] items-start justify-start  hover:text-blue-700 hover:underline">
 							{subject}
 						</p>
 					</HoverCardTrigger>

@@ -7,11 +7,12 @@ import { useUiStore } from "@/stores";
 import type { LetterDetailResponseType } from "@/types/letter_module";
 import type { LanguageEnum } from "@/types/shared";
 import { canSubmitLetter, generateUserPermissions } from "@/utils";
-import { Trash } from "lucide-react";
+import { Send, Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
+import ActionDropDown from "./ActionDropDown";
 import SaveUpdatedLetter from "./SaveUpdatedLetter";
 
 export type ButtonConfigType = {
@@ -55,7 +56,7 @@ function ActionButtons({
 				isVisible: currentUserPerms.can_trash_letter,
 				variant: "outline",
 				size: "icon",
-				icon: <Trash size={20} />,
+				icon: <Trash size={20} className="text-red-500" />,
 				action: () => handleAction("trash_letter"),
 			},
 			{
@@ -114,7 +115,9 @@ function ActionButtons({
 								letter.participants
 							)
 						}
-						triggerButtonText="ወደ መዝገብ ቢሮ አስተላልፍ"
+						triggerButtonText=""
+						triggerButtonTooltip="ወደ መዝገብ ቢሮ አስተላልፍ"
+						triggerButtonIcon={<Send size={15} />}
 						triggerButtonVariant="default"
 						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
@@ -128,6 +131,11 @@ function ActionButtons({
 						requiresAuth={true}
 					/>
 				),
+			},
+			{
+				id: uuidv4.v4(),
+				isVisible: currentUserPerms.can_submit_letter,
+				component: <ActionDropDown letter={letter} />,
 			},
 			{
 				id: uuidv4.v4(),

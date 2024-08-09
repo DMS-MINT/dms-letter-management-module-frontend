@@ -125,11 +125,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 
 		if (referenceNumbers.length > 0) {
 			switch (param) {
-				case "inbox":
-				case "outbox":
 				case "draft":
-				case "pending":
-				case "published":
 					await handleBatchAction("moveToTrash_batch", referenceNumbers);
 					break;
 				case "trash":
@@ -224,13 +220,14 @@ function DataTable({ columns, data, param }: DataTableProps) {
 							}}
 							requiresAuth={true}
 						/>
-					) : (
+					) : null}
+					{param === "draft" ? (
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button
 									variant={isDeleteButtonDisabled ? "outline" : "default"}
 									disabled={isDeleteButtonDisabled}
-									size="sm"
+									size={"sm"}
 									className={`${isDeleteButtonDisabled ? "" : "bg-red-500"} flex gap-2 `}
 								>
 									<Trash size={15} />
@@ -256,14 +253,14 @@ function DataTable({ columns, data, param }: DataTableProps) {
 								</AlertDialogFooter>
 							</AlertDialogContent>
 						</AlertDialog>
-					)}
+					) : null}
 					{param === "trash" && (
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button
 									variant={isDeleteButtonDisabled ? "outline" : "default"}
 									disabled={isDeleteButtonDisabled}
-									size="sm"
+									size={"sm"}
 									className="flex gap-2"
 								>
 									<UndoDot size={15} /> ወደ ቦታው መልስ
