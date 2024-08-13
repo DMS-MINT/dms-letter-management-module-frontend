@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useUiStore } from "@/stores";
+import { useUiStore } from "@/lib/stores";
 import { Menu } from "lucide-react";
 
 export default function Subheader({
