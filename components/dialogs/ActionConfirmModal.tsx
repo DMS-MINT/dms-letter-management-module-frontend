@@ -36,29 +36,29 @@ import {
 import { Textarea } from "../ui/textarea";
 
 export type ActionConfirmModalRef = {
-	getOTP: () => number;
+	getOTP: () => string;
 	message: string;
 };
 
 type ActionConfirmModalProps = {
 	triggerButtonIcon?: React.ReactNode;
 
-	disabledButton?: boolean;
+	disabled?: boolean;
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
-	requriresMessage?: boolean;
 	dialogTitle: string;
 	dialogDescription: string;
 	confirmButtonText: string;
 	cancelButtonText: string;
 	onConfirm: () => void;
 	requiresAuth: boolean;
+	requiresMessage?: boolean;
 };
 
 function ActionConfirmModal(
 	{
 		triggerButtonIcon,
-		disabledButton,
+		disabled,
 		triggerButtonText,
 		triggerButtonVariant,
 		dialogTitle,
@@ -67,7 +67,7 @@ function ActionConfirmModal(
 		cancelButtonText,
 		onConfirm,
 		requiresAuth,
-		requriresMessage,
+		requiresMessage,
 	}: ActionConfirmModalProps,
 	ref: Ref<ActionConfirmModalRef>
 ) {
@@ -99,7 +99,7 @@ function ActionConfirmModal(
 					onClick={() => {
 						form.reset();
 					}}
-					disabled={disabledButton}
+					disabled={disabled}
 					className="flex gap-2"
 					size="sm"
 				>
@@ -112,7 +112,7 @@ function ActionConfirmModal(
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
 				</DialogHeader>
-				{requriresMessage ? (
+				{requiresMessage ? (
 					<Textarea
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
