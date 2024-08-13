@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/hooks";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
+import { useUserStore } from "@/lib/stores";
 import clsx from "clsx";
 import { FileText, Inbox, Send, Trash } from "lucide-react";
 import Link from "next/link";
@@ -22,12 +21,10 @@ const ICON_SIZE: number = 20;
 const ICON_COLOR: string = "#2DA4FF";
 
 export default function LetterNavigationDrawer() {
-	const myProfile = useAppSelector(selectMyProfile);
+	const currentUser = useUserStore((state) => state.currentUser);
 	const pathname = usePathname();
 
 	const routes: RouteType[] = useMemo(() => {
-		if (!myProfile) return [];
-
 		return [
 			{
 				id: uuidv4.v4(),
@@ -62,17 +59,17 @@ export default function LetterNavigationDrawer() {
 				name: "መጽደቅን በመጠባበቅ ላይ",
 				icon: <></>,
 				path: "/letters/pending",
-				isVisible: myProfile.is_staff,
+				isVisible: currentUser.is_staff,
 			},
 			{
 				id: uuidv4.v4(),
 				name: "የጸደቀ ደብዳቤ",
 				icon: <></>,
 				path: "/letters/published",
-				isVisible: myProfile.is_staff,
+				isVisible: currentUser.is_staff,
 			},
 		];
-	}, [myProfile]);
+	}, [currentUser]);
 
 	return (
 		<nav className="flex w-full flex-col gap-2">

@@ -17,15 +17,17 @@ import {
 } from "@/components/ui/dialog";
 import { LINKS } from "@/constants";
 import { useOTP } from "@/hooks";
-import { useLetterStore, useParticipantStore } from "@/stores";
+import { useDraftLetterStore } from "@/lib/stores";
+import canSubmitLetter from "@/lib/utils/canSubmitLetter";
+import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type {
 	DraftLetterType,
 	LetterDetailResponseType,
 } from "@/types/letter_module";
-import { canSubmitLetter } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { OTPInputForm } from "../forms";
 
@@ -33,7 +35,7 @@ export type ActionType = "create_and_submit" | "create_and_publish";
 
 export type CreateLetterParams = {
 	letter: DraftLetterType;
-	otp: number;
+	otp: string;
 };
 
 export type LetterActionProps = {
@@ -46,13 +48,14 @@ export default function SubmitLetterDialog({
 }: {
 	actionType: ActionType;
 }) {
-	const participants = useParticipantStore((state) => state.participants);
-	const letter = useLetterStore((state) => ({
-		subject: state.subject,
-		content: state.content,
-		letter_type: state.letter_type,
-		language: state.language,
-	}));
+	const { subject, body, letter_type, language, participants } =
+		useDraftLetterStore((state) => ({
+			subject: state.subject,
+			body: state.body,
+			letter_type: state.letter_type,
+			language: state.language,
+			participants: state.participants,
+		}));
 
 	const { form, getOTP, handleInputChange } = useOTP();
 	const router = useRouter();
@@ -92,16 +95,20 @@ export default function SubmitLetterDialog({
 		},
 	});
 
-	const onContinue = (otp: number) => {
+	const draft_participants = useMemo(() => {
+		return generateDraftParticipant(participants);
+	}, [participants]);
+
+	const onContinue = (otp: string) => {
 		const action: LetterActionProps = {
 			actionType,
 			params: {
 				letter: {
-					subject: letter.subject,
-					content: letter.content,
-					letter_type: letter.letter_type,
-					language: letter.language,
-					participants,
+					subject: subject,
+					body: body,
+					letter_type: letter_type,
+					language: language,
+					participants: draft_participants,
 				},
 				otp: otp,
 			},
@@ -114,7 +121,15 @@ export default function SubmitLetterDialog({
 			<DialogTrigger asChild>
 				<Button
 					type="button"
-					disabled={!canSubmitLetter(letter, participants)}
+					disabled={
+						!canSubmitLetter({
+							subject,
+							body,
+							letter_type,
+							language,
+							participants,
+						})
+					}
 					onClick={() => {
 						form.reset();
 					}}
@@ -122,7 +137,7 @@ export default function SubmitLetterDialog({
 					ወደ መዝገብ ቢሮ አስተላልፍ
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="">
+			<DialogContent>
 				<DialogHeader className="gap-2">
 					<DialogTitle>ማንነትዎን ያረጋግጡ</DialogTitle>
 					<DialogDescription>
@@ -140,7 +155,7 @@ export default function SubmitLetterDialog({
 					</DialogDescription>
 				</DialogHeader>
 				<div className="px-2">
-					<OTPInputForm form={form} onChange={handleInputChange} />
+					<OTPInputForm showLabel={true} form={form} onChange={handleInputChange} />
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>

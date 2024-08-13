@@ -33,7 +33,7 @@ export type ActionType =
 
 export type ParamsType = {
 	referenceNumber: string | string[]; // Adjusted to handle both single and multiple reference numbers
-	otp?: number;
+	otp?: string;
 	message?: string;
 };
 

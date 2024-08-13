@@ -1,7 +1,8 @@
 "use client";
 
 import { createLetter } from "@/actions/letter_module/crudActions";
-import { useLetterStore, useParticipantStore } from "@/stores";
+import { useDraftLetterStore } from "@/lib/stores";
+import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type { DraftLetterType, LetterDetailType } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -11,15 +12,8 @@ import { SubmitLetterDialog } from "../dialogs";
 import { Button } from "../ui/button";
 
 export default function ComposeControlPanel() {
-	const participants = useParticipantStore((state) => state.participants);
-	const { subject, content, letter_type, language } = useLetterStore(
-		(state) => ({
-			subject: state.subject,
-			content: state.content,
-			letter_type: state.letter_type,
-			language: state.language,
-		})
-	);
+	const { subject, body, letter_type, language, participants } =
+		useDraftLetterStore();
 
 	const router = useRouter();
 
@@ -47,14 +41,19 @@ export default function ComposeControlPanel() {
 		},
 	});
 
+	const draft_participants = useMemo(() => {
+		return generateDraftParticipant(participants);
+	}, [participants]);
+
 	const onSubmit = () => {
 		const letter: DraftLetterType = {
 			subject,
-			content,
+			body,
 			letter_type,
 			language,
-			participants,
+			participants: draft_participants,
 		};
+
 		mutate(letter);
 	};
 

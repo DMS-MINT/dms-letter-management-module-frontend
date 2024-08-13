@@ -7,11 +7,12 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLetterStore, useUserStore } from "@/stores";
+import { useDraftLetterStore, useUserStore } from "@/lib/stores";
 import { letterCategoryTranslations } from "@/types/letter_module";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
+
 const whitelist: string[] = [
 	"inbox",
 	"outbox",
@@ -25,7 +26,9 @@ export default function TableControlPanel() {
 	const params = useParams();
 	const router = useRouter();
 	const category: string = params.category as string;
-	const updateLetterField = useLetterStore((state) => state.updateLetterField);
+	const updateLetterField = useDraftLetterStore(
+		(state) => state.updateLetterField
+	);
 	const is_staff = useUserStore((state) => state.currentUser.is_staff);
 
 	const isValidCategory = useMemo(
