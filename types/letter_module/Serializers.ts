@@ -1,6 +1,6 @@
 import type { LanguageEnum } from "../shared";
 import type { LetterDetailType } from "./LetterType";
-import type { ParticipantType } from "./ParticipantType";
+import type { ParticipantDraftType } from "./ParticipantType";
 
 export type PermissionsResponseType = {
 	user_id: string;
@@ -15,16 +15,16 @@ export type LetterDetailResponseType = {
 
 export type DraftLetterType = {
 	subject: string;
-	content: string;
+	body: string;
 	letter_type: "internal" | "outgoing" | "incoming";
 	language: LanguageEnum;
-	participants: ParticipantType[];
+	participants: ParticipantDraftType[];
 };
 
 export type ModifiedLetterType = {
 	subject: string;
-	content: string;
-	participants: ParticipantType[];
+	body: string;
+	participants: ParticipantDraftType[];
 };
 
 export type UpdatedLetterType = {};

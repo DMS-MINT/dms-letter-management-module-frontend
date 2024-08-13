@@ -1,20 +1,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { CommentType, LanguageEnum } from "../shared";
-import type { MemberType } from "../user_module";
-import type { ParticipantType } from "./ParticipantType";
-
-export type SignatureType = {
-	id: string;
-	user: MemberType;
-	e_signature: string;
-};
+import type { UserType } from "../user_module";
+import type { ParticipantDetailType } from "./ParticipantType";
 
 export type LetterType = {
 	id: string;
 	reference_number: string;
 	reference_number_am: string;
 	subject: string;
-	content: string;
+	body: string;
 	current_state: string;
 	has_read: boolean;
 	sent_at: string;
@@ -24,10 +18,9 @@ export type LetterType = {
 	created_at: string;
 	updated_at: string;
 	letter_type: "internal" | "outgoing" | "incoming";
-	participants: ParticipantType[];
+	participants: ParticipantDetailType[];
 };
 
-// export type LetterColumnDefType = ColumnDef<LetterType>[];
 export type LetterColumnDefType = ColumnDef<LetterType, any>[];
 
 export type LetterDetailType = {
@@ -37,16 +30,16 @@ export type LetterDetailType = {
 	reference_number: string;
 	reference_number_am: string;
 	subject?: string;
-	content?: string;
+	body?: string;
 	letter_type: "internal" | "outgoing" | "incoming";
 	language: keyof typeof LanguageEnum;
 	current_state: string;
-	owner: MemberType;
+	owner: UserType;
 	pdf_version: string;
 	submitted_at: string;
 	published_at: string;
 	created_at: string;
 	updated_at: string;
-	participants: ParticipantType[];
+	participants: ParticipantDetailType[];
 	comments: CommentType[];
 };
