@@ -8,36 +8,35 @@ import {
 	InternalLetterTemplate,
 	OutgoingLetterTemplate,
 } from "@/components/templates";
-import { useLetterStore, useParticipantStore } from "@/stores";
-import { useEffect } from "react";
+import type { TemplateProps } from "@/components/templates/types";
+import useBlockEditor from "@/hooks/useBlockEditor";
+import { useDraftLetterStore } from "@/lib/stores";
+import { useMemo } from "react";
 
 export default function Compose() {
-	const { letter_type, resetContent } = useLetterStore((state) => ({
-		letter_type: state.letter_type,
-		resetContent: state.resetContent,
-	}));
+	const {
+		subject,
+		body,
+		letter_type,
+		participants,
+		updateLetterField,
+		addParticipant,
+		removeParticipant,
+	} = useDraftLetterStore();
 
-	const resetParticipantStore = useParticipantStore(
-		(state) => state.resetParticipantStore
-	);
+	const { editor } = useBlockEditor({ editable: true, body, updateLetterField });
 
-	useEffect(() => {
-		resetContent();
-		resetParticipantStore();
-	}, [resetContent, resetParticipantStore]);
+	const TemplateComponent = useMemo(() => {
+		const templateMap: Record<string, React.FC<TemplateProps>> = {
+			internal: InternalLetterTemplate,
+			outgoing: OutgoingLetterTemplate,
+			IncomingLetterTemplate: IncomingLetterTemplate,
+		};
 
-	const renderTemplate = () => {
-		switch (letter_type) {
-			case "internal":
-				return <InternalLetterTemplate />;
-			case "outgoing":
-				return <OutgoingLetterTemplate />;
-			case "incoming":
-				return <IncomingLetterTemplate />;
-			default:
-				return null;
-		}
-	};
+		return templateMap[letter_type] || null;
+	}, [letter_type]);
+
+	if (!editor) return null;
 
 	return (
 		<>
@@ -49,7 +48,17 @@ export default function Compose() {
 					<LetterComposeDrawer />
 				</Drawer>
 				<main className="mb-0 flex flex-1 flex-col items-center bg-gray-100 py-5">
-					{renderTemplate()}
+					<TemplateComponent
+						editor={editor}
+						subject={subject}
+						reference_number=""
+						published_at=""
+						participants={participants}
+						isLetterReadOnly={false}
+						updateLetterField={updateLetterField}
+						addParticipant={addParticipant}
+						removeParticipant={removeParticipant}
+					/>
 				</main>
 			</section>
 		</>
