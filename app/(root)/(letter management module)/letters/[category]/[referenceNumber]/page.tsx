@@ -7,6 +7,7 @@ import { Drawer, Subheader } from "@/components/layouts";
 import { DetailControlPanel } from "@/components/panels";
 import { LetterSkeleton } from "@/components/skeletons";
 import { EditableLetter } from "@/components/templates";
+import { useWebsocket } from "@/hooks";
 import {
 	useLetterRevisionStore,
 	type LetterContentStoreType,
@@ -14,7 +15,7 @@ import {
 import generateUserPermissions from "@/lib/utils/generateUserPermissions";
 import type { LetterDetailResponseType } from "@/types/letter_module";
 import { LanguageEnum } from "@/types/shared";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export default function LetterDetail({
@@ -28,6 +29,7 @@ export default function LetterDetail({
 			initializeParticipants: state.initializeParticipants,
 		})
 	);
+	const queryClient = useQueryClient();
 	const { data, isSuccess } = useQuery({
 		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
@@ -59,6 +61,18 @@ export default function LetterDetail({
 			}
 		},
 		enabled: !!referenceNumber,
+	});
+
+	useWebsocket<LetterDetailResponseType>({
+		url: `ws://localhost:8000/ws/letters/${referenceNumber}/`,
+		onMessage: (message) => {
+			queryClient.setQueryData<LetterDetailResponseType>(
+				["getLetterDetails", referenceNumber],
+				(oldData) => {
+					return { ...oldData, ...message };
+				}
+			);
+		},
 	});
 
 	return isSuccess && data ? (
