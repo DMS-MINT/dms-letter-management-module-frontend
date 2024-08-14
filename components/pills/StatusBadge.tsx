@@ -1,29 +1,29 @@
 import { letterStatusTranslations } from "@/types/letter_module";
 import clsx from "clsx";
-import {
-	BookDashed,
-	Check,
-	FolderClosed,
-	Hourglass,
-	Trash,
-	X,
-} from "lucide-react";
+// import {
+// 	BookDashed,
+// 	Check,
+// 	FolderClosed,
+// 	Hourglass,
+// 	Trash,
+// 	X,
+// } from "lucide-react";
 
-const statusIconMapping: Record<string, any> = {
-	Draft: BookDashed,
-	Submitted: Hourglass,
-	Published: Check,
-	Closed: FolderClosed,
-	Rejected: X,
-	Trashed: Trash,
-};
+// const statusIconMapping: Record<string, any> = {
+// 	Draft: BookDashed,
+// 	Submitted: Hourglass,
+// 	Published: Check,
+// 	Closed: FolderClosed,
+// 	Rejected: X,
+// 	Trashed: Trash,
+// };
 
 export default function StatusBadge({
 	current_state,
 }: {
 	current_state: string;
 }) {
-	const StatusIcon = statusIconMapping[current_state] || BookDashed;
+	// const StatusIcon = statusIconMapping[current_state] || BookDashed;
 
 	return (
 		<div

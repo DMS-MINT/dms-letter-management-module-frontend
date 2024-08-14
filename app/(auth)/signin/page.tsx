@@ -28,7 +28,7 @@ import { z } from "zod";
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
 	password: z.string().min(1, { message: "እባክዎ የይለፍ ቃልዎን ያስገቡ።" }),
-	remember: z.boolean().default(false).optional(), 
+	remember: z.boolean().default(false).optional(),
 });
 
 export default function SignIn() {
@@ -39,7 +39,7 @@ export default function SignIn() {
 		defaultValues: {
 			email: "",
 			password: "",
-			remember: false, 
+			remember: false,
 		},
 	});
 

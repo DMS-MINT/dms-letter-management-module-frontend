@@ -164,8 +164,6 @@ export default function NotificationPopover() {
 	);
 }
 
-type CardProps = React.ComponentProps<typeof Card>;
-
 function NotificationDrawer({
 	reminders,
 	notifications,
@@ -173,6 +171,7 @@ function NotificationDrawer({
 }: {
 	reminders: NotificationItem[];
 	notifications: NotificationItem[];
+	// eslint-disable-next-line no-unused-vars
 	onOpen: (item: NotificationItem) => void;
 }) {
 	return (

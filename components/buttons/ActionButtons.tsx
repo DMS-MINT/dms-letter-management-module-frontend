@@ -135,7 +135,7 @@ function ActionButtons({
 			{
 				id: uuidv4.v4(),
 				isVisible: currentUserPerms.can_submit_letter,
-				component: <ActionDropDown letter={letter} />,
+				component: <ActionDropDown />,
 			},
 			{
 				id: uuidv4.v4(),

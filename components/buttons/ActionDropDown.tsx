@@ -1,6 +1,5 @@
 "use client";
 
-import type { LetterDetailType } from "@/types/letter_module";
 import { Bell, EllipsisVertical } from "lucide-react";
 import { useState } from "react";
 import { PingNotificationModal } from "../dialogs/PingNotificationModal";
@@ -14,11 +13,7 @@ import {
 	TooltipTrigger,
 } from "../ui/tooltip";
 
-export default function ActionDropDown({
-	letter,
-}: {
-	letter: LetterDetailType;
-}) {
+export default function ActionDropDown() {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleOpenModal = () => setIsModalOpen(true);

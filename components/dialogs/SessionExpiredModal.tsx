@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/form"; // Adjust the import path
 import { useState } from "react";
 // Adjust the import path
-import { ICredentials, signIn, signOut } from "@/actions/auth/action";
+import type { ICredentials } from "@/actions/auth/action";
+import { signIn, signOut } from "@/actions/auth/action";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn, LogOut } from "lucide-react";
@@ -50,7 +51,7 @@ const SessionExpiredModal = () => {
 		},
 	});
 
-	const { mutate, isSuccess, isPending } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationKey: ["signIn"],
 		mutationFn: async (values: z.infer<typeof formSchema>) => {
 			const response = await signIn(values);
