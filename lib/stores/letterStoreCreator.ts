@@ -28,7 +28,7 @@ export type ParticipantStoreActions = {
 	initializeParticipants: (_participants: ParticipantDetailType[]) => void;
 	addParticipant: (_participant: ParticipantDetailType) => void;
 	removeParticipant: (_user_id: string) => void;
-	resetParticipantStore: () => void;
+	resetParticipants: () => void;
 };
 
 export type LetterStoreType = LetterContentStoreType &
@@ -65,7 +65,7 @@ export const createParticipantStore = () =>
 				}),
 			})),
 
-		resetParticipantStore: () => set({ participants: [] }),
+		resetParticipants: () => set({ participants: [] }),
 	}));
 
 export const createLetterStore = () =>
@@ -115,5 +115,5 @@ export const createLetterStore = () =>
 					throw new Error("Unexpected participant type");
 				}),
 			})),
-		resetParticipantStore: () => set({ participants: [] }),
+		resetParticipants: () => set({ participants: [] }),
 	}));
