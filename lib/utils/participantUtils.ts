@@ -8,6 +8,7 @@ import type {
 	ParticipantDraftType,
 	RoleEnum,
 } from "@/types/letter_module";
+import { LanguageEnum } from "@/types/shared";
 import type {
 	ContactType,
 	EnterpriseType,
@@ -19,7 +20,7 @@ export type OptionType = UserType | EnterpriseType | ContactType;
 
 export type ParticipantScopeType = "all" | "internal_staff" | "external_staff";
 
-export type GroupType =
+export type GroupedOption =
 	| { label: "Users"; options: UserType[] }
 	| { label: "Enterprises"; options: EnterpriseType[] }
 	| { label: "Contacts"; options: ContactType[] };
@@ -47,7 +48,7 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 				};
 			}
 
-			const groups: GroupType[] = [
+			const groups: GroupedOption[] = [
 				{
 					label: "Users",
 					options: users.message,
@@ -69,7 +70,7 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 
 			if (!response.ok) throw response;
 
-			const groups: GroupType[] = [
+			const groups: GroupedOption[] = [
 				{
 					label: "Users",
 					options: response.message,
@@ -100,7 +101,7 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 				};
 			}
 
-			const groups: GroupType[] = [
+			const groups: GroupedOption[] = [
 				{
 					label: "Users",
 					options: [],
@@ -146,19 +147,19 @@ export const getIdOrValue = (
 	return "id" in removedValue ? removedValue.id : removedValue.value;
 };
 
-const isOptionType = (option: any): option is OptionType => {
+export const isOptionType = (option: any): option is OptionType => {
 	return option.id ? true : false;
 };
 
-const isUserType = (option: any): option is UserType => {
+export const isUserType = (option: any): option is UserType => {
 	return option.job_title ? true : false;
 };
 
-const isEnterpriseType = (option: any): option is EnterpriseType => {
+export const isEnterpriseType = (option: any): option is EnterpriseType => {
 	return option.name_en ? true : false;
 };
 
-const isContactType = (option: any): option is ContactType => {
+export const isContactType = (option: any): option is ContactType => {
 	return option.full_name_en ? true : false;
 };
 
@@ -194,32 +195,39 @@ export const participantSerializer = (
 };
 
 export const getLabel = (
-	option: OptionType | { label: string; value: string }
+	option: OptionType | { label: string; value: string },
+	language: LanguageEnum
 ): string => {
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
 			return option.job_title;
 		} else if (isEnterpriseType(option)) {
-			return option.name_en;
+			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
-			return option.full_name_am;
+			return language === LanguageEnum.English
+				? option.full_name_en
+				: option.full_name_am;
 		}
 	}
 	return option.label;
 };
 
 export const getValue = (
-	option: OptionType | { label: string; value: string }
+	option: OptionType | { label: string; value: string },
+	language: LanguageEnum
 ): string => {
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
-			return option.id;
+			return option.job_title;
 		} else if (isEnterpriseType(option)) {
-			return option.id;
+			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
-			return option.full_name_en;
+			return language === LanguageEnum.English
+				? option.full_name_en
+				: option.full_name_am;
 		}
 	}
+
 	return option.label;
 };
 
@@ -237,7 +245,7 @@ export const getDefaultValue = (
 			} else if (participant.participant_type === "contact") {
 				return participant.contact;
 			}
-
+			console.warn("Unexpected participant type");
 			throw new Error("Unexpected participant type");
 		});
 };

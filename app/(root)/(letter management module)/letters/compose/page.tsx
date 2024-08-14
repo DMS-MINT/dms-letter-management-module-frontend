@@ -17,6 +17,7 @@ export default function Compose() {
 	const {
 		subject,
 		body,
+		language,
 		letter_type,
 		participants,
 		updateLetterField,
@@ -50,6 +51,7 @@ export default function Compose() {
 				<main className="mb-0 flex flex-1 flex-col items-center bg-gray-100 py-5">
 					<TemplateComponent
 						editor={editor}
+						language={language}
 						subject={subject}
 						reference_number=""
 						published_at=""

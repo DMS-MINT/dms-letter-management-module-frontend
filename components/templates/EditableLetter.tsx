@@ -13,6 +13,7 @@ function EditableLetter({ editable }: { editable: boolean }) {
 		subject,
 		body,
 		letter_type,
+		language,
 		reference_number,
 		published_at,
 		participants,
@@ -43,6 +44,7 @@ function EditableLetter({ editable }: { editable: boolean }) {
 		<TemplateComponent
 			editor={editor}
 			subject={subject}
+			language={language}
 			reference_number={reference_number}
 			published_at={published_at}
 			participants={participants}

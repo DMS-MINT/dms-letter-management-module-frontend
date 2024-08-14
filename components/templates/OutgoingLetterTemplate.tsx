@@ -6,6 +6,7 @@ import {
 } from "@/components/templates";
 import { getDefaultValue } from "@/lib/utils/participantUtils";
 import { RoleEnum } from "@/types/letter_module";
+import { LanguageEnum } from "@/types/shared";
 import { BlockEditor } from "../BlockEditor";
 import { Label } from "../ui/label";
 import Paper from "./Paper";
@@ -13,11 +14,12 @@ import type { TemplateProps } from "./types";
 
 export default function OutgoingLetterTemplate({
 	editor,
+	language,
 	subject,
 	participants,
-	reference_number,
 	published_at,
 	isLetterReadOnly,
+	reference_number,
 	addParticipant,
 	removeParticipant,
 	updateLetterField,
@@ -30,18 +32,19 @@ export default function OutgoingLetterTemplate({
 				published_at={published_at}
 			/>
 			<ParticipantSelector
-				prefix="ለ"
+				language={language}
+				prefix={language === LanguageEnum.English ? "To" : "ለ"}
 				isDisabled={isLetterReadOnly}
 				name={RoleEnum["PRIMARY RECIPIENT"]}
 				placeholder="እባክዎ የደብዳቤውን ለማን እንደሚልኩ ይምረጡ"
-				participantScope="internal_staff"
+				participantScope="external_staff"
 				participants={participants}
 				addParticipant={addParticipant}
 				removeParticipant={removeParticipant}
 				value={getDefaultValue(participants, RoleEnum["PRIMARY RECIPIENT"])}
 			/>
 			<div className="mb-2 flex w-full items-center justify-center gap-2 self-center">
-				<Label>ጉዳዩ:-</Label>
+				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
 				<input
 					type="text"
 					value={subject}
@@ -53,15 +56,16 @@ export default function OutgoingLetterTemplate({
 			</div>
 			<BlockEditor editor={editor} />
 			<div className="mt-auto py-3 font-serif">
-				<p>እንዲያውቁት:-</p>
+				<p>{language === LanguageEnum.English ? "BCC" : "እንዲያውቁት"}:-</p>
 				<ul className="pl-5">
 					<div className="flex flex-col gap-1 pt-1 font-serif ">
 						<ParticipantSelector
-							prefix="ለ"
+							language={language}
+							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["BLIND CARBON COPY RECIPIENT"]}
 							placeholder="እባክዎ ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
-							participantScope="internal_staff"
+							participantScope="all"
 							participants={participants}
 							addParticipant={addParticipant}
 							removeParticipant={removeParticipant}
@@ -74,15 +78,16 @@ export default function OutgoingLetterTemplate({
 				</ul>
 			</div>
 			<div className="py-3 font-serif">
-				<p>ግልባጭ:-</p>
+				<p>{language === LanguageEnum.English ? "CC" : "ግልባጭ"}:-</p>
 				<ul className="pl-5">
 					<div className="flex flex-col gap-1 pt-1 font-serif ">
 						<ParticipantSelector
-							prefix="ለ"
+							language={language}
+							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["CARBON COPY RECIPIENT"]}
 							placeholder="እባክዎ የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
-							participantScope="internal_staff"
+							participantScope="all"
 							participants={participants}
 							addParticipant={addParticipant}
 							removeParticipant={removeParticipant}
