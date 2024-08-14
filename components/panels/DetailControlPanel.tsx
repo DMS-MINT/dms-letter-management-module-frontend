@@ -13,7 +13,10 @@ export default function DetailControlPanel({
 			<h1 className="page-title">{data.letter.reference_number}</h1>
 			<StatusBadge current_state={data.letter.current_state} />
 			<div className="ml-auto flex items-center gap-2">
-				<PrintPreviewButton pdf_version={data.letter.pdf_version} />
+				<PrintPreviewButton
+					pdf_version={data.letter.pdf_version}
+					current_state={data.letter.current_state}
+				/>
 				<ActionButtons permissions={generateUserPermissions(data.permissions)} />
 			</div>
 		</section>
