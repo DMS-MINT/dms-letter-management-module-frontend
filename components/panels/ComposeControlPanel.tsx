@@ -12,8 +12,15 @@ import { SubmitLetterDialog } from "../dialogs";
 import { Button } from "../ui/button";
 
 export default function ComposeControlPanel() {
-	const { subject, body, letter_type, language, participants } =
-		useDraftLetterStore();
+	const {
+		subject,
+		body,
+		letter_type,
+		language,
+		participants,
+		resetContent,
+		resetParticipants,
+	} = useDraftLetterStore();
 
 	const router = useRouter();
 
@@ -33,6 +40,8 @@ export default function ComposeControlPanel() {
 		onSuccess: (data) => {
 			toast.dismiss();
 			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
+			resetContent();
+			resetParticipants();
 			router.push(`/letters/draft/${data.reference_number}`);
 		},
 		onError: (error: any) => {
