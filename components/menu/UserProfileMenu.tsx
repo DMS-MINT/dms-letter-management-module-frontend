@@ -13,7 +13,7 @@ import { useAppDispatch } from "@/hooks";
 import { storeMyProfile } from "@/lib/features/user/userSlice";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CircleHelp, LogOut, MonitorPlay } from "lucide-react";
+import { CircleHelp, LogOut, MonitorPlay, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -107,6 +107,14 @@ export default function UserProfileMenu() {
 					>
 						<MonitorPlay size={20} />
 						የቪዲዮ እርዳታ
+					</DropdownMenuItem>
+					<Separator />
+					<DropdownMenuItem
+						onClick={() => router.push("/myaccount")}
+						className="flex w-full gap-4"
+					>
+						<UserRound size={20} />
+						የእኔ መገለጫ
 					</DropdownMenuItem>
 					<Separator />
 					<DropdownMenuItem onClick={() => logOut()} className="flex w-full gap-4">
