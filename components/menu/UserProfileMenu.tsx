@@ -67,7 +67,7 @@ export default function UserProfileMenu() {
 		setVideoDialogOpen(false);
 	};
 
-	const fullName = myProfile?.full_name;
+	const fullName = myProfile?.full_name_am;
 	const initials = fullName ? getInitials(fullName) : "";
 
 	return isSuccess && myProfile ? (
@@ -88,9 +88,9 @@ export default function UserProfileMenu() {
 				<DropdownMenuContent className="mr-2 flex flex-col">
 					<DropdownMenuItem className="flex w-full gap-3">
 						<div className="flex flex-col items-center ">
-							<p className="text-sm">{myProfile.full_name}</p>
+							<p className="text-sm">{myProfile.full_name_am}</p>
 							<span className="text-xs text-muted-foreground">
-								{myProfile.department.name_en}
+								{myProfile.department.department_name_am}
 							</span>
 						</div>
 					</DropdownMenuItem>

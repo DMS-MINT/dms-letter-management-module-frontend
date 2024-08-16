@@ -46,7 +46,8 @@ export async function getContacts() {
 }
 export async function AddContacts(data: NewContactType) {
 	try {
-		const response = await axiosInstance.put("contacts/", data);
+		console.log("added contact", data);
+		const response = await axiosInstance.post("contacts/create/", data);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -55,7 +56,16 @@ export async function AddContacts(data: NewContactType) {
 }
 export async function UpdateContacts(id: string, data: NewContactType) {
 	try {
-		const response = await axiosInstance.patch(`contacts/${id}/update/`, data);
+		const response = await axiosInstance.post(`contacts/${id}/update/`, data);
+
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+export async function DeleteContacts(id: string) {
+	try {
+		const response = await axiosInstance.delete(`contacts/${id}/delete/`);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {

@@ -1,6 +1,10 @@
 "use client";
 
-import { AddContacts, UpdateContacts } from "@/actions/user_module/action";
+import {
+	AddContacts,
+	DeleteContacts,
+	UpdateContacts,
+} from "@/actions/user_module/action";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -26,7 +30,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { getInitials } from "@/lib/utils/getInitials";
-import { ContactTypeWithImage } from "@/types/user_module";
+import { ContactType } from "@/types/user_module";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -38,42 +42,25 @@ import {
 import { useState } from "react";
 import { CustomSheet } from "../CustomSheet";
 
-// Sample contact data
-const contacts: ContactTypeWithImage[] = [
-	{
-		id: "1",
-		fullName: "John Doe",
-		fullNameAmharic: "ጆን ዶ",
-		address: "123 Elm Street",
-		addressAmharic: "123 ኤልም ጎዳና",
-		phone: "(555) 123-4567",
-		email: "john.doe@example.com",
-		photo: "/images/placeholder.png",
-	},
-	{
-		id: "2",
-		fullName: "Jane Smith",
-		fullNameAmharic: "ጄን ስሚት",
-		address: "456 Oak Avenue",
-		addressAmharic: "456 ኦክ አቅድ",
-		phone: "(555) 765-4321",
-		email: "jane.smith@example.com",
-	},
-	// Add more contacts as needed
-];
-
 const ITEMS_PER_PAGE = 5; // Number of items per page
 
-export default function ContactTable() {
+export default function ContactTable({
+	contacts,
+	refetchContacts,
+}: {
+	contacts: ContactType[];
+	refetchContacts: () => void;
+}) {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
-	const [selectedContact, setSelectedContact] =
-		useState<ContactTypeWithImage | null>(null);
+	const [selectedContact, setSelectedContact] = useState<ContactType | null>(
+		null
+	);
 	const [isAdding, setIsAdding] = useState(false);
 
 	const handleOpenSheet = (
-		contact: ContactTypeWithImage | null,
+		contact: ContactType | null,
 		isAdding: boolean = false
 	) => {
 		setSelectedContact(contact);
@@ -85,31 +72,12 @@ export default function ContactTable() {
 		setIsSheetOpen(false);
 	};
 
-	const handleSave = async (updatedContact: ContactTypeWithImage) => {
-		const {
-			id,
-			fullName: full_name_en,
-			fullNameAmharic: full_name_am,
-			email,
-			phone: phone_number,
-			address,
-			addressAmharic: city_am,
-		} = updatedContact;
-
-		const formattedContact = {
-			full_name_en,
-			full_name_am,
-			email,
-			phone_number: Number(phone_number), // Ensuring phone number is a number
-			address: {
-				city_en: address,
-				city_am,
-			},
-		};
+	const handleSave = async (updatedContact: ContactType) => {
+		const { id } = selectedContact || {};
 
 		if (isAdding) {
 			// Add new contact logic
-			const result = await AddContacts(formattedContact);
+			const result = await AddContacts(updatedContact);
 			if (result.ok) {
 				console.log("New contact added:", result.message);
 			} else {
@@ -119,9 +87,11 @@ export default function ContactTable() {
 			// Update the contact logic
 			if (id) {
 				// Ensure the ID exists before updating
-				const result = await UpdateContacts(id, { ...formattedContact });
+
+				const result = await UpdateContacts(id, updatedContact);
 				if (result.ok) {
 					console.log("Updated contact:", result.message);
+					refetchContacts();
 				} else {
 					console.error("Error updating contact:", result.message);
 				}
@@ -133,14 +103,24 @@ export default function ContactTable() {
 		setIsSheetOpen(false);
 	};
 
+	const handleDelete = async (id: string) => {
+		const result = await DeleteContacts(id);
+		if (result.ok) {
+			console.log("Deleted contact:", result.message);
+			refetchContacts();
+		} else {
+			console.error("Error deleting contact:", result.message);
+		}
+	};
+
 	// Filter contacts based on search query
 	const filteredContacts = contacts.filter((contact) => {
 		return (
-			contact.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			contact.fullNameAmharic.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			contact.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			contact.addressAmharic.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			contact.phone.toLowerCase().includes(searchQuery.toLowerCase())
+			contact.full_name_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			contact.full_name_am.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			contact.address.city_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			contact.address.city_am.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			contact.phone_number.toString().includes(searchQuery.toLowerCase())
 		);
 	});
 
@@ -199,33 +179,23 @@ export default function ContactTable() {
 						{currentContacts.map((contact) => (
 							<TableRow key={contact.id}>
 								<TableCell className="hidden w-16 sm:table-cell">
-									{/* {contact.photo ? (
-										<Image
-											alt={contact.fullName}
-											className="aspect-square rounded-md object-cover"
-											height={32}
-											src={contact.photo}
-											width={32}
-										/>
-									) : ( */}
 									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-600">
-										{getInitials(contact.fullName)}
+										{getInitials(contact.full_name_en)}
 									</div>
-									{/* )} */}
 								</TableCell>
 
 								<TableCell className="table-cell w-80">
 									<div className="flex flex-col gap-1">
-										<span className="font-bold">{contact.fullNameAmharic}</span>
-										<span>{contact.fullName}</span>
+										<span className="font-bold">{contact.full_name_am}</span>
+										<span>{contact.full_name_en}</span>
 									</div>
 								</TableCell>
 								<TableCell className="hidden sm:table-cell sm:grid-cols-1 sm:gap-1">
-									<div className="font-bold">{contact.addressAmharic}</div>
-									<div>{contact.address}</div>
+									<div className="font-bold">{contact.address.city_am}</div>
+									<div>{contact.address.city_en}</div>
 								</TableCell>
 
-								<TableCell>{contact.phone}</TableCell>
+								<TableCell>{contact.phone_number}</TableCell>
 								<TableCell>{contact.email}</TableCell>
 
 								<TableCell>
@@ -244,7 +214,10 @@ export default function ContactTable() {
 											>
 												<Pencil size={15} /> አርም
 											</DropdownMenuItem>
-											<DropdownMenuItem className="flex items-center gap-2 text-red-500">
+											<DropdownMenuItem
+												className="flex items-center gap-2 text-red-500"
+												onClick={() => handleDelete(contact.id)}
+											>
 												<Trash size={15} />
 												አጥፋ
 											</DropdownMenuItem>

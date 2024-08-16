@@ -4,7 +4,7 @@ import { BriefcaseBusiness, Building2 } from "lucide-react";
 
 const MyProfileSideBar = ({ myProfile }: { myProfile: CurrentUserType }) => {
 	// const hasProfileImage = !!myProfile.image;
-	const fullName = myProfile.full_name;
+	const fullName = myProfile.full_name_am;
 	const initials = getInitials(fullName);
 
 	return (
@@ -30,7 +30,7 @@ const MyProfileSideBar = ({ myProfile }: { myProfile: CurrentUserType }) => {
 					</span>
 					<p className="rounded-md bg-gray-50 text-center text-sm text-muted-foreground">
 						{" "}
-						{myProfile.department.name_en}
+						{myProfile.department.department_name_en}
 					</p>
 				</span>
 				<span className="flex flex-col gap-2 ">
@@ -40,7 +40,7 @@ const MyProfileSideBar = ({ myProfile }: { myProfile: CurrentUserType }) => {
 					</span>
 					<p className="rounded-md bg-gray-50 text-center text-sm text-muted-foreground">
 						{" "}
-						{myProfile.job_title}
+						{myProfile.job_title.title_en}
 					</p>
 				</span>
 

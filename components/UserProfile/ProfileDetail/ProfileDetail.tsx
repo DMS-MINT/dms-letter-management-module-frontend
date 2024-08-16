@@ -56,7 +56,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.first_name}
+							value={myProfile.first_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -67,7 +67,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name}
+							value={myProfile.middle_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -78,7 +78,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name}
+							value={myProfile.last_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -91,7 +91,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.first_name}
+							value={myProfile.first_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -102,7 +102,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name}
+							value={myProfile.middle_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -113,7 +113,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name}
+							value={myProfile.last_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -168,7 +168,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.name_am}
+							value={myProfile.department.department_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -179,7 +179,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.job_title}
+							value={myProfile.job_title.title_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -192,7 +192,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.name_en}
+							value={myProfile.department.department_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -203,7 +203,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.job_title}
+							value={myProfile.job_title.title_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>

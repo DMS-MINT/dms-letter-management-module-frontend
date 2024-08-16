@@ -3,7 +3,7 @@ import { getMyProfile } from "@/actions/user_module/action";
 import { useUserStore } from "@/lib/stores";
 import type { CurrentUserType } from "@/types/user_module";
 import { useQuery } from "@tanstack/react-query";
-import { BellRing, Contact, QrCode, User } from "lucide-react";
+import { Contact, QrCode, User } from "lucide-react";
 import { toast } from "sonner";
 import {
 	Accordion,
@@ -16,7 +16,6 @@ import ContactDetail from "./ContactDetail/ContactDetail";
 import MyProfileSideBar from "./MyProfileSideBar";
 import ProfileDetail from "./ProfileDetail/ProfileDetail";
 import TwoFactorAuth from "./ProfileDetail/TwoFactorAuth";
-import NotificationSetting from "./Settings/NotificationSetting";
 
 const MyProfile = () => {
 	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
@@ -43,7 +42,7 @@ const MyProfile = () => {
 					<CardContent className="w-full">
 						<Accordion type="single" collapsible defaultValue="item-1">
 							<AccordionItem value="item-1">
-								<AccordionTrigger className=" text-lg hover:no-underline">
+								<AccordionTrigger className=" text-base hover:no-underline">
 									<span className="flex items-center gap-2">
 										<User size={25} />
 										የግለ መረጃ ዝርዝር
@@ -54,7 +53,7 @@ const MyProfile = () => {
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="item-2">
-								<AccordionTrigger className=" text-lg hover:no-underline">
+								<AccordionTrigger className=" text-base hover:no-underline">
 									<span className="flex items-center gap-2">
 										<QrCode size={25} />
 										ባለ ሁለት የማረጋገጫ ኮድ
@@ -65,7 +64,7 @@ const MyProfile = () => {
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="item-3">
-								<AccordionTrigger className=" text-lg hover:no-underline">
+								<AccordionTrigger className=" text-base hover:no-underline">
 									<span className="flex items-center gap-2">
 										<Contact size={25} />
 										የግል የእውቂያ መረጃ
@@ -75,7 +74,7 @@ const MyProfile = () => {
 									<ContactDetail />
 								</AccordionContent>
 							</AccordionItem>
-							<AccordionItem value="item-4">
+							{/* <AccordionItem value="item-4">
 								<AccordionTrigger className=" text-lg hover:no-underline">
 									<span className="flex items-center gap-2">
 										<BellRing size={25} />
@@ -85,7 +84,7 @@ const MyProfile = () => {
 								<AccordionContent>
 									<NotificationSetting />
 								</AccordionContent>
-							</AccordionItem>
+							</AccordionItem> */}
 						</Accordion>
 					</CardContent>
 				</Card>

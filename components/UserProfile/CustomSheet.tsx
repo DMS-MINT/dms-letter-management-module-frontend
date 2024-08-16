@@ -7,38 +7,39 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { ContactTypeWithImage } from "@/types/user_module";
+import { ContactType } from "@/types/user_module";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Label } from "../ui/label";
 
-// Custom validation for image file types
-const imageFileSchema = z
-	.instanceof(File)
-	.refine((file) => file.type.startsWith("image/"), {
-		message: "Only image files are allowed (JPEG, PNG, GIF, etc.)",
-	});
-
 const contactSchema = z.object({
-	fullName: z.string().min(1, { message: "Full Name is required" }),
-	fullNameAmharic: z.string().optional(),
-	address: z.string().optional(),
-	addressAmharic: z.string().optional(),
-	phone: z
+	full_name_en: z
 		.string()
-		.min(10, { message: "Phone number must be at least 10 digits" }),
+		.min(1, { message: "Full Name (English) is required" }),
+	full_name_am: z
+		.string()
+		.min(1, { message: "Full Name (Amharic) is required" }),
+	address: z.object({
+		city_en: z.string().min(1, { message: "Address (English) is required" }),
+		city_am: z.string().min(1, { message: "Address (Amharic) is required" }),
+	}),
+	phone_number: z
+		.string()
+		.regex(
+			/^\+2519\d{8}$/,
+			"Phone number must start with +2519 and be 13 digits long"
+		),
 	email: z.string().email({ message: "Invalid email address" }),
-	photo: z.union([imageFileSchema, z.string().optional()]), // Either a File or a string URL
 });
 
 type CustomSheetProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	contact: ContactTypeWithImage | null;
+	contact: ContactType | null;
 	isAdding: boolean;
-	onSave: (contact: ContactTypeWithImage) => void;
+	onSave: (contact: ContactType) => void;
 };
 
 export function CustomSheet({
@@ -48,130 +49,110 @@ export function CustomSheet({
 	isAdding,
 	onSave,
 }: CustomSheetProps) {
-	const [preview, setPreview] = useState<string | null>(null);
-
 	const {
 		register,
 		handleSubmit,
 		setValue,
 		reset,
 		formState: { errors },
-	} = useForm<ContactTypeWithImage>({
+	} = useForm<ContactType>({
 		defaultValues: {
-			fullName: contact?.fullName || "",
-			fullNameAmharic: contact?.fullNameAmharic || "",
-			address: contact?.address || "",
-			addressAmharic: contact?.addressAmharic || "",
-			phone: contact?.phone || "",
+			full_name_en: contact?.full_name_en || "",
+			full_name_am: contact?.full_name_am || "",
+			address: {
+				city_en: contact?.address?.city_en || "",
+				city_am: contact?.address?.city_am || "",
+			},
+			phone_number: contact?.phone_number || 0,
 			email: contact?.email || "",
-			photo: contact?.photo || null,
 		},
 		resolver: zodResolver(contactSchema),
 	});
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			setValue("photo", file);
-			setPreview(URL.createObjectURL(file)); // Create a preview URL
-		}
+	const onSubmit = (data: ContactType) => {
+		// Convert phone_number to string if needed before saving
+		data.phone_number = Number(data.phone_number);
+		onSave(data);
+		onClose();
 	};
-
 	useEffect(() => {
 		if (contact) {
 			reset({
 				...contact,
-				photo: contact.photo ? contact.photo : null,
 			});
-
-			// Set the preview if the photo is a string (URL)
-			if (typeof contact.photo === "string") {
-				setPreview(contact.photo);
-			} else {
-				setPreview(null);
-			}
 		} else {
 			reset({
-				fullName: "",
-				fullNameAmharic: "",
-				address: "",
-				addressAmharic: "",
-				phone: "",
+				full_name_en: "",
+				full_name_am: "",
+				address: {
+					city_en: "",
+					city_am: "",
+				},
+				phone_number: 0,
 				email: "",
-				photo: null,
 			});
-			setPreview(null);
 		}
 	}, [contact, isOpen, reset]);
-
-	const onSubmit = (data: ContactTypeWithImage) => {
-		onSave(data);
-		onClose();
-	};
-
-	// Clean up the preview URL when the component unmounts
-	useEffect(() => {
-		return () => {
-			if (preview) {
-				URL.revokeObjectURL(preview);
-			}
-		};
-	}, [preview]);
-
 	return (
 		<Sheet open={isOpen} onOpenChange={onClose}>
 			<SheetContent className="max-w-lg pr-0">
 				<SheetHeader>
-					<SheetTitle>{isAdding ? "አዲስ እውቂያ" : "እውቂያን ማረሚያ"}</SheetTitle>
-					<SheetDescription>እውቂያዎችን በሚገባው መረጃ ላይ ያስገቡ።</SheetDescription>
+					<SheetTitle>{isAdding ? "Add Contact" : "Edit Contact"}</SheetTitle>
+					<SheetDescription>
+						Fill in the contact details accurately.
+					</SheetDescription>
 				</SheetHeader>
-				<div className="my-4 h-[90%] overflow-y-auto  pr-4">
+				<div className="my-4 h-[90%] overflow-y-auto pr-4">
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="space-y-2">
 							<div>
-								<Label htmlFor="photo">Photo</Label>
+								<Label htmlFor="full_name_en">Full Name (English)</Label>
 								<Input
-									id="photo"
-									type="file"
-									accept="image/*"
-									onChange={handleFileChange}
+									{...register("full_name_en")}
+									placeholder="Full Name - English"
 								/>
-								{errors.photo && (
-									<p className="text-sm text-red-500">{errors.photo.message}</p>
-								)}
-								{preview && (
-									<img src={preview} alt="Selected preview" className="mt-2 max-h-40" />
+								{errors.full_name_en && (
+									<p className="text-sm text-red-500">{errors.full_name_en.message}</p>
 								)}
 							</div>
 							<div>
-								<Label htmlFor="fullName">Full Name</Label>
-								<Input {...register("fullName")} placeholder="Full Name - English" />
-								{errors.fullName && (
-									<p className="text-sm text-red-500">{errors.fullName.message}</p>
+								<Label htmlFor="full_name_am">ስም (አማርኛ)</Label>
+								<Input {...register("full_name_am")} placeholder="ስም - አማርኛ" />
+								{errors.full_name_am && (
+									<p className="text-sm text-red-500">{errors.full_name_am.message}</p>
 								)}
 							</div>
 							<div>
-								<Label htmlFor="fullNameAmharic">ስም</Label>
-								<Input {...register("fullNameAmharic")} placeholder="ስም - አማርኛ" />
+								<Label htmlFor="address_city_en">Address (English)</Label>
+								<Input
+									{...register("address.city_en")}
+									placeholder="Address - English"
+								/>
+								{errors.address?.city_en && (
+									<p className="text-sm text-red-500">
+										{errors.address.city_en.message}
+									</p>
+								)}
 							</div>
 							<div>
-								<Label htmlFor="address">Address</Label>
-								<Input {...register("address")} placeholder="Address - English" />
+								<Label htmlFor="address_city_am">አድራሻ (አማርኛ)</Label>
+								<Input {...register("address.city_am")} placeholder="አድራሻ - አማርኛ" />
+								{errors.address?.city_am && (
+									<p className="text-sm text-red-500">
+										{errors.address.city_am.message}
+									</p>
+								)}
 							</div>
 							<div>
-								<Label htmlFor="addressAmharic">አድራሻ</Label>
-								<Input {...register("addressAmharic")} placeholder="አድራሻ - አማርኛ" />
-							</div>
-							<div>
-								<Label htmlFor="phone">Phone Number</Label>
-								<Input {...register("phone")} placeholder="ስልክ ቁጥር - አማርኛ" />
-								{errors.phone && (
-									<p className="text-sm text-red-500">{errors.phone.message}</p>
+								<Label htmlFor="phone_number">Phone Number</Label>
+								<Input {...register("phone_number")} placeholder="ስልክ ቁጥር" />
+								{errors.phone_number && (
+									<p className="text-sm text-red-500">{errors.phone_number.message}</p>
 								)}
 							</div>
 							<div>
 								<Label htmlFor="email">Email</Label>
-								<Input {...register("email")} placeholder="Email - English" />
+								<Input {...register("email")} placeholder="Email" />
 								{errors.email && (
 									<p className="text-sm text-red-500">{errors.email.message}</p>
 								)}
