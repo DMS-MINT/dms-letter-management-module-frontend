@@ -31,6 +31,7 @@ export default function TwoFactorSetupDialog() {
 	const { form, validateOTP, handleInputChange, isPending, getOTP, isSuccess } =
 		useOTP();
 	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
+
 	const { data: myProfile } = useQuery({
 		queryKey: ["getMyProfile"],
 		queryFn: async () => {
@@ -56,6 +57,7 @@ export default function TwoFactorSetupDialog() {
 		mutationFn: async () => {
 			const response = await requestQRCode();
 
+			console.log("🚀 ~ mutationFn: ~ response:", response);
 			if (!response.ok) throw response;
 
 			return response.message.qr_code_image;

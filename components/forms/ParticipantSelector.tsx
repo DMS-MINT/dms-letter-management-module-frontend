@@ -118,7 +118,18 @@ function ParticipantSelector({
 			<div>
 				<components.Option {...props} className="!p-1">
 					{isUserType(data) ? (
-						<OptionItem primaryText={data.job_title} secondaryText={data.full_name} />
+						<OptionItem
+							primaryText={
+								language === LanguageEnum.English
+									? data.job_title.title_en
+									: data.job_title.title_am
+							}
+							secondaryText={
+								language === LanguageEnum.English
+									? data.full_name_en
+									: data.full_name_am
+							}
+						/>
 					) : null}
 					{isEnterpriseType(data) ? (
 						<OptionItem
@@ -126,7 +137,11 @@ function ParticipantSelector({
 							primaryText={
 								language === LanguageEnum.English ? data.name_en : data.name_am
 							}
-							secondaryText={data.address}
+							secondaryText={
+								language === LanguageEnum.English
+									? data.address.city_en
+									: data.address.city_en
+							}
 						/>
 					) : null}
 					{isContactType(data) ? (
@@ -136,7 +151,11 @@ function ParticipantSelector({
 									? data.full_name_en
 									: data.full_name_am
 							}
-							secondaryText={data.address}
+							secondaryText={
+								language === LanguageEnum.English
+									? data.address.city_en
+									: data.address.city_en
+							}
 						/>
 					) : null}
 				</components.Option>

@@ -120,7 +120,7 @@ export default function ContactTable({
 			contact.full_name_am.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			contact.address.city_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			contact.address.city_am.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			contact.phone_number.toString().includes(searchQuery.toLowerCase())
+			contact.phone_number?.toString().includes(searchQuery.toLowerCase())
 		);
 	});
 

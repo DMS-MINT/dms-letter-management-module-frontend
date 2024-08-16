@@ -30,7 +30,8 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
 			email: myProfile?.email || "",
-			phone_number: myProfile?.phone_number || "",
+			phone_number:
+				myProfile?.phone_number != null ? String(myProfile.phone_number) : "",
 		},
 	});
 
