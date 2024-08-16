@@ -10,6 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useUserStore } from "@/lib/stores";
+import { getInitials } from "@/lib/utils/getInitials";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CircleHelp, LogOut, MonitorPlay, UserRound } from "lucide-react";
@@ -66,6 +67,9 @@ export default function UserProfileMenu() {
 		setVideoDialogOpen(false);
 	};
 
+	const fullName = myProfile?.full_name;
+	const initials = fullName ? getInitials(fullName) : "";
+
 	return isSuccess && myProfile ? (
 		<div className="flex items-center gap-4">
 			{/* <div className="flex items-end gap-2">
@@ -77,7 +81,7 @@ export default function UserProfileMenu() {
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">
-						<AvatarFallback>{myProfile.full_name.substring(0, 2)}</AvatarFallback>
+						<AvatarFallback>{initials}</AvatarFallback>
 					</Avatar>
 				</DropdownMenuTrigger>
 

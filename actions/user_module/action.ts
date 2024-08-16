@@ -1,6 +1,8 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
+import type { ProfileFormData } from "@/components/UserProfile/ProfileDetail/ProfileDetail";
+import { NewContactType } from "@/types/user_module";
 import getErrorMessage from "../getErrorMessage";
 import { userErrorMessages } from "./errorMessages";
 
@@ -38,6 +40,34 @@ export async function getContacts() {
 		const response = await axiosInstance.get("contacts/");
 
 		return { ok: true, message: response.data.contacts };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+export async function AddContacts(data: NewContactType) {
+	try {
+		const response = await axiosInstance.put("contacts/", data);
+
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+export async function UpdateContacts(id: string, data: NewContactType) {
+	try {
+		const response = await axiosInstance.patch(`contacts/${id}/update/`, data);
+
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+
+export async function updateProfile(data: ProfileFormData) {
+	try {
+		const response = await axiosInstance.patch("users/profile/", data);
+
+		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}

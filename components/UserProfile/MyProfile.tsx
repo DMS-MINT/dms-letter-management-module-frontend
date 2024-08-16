@@ -1,4 +1,10 @@
+"use client";
+import { getMyProfile } from "@/actions/user_module/action";
+import { useUserStore } from "@/lib/stores";
+import type { CurrentUserType } from "@/types/user_module";
+import { useQuery } from "@tanstack/react-query";
 import { BellRing, Contact, QrCode, User } from "lucide-react";
+import { toast } from "sonner";
 import {
 	Accordion,
 	AccordionContent,
@@ -13,10 +19,26 @@ import TwoFactorAuth from "./ProfileDetail/TwoFactorAuth";
 import NotificationSetting from "./Settings/NotificationSetting";
 
 const MyProfile = () => {
-	return (
+	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
+
+	const { isSuccess, data: myProfile } = useQuery({
+		queryKey: ["getMyProfile"],
+		queryFn: async () => {
+			try {
+				const data = await getMyProfile();
+				setCurrentUser(data.my_profile);
+				return data.my_profile as CurrentUserType;
+			} catch (error: any) {
+				toast.error(error.message);
+			}
+		},
+		enabled: true,
+	});
+
+	return isSuccess && myProfile ? (
 		<div>
 			<div className="flex gap-4 pr-6">
-				<MyProfileSideBar />
+				<MyProfileSideBar myProfile={myProfile} />
 				<Card className="mb-12 flex w-full  items-start justify-center gap-6 pb-28">
 					<CardContent className="w-full">
 						<Accordion type="single" collapsible defaultValue="item-1">
@@ -28,7 +50,7 @@ const MyProfile = () => {
 									</span>
 								</AccordionTrigger>
 								<AccordionContent>
-									<ProfileDetail />
+									<ProfileDetail myProfile={myProfile} />
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="item-2">
@@ -39,7 +61,7 @@ const MyProfile = () => {
 									</span>
 								</AccordionTrigger>
 								<AccordionContent>
-									<TwoFactorAuth />
+									<TwoFactorAuth logedUser={myProfile} />
 								</AccordionContent>
 							</AccordionItem>
 							<AccordionItem value="item-3">
@@ -69,7 +91,7 @@ const MyProfile = () => {
 				</Card>
 			</div>
 		</div>
-	);
+	) : null;
 };
 
 export default MyProfile;
