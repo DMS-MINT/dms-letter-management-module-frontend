@@ -1,23 +1,14 @@
-// export type ContactType = {
-// 	id: string;
-// 	full_name_en: string;
-// 	full_name_am: string;
-// 	address: string;
-// 	email?: string | null;
-// 	phone_number?: string | null;
-// };
+import type { AddressType } from "./AddressType";
 
 export type ContactType = {
 	id: string;
 	full_name_en: string;
 	full_name_am: string;
-	email: string;
-	phone_number: number;
-	address: {
-		city_en: string;
-		city_am: string;
-	};
+	address: AddressType;
+	email?: string | null;
+	phone_number?: number | null;
 };
+
 export type NewContactType = {
 	full_name_en: string;
 	full_name_am: string;

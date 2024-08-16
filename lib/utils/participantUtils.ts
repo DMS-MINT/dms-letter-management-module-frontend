@@ -22,8 +22,8 @@ export type ParticipantScopeType = "all" | "internal_staff" | "external_staff";
 
 export type GroupedOption =
 	| { label: "Users"; options: UserType[] }
-	| { label: "Enterprises"; options: EnterpriseType[] }
-	| { label: "Contacts"; options: ContactType[] };
+	| { label: "Contacts"; options: ContactType[] }
+	| { label: "Enterprises"; options: EnterpriseType[] };
 
 export type Options = {
 	users: UserType[];
@@ -54,12 +54,12 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 					options: users.message,
 				},
 				{
-					label: "Enterprises",
-					options: enterprises.message,
-				},
-				{
 					label: "Contacts",
 					options: contacts.message,
+				},
+				{
+					label: "Enterprises",
+					options: enterprises.message,
 				},
 			];
 
@@ -76,11 +76,11 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 					options: response.message,
 				},
 				{
-					label: "Enterprises",
+					label: "Contacts",
 					options: [],
 				},
 				{
-					label: "Contacts",
+					label: "Enterprises",
 					options: [],
 				},
 			];
@@ -107,12 +107,12 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 					options: [],
 				},
 				{
-					label: "Enterprises",
-					options: enterprises.message,
-				},
-				{
 					label: "Contacts",
 					options: contacts.message,
+				},
+				{
+					label: "Enterprises",
+					options: enterprises.message,
 				},
 			];
 
@@ -133,9 +133,12 @@ export const handleCreateParticipant = (
 		id: value,
 		full_name_en: value,
 		full_name_am: "guest",
-		address: "",
+		address: {
+			city_en: "",
+			city_am: "",
+		},
 		email: "",
-		phone_number: "",
+		phone_number: 0,
 	};
 
 	return participantSerializer(contact, role);
@@ -200,7 +203,9 @@ export const getLabel = (
 ): string => {
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
-			return option.job_title;
+			return language === LanguageEnum.English
+				? option.job_title.title_en
+				: option.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -218,7 +223,9 @@ export const getValue = (
 ): string => {
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
-			return option.job_title;
+			return language === LanguageEnum.English
+				? option.job_title.title_en
+				: option.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -291,7 +298,10 @@ export const generateDraftParticipant = (
 				contact: {
 					full_name_en: participant.contact.full_name_en,
 					full_name_am: participant.contact.full_name_am,
-					address: participant.contact.address,
+					address: {
+						city_en: participant.contact.address.city_en,
+						city_am: participant.contact.address.city_am,
+					},
 					email: participant.contact?.email || null,
 					phone_number: participant.contact?.phone_number || null,
 				},
