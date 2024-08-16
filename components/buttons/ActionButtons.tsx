@@ -105,17 +105,6 @@ function ActionButtons({ permissions }: { permissions: PermissionsType }) {
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
-						// disabledButton={
-						// 	!canSubmitLetter(
-						// 		{
-						// 			subject: letter.subject as string,
-						// 			content: letter.content as string,
-						// 			letter_type: letter.letter_type,
-						// 			language: letter.language as LanguageEnum,
-						// 		},
-						// 		letter.participants
-						// 	)
-						// }
 						triggerButtonText=""
 						triggerButtonTooltip="ወደ መዝገብ ቢሮ አስተላልፍ"
 						triggerButtonIcon={<Send size={15} />}

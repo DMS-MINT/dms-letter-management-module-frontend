@@ -52,7 +52,7 @@ export const FontSizePicker = ({ onChange, value }: FontSizePickerProps) => {
 							onClick={selectSize(size.value)}
 							key={`${size.label}_${size.value}`}
 						>
-							<span style={{ fontSize: size.value }}>{size.label}</span>
+							<span style={{ fontSize: "14px" }}>{size.label}</span>
 						</DropdownButton>
 					))}
 				</Surface>

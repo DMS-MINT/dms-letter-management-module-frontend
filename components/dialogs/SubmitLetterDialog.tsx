@@ -25,6 +25,7 @@ import type {
 	LetterDetailResponseType,
 } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
+import { Send } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
@@ -134,7 +135,7 @@ export default function SubmitLetterDialog({
 						form.reset();
 					}}
 				>
-					ወደ መዝገብ ቢሮ አስተላልፍ
+					<Send size={15} />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>

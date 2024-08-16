@@ -84,7 +84,6 @@ export async function get_user() {
 export async function requestQRCode() {
 	try {
 		const response = await axiosInstance.post("auth/qr-code/");
-		console.log("🚀 ~ requestQRCode ~ response:", response);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {

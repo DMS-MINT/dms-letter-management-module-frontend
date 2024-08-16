@@ -140,7 +140,7 @@ function ParticipantSelector({
 							secondaryText={
 								language === LanguageEnum.English
 									? data.address.city_en
-									: data.address.city_en
+									: data.address.city_am
 							}
 						/>
 					) : null}

@@ -11,12 +11,11 @@ import * as z from "zod";
 
 const profileSchema = z.object({
 	email: z.string().email("Invalid email address"),
-	phone_number: z
-		.string()
-		.regex(
-			/^\+2519\d{8}$/,
-			"Phone number must start with +2519 and be 13 digits long"
-		),
+	phone_number: z.number(),
+	// .regex(
+	// 	/^\+2519\d{8}$/,
+	// 	"Phone number must start with +2519 and be 13 digits long"
+	// ),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
@@ -30,8 +29,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
 			email: myProfile?.email || "",
-			phone_number:
-				myProfile?.phone_number != null ? String(myProfile.phone_number) : "",
+			phone_number: myProfile?.phone_number || 0,
 		},
 	});
 
@@ -68,7 +66,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.middle_name_am}
+							value={myProfile.last_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -169,7 +167,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.department_name_am}
+							value={myProfile.department.abbreviation_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -193,7 +191,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.department_name_en}
+							value={myProfile.department.abbreviation_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
