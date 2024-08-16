@@ -21,14 +21,14 @@ export type OptionType = UserType | EnterpriseType | ContactType;
 export type ParticipantScopeType = "all" | "internal_staff" | "external_staff";
 
 export type GroupedOption =
-	| { label: "Users"; options: UserType[] }
-	| { label: "Contacts"; options: ContactType[] }
-	| { label: "Enterprises"; options: EnterpriseType[] };
+	| { label: "የMINT ሰራተኞች"; options: UserType[] }
+	| { label: "የእኔ ደንበኞች"; options: ContactType[] }
+	| { label: "የመንግስት ድርጅቶች"; options: EnterpriseType[] };
 
 export type Options = {
 	users: UserType[];
-	enterprises: EnterpriseType[];
 	contacts: ContactType[];
+	enterprises: EnterpriseType[];
 };
 
 export const actionDispatcher = async (scope: ParticipantScopeType) => {
@@ -50,15 +50,15 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 
 			const groups: GroupedOption[] = [
 				{
-					label: "Users",
+					label: "የMINT ሰራተኞች",
 					options: users.message,
 				},
 				{
-					label: "Contacts",
+					label: "የእኔ ደንበኞች",
 					options: contacts.message,
 				},
 				{
-					label: "Enterprises",
+					label: "የመንግስት ድርጅቶች",
 					options: enterprises.message,
 				},
 			];
@@ -72,15 +72,15 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 
 			const groups: GroupedOption[] = [
 				{
-					label: "Users",
+					label: "የMINT ሰራተኞች",
 					options: response.message,
 				},
 				{
-					label: "Contacts",
+					label: "የእኔ ደንበኞች",
 					options: [],
 				},
 				{
-					label: "Enterprises",
+					label: "የመንግስት ድርጅቶች",
 					options: [],
 				},
 			];
@@ -103,15 +103,15 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 
 			const groups: GroupedOption[] = [
 				{
-					label: "Users",
+					label: "የMINT ሰራተኞች",
 					options: [],
 				},
 				{
-					label: "Contacts",
+					label: "የእኔ ደንበኞች",
 					options: contacts.message,
 				},
 				{
-					label: "Enterprises",
+					label: "የመንግስት ድርጅቶች",
 					options: enterprises.message,
 				},
 			];
@@ -163,7 +163,7 @@ export const isEnterpriseType = (option: any): option is EnterpriseType => {
 };
 
 export const isContactType = (option: any): option is ContactType => {
-	return option.full_name_en ? true : false;
+	return option.full_name_en && option.address ? true : false;
 };
 
 export const participantSerializer = (

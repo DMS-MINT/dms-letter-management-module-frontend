@@ -119,9 +119,11 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 					<div className="card my-2 flex w-[800px] flex-col gap-4 px-1 py-2">
 						<div className="flex items-center gap-4">
 							<Avatar className="h-11 w-11">
-								<AvatarFallback>{currentUser.full_name.substring(0, 2)}</AvatarFallback>
+								<AvatarFallback>
+									{currentUser.full_name_am.substring(0, 2)}
+								</AvatarFallback>
 							</Avatar>
-							<h4 className="text-base font-semibold">{`${currentUser.full_name} - ${currentUser.job_title}`}</h4>
+							<h4 className="text-base font-semibold">{`${currentUser.full_name_am} - ${currentUser.job_title.title_am}`}</h4>
 							<div className="ml-auto flex gap-1">
 								<Button
 									variant="ghost"
@@ -151,7 +153,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 			) : null}
 
 			{letter.comments.map(
-				({ id, content, created_at, author: { full_name, job_title } }) => (
+				({ id, content, created_at, author: { full_name_am, job_title } }) => (
 					<div key={id} className="flex min-h-16 gap-6">
 						<div className="flex w-[50px] flex-col items-center">
 							<Separator
@@ -178,10 +180,10 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 							<div className="flex items-center gap-4">
 								<Avatar className="h-11 w-11">
 									<AvatarFallback>
-										{full_name ? full_name.substring(0, 2) : ""}
+										{full_name_am ? full_name_am.substring(0, 2) : ""}
 									</AvatarFallback>
 								</Avatar>
-								<h4 className="text-base font-semibold">{`${full_name} - ${job_title}`}</h4>
+								<h4 className="text-base font-semibold">{`${full_name_am} - ${job_title.title_am}`}</h4>
 								<div className="ml-auto flex gap-1">
 									{selectedCommentId === id ? (
 										<>
@@ -258,7 +260,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 				</div>
 				<div className="flex items-center px-1">
 					<p className="text-gray-700">
-						{`${letter.owner.full_name} ይህን ደብዳቤ 
+						{`${letter.owner.full_name_am} ይህን ደብዳቤ 
             ${convertToEthiopianDate(letter.created_at)} ፈጥረዋል።`}
 					</p>
 				</div>

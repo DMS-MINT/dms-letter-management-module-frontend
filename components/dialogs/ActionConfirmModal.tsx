@@ -34,12 +34,6 @@ import {
 	useState,
 } from "react";
 import { Textarea } from "../ui/textarea";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "../ui/tooltip";
 
 export type ActionConfirmModalRef = {
 	getOTP: () => string;
@@ -100,28 +94,28 @@ function ActionConfirmModal(
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<TooltipProvider>
+				<Button
+					type="button"
+					variant={triggerButtonVariant}
+					onClick={() => {
+						form.reset();
+					}}
+					disabled={disabledButton}
+					className="flex gap-2"
+					size={"sm"}
+				>
+					{triggerButtonIcon && triggerButtonIcon}
+					{triggerButtonText}
+				</Button>
+				{/* <TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger>
-							<Button
-								type="button"
-								variant={triggerButtonVariant}
-								onClick={() => {
-									form.reset();
-								}}
-								disabled={disabledButton}
-								className="flex gap-2"
-								size={"sm"}
-							>
-								{triggerButtonIcon && triggerButtonIcon}
-								{triggerButtonText}
-							</Button>
 						</TooltipTrigger>
 						<TooltipContent side="bottom" align="center">
 							<p>{triggerButtonTooltip}</p>
 						</TooltipContent>
 					</Tooltip>
-				</TooltipProvider>
+				</TooltipProvider> */}
 			</DialogTrigger>
 			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
