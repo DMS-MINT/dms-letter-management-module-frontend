@@ -1,5 +1,6 @@
 "use client";
 
+import { LINKS } from "@/constants";
 import clsx from "clsx";
 import { useState } from "react";
 import { Spinner } from "../helpers";
@@ -20,9 +21,6 @@ interface VideoDialogProps {
 
 export function VideoDialog({ isOpen, onClose }: VideoDialogProps) {
 	const [isLoading, setIsLoading] = useState(true);
-	const videoUrl =
-		"https://drive.google.com/file/d/1Lj23UNXBDmNSfLuo8UtnacY5U4JjShh7/preview";
-
 	const handleIframeLoad = () => {
 		setIsLoading(false);
 	};
@@ -41,10 +39,9 @@ export function VideoDialog({ isOpen, onClose }: VideoDialogProps) {
 						</div>
 					) : null}
 					<iframe
-						src={videoUrl}
+						src={LINKS.lms_walkthrough_video}
 						width="640"
 						height="450"
-						allow="autoplay"
 						frameBorder="0"
 						className={clsx("w-full", { hidden: isLoading })}
 						onLoad={handleIframeLoad}

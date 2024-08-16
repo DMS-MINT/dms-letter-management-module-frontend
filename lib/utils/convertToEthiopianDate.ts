@@ -1,7 +1,7 @@
 import { monthTranslations } from "@/types/letter_module";
 const ethiopianDate = require("ethiopian-date");
 
-export function convertToEthiopianDateonly(dateString: string): string {
+export function convertToEthiopianDate(dateString: string): string {
 	const date = new Date(dateString);
 
 	const [ethYear, ethMonth, ethDay] = ethiopianDate.toEthiopian(
@@ -13,7 +13,7 @@ export function convertToEthiopianDateonly(dateString: string): string {
 	return `${monthTranslations[ethMonth]} ${ethDay} ${ethYear}`;
 }
 
-export default function convertToEthiopianDate(dateString: string): {
+export function convertToEthiopianDateAndTime(dateString: string): {
 	time: string;
 	date: string;
 } {

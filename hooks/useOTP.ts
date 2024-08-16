@@ -6,18 +6,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-	otp: z
-		.number()
-		.int()
-		.refine(
-			(value) => {
-				const strValue = value.toString();
-				return strValue.length === 6 && /^[0-9]+$/.test(strValue);
-			},
-			{
-				message: "OTP must be a 6-digit number.",
-			}
-		),
+	otp: z.string().refine(
+		(value) => {
+			return value.length === 6 && /^[0-9]+$/.test(value);
+		},
+		{
+			message: "የአንድ ጊዜ የይለፍ ቃል ባለ 6-አሃዝ መሆን አለበት።",
+		}
+	),
 });
 
 export type OTPFormType = z.infer<typeof formSchema>;
@@ -27,31 +23,36 @@ export function useOTP() {
 		resolver: zodResolver(formSchema),
 	});
 
-	const { mutate, data, isPending, isSuccess } = useMutation({
-		mutationKey: ["validateOTP"],
-		mutationFn: validateOneTimePassword,
+	const { mutate, isPending, isSuccess, data } = useMutation({
+		mutationKey: ["validateOneTimePassword"],
+		mutationFn: async (otp: string) => {
+			const response = await validateOneTimePassword(otp);
+
+			if (!response.ok) throw response;
+
+			return response.message;
+		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("Verifying OTP...");
+			toast.loading("የእርስዎን የማረጋገጫ ኮድ በማረጋገጥ ላይ። እባክዎ ይጠብቁ...");
 		},
-		onSuccess: (data) => {
+		onSuccess: () => {
 			toast.dismiss();
-			toast.success("OTP verified successfully.");
-			return data;
+			toast.success("በተሳካ ሁኔታ የሁለት ደረጃ ማረጋገጫን አዘጋጅተዋል።");
 		},
-		onError: (error) => {
+		onError: (error: any) => {
 			toast.dismiss();
 			toast.error(error.message);
 		},
 	});
 
-	const getOTP = (): number => form.watch("otp");
+	const getOTP = (): string => form.watch("otp");
 
 	const handleInputChange = (value: string) => {
-		form.setValue("otp", Number(value));
+		form.setValue("otp", value);
 	};
 
-	const onSubmit = (values: OTPFormType) => {
+	const validateOTP = (values: OTPFormType) => {
 		mutate(values.otp);
 	};
 
@@ -59,7 +60,7 @@ export function useOTP() {
 		form,
 		getOTP,
 		handleInputChange,
-		onSubmit,
+		validateOTP,
 		data,
 		isPending,
 		isSuccess,

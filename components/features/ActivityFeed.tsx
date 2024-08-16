@@ -1,7 +1,14 @@
 "use client";
 
-import type { CreateCommentParams } from "@/actions/shared/action";
-import { create_comment } from "@/actions/shared/action";
+import type {
+	CreateCommentParams,
+	UpdateCommentParams,
+} from "@/actions/shared/action";
+import {
+	createComment,
+	deleteComment,
+	updateComment,
+} from "@/actions/shared/action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -12,11 +19,10 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppSelector } from "@/hooks";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
+import { useToastMutation } from "@/hooks";
+import { useUserStore } from "@/lib/stores";
+import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
 import type { LetterDetailType } from "@/types/letter_module";
-import { convertToEthiopianDateonly } from "@/utils/convertToEthiopianDate";
-import { useMutation } from "@tanstack/react-query";
 import {
 	Check,
 	Dot,
@@ -26,32 +32,31 @@ import {
 	Trash,
 	X,
 } from "lucide-react";
-import { useState, type ChangeEvent } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 
 export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
-	const myProfile = useAppSelector(selectMyProfile);
+	const currentUser = useUserStore((state) => state.currentUser);
 	const [createMode, setCreateMode] = useState<boolean>(false);
 	const [selectedCommentId, setSelectedCommentId] = useState<string>("");
 	const [updatedContent, setUpdatedContent] = useState<string>("");
 	const [content, setContent] = useState<string>("");
-
-	const { mutate: createComment } = useMutation({
-		mutationKey: ["createComment"],
-		mutationFn: (params: CreateCommentParams) => create_comment(params),
-		onMutate: () => {
-			toast.dismiss();
-			toast.loading("Creating comment, Please wait...");
-		},
-		onSuccess: (data) => {
-			toast.dismiss();
-			toast.success(data.message);
-		},
-		onError: (errorMessage: string) => {
-			toast.dismiss();
-			toast.error(errorMessage);
-		},
-	});
+	const { mutate: createCommentMutation } =
+		useToastMutation<CreateCommentParams>(
+			"createComment",
+			createComment,
+			"አስተያየትዎን በማስቀመጥ ላይ፣ እባክዎ ይጠብቁ..."
+		);
+	const { mutate: updateCommentMutation } =
+		useToastMutation<UpdateCommentParams>(
+			"updateComment",
+			updateComment,
+			"ለውጦችን በማስቀመጥ ላይ ላይ፣ እባክዎ ይጠብቁ..."
+		);
+	const { mutate: deleteCommentMutation } = useToastMutation<string>(
+		"deleteComment",
+		deleteComment,
+		"አስተያየቶችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+	);
 
 	const toggleEditMode = (id: string = "", content: string = "") => {
 		setSelectedCommentId(id);
@@ -64,21 +69,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 		setUpdatedContent("");
 	};
 
-	const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-		setContent(e.target.value);
-	};
-
-	const dispatchUpdateComment = () => {
-		// dispatch(
-		// 	updateComment({ comment_id: selectedCommentId, content: updatedContent })
-		// );
-	};
-	const dispatchDeleteComment = (id: string) => {
-		console.log(id);
-		// dispatch(deleteComment(id));
-	};
-
-	return myProfile ? (
+	return (
 		<section id="comment_section" className="mb-10 flex flex-col">
 			<div className="flex min-h-16 gap-6">
 				<div className="flex w-[50px] flex-col items-center">
@@ -128,18 +119,16 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 					<div className="card my-2 flex w-[800px] flex-col gap-4 px-1 py-2">
 						<div className="flex items-center gap-4">
 							<Avatar className="h-11 w-11">
-								<AvatarFallback>
-									{myProfile.full_name ? myProfile.full_name.substring(0, 2) : ""}
-								</AvatarFallback>
+								<AvatarFallback>{currentUser.full_name.substring(0, 2)}</AvatarFallback>
 							</Avatar>
-							<h4 className="text-base font-semibold">{`${myProfile.full_name} - ${myProfile.job_title}`}</h4>
+							<h4 className="text-base font-semibold">{`${currentUser.full_name} - ${currentUser.job_title}`}</h4>
 							<div className="ml-auto flex gap-1">
 								<Button
 									variant="ghost"
 									className="px-2"
 									onClick={() => {
 										const reference_number = letter.reference_number;
-										createComment({ reference_number, content });
+										createCommentMutation({ reference_number, content });
 									}}
 								>
 									<Check size={18} className="text-green-500" />
@@ -153,7 +142,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 							<Textarea
 								value={content}
 								onChange={(e) => {
-									handleContentChange(e);
+									setContent(e.target.value);
 								}}
 							/>
 						</div>
@@ -175,7 +164,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 										<MessageSquareText size={18} className="text-gray-500" />
 									</TooltipTrigger>
 									<TooltipContent>
-										<p>{convertToEthiopianDateonly(created_at)}</p>
+										<p>{convertToEthiopianDate(created_at)}</p>
 									</TooltipContent>
 								</Tooltip>
 							</TooltipProvider>
@@ -199,7 +188,12 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 											<Button
 												variant="ghost"
 												className="px-2"
-												onClick={dispatchUpdateComment}
+												onClick={() =>
+													updateCommentMutation({
+														comment_id: selectedCommentId,
+														content: updatedContent,
+													})
+												}
 											>
 												<Check size={18} className="text-green-500" />
 											</Button>
@@ -224,7 +218,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 												variant="ghost"
 												size="icon"
 												className="px-2"
-												onClick={() => dispatchDeleteComment(id)}
+												onClick={() => deleteCommentMutation(id)}
 											>
 												<Trash size={18} className="text-gray-500" />
 											</Button>
@@ -237,7 +231,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 									<Textarea
 										value={updatedContent}
 										onChange={(e) => {
-											handleContentChange(e);
+											setUpdatedContent(e.target.value);
 										}}
 									/>
 								) : content ? (
@@ -265,10 +259,10 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 				<div className="flex items-center px-1">
 					<p className="text-gray-700">
 						{`${letter.owner.full_name} ይህን ደብዳቤ 
-            ${convertToEthiopianDateonly(letter.created_at)} ፈጥረዋል።`}
+            ${convertToEthiopianDate(letter.created_at)} ፈጥረዋል።`}
 					</p>
 				</div>
 			</div>
 		</section>
-	) : null;
+	);
 }

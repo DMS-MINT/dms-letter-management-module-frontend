@@ -19,7 +19,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { convertToEthiopianDate } from "@/utils";
+
+import { convertToEthiopianDateAndTime } from "@/lib/utils/convertToEthiopianDate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Bell, CalendarIcon } from "lucide-react";
 import { useState } from "react";
@@ -86,7 +87,7 @@ export function PingNotificationModal({
 
 	const formattedDate = date ? new Date(date).toISOString() : undefined;
 	const { time: timeInEthiopia, date: dateInEthiopia } = formattedDate
-		? convertToEthiopianDate(formattedDate)
+		? convertToEthiopianDateAndTime(formattedDate)
 		: { time: "", date: "" };
 
 	return (

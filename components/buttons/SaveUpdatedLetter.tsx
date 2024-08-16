@@ -1,5 +1,6 @@
 import { updateLetter } from "@/actions/letter_module/crudActions";
-import { useLetterStore, useParticipantStore } from "@/stores";
+import { useLetterRevisionStore } from "@/lib/stores";
+import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type {
 	LetterDetailType,
 	ModifiedLetterType,
@@ -7,6 +8,7 @@ import type {
 import { useMutation } from "@tanstack/react-query";
 import { Pencil } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import {
@@ -18,14 +20,10 @@ import {
 
 export default function SaveUpdatedLetter() {
 	const { referenceNumber } = useParams();
-	const participants = useParticipantStore((state) => state.participants);
-	const { subject, content } = useLetterStore((state) => ({
-		subject: state.subject,
-		content: state.content,
-	}));
+	const { subject, body, participants } = useLetterRevisionStore();
 
 	const { mutate } = useMutation({
-		mutationKey: ["createLetter"],
+		mutationKey: ["updateLetter"],
 		mutationFn: async (letter: ModifiedLetterType) => {
 			const response = await updateLetter(referenceNumber as string, letter);
 
@@ -47,11 +45,15 @@ export default function SaveUpdatedLetter() {
 		},
 	});
 
+	const draft_participants = useMemo(() => {
+		return generateDraftParticipant(participants);
+	}, [participants]);
+
 	const onSubmit = () => {
 		const letter: ModifiedLetterType = {
 			subject,
-			content,
-			participants,
+			body,
+			participants: draft_participants,
 		};
 		mutate(letter);
 	};

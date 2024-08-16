@@ -1,16 +1,13 @@
-"use client";
-
 import { Printer } from "lucide-react";
-import { useParams } from "next/navigation";
 import { Button } from "../ui/button";
 
 export default function PrintPreviewButton({
 	pdf_version,
+	current_state,
 }: {
 	pdf_version: string;
+	current_state: string;
 }) {
-	const { category } = useParams();
-
 	const handlePrint = () => {
 		const printWindow = window.open(
 			`${process.env.NEXT_PUBLIC_API_BASE_URL}${pdf_version}`
@@ -22,7 +19,7 @@ export default function PrintPreviewButton({
 		}
 	};
 
-	return category !== "trash" ? (
+	return current_state !== "Trashed" ? (
 		<Button
 			disabled={pdf_version ? false : true}
 			size={"icon"}

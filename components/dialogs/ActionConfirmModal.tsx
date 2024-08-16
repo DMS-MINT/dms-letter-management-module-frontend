@@ -42,7 +42,7 @@ import {
 } from "../ui/tooltip";
 
 export type ActionConfirmModalRef = {
-	getOTP: () => number;
+	getOTP: () => string;
 	message: string;
 };
 
@@ -52,13 +52,13 @@ type ActionConfirmModalProps = {
 	disabledButton?: boolean;
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
-	requriresMessage?: boolean;
 	dialogTitle: string;
 	dialogDescription: string;
 	confirmButtonText: string;
 	cancelButtonText: string;
 	onConfirm: () => void;
 	requiresAuth: boolean;
+	requiresMessage?: boolean;
 };
 
 function ActionConfirmModal(
@@ -74,7 +74,7 @@ function ActionConfirmModal(
 		cancelButtonText,
 		onConfirm,
 		requiresAuth,
-		requriresMessage,
+		requiresMessage,
 	}: ActionConfirmModalProps,
 	ref: Ref<ActionConfirmModalRef>
 ) {
@@ -128,7 +128,7 @@ function ActionConfirmModal(
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
 				</DialogHeader>
-				{requriresMessage ? (
+				{requiresMessage ? (
 					<Textarea
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}

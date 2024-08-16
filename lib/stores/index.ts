@@ -1,4 +1,4 @@
 export * from "./letterStore";
-export * from "./participantStore";
+export * from "./letterStoreCreator";
 export * from "./uiStore";
 export * from "./userStore";

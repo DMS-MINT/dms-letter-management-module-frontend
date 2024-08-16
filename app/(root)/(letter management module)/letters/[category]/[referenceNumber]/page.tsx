@@ -7,40 +7,53 @@ import { Drawer, Subheader } from "@/components/layouts";
 import { DetailControlPanel } from "@/components/panels";
 import { LetterSkeleton } from "@/components/skeletons";
 import { EditableLetter } from "@/components/templates";
-import type { LetterStoreType } from "@/stores";
-import { useLetterStore, useParticipantStore } from "@/stores";
+import { useWebsocket } from "@/hooks";
+import {
+	useLetterRevisionStore,
+	type LetterContentStoreType,
+} from "@/lib/stores";
+import generateUserPermissions from "@/lib/utils/generateUserPermissions";
 import type { LetterDetailResponseType } from "@/types/letter_module";
 import { LanguageEnum } from "@/types/shared";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export default function LetterDetail() {
-	const setLetter = useLetterStore((state) => state.setLetter);
-	const setParticipants = useParticipantStore((state) => state.setParticipants);
-	const { referenceNumber } = useParams();
+export default function LetterDetail({
+	params: { referenceNumber },
+}: {
+	params: { referenceNumber: string };
+}) {
+	const { initializeContent, initializeParticipants } = useLetterRevisionStore(
+		(state) => ({
+			initializeContent: state.initializeContent,
+			initializeParticipants: state.initializeParticipants,
+		})
+	);
+	const queryClient = useQueryClient();
 	const { data, isSuccess } = useQuery({
 		queryKey: ["getLetterDetails", referenceNumber],
 		queryFn: async () => {
 			try {
 				toast.dismiss();
 				toast.loading("የደብዳቤዉን ዝርዝር መረጃ በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
-				const response = await getLetterDetails(referenceNumber as string);
+				const response = await getLetterDetails(referenceNumber);
 
 				toast.dismiss();
 				if (!response.ok) throw response;
 
 				const data = response.message as LetterDetailResponseType;
 
-				const message: LetterStoreType = {
+				const content: LetterContentStoreType = {
 					subject: data.letter.subject || "",
-					content: data.letter.content || "",
+					body: data.letter.body || "",
 					letter_type: data.letter.letter_type,
 					language: LanguageEnum[data.letter.language],
+					reference_number: data.letter.reference_number,
+					published_at: data.letter.published_at,
 				};
 
-				setLetter(message);
-				setParticipants(data.letter.participants);
+				initializeContent(content);
+				initializeParticipants(data.letter.participants);
 
 				return response.message as LetterDetailResponseType;
 			} catch (error: any) {
@@ -48,6 +61,18 @@ export default function LetterDetail() {
 			}
 		},
 		enabled: !!referenceNumber,
+	});
+
+	useWebsocket<LetterDetailResponseType>({
+		url: `ws://localhost:8000/ws/letters/${referenceNumber}/`,
+		onMessage: (message) => {
+			queryClient.setQueryData<LetterDetailResponseType>(
+				["getLetterDetails", referenceNumber],
+				(oldData) => {
+					return { ...oldData, ...message };
+				}
+			);
+		},
 	});
 
 	return isSuccess && data ? (
@@ -61,7 +86,9 @@ export default function LetterDetail() {
 				</Drawer>
 				<section className="flex-1 pb-5">
 					<section className="mb-5 flex flex-1 flex-col items-center bg-gray-100 py-5">
-						<EditableLetter letter={data.letter} />
+						<EditableLetter
+							editable={generateUserPermissions(data.permissions).can_update_letter}
+						/>
 					</section>
 					<ActivityFeed letter={data.letter} />
 				</section>

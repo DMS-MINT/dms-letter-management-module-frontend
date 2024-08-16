@@ -1,11 +1,10 @@
 "use client";
 import { requestQRCode } from "@/actions/auth/action";
+import { getMyProfile } from "@/actions/user_module/action";
 import { Spinner } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAppSelector } from "@/hooks";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { useMutation } from "@tanstack/react-query";
+
 import {
 	CheckCircle,
 	ChevronDown,
@@ -15,27 +14,45 @@ import {
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+
+import { useUserStore } from "@/lib/stores";
+import type { CurrentUserType } from "@/types/user_module";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 const TwoFactorAuth = () => {
-	const myProfile = useAppSelector(selectMyProfile);
+	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
-	const {
-		mutate: requestQRCodeMutate,
-		data: qrCodeImage,
-		error,
-	} = useMutation({
+	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
+	const { data: myProfile } = useQuery({
+		queryKey: ["getMyProfile"],
+		queryFn: async () => {
+			try {
+				const data = await getMyProfile();
+				setCurrentUser(data.my_profile);
+				return data.my_profile as CurrentUserType;
+			} catch (error: any) {
+				toast.error(error.message);
+			}
+		},
+		enabled: true,
+	});
+
+	const { mutate: requestQRCodeMutate, data: qrCodeImage } = useMutation({
 		mutationKey: ["requestQRCode"],
 		mutationFn: async () => {
 			const response = await requestQRCode();
 
-			if (!response.ok) throw new Error(response.message || "Request failed");
+			if (!response.ok) throw response;
 
 			return response.message.qr_code_image;
 		},
 		onError: (error: any) => {
 			toast.dismiss();
-			toast.error(error.message || "An error occurred");
+			toast.error(error.message);
 		},
 	});
 

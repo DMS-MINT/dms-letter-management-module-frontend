@@ -1,8 +1,10 @@
-import type { LetterStoreType } from "@/stores";
-import type { ParticipantType } from "@/types/letter_module";
+import type {
+	LetterContentStoreType,
+	ParticipantStoreType,
+} from "@/lib/stores";
 import { RoleEnum } from "@/types/letter_module";
 
-function isContentEmpty(html: string): boolean {
+function isBodyEmpty(html: string): boolean {
 	if (typeof document === "undefined") {
 		// If document is not defined (e.g., during SSR), return false
 		return false;
@@ -19,16 +21,16 @@ function isContentEmpty(html: string): boolean {
 }
 
 export default function canSubmitLetter(
-	letter: LetterStoreType,
-	participants: ParticipantType[]
+	letter: Omit<LetterContentStoreType, "reference_number" | "published_at"> &
+		ParticipantStoreType
 ): boolean {
-	const hasPrimaryRecipient = participants.some(
+	const hasPrimaryRecipient = letter.participants.some(
 		(participant) => participant.role === RoleEnum["PRIMARY RECIPIENT"]
 	);
 
 	const hasSubject = letter.subject.trim() !== "";
 
-	const hasContent = !isContentEmpty(letter.content);
+	const hasBody = !isBodyEmpty(letter.body);
 
-	return hasPrimaryRecipient && hasContent && hasSubject;
+	return hasPrimaryRecipient && hasBody && hasSubject;
 }

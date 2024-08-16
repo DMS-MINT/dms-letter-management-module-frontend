@@ -1,5 +1,5 @@
 import type { ShouldShowProps } from "@/components/BlockEditor/menus/types";
-import { isTextSelected } from "@/utils";
+import { isTextSelected } from "@/lib/utils/isTextSelected";
 import type { Editor } from "@tiptap/react";
 import { useCallback } from "react";
 

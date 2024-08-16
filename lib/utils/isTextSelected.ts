@@ -1,7 +1,7 @@
 import { isTextSelection } from "@tiptap/core";
 import type { Editor } from "@tiptap/react";
 
-export default function isTextSelected({ editor }: { editor: Editor }) {
+export function isTextSelected({ editor }: { editor: Editor }) {
 	const {
 		state: {
 			doc,

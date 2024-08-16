@@ -13,11 +13,31 @@ export async function getMyProfile() {
 	}
 }
 
-export async function getAllUsers() {
+export async function getUsers() {
 	try {
 		const response = await axiosInstance.get("users/");
 
 		return { ok: true, message: response.data.users };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+
+export async function getEnterprises() {
+	try {
+		const response = await axiosInstance.get("enterprises/");
+
+		return { ok: true, message: response.data.enterprises };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+
+export async function getContacts() {
+	try {
+		const response = await axiosInstance.get("contacts/");
+
+		return { ok: true, message: response.data.contacts };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}

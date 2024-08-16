@@ -1,11 +1,11 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
-import { authErrorMessages } from "./errorMessages";
+import { cookies } from "next/headers";
 import getErrorMessage from "../getErrorMessage";
 import { workflowErrorMessages } from "../letter_module/errorMessages";
+import { authErrorMessages } from "./errorMessages";
 
 const SESSION_NAME = "DMS";
 
@@ -91,7 +91,7 @@ export async function requestQRCode() {
 	}
 }
 
-export async function validateOneTimePassword(otp: number) {
+export async function validateOneTimePassword(otp: string) {
 	try {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
 

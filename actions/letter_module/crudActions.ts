@@ -11,13 +11,12 @@ import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
 interface BatchParamsType {
 	referenceNumbers: string[];
-	otp?: number;
+	otp?: string;
 }
 
 export async function getLetters(category: string) {
 	try {
 		const response = await axiosInstance.get(`letters/?category=${category}`);
-
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
@@ -49,7 +48,7 @@ export async function createAndSubmitLetter({
 	otp,
 }: {
 	letter: DraftLetterType;
-	otp: number;
+	otp: string;
 }) {
 	try {
 		const response = await axiosInstance.post("letters/create_and_submit/", {
@@ -68,7 +67,7 @@ export async function createAndPublishLetter({
 	otp,
 }: {
 	letter: DraftLetterType;
-	otp: number;
+	otp: string;
 }) {
 	try {
 		const response = await axiosInstance.post("letters/create_and_publish/", {

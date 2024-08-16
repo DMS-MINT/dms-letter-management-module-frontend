@@ -1,3 +1,4 @@
+import { StatusBadge } from "@/components/pills";
 import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -5,9 +6,11 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { convertToEthiopianDateAndTime } from "@/lib/utils/convertToEthiopianDate";
+import getParticipantInfo from "@/lib/utils/getParticipantInfo";
 import type {
 	LetterColumnDefType,
-	ParticipantType,
+	ParticipantDetailType,
 } from "@/types/letter_module";
 import {
 	LetterTableColumns,
@@ -15,9 +18,7 @@ import {
 	columnTranslation,
 	letterTypeTranslations,
 } from "@/types/letter_module";
-import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { CalendarIcon, Circle, CornerRightDown, UserRound } from "lucide-react";
-import StatusBadge from "../../pills/StatusBadge";
 
 export const publishedTableColumns: LetterColumnDefType = [
 	{
@@ -31,7 +32,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 				aria-label="ሁሉንም ምረጥ"
 				onClick={(e) => e.stopPropagation()}
-				className=" h-5 w-5"
+				className="h-5 w-5 "
 			/>
 		),
 		cell: ({ row }) => (
@@ -83,7 +84,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 			/>
 		),
 		cell: ({ row }) => {
-			const participants: ParticipantType[] = row.original.participants;
+			const participants: ParticipantDetailType[] = row.original.participants;
 			const senders = getParticipantInfo(RoleEnum.AUTHOR, participants);
 			const senderList = senders ? senders.split(",") : [];
 
@@ -130,7 +131,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 			/>
 		),
 		cell: ({ row }) => {
-			const participants: ParticipantType[] = row.original.participants;
+			const participants: ParticipantDetailType[] = row.original.participants;
 			const recipients = getParticipantInfo(
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
@@ -246,7 +247,7 @@ export const publishedTableColumns: LetterColumnDefType = [
 
 		cell: ({ row }) => {
 			const submitted_at: string = row.getValue(LetterTableColumns.SUBMITTED_AT);
-			const { time, date } = convertToEthiopianDate(submitted_at);
+			const { time, date } = convertToEthiopianDateAndTime(submitted_at);
 			return (
 				<div className="flex flex-col items-center text-xs font-normal text-muted-foreground">
 					<span>{time}</span>

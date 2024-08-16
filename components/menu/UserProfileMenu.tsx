@@ -9,8 +9,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppDispatch } from "@/hooks";
-import { storeMyProfile } from "@/lib/features/user/userSlice";
+import { useUserStore } from "@/lib/stores";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CircleHelp, LogOut, MonitorPlay, UserRound } from "lucide-react";
@@ -23,15 +22,15 @@ import { VideoDialog } from "./VideoDialog";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
 	const [isVideoDialogOpen, setVideoDialogOpen] = useState(false);
+	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
 
 	const { isSuccess, data: myProfile } = useQuery({
 		queryKey: ["getMyProfile"],
 		queryFn: async () => {
 			try {
 				const data = await getMyProfile();
-				dispatch(storeMyProfile(data.my_profile));
+				setCurrentUser(data.my_profile);
 				return data.my_profile as CurrentUserType;
 			} catch (error: any) {
 				toast.error(error.message);
@@ -57,7 +56,6 @@ export default function UserProfileMenu() {
 	});
 
 	const handleSupport = () => {
-		// Open the PDF file located in the public folder
 		window.open("/Training.pdf", "_blank");
 	};
 	const handleSupportVideo = () => {

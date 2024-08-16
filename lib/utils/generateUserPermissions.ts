@@ -1,4 +1,4 @@
-import {
+import type {
 	PermissionsResponseType,
 	PermissionsType,
 } from "@/types/letter_module";

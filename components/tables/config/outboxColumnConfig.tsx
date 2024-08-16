@@ -1,3 +1,4 @@
+import { StatusBadge } from "@/components/pills";
 import { ColumnHeader } from "@/components/tables";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -5,9 +6,11 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { convertToEthiopianDateAndTime } from "@/lib/utils/convertToEthiopianDate";
+import getParticipantInfo from "@/lib/utils/getParticipantInfo";
 import type {
 	LetterColumnDefType,
-	ParticipantType,
+	ParticipantDetailType,
 } from "@/types/letter_module";
 import {
 	LetterTableColumns,
@@ -15,9 +18,7 @@ import {
 	columnTranslation,
 	letterTypeTranslations,
 } from "@/types/letter_module";
-import { convertToEthiopianDate, getParticipantInfo } from "@/utils";
 import { CalendarIcon, Circle, CornerRightDown, UserRound } from "lucide-react";
-import StatusBadge from "../../pills/StatusBadge";
 
 export const outboxTableColumns: LetterColumnDefType = [
 	{
@@ -31,7 +32,7 @@ export const outboxTableColumns: LetterColumnDefType = [
 				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 				aria-label="ሁሉንም ምረጥ"
 				onClick={(e) => e.stopPropagation()}
-				className=" h-5 w-5"
+				className="h-5 w-5 "
 			/>
 		),
 		cell: ({ row }) => (
@@ -82,7 +83,7 @@ export const outboxTableColumns: LetterColumnDefType = [
 			/>
 		),
 		cell: ({ row }) => {
-			const participants: ParticipantType[] = row.original.participants;
+			const participants: ParticipantDetailType[] = row.original.participants;
 			const recipients = getParticipantInfo(
 				RoleEnum["PRIMARY RECIPIENT"],
 				participants
@@ -198,7 +199,7 @@ export const outboxTableColumns: LetterColumnDefType = [
 
 		cell: ({ row }) => {
 			const updated_at: string = row.getValue(LetterTableColumns.UPDATED_AT);
-			const { time, date } = convertToEthiopianDate(updated_at);
+			const { time, date } = convertToEthiopianDateAndTime(updated_at);
 			return (
 				<div className="flex flex-col items-center text-xs font-normal text-muted-foreground">
 					<span>{time}</span>

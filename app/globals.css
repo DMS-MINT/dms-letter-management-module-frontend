@@ -99,18 +99,18 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 /* Style for react-select when it is used in vertical mode */
-.vertical__control {
+.participant_selector__control {
 	@apply !border-none !bg-transparent;
 	box-shadow: none !important;
 }
-.vertical__value-container {
+.participant_selector__value-container {
 	@apply !flex !flex-col !items-start !p-0;
 }
 
-.vertical__multi-value {
+.participant_selector__multi-value {
 	@apply !bg-transparent;
 }
 
-.vertical__multi-value__label {
+.participant_selector__multi-value__label {
 	@apply !text-base;
 }

@@ -1,4 +1,3 @@
-import { StoreProvider } from "@/app/StoreProvider";
 import "@/app/globals.css";
 import { RequireAuth } from "@/components/hoc";
 import { TopBar } from "@/components/layouts";
@@ -23,22 +22,20 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<StoreProvider>
-			<html lang="am">
-				<body className={noto_serif_ethiopic.className}>
-					<Providers>
-						<RequireAuth>
-							<div className="flex h-full flex-col">
-								<div className="absolute">
-									<Toaster richColors position="top-center" />
-								</div>
-								<TopBar />
-								{children}
+		<html lang="am">
+			<body className={noto_serif_ethiopic.className}>
+				<Providers>
+					<RequireAuth>
+						<div className="flex h-full flex-col">
+							<div className="absolute">
+								<Toaster richColors position="top-center" />
 							</div>
-						</RequireAuth>
-					</Providers>
-				</body>
-			</html>
-		</StoreProvider>
+							<TopBar />
+							{children}
+						</div>
+					</RequireAuth>
+				</Providers>
+			</body>
+		</html>
 	);
 }

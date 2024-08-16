@@ -111,7 +111,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 
 	const { mutate } = useWorkflowDispatcher();
 
-	const handleDelete = async (otp?: number) => {
+	const handleDelete = async (otp?: string) => {
 		const selectedRowIds = Object.keys(rowSelection);
 
 		const referenceNumbers = selectedRowIds
@@ -174,7 +174,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 	};
 
 	const handleBatchAction = useCallback(
-		async (actionType: ActionType, referenceNumber: string[], otp?: number) => {
+		async (actionType: ActionType, referenceNumber: string[], otp?: string) => {
 			try {
 				await mutate({
 					actionType,
@@ -214,7 +214,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 							confirmButtonText="አጥፋ"
 							cancelButtonText="አይ ተመለስ"
 							onConfirm={async () => {
-								const otp: number | undefined = modelRef.current?.getOTP();
+								const otp: string | undefined = modelRef.current?.getOTP();
 								if (!otp) return;
 								await handleDelete(otp);
 							}}
