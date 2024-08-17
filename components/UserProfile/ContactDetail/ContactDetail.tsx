@@ -1,5 +1,5 @@
 import { getContacts } from "@/actions/user_module/action";
-import { ContactType } from "@/types/user_module";
+import type { ContactType } from "@/types/user_module";
 import { useEffect, useState } from "react";
 import ContactTable from "./ContactTable";
 
