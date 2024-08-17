@@ -79,8 +79,8 @@ function DataTable({ columns, data, param }: DataTableProps) {
 		filterValue: string
 	): boolean => {
 		const cellValue = row.getValue(columnId) as string;
-		const normalizedCellValue = normalizeText(cellValue);
-		const normalizedFilterValue = normalizeText(filterValue);
+		const normalizedCellValue = normalizeText(cellValue).toLowerCase();
+		const normalizedFilterValue = filterValue.toLowerCase();
 
 		return normalizedCellValue.includes(normalizedFilterValue);
 	};

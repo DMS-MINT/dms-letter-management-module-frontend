@@ -134,11 +134,11 @@ export function PingNotificationModal({
 										<SelectContent>
 											<SelectGroup>
 												<SelectLabel>Recipients</SelectLabel>
-												<SelectItem value="85bddf6c-ecb2-4346-ac71-f65e274ec3fa">
-													User 1
+												<SelectItem value="fb25994a-6d44-4040-9df5-05da614c34d0">
+													Kidest Mekonene
 												</SelectItem>
 												<SelectItem value="190b459f-5efb-4d92-8216-b314b0c6ac12">
-													User 2
+													Tesfaye Hailu
 												</SelectItem>
 												{/* Add more recipients here */}
 											</SelectGroup>

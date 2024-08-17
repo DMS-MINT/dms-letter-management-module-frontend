@@ -25,21 +25,19 @@ const MyProfileTopBar = () => {
 	});
 
 	return isSuccess && myProfile ? (
-		<div>
-			<div className="mx-10 flex h-14 items-center justify-between">
-				<div className="flex items-center gap-2">
-					<h1 className="text-xl font-bold">{myProfile.full_name_am}</h1>
-					<span>
-						<Badge className="flex items-center justify-start bg-green-100 text-green-500">
-							{" "}
-							<Dot />
-							መስመር ላይ
-						</Badge>
-					</span>
-				</div>
-				<h2>ግለ መረጃ</h2>
-			</div>
-		</div>
+		<section className="flex w-full items-center justify-between">
+			<span className="flex items-center gap-2">
+				<h1 className="text-xl font-bold">{myProfile.full_name_am}</h1>
+
+				<Badge className="flex items-center justify-start bg-green-100 text-green-500">
+					{" "}
+					<Dot />
+					መስመር ላይ
+				</Badge>
+			</span>
+
+			<h2>ግለ መረጃ</h2>
+		</section>
 	) : null;
 };
 

@@ -167,7 +167,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.abbreviation_am}
+							value={myProfile.department.department_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -191,7 +191,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.abbreviation_en}
+							value={myProfile.department.department_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
