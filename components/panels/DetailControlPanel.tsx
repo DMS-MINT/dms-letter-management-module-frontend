@@ -17,7 +17,10 @@ export default function DetailControlPanel({
 					pdf_version={data.letter.pdf_version}
 					current_state={data.letter.current_state}
 				/>
-				<ActionButtons permissions={generateUserPermissions(data.permissions)} />
+				<ActionButtons
+					owner={data.letter.owner}
+					permissions={generateUserPermissions(data.permissions)}
+				/>
 			</div>
 		</section>
 	);
