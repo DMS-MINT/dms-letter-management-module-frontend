@@ -62,8 +62,8 @@ export default function SaveUpdatedLetter() {
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger>
-					<Button variant={"outline"} onClick={onSubmit} size={"sm"}>
-						<Pencil size={15} className="text-green-500" />
+					<Button variant={"outline"} onClick={onSubmit} size={"icon"}>
+						<Pencil size={20} className="text-green-500" />
 					</Button>
 				</TooltipTrigger>
 				<TooltipContent side="bottom" align="center">
