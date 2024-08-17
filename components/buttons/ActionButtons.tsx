@@ -124,7 +124,7 @@ function ActionButtons({ permissions }: { permissions: PermissionsType }) {
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: permissions.can_submit_letter,
+				isVisible: permissions.can_share_letter,
 				component: <ActionDropDown letterRef={reference_number} />,
 			},
 			{

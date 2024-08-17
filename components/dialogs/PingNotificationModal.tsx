@@ -1,6 +1,6 @@
 "use client";
 
-import { SendReminderNotification } from "@/actions/notification/action";
+import { sendReminderNotification } from "@/actions/notification/action";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -19,8 +19,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Label } from "../ui/label";
 import {
@@ -64,6 +66,28 @@ export function PingNotificationModal({
 	onClose,
 	letterRef,
 }: PingNotificationModalProps) {
+	const { mutate } = useMutation({
+		mutationKey: ["sendReminder"],
+		mutationFn: async (data: NotificationType) => {
+			const response = await sendReminderNotification(data);
+
+			if (!response.ok) throw response;
+
+			return response.message;
+		},
+		onMutate: () => {
+			toast.dismiss();
+			toast.loading("sending");
+		},
+		onSuccess: (data: string) => {
+			toast.dismiss();
+			toast.success("sent");
+		},
+		onError: (error: any) => {
+			toast.dismiss();
+			toast.error(error.message);
+		},
+	});
 	const form = useForm<z.infer<typeof NotificationSchema>>({
 		resolver: zodResolver(NotificationSchema),
 		defaultValues: {
@@ -83,14 +107,7 @@ export function PingNotificationModal({
 				letter_ref: letterRef,
 			},
 		};
-
-		try {
-			await SendReminderNotification(payload);
-			onClose();
-			form.reset();
-		} catch (error) {
-			console.error("Notification sending failed:", error);
-		}
+		mutate(payload);
 	}
 
 	return (

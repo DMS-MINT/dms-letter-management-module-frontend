@@ -1,3 +1,5 @@
+"use server";
+
 import type { NotificationType } from "@/types/shared/NotificationType";
 import axiosInstance from "../axiosInstance";
 import getErrorMessage from "../getErrorMessage";
@@ -61,7 +63,7 @@ export async function MarkBulkNotificationsAsRead(data: {
 	}
 }
 
-export async function SendReminderNotification(data: NotificationType) {
+export async function sendReminderNotification(data: NotificationType) {
 	try {
 		console.log("notification data", data);
 		const response = await axiosInstance.post("/notifications/reminder/", data);
