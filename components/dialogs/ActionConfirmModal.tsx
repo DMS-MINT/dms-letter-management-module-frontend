@@ -102,7 +102,7 @@ function ActionConfirmModal(
 					}}
 					disabled={disabledButton}
 					className="flex gap-2"
-					size={"sm"}
+					size={"icon"}
 				>
 					{triggerButtonIcon && triggerButtonIcon}
 					{triggerButtonText}
