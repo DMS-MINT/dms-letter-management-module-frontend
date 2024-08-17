@@ -30,11 +30,12 @@ export type ModifiedLetterType = {
 export type UpdatedLetterType = {};
 
 export type ShareLetterRequestType = {
-	to: string[];
+	participants: ParticipantDraftType[];
 	message: string;
-	permissions:
+	permissions: (
 		| "can_view_letter"
 		| "can_update_letter"
 		| "can_comment_letter"
-		| "can_share_letter";
+		| "can_share_letter"
+	)[];
 };
