@@ -2,7 +2,7 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ProfileFormData } from "@/components/UserProfile/ProfileDetail/ProfileDetail";
-import { NewContactType } from "@/types/user_module";
+import type { NewContactType } from "@/types/user_module";
 import getErrorMessage from "../getErrorMessage";
 import { userErrorMessages } from "./errorMessages";
 

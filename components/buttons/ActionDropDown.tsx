@@ -13,7 +13,7 @@ import {
 	TooltipTrigger,
 } from "../ui/tooltip";
 
-export default function ActionDropDown() {
+export default function ActionDropDown({ letterRef }: { letterRef: string }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleOpenModal = () => setIsModalOpen(true);
@@ -51,7 +51,11 @@ export default function ActionDropDown() {
 				</PopoverContent>
 			</Popover>
 
-			<PingNotificationModal open={isModalOpen} onClose={handleCloseModal} />
+			<PingNotificationModal
+				open={isModalOpen}
+				onClose={handleCloseModal}
+				letterRef={letterRef}
+			/>
 		</>
 	);
 }

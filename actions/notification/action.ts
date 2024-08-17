@@ -1,3 +1,4 @@
+import type { NotificationType } from "@/types/shared/NotificationType";
 import axiosInstance from "../axiosInstance";
 import getErrorMessage from "../getErrorMessage";
 import { notificationErrorMessages } from "./errorMessages";
@@ -51,6 +52,19 @@ export async function MarkBulkNotificationsAsRead(data: {
 }) {
 	try {
 		const response = await axiosInstance.post("/notifications/bulk/read/", data);
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return {
+			ok: false,
+			message: getErrorMessage(notificationErrorMessages, error),
+		};
+	}
+}
+
+export async function SendReminderNotification(data: NotificationType) {
+	try {
+		console.log("notification data", data);
+		const response = await axiosInstance.post("/notifications/reminder/", data);
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return {
