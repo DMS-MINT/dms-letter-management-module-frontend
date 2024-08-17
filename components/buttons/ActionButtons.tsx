@@ -5,6 +5,7 @@ import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
 import { useLetterRevisionStore } from "@/lib/stores";
 import type { PermissionsType } from "@/types/letter_module";
+import type { UserType } from "@/types/user_module";
 import { Send, Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
@@ -25,7 +26,12 @@ export type ButtonConfigType = {
 	action?: () => void;
 };
 
-function ActionButtons({ permissions }: { permissions: PermissionsType }) {
+type Props = {
+	owner: UserType;
+	permissions: PermissionsType;
+};
+
+function ActionButtons({ owner, permissions }: Props) {
 	const {
 		subject,
 		body,
@@ -67,11 +73,6 @@ function ActionButtons({ permissions }: { permissions: PermissionsType }) {
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: permissions.can_share_letter,
-				component: <ShareLetterDialog />,
-			},
-			{
-				id: uuidv4.v4(),
 				isVisible: permissions.can_restore_letter,
 				label: "ወደነበረበት መልስ",
 				variant: "default",
@@ -101,13 +102,18 @@ function ActionButtons({ permissions }: { permissions: PermissionsType }) {
 			},
 			{
 				id: uuidv4.v4(),
+				isVisible: permissions.can_share_letter,
+				component: <ShareLetterDialog owner={owner} />,
+			},
+			{
+				id: uuidv4.v4(),
 				isVisible: permissions.can_submit_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
 						triggerButtonText=""
 						triggerButtonTooltip="ወደ መዝገብ ቢሮ አስተላልፍ"
-						triggerButtonIcon={<Send size={15} />}
+						triggerButtonIcon={<Send size={20} />}
 						triggerButtonVariant="default"
 						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
@@ -209,7 +215,7 @@ function ActionButtons({ permissions }: { permissions: PermissionsType }) {
 				action: () => handleAction("reopen_letter"),
 			},
 		];
-	}, [permissions]);
+	}, [permissions, owner]);
 
 	return (
 		<>
