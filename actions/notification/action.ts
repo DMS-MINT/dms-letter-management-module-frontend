@@ -1,6 +1,6 @@
 "use server";
 
-import type { NotificationType } from "@/types/shared/NotificationType";
+import type { NotificationCreateDTO } from "@/types/shared/NotificationType";
 import axiosInstance from "../axiosInstance";
 import getErrorMessage from "../getErrorMessage";
 import { notificationErrorMessages } from "./errorMessages";
@@ -63,11 +63,14 @@ export async function MarkBulkNotificationsAsRead(data: {
 	}
 }
 
-export async function sendReminderNotification(data: NotificationType) {
+export async function sendReminderNotification(
+	params: [NotificationCreateDTO]
+) {
 	try {
-		console.log("notification data", data);
-		const response = await axiosInstance.post("/notifications/reminder/", data);
-		return { ok: true, message: response.data };
+		const [data] = params;
+		await axiosInstance.post("/notifications/reminder/", data);
+
+		return { ok: true, message: "የማስታወሻ መልእክቱ በተሳካ ሁኔታ ተልኳል።" };
 	} catch (error: any) {
 		return {
 			ok: false,
