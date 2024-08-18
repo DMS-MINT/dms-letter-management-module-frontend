@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,7 +25,8 @@ import { z } from "zod";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
-	password: z.string().min(1, { message: "እባክዎ የይለፍ ቃሎን ያስገቡ።" }),
+	password: z.string().min(1, { message: "እባክዎ የይለፍ ቃልዎን ያስገቡ።" }),
+	remember: z.boolean().default(false).optional(),
 });
 
 export default function SignIn() {
@@ -37,8 +37,10 @@ export default function SignIn() {
 		defaultValues: {
 			email: "",
 			password: "",
+			remember: false,
 		},
 	});
+
 	const { mutate, isSuccess, isPending } = useMutation({
 		mutationKey: ["signIn"],
 		mutationFn: async (values: z.infer<typeof formSchema>) => {
@@ -102,11 +104,11 @@ export default function SignIn() {
 								<FormItem>
 									<FormLabel className="flex justify-between">
 										የይለፍ ቃልዎን ያስገቡ
-										<Link href="/forgot-password" tabIndex={4}>
+										{/* <Link href="/forgot-password" tabIndex={4}>
 											<Button type="button" variant="link" className="h-fit py-0">
 												የይለፍ ቃልዎን ረስተዋል?
 											</Button>
-										</Link>
+										</Link> */}
 									</FormLabel>
 									<FormControl>
 										<div className="relative ">
@@ -131,6 +133,26 @@ export default function SignIn() {
 								</FormItem>
 							)}
 						/>
+						{/* <FormField
+							control={form.control}
+							name="remember"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel className="flex items-center gap-2">
+										<FormControl>
+											<Checkbox
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												className=" h-5 w-5 "
+											/>
+										</FormControl>
+										አስታውሰኝ
+									</FormLabel>
+									<FormMessage className="form-error-message" />
+								</FormItem>
+							)}
+						/> */}
+
 						<Button
 							disabled={isPending}
 							type="submit"

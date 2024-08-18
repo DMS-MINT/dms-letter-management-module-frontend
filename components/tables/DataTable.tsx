@@ -79,8 +79,8 @@ function DataTable({ columns, data, param }: DataTableProps) {
 		filterValue: string
 	): boolean => {
 		const cellValue = row.getValue(columnId) as string;
-		const normalizedCellValue = normalizeText(cellValue);
-		const normalizedFilterValue = normalizeText(filterValue);
+		const normalizedCellValue = normalizeText(cellValue).toLowerCase();
+		const normalizedFilterValue = filterValue.toLowerCase();
 
 		return normalizedCellValue.includes(normalizedFilterValue);
 	};
@@ -111,7 +111,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 
 	const { mutate } = useWorkflowDispatcher();
 
-	const handleDelete = async (otp?: number) => {
+	const handleDelete = async (otp?: string) => {
 		const selectedRowIds = Object.keys(rowSelection);
 
 		const referenceNumbers = selectedRowIds
@@ -125,11 +125,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 
 		if (referenceNumbers.length > 0) {
 			switch (param) {
-				case "inbox":
-				case "outbox":
 				case "draft":
-				case "pending":
-				case "published":
 					await handleBatchAction("moveToTrash_batch", referenceNumbers);
 					break;
 				case "trash":
@@ -178,7 +174,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 	};
 
 	const handleBatchAction = useCallback(
-		async (actionType: ActionType, referenceNumber: string[], otp?: number) => {
+		async (actionType: ActionType, referenceNumber: string[], otp?: string) => {
 			try {
 				await mutate({
 					actionType,
@@ -218,19 +214,20 @@ function DataTable({ columns, data, param }: DataTableProps) {
 							confirmButtonText="አጥፋ"
 							cancelButtonText="አይ ተመለስ"
 							onConfirm={async () => {
-								const otp: number | undefined = modelRef.current?.getOTP();
+								const otp: string | undefined = modelRef.current?.getOTP();
 								if (!otp) return;
 								await handleDelete(otp);
 							}}
 							requiresAuth={true}
 						/>
-					) : (
+					) : null}
+					{param === "draft" ? (
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button
 									variant={isDeleteButtonDisabled ? "outline" : "default"}
 									disabled={isDeleteButtonDisabled}
-									size="sm"
+									size={"sm"}
 									className={`${isDeleteButtonDisabled ? "" : "bg-red-500"} flex gap-2 `}
 								>
 									<Trash size={15} />
@@ -256,14 +253,14 @@ function DataTable({ columns, data, param }: DataTableProps) {
 								</AlertDialogFooter>
 							</AlertDialogContent>
 						</AlertDialog>
-					)}
+					) : null}
 					{param === "trash" && (
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button
 									variant={isDeleteButtonDisabled ? "outline" : "default"}
 									disabled={isDeleteButtonDisabled}
-									size="sm"
+									size={"sm"}
 									className="flex gap-2"
 								>
 									<UndoDot size={15} /> ወደ ቦታው መልስ

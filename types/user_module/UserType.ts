@@ -1,28 +1,26 @@
-import type { DepartmentType } from "./DepartmentType";
+import type { DepartmentType, JobTitleType } from "./DepartmentType";
 
-export type MemberType = {
+export type UserType = {
 	id: string;
-	full_name: string;
-	job_title: string;
-	user_type: "member";
-};
-
-export type GuestType = {
-	id: string;
-	name: string;
-	user_type: "guest";
+	full_name_en: string;
+	full_name_am: string;
+	job_title: JobTitleType;
 };
 
 export type CurrentUserType = {
 	id: string;
-	email: string;
-	username: string;
-	first_name: string;
-	last_name: string;
-	full_name: string;
-	job_title: string;
+	first_name_en: string;
+	middle_name_en: string;
+	last_name_en: string;
+	first_name_am: string;
+	middle_name_am: string;
+	last_name_am: string;
+	full_name_en: string;
+	full_name_am: string;
+	job_title: JobTitleType;
 	department: DepartmentType;
-	phone_number: string;
-	is_staff: boolean;
+	phone_number: number;
+	email: string;
 	is_2fa_enabled: boolean;
+	is_staff: boolean;
 };

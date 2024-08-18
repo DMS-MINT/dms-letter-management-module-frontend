@@ -1,6 +1,6 @@
 "use server";
 
-import { TwoFactorSetupDialog } from "@/components/dialogs";
+import { TwoFactorSetupDialog } from "../dialogs";
 
 interface Props {
 	children: React.ReactNode;

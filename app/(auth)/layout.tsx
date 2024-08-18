@@ -1,4 +1,3 @@
-import { StoreProvider } from "@/app/StoreProvider";
 import "@/app/globals.css";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
@@ -21,17 +20,15 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<StoreProvider>
-			<html lang="am">
-				<body className={noto_serif_ethiopic.className}>
-					<Providers>
-						<div className="absolute">
-							<Toaster richColors position="top-center" />
-						</div>
-						{children}
-					</Providers>
-				</body>
-			</html>
-		</StoreProvider>
+		<html lang="am">
+			<body className={noto_serif_ethiopic.className}>
+				<Providers>
+					<div className="absolute">
+						<Toaster richColors position="top-center" />
+					</div>
+					{children}
+				</Providers>
+			</body>
+		</html>
 	);
 }

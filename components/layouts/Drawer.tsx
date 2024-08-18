@@ -1,6 +1,6 @@
 "use client";
 
-import { useUiStore } from "@/stores";
+import { useUiStore } from "@/lib/stores";
 
 export default function Drawer({
 	children,

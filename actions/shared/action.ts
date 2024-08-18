@@ -1,6 +1,8 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
+import getErrorMessage from "../getErrorMessage";
+import { commentErrorMessages } from "./errorMessages";
 
 export type CreateCommentParams = {
 	reference_number: string;
@@ -12,43 +14,42 @@ export type UpdateCommentParams = {
 	content: string;
 };
 
-export async function create_comment({
+export async function createComment({
 	reference_number,
 	content,
 }: CreateCommentParams) {
 	try {
-		const response = await axiosInstance.post(
-			`comments/${reference_number}/create/`,
-			{
-				content,
-			}
-		);
-		return response.data;
+		await axiosInstance.post(`comments/${reference_number}/create/`, {
+			content,
+		});
+
+		return { ok: true, message: "ደብዳቤ ለተገለጹት ተባባሪዎች ተጋርቷል።" };
 	} catch (error: any) {
-		const errorMessage = error.message;
-		throw errorMessage;
+		return { ok: false, message: getErrorMessage(commentErrorMessages, error) };
 	}
 }
 
-export async function update_comment({
+export async function updateComment({
 	comment_id,
 	content,
 }: UpdateCommentParams) {
 	try {
-		const response = await axiosInstance.put(`comments/${comment_id}/update/`, {
+		await axiosInstance.put(`comments/${comment_id}/update/`, {
 			content,
 		});
-		return response.data;
+
+		return { ok: true, message: "አስተያየቱ በተሳካ ሁኔታ ተቀይሯል።" };
 	} catch (error: any) {
-		throw error.message;
+		return { ok: false, message: getErrorMessage(commentErrorMessages, error) };
 	}
 }
 
-export async function delete_comment(comment_id: string) {
+export async function deleteComment(comment_id: string) {
 	try {
-		const response = await axiosInstance.delete(`comments/${comment_id}/delete/`);
-		return response.data;
+		await axiosInstance.delete(`comments/${comment_id}/delete/`);
+
+		return { ok: true, message: "አስተያየቱ በተሳካ ሁኔታ ተሰርዟል።" };
 	} catch (error: any) {
-		throw error.message;
+		return { ok: false, message: getErrorMessage(commentErrorMessages, error) };
 	}
 }

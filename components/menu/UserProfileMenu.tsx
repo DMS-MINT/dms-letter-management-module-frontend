@@ -7,30 +7,36 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
+	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppDispatch } from "@/hooks";
-import { storeMyProfile } from "@/lib/features/user/userSlice";
+import { DOCS } from "@/constants";
+import { useUserStore } from "@/lib/stores";
+import { getInitials } from "@/lib/utils/getInitials";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CircleHelp, LogOut, MonitorPlay } from "lucide-react";
+import { FileText, LifeBuoy, LogOut, SquarePlay, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Separator } from "../ui/separator";
 import { VideoDialog } from "./VideoDialog";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
 	const [isVideoDialogOpen, setVideoDialogOpen] = useState(false);
+	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
 
 	const { isSuccess, data: myProfile } = useQuery({
 		queryKey: ["getMyProfile"],
 		queryFn: async () => {
 			try {
 				const data = await getMyProfile();
-				dispatch(storeMyProfile(data.my_profile));
+				setCurrentUser(data.my_profile);
 				return data.my_profile as CurrentUserType;
 			} catch (error: any) {
 				toast.error(error.message);
@@ -56,8 +62,7 @@ export default function UserProfileMenu() {
 	});
 
 	const handleSupport = () => {
-		// Open the PDF file located in the public folder
-		window.open("/Training.pdf", "_blank");
+		window.open(DOCS.user_manual, "_blank");
 	};
 	const handleSupportVideo = () => {
 		setVideoDialogOpen(true);
@@ -67,47 +72,50 @@ export default function UserProfileMenu() {
 		setVideoDialogOpen(false);
 	};
 
+	const fullName = myProfile?.full_name_am;
+	const initials = fullName ? getInitials(fullName) : "";
+
 	return isSuccess && myProfile ? (
 		<div className="flex items-center gap-4">
-			{/* <div className="flex items-end gap-2">
-				<p className="text-sm">{myProfile.full_name}</p>
-			</div> */}
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">
-						<AvatarFallback>{myProfile.full_name.substring(0, 2)}</AvatarFallback>
+						<AvatarFallback>{initials}</AvatarFallback>
 					</Avatar>
 				</DropdownMenuTrigger>
 
-				<DropdownMenuContent className="mr-2 flex flex-col">
-					<DropdownMenuItem className="flex w-full gap-3">
-						<div className="flex flex-col items-center ">
-							<p className="text-sm">{myProfile.full_name}</p>
-							<span className="text-xs text-muted-foreground">
-								{myProfile.department.name_en}
-							</span>
-						</div>
+				<DropdownMenuContent className="mr-5 min-w-[20rem] max-w-[20rem]">
+					<DropdownMenuLabel className="flex flex-col items-start">
+						<p>{myProfile.full_name_am}</p>
+						<p className="text-sm text-gray-600">{myProfile.job_title.title_am}</p>
+					</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem onClick={() => router.push("/myaccount")}>
+						<User size={20} className="mr-2" />
+						<span>የእኔ መገለጫ</span>
 					</DropdownMenuItem>
-					<Separator className="mb-1 h-1" />
-
-					<DropdownMenuItem
-						onClick={() => handleSupport()}
-						className="flex w-full gap-4"
-					>
-						<CircleHelp size={20} />
-						እርዳታ
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						onClick={() => handleSupportVideo()}
-						className="flex w-full gap-4"
-					>
-						<MonitorPlay size={20} />
-						የቪዲዮ እርዳታ
-					</DropdownMenuItem>
-					<Separator />
+					<DropdownMenuSub>
+						<DropdownMenuSubTrigger>
+							<LifeBuoy size={20} className="mr-2" />
+							<span>የእገዛ ማዕከል</span>
+						</DropdownMenuSubTrigger>
+						<DropdownMenuPortal>
+							<DropdownMenuSubContent className="mr-2">
+								<DropdownMenuItem onClick={() => handleSupport()}>
+									<FileText size={20} className="mr-2" />
+									<span>የተጠቃሚ መመሪያ</span>
+								</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => handleSupportVideo()}>
+									<SquarePlay size={20} className="mr-2" />
+									<span>የቪዲዮ አጋዥ ስልጠና</span>
+								</DropdownMenuItem>
+							</DropdownMenuSubContent>
+						</DropdownMenuPortal>
+					</DropdownMenuSub>
+					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => logOut()} className="flex w-full gap-4">
 						<LogOut size={20} />
-						ውጣ
+						<span>ውጣ</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>

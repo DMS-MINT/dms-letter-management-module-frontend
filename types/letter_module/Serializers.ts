@@ -1,6 +1,6 @@
 import type { LanguageEnum } from "../shared";
 import type { LetterDetailType } from "./LetterType";
-import type { ParticipantType } from "./ParticipantType";
+import type { ParticipantDraftType } from "./ParticipantType";
 
 export type PermissionsResponseType = {
 	user_id: string;
@@ -15,26 +15,27 @@ export type LetterDetailResponseType = {
 
 export type DraftLetterType = {
 	subject: string;
-	content: string;
+	body: string;
 	letter_type: "internal" | "outgoing" | "incoming";
 	language: LanguageEnum;
-	participants: ParticipantType[];
+	participants: ParticipantDraftType[];
 };
 
 export type ModifiedLetterType = {
 	subject: string;
-	content: string;
-	participants: ParticipantType[];
+	body: string;
+	participants: ParticipantDraftType[];
 };
 
 export type UpdatedLetterType = {};
 
 export type ShareLetterRequestType = {
-	to: string[];
+	participants: ParticipantDraftType[];
 	message: string;
-	permissions:
+	permissions: (
 		| "can_view_letter"
 		| "can_update_letter"
 		| "can_comment_letter"
-		| "can_share_letter";
+		| "can_share_letter"
+	)[];
 };

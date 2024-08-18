@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
-import { useUiStore } from "@/stores";
-import type { LetterDetailResponseType } from "@/types/letter_module";
-import type { LanguageEnum } from "@/types/shared";
-import { canSubmitLetter, generateUserPermissions } from "@/utils";
-import { Trash } from "lucide-react";
+import { useLetterRevisionStore } from "@/lib/stores";
+import type { PermissionsType } from "@/types/letter_module";
+import type { UserType } from "@/types/user_module";
+import { Send, Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
+import { Button } from "../ui/button";
+import ActionDropDown from "./ActionDropDown";
 import SaveUpdatedLetter from "./SaveUpdatedLetter";
 
 export type ButtonConfigType = {
@@ -26,51 +26,45 @@ export type ButtonConfigType = {
 	action?: () => void;
 };
 
-function ActionButtons({
-	data: { letter, permissions },
-}: {
-	data: LetterDetailResponseType;
-}) {
+type Props = {
+	current_state: string;
+	owner: UserType;
+	permissions: PermissionsType;
+};
+
+function ActionButtons({ owner, current_state, permissions }: Props) {
+	const { letter_type, reference_number } = useLetterRevisionStore();
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
-	const setLetterReadOnly = useUiStore((state) => state.setLetterReadOnly);
 
 	const handleAction = useCallback(
-		(actionType: ActionType, otp?: number, message?: string) => {
+		(actionType: ActionType, otp?: string, message?: string) => {
 			mutate({
 				actionType,
-				params: { referenceNumber: letter.reference_number, otp, message },
+				params: { referenceNumber: reference_number, otp, message },
 			});
 		},
-		[mutate, letter.reference_number]
+		[mutate, reference_number]
 	);
 
 	const buttonConfigs: ButtonConfigType[] = useMemo(() => {
-		const currentUserPerms = generateUserPermissions(permissions);
-		setLetterReadOnly(!currentUserPerms.can_update_letter);
-
 		return [
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_trash_letter,
+				isVisible: permissions.can_trash_letter,
 				variant: "outline",
 				size: "icon",
-				icon: <Trash size={20} />,
+				icon: <Trash size={20} className="text-red-500" />,
 				action: () => handleAction("trash_letter"),
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_update_letter,
+				isVisible: permissions.can_update_letter,
 				component: <SaveUpdatedLetter />,
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_share_letter,
-				component: <ShareLetterDialog letter={letter} />,
-			},
-			{
-				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_restore_letter,
+				isVisible: permissions.can_restore_letter,
 				label: "ወደነበረበት መልስ",
 				variant: "default",
 				size: "default",
@@ -78,7 +72,7 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_permanently_delete_letter,
+				isVisible: permissions.can_permanently_delete_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
@@ -89,7 +83,7 @@ function ActionButtons({
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
 						onConfirm={() => {
-							const otp: number | undefined = modelRef.current?.getOTP();
+							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
 							handleAction("permanently_delete", otp);
 						}}
@@ -99,29 +93,26 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_submit_letter,
+				isVisible: permissions.can_share_letter,
+				component: <ShareLetterDialog owner={owner} />,
+			},
+			{
+				id: uuidv4.v4(),
+				isVisible: permissions.can_submit_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
-						disabledButton={
-							!canSubmitLetter(
-								{
-									subject: letter.subject as string,
-									content: letter.content as string,
-									letter_type: letter.letter_type,
-									language: letter.language as LanguageEnum,
-								},
-								letter.participants
-							)
-						}
-						triggerButtonText="ወደ መዝገብ ቢሮ አስተላልፍ"
+						triggerButtonText=""
+						triggerButtonTooltip="ወደ መዝገብ ቢሮ አስተላልፍ"
+						triggerButtonIcon={<Send size={20} />}
+						triggerButtonSize="icon"
 						triggerButtonVariant="default"
 						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
 						onConfirm={() => {
-							const otp: number | undefined = modelRef.current?.getOTP();
+							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
 							handleAction("submit_letter", otp);
 						}}
@@ -131,7 +122,7 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_retract_letter,
+				isVisible: permissions.can_retract_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
@@ -142,7 +133,7 @@ function ActionButtons({
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
 						onConfirm={() => {
-							const otp: number | undefined = modelRef.current?.getOTP();
+							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
 							handleAction("retract_letter", otp);
 						}}
@@ -152,12 +143,10 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible:
-					letter.letter_type !== "incoming" && currentUserPerms.can_reject_letter,
+				isVisible: letter_type !== "incoming" && permissions.can_reject_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
-						requriresMessage={true}
 						triggerButtonText="ደብዳቤውን አትቀበል"
 						triggerButtonVariant="destructive"
 						dialogTitle="ደብዳቤውን አትቀበል"
@@ -165,19 +154,19 @@ function ActionButtons({
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
 						onConfirm={() => {
-							const otp: number | undefined = modelRef.current?.getOTP();
+							const otp: string | undefined = modelRef.current?.getOTP();
 							const message: string | undefined = modelRef.current?.message;
 							if (!otp || !message) return;
 							handleAction("reject_letter", otp, message);
 						}}
 						requiresAuth={true}
+						requiresMessage={true}
 					/>
 				),
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible:
-					letter.letter_type !== "incoming" && currentUserPerms.can_publish_letter,
+				isVisible: letter_type !== "incoming" && permissions.can_publish_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
@@ -188,7 +177,7 @@ function ActionButtons({
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
 						onConfirm={() => {
-							const otp: number | undefined = modelRef.current?.getOTP();
+							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
 							handleAction("publish_letter", otp);
 						}}
@@ -198,7 +187,7 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_close_letter,
+				isVisible: permissions.can_close_letter,
 				label: "የደብዳቤውን የስራ ሂደት አጠናቅ",
 				variant: "third",
 				size: "default",
@@ -206,14 +195,35 @@ function ActionButtons({
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: currentUserPerms.can_reopen_letter,
+				isVisible: permissions.can_reopen_letter,
 				label: "የደብዳቤውን የስራ ሂደት እንደገና ክፈት",
 				variant: "default",
 				size: "default",
 				action: () => handleAction("reopen_letter"),
 			},
+			{
+				id: uuidv4.v4(),
+				isVisible: permissions.can_share_letter,
+				component: <ActionDropDown current_state={current_state} />,
+			},
 		];
-	}, [letter, permissions, handleAction, setLetterReadOnly]);
+	}, [
+		current_state,
+		handleAction,
+		letter_type,
+		owner,
+		permissions.can_close_letter,
+		permissions.can_permanently_delete_letter,
+		permissions.can_publish_letter,
+		permissions.can_reject_letter,
+		permissions.can_reopen_letter,
+		permissions.can_restore_letter,
+		permissions.can_retract_letter,
+		permissions.can_share_letter,
+		permissions.can_submit_letter,
+		permissions.can_trash_letter,
+		permissions.can_update_letter,
+	]);
 
 	return (
 		<>

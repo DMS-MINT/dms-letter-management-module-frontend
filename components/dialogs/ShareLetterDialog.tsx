@@ -1,17 +1,18 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { deleteParticipant } from "@/actions/letter_module/participantActions";
+import { shareLetter } from "@/actions/letter_module/workflowActions";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogClose,
 	DialogContent,
+	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -19,18 +20,47 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import type {
-	LetterDetailType,
-	ShareLetterRequestType,
-} from "@/types/letter_module";
-import { RoleEnum } from "@/types/letter_module";
-import { useState } from "react";
+import { useToastMutation } from "@/hooks";
+import { useCollaboratorStore, useLetterRevisionStore } from "@/lib/stores";
+import { getInitials } from "@/lib/utils/getInitials";
+import {
+	generateDraftParticipant,
+	getDefaultValue,
+} from "@/lib/utils/participantUtils";
+import { RoleEnum, type ShareLetterRequestType } from "@/types/letter_module";
+import { LanguageEnum } from "@/types/shared";
+import type { UserType } from "@/types/user_module";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { Share2, X } from "lucide-react";
+import { memo, useState } from "react";
 import * as uuidv4 from "uuid";
+import { ParticipantSelector } from "../forms";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Textarea } from "../ui/textarea";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
+type Props = {
+	owner: UserType;
+};
+
+type PermissionType =
+	| "can_view_letter"
+	| "can_comment_letter"
+	| "can_update_letter"
+	| "can_share_letter";
+
+type FormDataType = {
+	message: string;
+	permissions: PermissionType;
+};
 type SelectType = {
 	id: string;
-	value: string;
+	value: PermissionType;
 	label: string;
 };
 
@@ -55,150 +85,100 @@ const permissions: SelectType[] = [
 		value: "can_share_letter",
 		label: "ማጋራት ይችላል",
 	},
-	// {
-	// 	 id:uuidv4.v4(),
-	//   value: "transfer_ownership",
-	//   label: "ባለቤትነትን ያስተላልፉ",
-	// },
-	// {
-	//   id:uuidv4.v4(),
-	//   value: "remove_access",
-	//   label: "ፈቃድን ያስወግዱ",
-	// },
 ];
 
-export default function ShareLetterDialog({
-	letter,
-}: {
-	letter: LetterDetailType;
-}) {
-	const [formData] = useState<ShareLetterRequestType>({
-		to: [],
+function ShareLetterDialog({ owner }: Props) {
+	const { reference_number, language, participants } = useLetterRevisionStore();
+	const {
+		addParticipant,
+		removeParticipant,
+		resetParticipants,
+		participants: newCollaborators,
+	} = useCollaboratorStore();
+
+	const { mutate: shareLetterMutation } = useToastMutation<
+		[string, ShareLetterRequestType]
+	>("shareLetter", shareLetter, "ደብዳቤውን ለተገለጹት ተባባሪዎች በማጋራት፣ እባክዎ ይጠብቁ...");
+
+	const { mutate: deleteParticipantMutation } = useToastMutation<[string]>(
+		"deleteParticipant",
+		deleteParticipant,
+		"ፈቃዶችን በማስወገድ ላይ፣ እባክዎ ይጠብቁ..."
+	);
+
+	const [formData, setFormData] = useState<FormDataType>({
 		message: "",
 		permissions: "can_view_letter",
 	});
 
-	// const filteredOptions = useMemo(() => {
-	// 	return contacts.filter((contact) => {
-	// 		return !letterDetails?.participants.some(
-	// 			(participant) => participant.user.id === contact.id
-	// 		);
-	// 	});
-	// }, [contacts, letterDetails?.participants]);
+	const handleMessageChange = (message: string) => {
+		setFormData((prevData: FormDataType) => ({ ...prevData, message }));
+	};
 
-	// const handleSelectChange = (
-	// 	option: readonly ContactType[],
-	// 	actionMeta: ActionMeta<ContactType>
-	// ) => {
-	// 	const { action, option: selectedOption, removedValue } = actionMeta;
-
-	// 	const handleSelectOption = (selectedOption: ContactType) => {
-	// 		const user_id = selectedOption.id;
-	// 		setFormData((prevData: IShareLetterFormData) => ({
-	// 			...prevData,
-	// 			to: [...prevData.to, user_id],
-	// 		}));
-	// 	};
-
-	// 	const handleRemoveValue = (removedValue: ContactType) => {
-	// 		const user_id = removedValue.id;
-	// 		const ids = formData.to.filter((id) => id !== user_id);
-	// 		setFormData((prevData: IShareLetterFormData) => ({
-	// 			...prevData,
-	// 			to: ids,
-	// 		}));
-	// 	};
-	// 	const handleClear = () => {
-	// 		setFormData((prevData: IShareLetterFormData) => ({
-	// 			...prevData,
-	// 			to: [],
-	// 		}));
-	// 	};
-
-	// 	switch (action) {
-	// 		case "select-option":
-	// 			if (selectedOption) handleSelectOption(selectedOption);
-	// 			break;
-	// 		case "remove-value":
-	// 			if (removedValue) handleRemoveValue(removedValue);
-	// 			break;
-	// 		case "clear":
-	// 			handleClear();
-	// 			break;
-	// 		default:
-	// 			break;
-	// 	}
-	// };
-
-	// const getLabel = (option: ContactType): string => {
-	// 	if (option.user_type === "member") {
-	// 		return `${option.full_name} - ${option.job_title}`;
-	// 	} else {
-	// 		return `${option.name}`;
-	// 	}
-	// };
-
-	// const getValue = (option: ContactType): string => {
-	// 	if (option.user_type === "member") {
-	// 		return option.id;
-	// 	} else {
-	// 		return option.name;
-	// 	}
-	// };
-
-	// const handleMessageChange = (message: string) => {
-	// 	setFormData((prevData: IShareLetterFormData) => ({ ...prevData, message }));
-	// };
-
-	// const handlePermissionChange = (value: PermissionType) => {
-	// 	setFormData((prevData: IShareLetterFormData) => ({
-	// 		...prevData,
-	// 		permissions: [value],
-	// 	}));
-	// };
+	const handlePermissionChange = (value: PermissionType) => {
+		setFormData((prevData: FormDataType) => ({
+			...prevData,
+			permissions: value,
+		}));
+	};
 
 	const handleSubmit = () => {
-		// dispatch(
-		// 	shareLetter({
-		// 		reference_number: letterDetails?.reference_number,
-		// 		participants: formData,
-		// 	})
-		// );
-		// setFormData({
-		// 	to: [],
-		// 	message: "",
-		// 	permissions: ["can_view_letter"],
-		// });
+		shareLetterMutation([
+			reference_number,
+			{
+				participants: generateDraftParticipant(newCollaborators),
+				message: formData.message,
+				permissions: [formData.permissions],
+			},
+		]);
 	};
 
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant={"outline"}>ደብዳቤውን አጋራ</Button>
-			</DialogTrigger>
-			<DialogContent className="flex max-h-[40rem] min-w-[45rem] max-w-[45rem] flex-col">
-				<DialogHeader className="flex-1 p-2">
-					<DialogTitle>የደብዳቤ መምሪያ</DialogTitle>
-
-					<div className="flex items-center gap-1.5 py-3">
+		<Dialog onOpenChange={resetParticipants}>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<DialogTrigger asChild>
+							<Button size={"icon"} variant={"outline"}>
+								<Share2 size={20} />
+							</Button>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent side="bottom" align="center">
+						<p>ደብዳቤውን አጋራ</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
+			<DialogContent className="max-h-[40rem] min-w-[45rem] max-w-[45rem]">
+				<DialogHeader>
+					<DialogTitle>የደብዳቤ ማጋሪያ</DialogTitle>
+					<DialogDescription>
+						ይህን ደብዳቤ ልታጋራቸው የምትፈልጋቸውን ሰዎች ምረጥ፣ ፈቃዶቻቸውን አዘጋጅ እና ከደብዳቤው ጋር የሚላክ መልእክት
+						ጻፍ።
+					</DialogDescription>
+				</DialogHeader>
+				<section>
+					<div className="flex items-center gap-2">
 						<Label className="w-5">ለ</Label>
-						{/* <ReactSelect
-							isMulti
-							onChange={handleSelectChange}
-							options={filteredOptions.filter(
-								(contact) => contact.user_type === "member"
-							)}
-							placeholder="ለማን እንደሚጋራ ይምረጡ"
-							getOptionLabel={getLabel}
-							getOptionValue={getValue}
-							className="w-full"
-						/> */}
-						{formData.to.length > 0 ? (
+						<ParticipantSelector
+							language={language}
+							prefix={""}
+							isDisabled={false}
+							name={RoleEnum["COLLABORATOR"]}
+							placeholder="እባክዎ የደብዳቤው ለማን እንደሚጋራ ይምረጡ"
+							participantScope="internal_staff"
+							participants={participants}
+							addParticipant={addParticipant}
+							removeParticipant={removeParticipant}
+							value={getDefaultValue(newCollaborators, RoleEnum["COLLABORATOR"])}
+							classNamePrefix="none"
+						/>
+						{newCollaborators.length ? (
 							<Select
-								value={formData.permissions[0]}
-								// onValueChange={handlePermissionChange}
+								value={formData.permissions}
+								onValueChange={handlePermissionChange}
 							>
-								<SelectTrigger className="w-[150px]">
+								<SelectTrigger className="w-[200px] text-start">
 									<SelectValue placeholder="ማየት ይችላል" />
 								</SelectTrigger>
 								<SelectContent>
@@ -212,61 +192,107 @@ export default function ShareLetterDialog({
 						) : null}
 					</div>
 					<div className="mt-4 flex flex-col gap-2">
-						{formData.to.length === 0 ? (
+						{!newCollaborators.length ? (
 							<div className="flex flex-col gap-2">
 								<h4 className="font-semibold">ደብዳቤው ያላቸው ሰዎች</h4>
 
 								<div className="flex items-center gap-3">
 									<Avatar className="h-11 w-11">
 										<AvatarFallback>
-											{letter.owner?.full_name.substring(0, 2)}
+											{getInitials(
+												language === LanguageEnum.English
+													? owner.full_name_en
+													: owner.full_name_am
+											)}
 										</AvatarFallback>
 									</Avatar>
-									<p>{`${letter.owner.full_name} - ${letter.owner.job_title}`}</p>
+									<p className="flex flex-col">
+										<span>
+											{language === LanguageEnum.English
+												? owner.job_title.title_en
+												: owner.job_title.title_am}
+										</span>
+										<span className="text-sm text-gray-600">
+											{language === LanguageEnum.English
+												? owner.full_name_en
+												: owner.full_name_am}
+										</span>
+									</p>
 									<p className="ml-auto text-gray-400">ባለቤት</p>
 								</div>
 
-								{letter.participants
+								{participants
 									.filter(
 										(participant) =>
-											participant.role === RoleEnum.COLLABORATOR &&
-											participant.user.user_type === "member"
+											participant.participant_type === "user" &&
+											participant.role === RoleEnum.COLLABORATOR
 									)
-									.map((participant) => {
-										const { id, user } = participant;
-										if (user.user_type === "member") {
-											const { full_name, job_title } = user;
-											return (
-												<div key={id} className="flex items-center gap-3">
-													<Avatar className="h-11 w-11">
-														<AvatarFallback>{full_name.substring(0, 2)}</AvatarFallback>
-													</Avatar>
-													<p>{`${full_name} - ${job_title}`}</p>
-													{/* <p className="ml-auto text-gray-400">ባለቤት</p> */}
-												</div>
-											);
-										}
-										return null;
+									.map((p) => {
+										const collaborator = p as {
+											id: string;
+											role: RoleEnum;
+											user: UserType;
+											participant_type: "user";
+										};
+
+										return (
+											<div key={collaborator.id} className="flex items-center gap-3">
+												<Avatar className="h-11 w-11">
+													<AvatarFallback>
+														{getInitials(
+															language === LanguageEnum.English
+																? collaborator.user.full_name_en
+																: collaborator.user.full_name_am
+														)}
+													</AvatarFallback>
+												</Avatar>
+												<p className="flex flex-col">
+													<span>
+														{language === LanguageEnum.English
+															? collaborator.user.job_title.title_en
+															: collaborator.user.job_title.title_am}
+													</span>
+													<span className="text-sm text-gray-600">
+														{language === LanguageEnum.English
+															? collaborator.user.full_name_en
+															: collaborator.user.full_name_am}
+													</span>
+												</p>
+												<TooltipProvider>
+													<Tooltip>
+														<TooltipTrigger className="ml-auto" asChild>
+															<Button
+																size={"sm"}
+																variant={"ghost"}
+																onClick={() => deleteParticipantMutation([collaborator.id])}
+															>
+																<X size={15} />
+															</Button>
+														</TooltipTrigger>
+														<TooltipContent side="bottom" align="center">
+															<p>ፍቃድ ያስወግድ</p>
+														</TooltipContent>
+													</Tooltip>
+												</TooltipProvider>
+											</div>
+										);
 									})}
 							</div>
 						) : (
 							<Textarea
 								placeholder="መልእክት ማስቀመጫ"
-								className="bg-gray-100"
 								value={formData.message || ""}
-								// onChange={(e) => handleMessageChange(e.target.value)}
+								onChange={(e) => handleMessageChange(e.target.value)}
 							/>
 						)}
 					</div>
-				</DialogHeader>
+				</section>
 				<DialogFooter>
 					<DialogClose asChild>
 						<Button variant={"outline"}>ሰርዝ</Button>
 					</DialogClose>
 					<Button
-						disabled={
-							formData.message === "" || formData.to.length === 0 ? true : false
-						}
+						disabled={!newCollaborators.length || !formData.message}
 						onClick={handleSubmit}
 					>
 						ምራ
@@ -276,3 +302,5 @@ export default function ShareLetterDialog({
 		</Dialog>
 	);
 }
+
+export default memo(ShareLetterDialog);

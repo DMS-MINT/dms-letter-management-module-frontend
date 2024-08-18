@@ -8,13 +8,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useLetterStore, useUserStore } from "@/stores";
+import { useDraftLetterStore, useUserStore } from "@/lib/stores";
 import { LanguageEnum } from "@/types/shared";
 import { Languages, Mail, Paperclip } from "lucide-react";
 
 export default function LetterComposeDrawer() {
 	const is_staff = useUserStore((state) => state.currentUser.is_staff);
-	const { updateLetterField, letter_type, language } = useLetterStore(
+	const { updateLetterField, letter_type, language } = useDraftLetterStore(
 		(state) => ({
 			letter_type: state.letter_type,
 			language: state.language,
@@ -22,7 +22,7 @@ export default function LetterComposeDrawer() {
 		})
 	);
 
-	const handleLetterTypeChange = (type: string): void => {
+	const handleLetterCategoryChange = (type: string): void => {
 		updateLetterField("letter_type", type);
 	};
 
@@ -37,7 +37,7 @@ export default function LetterComposeDrawer() {
 					<Mail size={20} className="text-gray-600" />
 					<p className="text-gray-600">የደብዳቤ ዓይነት</p>
 				</div>
-				<Select value={letter_type} onValueChange={handleLetterTypeChange}>
+				<Select value={letter_type} onValueChange={handleLetterCategoryChange}>
 					<SelectTrigger>
 						<SelectValue placeholder="የደብዳቤ ዓይነት ይምረጡ" />
 					</SelectTrigger>

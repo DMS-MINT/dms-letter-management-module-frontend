@@ -34,31 +34,40 @@ import {
 	useState,
 } from "react";
 import { Textarea } from "../ui/textarea";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 export type ActionConfirmModalRef = {
-	getOTP: () => number;
+	getOTP: () => string;
 	message: string;
 };
 
 type ActionConfirmModalProps = {
 	triggerButtonIcon?: React.ReactNode;
-
+	triggerButtonSize?: "default" | "sm" | "lg" | "icon" | null | undefined;
+	triggerButtonTooltip?: string;
 	disabledButton?: boolean;
 	triggerButtonText: string;
 	triggerButtonVariant: "default" | "destructive" | "outline" | "third";
-	requriresMessage?: boolean;
 	dialogTitle: string;
 	dialogDescription: string;
 	confirmButtonText: string;
 	cancelButtonText: string;
 	onConfirm: () => void;
 	requiresAuth: boolean;
+	requiresMessage?: boolean;
 };
 
 function ActionConfirmModal(
 	{
 		triggerButtonIcon,
+		triggerButtonSize,
 		disabledButton,
+		triggerButtonTooltip,
 		triggerButtonText,
 		triggerButtonVariant,
 		dialogTitle,
@@ -67,7 +76,7 @@ function ActionConfirmModal(
 		cancelButtonText,
 		onConfirm,
 		requiresAuth,
-		requriresMessage,
+		requiresMessage,
 	}: ActionConfirmModalProps,
 	ref: Ref<ActionConfirmModalRef>
 ) {
@@ -92,27 +101,36 @@ function ActionConfirmModal(
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button
-					type="button"
-					variant={triggerButtonVariant}
-					onClick={() => {
-						form.reset();
-					}}
-					disabled={disabledButton}
-					className="flex gap-2"
-					size="sm"
-				>
-					{triggerButtonIcon && triggerButtonIcon}
-					{triggerButtonText}
-				</Button>
-			</DialogTrigger>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<DialogTrigger asChild>
+							<Button
+								type="button"
+								variant={triggerButtonVariant}
+								onClick={() => {
+									form.reset();
+								}}
+								disabled={disabledButton}
+								className="flex gap-2"
+								size={triggerButtonSize}
+							>
+								{triggerButtonIcon && triggerButtonIcon}
+								{triggerButtonText}
+							</Button>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent side="bottom" align="center">
+						<p>{triggerButtonTooltip || triggerButtonText}</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>{dialogTitle}</DialogTitle>
 					<DialogDescription>{dialogDescription}</DialogDescription>
 				</DialogHeader>
-				{requriresMessage ? (
+				{requiresMessage ? (
 					<Textarea
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}

@@ -1,68 +1,56 @@
 "use client";
 
+import { requestQRCode, signOut } from "@/actions/auth/action";
+import { getMyProfile } from "@/actions/user_module/action";
 import {
-	requestQRCode,
-	signOut,
-	validateOneTimePassword,
-} from "@/actions/auth/action";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import {
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSlot,
-} from "@/components/ui/input-otp";
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { LINKS } from "@/constants";
-import { useAppSelector } from "@/hooks";
-import { selectMyProfile } from "@/lib/features/user/userSlice";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useOTP } from "@/hooks";
+import { useUserStore } from "@/lib/stores";
+import type { CurrentUserType } from "@/types/user_module";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { OTPInputForm } from "../forms";
 import { Spinner } from "../helpers";
 import { Button } from "../ui/button";
 
-const formSchema = z.object({
-	otp: z
-		.number()
-		.int()
-		.refine(
-			(value) => {
-				const strValue = value.toString();
-				return strValue.length === 6 && /^[0-9]+$/.test(strValue);
-			},
-			{
-				message: "የአንድ ጊዜ የይለፍ ቃል ባለ 6-አሃዝ መሆን አለበት።",
-			}
-		),
-});
-
 export default function TwoFactorSetupDialog() {
-	const myProfile = useAppSelector(selectMyProfile);
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const router = useRouter();
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const { form, validateOTP, handleInputChange, isPending, getOTP, isSuccess } =
+		useOTP();
+	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
+
+	const { data: myProfile } = useQuery({
+		queryKey: ["getMyProfile"],
+		queryFn: async () => {
+			try {
+				const data = await getMyProfile();
+				setCurrentUser(data.my_profile);
+				return data.my_profile as CurrentUserType;
+			} catch (error: any) {
+				toast.error(error.message);
+			}
+		},
+		enabled: true,
 	});
+
+	useEffect(() => {
+		if (isSuccess) {
+			setIsDialogOpen(false);
+		}
+	}, [isSuccess]);
 
 	const { mutate: requestQRCodeMutate, data: qrCodeImage } = useMutation({
 		mutationKey: ["requestQRCode"],
@@ -79,30 +67,6 @@ export default function TwoFactorSetupDialog() {
 		},
 	});
 
-	const { mutate: validateOTPMutate, isPending } = useMutation({
-		mutationKey: ["validateOneTimePassword"],
-		mutationFn: async (otp: number) => {
-			const response = await validateOneTimePassword(otp);
-
-			if (!response.ok) throw response;
-
-			return response.message;
-		},
-		onMutate: () => {
-			toast.dismiss();
-			toast.loading("የእርስዎን የማረጋገጫ ኮድ በማረጋገጥ ላይ። እባክዎ ይጠብቁ...");
-		},
-		onSuccess: () => {
-			toast.dismiss();
-			toast.success("በተሳካ ሁኔታ የሁለት ደረጃ ማረጋገጫን አዘጋጅተዋል።");
-			setIsDialogOpen(false);
-		},
-		onError: (error: any) => {
-			toast.dismiss();
-			toast.error(error.message);
-		},
-	});
-
 	useEffect(() => {
 		if (!myProfile) return;
 
@@ -111,16 +75,6 @@ export default function TwoFactorSetupDialog() {
 			requestQRCodeMutate();
 		}
 	}, [myProfile, requestQRCodeMutate]);
-
-	const oneTimePassword = form.watch("otp");
-
-	const handleInputChange = (value: string) => {
-		form.setValue("otp", Number(value));
-	};
-
-	function onSubmit(values: z.infer<typeof formSchema>) {
-		validateOTPMutate(values.otp);
-	}
 
 	const { mutate: logOut } = useMutation({
 		mutationKey: ["signOut"],
@@ -139,87 +93,57 @@ export default function TwoFactorSetupDialog() {
 	});
 
 	return (
-		<section>
-			<Dialog open={isDialogOpen}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>የሁለት ደረጃ ማረጋገጫን አዘጋጅ</DialogTitle>
-						<DialogDescription>
-							የQR ኮድን ለመቃኘት የ
-							<Link
-								className="text-blue-800"
-								href={LINKS.google_authenticator}
-								target="_blank"
-							>
-								{" Google Authenticator "}
-							</Link>
-							ይጠቀሙ።
-						</DialogDescription>
-					</DialogHeader>
-					<div className="flex justify-center">
-						{qrCodeImage ? (
-							<Image
-								className="bg-white"
-								src={`data:image/png;base64,${qrCodeImage}`}
-								alt="QR code for two-factor authentication setup"
-								width={240}
-								height={240}
-							/>
-						) : (
-							<div className="flex aspect-square w-60 items-center justify-center">
-								<Spinner />
-							</div>
-						)}
-					</div>
-					<div>
-						<p className="text-center text-sm">
-							በማረጋገጫ መተግበሪያዎ የተፈጠረውን ባለ 6-አሃዝ የማረጋገጫ ኮድ ያስገቡ፡
-						</p>
-						<Form {...form}>
-							<form
-								onSubmit={(e) => {
-									e.preventDefault();
-									form.handleSubmit(onSubmit);
-								}}
-							>
-								<FormField
-									control={form.control}
-									name="otp"
-									render={() => (
-										<FormItem>
-											<FormLabel></FormLabel>
-											<FormControl>
-												<InputOTP maxLength={6} onChange={handleInputChange}>
-													<InputOTPGroup className="w-full">
-														{Array.from({ length: 6 }).map((_, index) => (
-															<InputOTPSlot key={index} index={index} className="flex-1" />
-														))}
-													</InputOTPGroup>
-												</InputOTP>
-											</FormControl>
-											<FormMessage className="form-error-message" />
-										</FormItem>
-									)}
-								/>
-							</form>
-						</Form>
-					</div>
-					<DialogFooter>
-						<Button variant={"outline"} onClick={() => logOut()}>
-							ከመተበሪያው ውጣ
-						</Button>
-						<Button
-							disabled={
-								!oneTimePassword || oneTimePassword.toString().length !== 6 || isPending
-							}
-							type="submit"
-							onClick={form.handleSubmit(onSubmit)}
+		<AlertDialog open={isDialogOpen}>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>የሁለት ደረጃ ማረጋገጫን አዘጋጅ</AlertDialogTitle>
+					<AlertDialogDescription>
+						የQR ኮድን ለመቃኘት የ
+						<Link
+							className="text-blue-800"
+							href={LINKS.google_authenticator}
+							target="_blank"
 						>
-							ቀጥል
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
-		</section>
+							{" Google Authenticator "}
+						</Link>
+						ይጠቀሙ።
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+				<div className="flex justify-center">
+					{qrCodeImage ? (
+						<Image
+							className="bg-white"
+							src={`data:image/png;base64,${qrCodeImage}`}
+							alt="QR code for two-factor authentication setup"
+							width={240}
+							height={240}
+						/>
+					) : (
+						<div className="flex aspect-square w-60 items-center justify-center">
+							<Spinner />
+						</div>
+					)}
+				</div>
+				<div>
+					<p className="text-center text-sm">
+						በማረጋገጫ መተግበሪያዎ የተፈጠረውን ባለ 6-አሃዝ የማረጋገጫ ኮድ ያስገቡ፡
+					</p>
+					<OTPInputForm showLabel={false} form={form} onChange={handleInputChange} />
+				</div>
+				<AlertDialogFooter>
+					<Button variant={"outline"} onClick={() => logOut()} className="mr-auto">
+						<LogOut size={20} />
+						ዘግተህ ውጣ
+					</Button>
+					<Button
+						disabled={!getOTP() || getOTP().length !== 6 || isPending}
+						type="submit"
+						onClick={form.handleSubmit(validateOTP)}
+					>
+						ቀጥል
+					</Button>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 	);
 }

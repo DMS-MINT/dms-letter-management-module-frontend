@@ -17,9 +17,10 @@ import { memo } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 type OTPInputFormProps = {
+	showLabel: boolean;
 	form: UseFormReturn<
 		{
-			otp: number;
+			otp: string;
 		},
 		any,
 		undefined
@@ -27,7 +28,7 @@ type OTPInputFormProps = {
 	onChange: (_value: string) => void;
 };
 
-function OTPInputForm({ form, onChange }: OTPInputFormProps) {
+function OTPInputForm({ showLabel, form, onChange }: OTPInputFormProps) {
 	return (
 		<Form {...form}>
 			<form
@@ -40,7 +41,7 @@ function OTPInputForm({ form, onChange }: OTPInputFormProps) {
 					name="otp"
 					render={() => (
 						<FormItem>
-							<FormLabel>የአንድ ጊዜ የይለፍ ቃልዎን ያስገቡ</FormLabel>
+							{showLabel ? <FormLabel>የአንድ ጊዜ የይለፍ ቃልዎን ያስገቡ</FormLabel> : null}
 							<FormControl>
 								<InputOTP maxLength={6} onChange={onChange}>
 									<InputOTPGroup className="w-full">

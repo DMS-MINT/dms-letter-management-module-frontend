@@ -11,13 +11,12 @@ import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
 interface BatchParamsType {
 	referenceNumbers: string[];
-	otp?: number;
+	otp?: string;
 }
 
 export async function getLetters(category: string) {
 	try {
 		const response = await axiosInstance.get(`letters/?category=${category}`);
-
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
@@ -49,7 +48,7 @@ export async function createAndSubmitLetter({
 	otp,
 }: {
 	letter: DraftLetterType;
-	otp: number;
+	otp: string;
 }) {
 	try {
 		const response = await axiosInstance.post("letters/create_and_submit/", {
@@ -68,7 +67,7 @@ export async function createAndPublishLetter({
 	otp,
 }: {
 	letter: DraftLetterType;
-	otp: number;
+	otp: string;
 }) {
 	try {
 		const response = await axiosInstance.post("letters/create_and_publish/", {
@@ -82,17 +81,12 @@ export async function createAndPublishLetter({
 	}
 }
 
-export async function updateLetter(
-	referenceNumber: string,
-	letter: ModifiedLetterType
-) {
+export async function updateLetter(params: [string, ModifiedLetterType]) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/update/`,
-			letter
-		);
+		const [referenceNumber, letter] = params;
+		await axiosInstance.put(`letters/${referenceNumber}/update/`, letter);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: "ለውጦችን በተሳካ ሁኔታ ተቀምጠዋል።" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
