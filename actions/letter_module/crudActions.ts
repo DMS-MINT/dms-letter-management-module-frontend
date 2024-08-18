@@ -81,17 +81,12 @@ export async function createAndPublishLetter({
 	}
 }
 
-export async function updateLetter(
-	referenceNumber: string,
-	letter: ModifiedLetterType
-) {
+export async function updateLetter(params: [string, ModifiedLetterType]) {
 	try {
-		const response = await axiosInstance.put(
-			`letters/${referenceNumber}/update/`,
-			letter
-		);
+		const [referenceNumber, letter] = params;
+		await axiosInstance.put(`letters/${referenceNumber}/update/`, letter);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: "ለውጦችን በተሳካ ሁኔታ ተቀምጠዋል።" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
 	}
