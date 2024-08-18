@@ -1,8 +1,10 @@
-export type NotificationType = {
-	to: string[]; // Array of recipient IDs
-	message: string; // Notification message
-	channels: string[]; // Array of channels
-	details: Record<string, unknown>; // Details as a JSON object with dynamic structure
+export type NotificationCreateDTO = {
+	to: string[];
+	message: string;
+	channels: ("in-app" | "email" | "sms")[];
+	details: {
+		source: "user";
+	} & Record<string, unknown>;
 };
 //channels: enum('email', 'sms', 'in-app')
 

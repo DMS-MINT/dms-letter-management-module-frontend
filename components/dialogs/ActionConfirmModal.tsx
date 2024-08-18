@@ -34,6 +34,12 @@ import {
 	useState,
 } from "react";
 import { Textarea } from "../ui/textarea";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 export type ActionConfirmModalRef = {
 	getOTP: () => string;
@@ -42,6 +48,7 @@ export type ActionConfirmModalRef = {
 
 type ActionConfirmModalProps = {
 	triggerButtonIcon?: React.ReactNode;
+	triggerButtonSize?: "default" | "sm" | "lg" | "icon" | null | undefined;
 	triggerButtonTooltip?: string;
 	disabledButton?: boolean;
 	triggerButtonText: string;
@@ -58,6 +65,7 @@ type ActionConfirmModalProps = {
 function ActionConfirmModal(
 	{
 		triggerButtonIcon,
+		triggerButtonSize,
 		disabledButton,
 		triggerButtonTooltip,
 		triggerButtonText,
@@ -93,30 +101,30 @@ function ActionConfirmModal(
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button
-					type="button"
-					variant={triggerButtonVariant}
-					onClick={() => {
-						form.reset();
-					}}
-					disabled={disabledButton}
-					className="flex gap-2"
-					size={"icon"}
-				>
-					{triggerButtonIcon && triggerButtonIcon}
-					{triggerButtonText}
-				</Button>
-				{/* <TooltipProvider>
-					<Tooltip>
-						<TooltipTrigger>
-						</TooltipTrigger>
-						<TooltipContent side="bottom" align="center">
-							<p>{triggerButtonTooltip}</p>
-						</TooltipContent>
-					</Tooltip>
-				</TooltipProvider> */}
-			</DialogTrigger>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<DialogTrigger asChild>
+							<Button
+								type="button"
+								variant={triggerButtonVariant}
+								onClick={() => {
+									form.reset();
+								}}
+								disabled={disabledButton}
+								className="flex gap-2"
+								size={triggerButtonSize}
+							>
+								{triggerButtonIcon && triggerButtonIcon}
+								{triggerButtonText}
+							</Button>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent side="bottom" align="center">
+						<p>{triggerButtonTooltip || triggerButtonText}</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 			<DialogContent className="flex flex-col rounded-md bg-white p-4 shadow-lg">
 				<DialogHeader className="flex-1 p-2">
 					<DialogTitle>{dialogTitle}</DialogTitle>

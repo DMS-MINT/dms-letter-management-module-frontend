@@ -135,11 +135,20 @@ function ShareLetterDialog({ owner }: Props) {
 
 	return (
 		<Dialog onOpenChange={resetParticipants}>
-			<DialogTrigger asChild>
-				<Button size={"icon"} variant={"outline"}>
-					<Share2 size={20} />
-				</Button>
-			</DialogTrigger>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<DialogTrigger asChild>
+							<Button size={"icon"} variant={"outline"}>
+								<Share2 size={20} />
+							</Button>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent side="bottom" align="center">
+						<p>ደብዳቤውን አጋራ</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 			<DialogContent className="max-h-[40rem] min-w-[45rem] max-w-[45rem]">
 				<DialogHeader>
 					<DialogTitle>የደብዳቤ ማጋሪያ</DialogTitle>
@@ -251,7 +260,7 @@ function ShareLetterDialog({ owner }: Props) {
 												</p>
 												<TooltipProvider>
 													<Tooltip>
-														<TooltipTrigger className="ml-auto">
+														<TooltipTrigger className="ml-auto" asChild>
 															<Button
 																size={"sm"}
 																variant={"ghost"}

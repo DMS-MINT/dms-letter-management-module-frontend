@@ -11,8 +11,11 @@ import { Toaster } from "sonner";
 const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Letter Management System",
+	title: "የእኔ መገለጫ",
 	description: "Efficiently manage and organize your letters.",
+	icons: {
+		icon: "/icons/favicon.ico",
+	},
 };
 
 export default function RootLayout({

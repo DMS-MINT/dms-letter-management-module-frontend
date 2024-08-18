@@ -67,7 +67,7 @@ export default function useWebsocket<T>({
 				clearTimeout(reconnectTimeout.current);
 			}
 		};
-	}, [connect]);
+	}, []);
 
 	return {};
 }

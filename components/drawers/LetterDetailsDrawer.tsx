@@ -16,7 +16,7 @@ import {
 	MessageSquareText,
 	Paperclip,
 } from "lucide-react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, memo, useMemo } from "react";
 
 interface ILetterMetaData {
 	label: string;
@@ -24,36 +24,36 @@ interface ILetterMetaData {
 	icon: React.JSX.Element;
 }
 
-export default function LetterDetailsDrawer({
-	letter,
+function LetterDetailsDrawer({
+	letter: {
+		language,
+		letter_type,
+		reference_number,
+		reference_number_am,
+		comments,
+	},
 }: {
 	letter: LetterDetailType;
 }) {
-	const [letterMeta, setLetterMeta] = useState<ILetterMetaData[]>([]);
-
-	useEffect(() => {
-		const LetterMetaData: ILetterMetaData[] = [
+	const letterMeta: ILetterMetaData[] = useMemo(() => {
+		return [
 			{
 				label: "የደብዳቤ አይነት",
-				value: letterTypeTranslations[letter.letter_type.toUpperCase()],
+				value: letterTypeTranslations[letter_type.toUpperCase()],
 				icon: <Mail size={20} className="text-gray-600" />,
 			},
 			{
 				label: "የመዝገብ ቁጥር",
-				value:
-					letter.language === "English"
-						? letter.reference_number
-						: letter.reference_number_am,
+				value: language === "English" ? reference_number : reference_number_am,
 				icon: <FileDigit size={20} className="text-gray-600" />,
 			},
 			{
 				label: "ቋንቋ",
-				value: letter.language,
+				value: language,
 				icon: <Languages size={20} className="text-gray-600" />,
 			},
 		];
-		setLetterMeta(LetterMetaData);
-	}, [letter]);
+	}, [language, reference_number, reference_number_am, letter_type]);
 
 	return (
 		<section className="flex flex-col gap-10">
@@ -80,7 +80,7 @@ export default function LetterDetailsDrawer({
 						<div className="flex flex-col gap-5">
 							<a className="flex w-fit items-center gap-2" href="#comment_section">
 								<MessageSquareText size={20} className="text-gray-600" />
-								<p className="text-gray-600">{letter.comments?.length || 0}</p>
+								<p className="text-gray-600">{comments.length}</p>
 							</a>
 						</div>
 					</TooltipTrigger>
@@ -90,3 +90,5 @@ export default function LetterDetailsDrawer({
 		</section>
 	);
 }
+
+export default memo(LetterDetailsDrawer);

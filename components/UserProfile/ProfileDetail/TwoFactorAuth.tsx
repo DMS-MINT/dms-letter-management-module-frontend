@@ -1,8 +1,8 @@
 "use client";
 import {
-	type ICredentials,
 	requestQRCode,
 	signIn,
+	type ICredentials,
 } from "@/actions/auth/action";
 import { getMyProfile } from "@/actions/user_module/action";
 import { Spinner } from "@/components/helpers";
@@ -119,10 +119,6 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 
 		requestQRCodeMutate();
 	}, [myProfile, requestQRCodeMutate]);
-
-	useEffect(() => {
-		console.log(qrCodeImage); // Log the QR code image data
-	}, [qrCodeImage]);
 
 	return (
 		<div className="my-10 space-y-4">

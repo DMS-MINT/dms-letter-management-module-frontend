@@ -12,7 +12,6 @@ import {
 	isEnterpriseType,
 	isOptionDisabled,
 	isUserType,
-	type GroupedOption,
 	type OptionType,
 	type ParticipantScopeType,
 } from "@/lib/utils/participantUtils";
@@ -28,8 +27,6 @@ import { memo } from "react";
 import ReactSelect, {
 	components,
 	type IndicatorsContainerProps,
-	type MenuListProps,
-	type MenuProps,
 	type MultiValueGenericProps,
 	type MultiValueRemoveProps,
 	type OptionProps,
@@ -66,6 +63,7 @@ function ParticipantSelector({
 				toast.error(error.message);
 			}
 		},
+		staleTime: Infinity,
 	});
 
 	const { handleMultiSelectChange } = useParticipantSelector({
@@ -94,21 +92,6 @@ function ParticipantSelector({
 		) : (
 			<components.MultiValueRemove {...props}></components.MultiValueRemove>
 		);
-	};
-
-	const Menu = (props: MenuProps<OptionType, false, GroupedOption>) => {
-		return (
-			<components.Menu<OptionType, false, GroupedOption>
-				{...props}
-				className="bg-black"
-			>
-				{props.children}
-			</components.Menu>
-		);
-	};
-
-	const MenuList = (props: MenuListProps<OptionType, false, GroupedOption>) => {
-		return <components.MenuList {...props}>{props.children}</components.MenuList>;
 	};
 
 	const Option = (props: OptionProps<OptionType>) => {
@@ -179,8 +162,6 @@ function ParticipantSelector({
 				IndicatorsContainer,
 				MultiValueRemove,
 				Option,
-				// @ts-expect-error Type mismatch for MenuList component in ReactSelect
-				MenuList,
 			}}
 			isOptionDisabled={(option) => isOptionDisabled(option, participants)}
 			{...reactSelectProps}

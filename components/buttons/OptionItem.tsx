@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials } from "@/lib/utils/getInitials";
 
 type OptionItemProps = {
 	imageSrc?: string | null | undefined;
@@ -13,10 +14,10 @@ export default function OptionItem({
 }: OptionItemProps) {
 	return (
 		<div className="flex items-center gap-2">
-			<Avatar className="">
+			<Avatar>
 				<AvatarImage src={imageSrc || ""} />
 				<AvatarFallback className="bg-blue-200 text-sm">
-					{primaryText.substring(0, 2)}
+					{getInitials(primaryText)}
 				</AvatarFallback>
 			</Avatar>
 			<div>
