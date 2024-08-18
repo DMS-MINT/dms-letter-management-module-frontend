@@ -1,61 +1,53 @@
 "use client";
 
-import { Bell, EllipsisVertical } from "lucide-react";
-import { useState } from "react";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { AlarmClock, Ellipsis } from "lucide-react";
+import { memo, useCallback, useState } from "react";
 import { PingNotificationModal } from "../dialogs/PingNotificationModal";
 import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Separator } from "../ui/separator";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "../ui/tooltip";
 
-export default function ActionDropDown({ letterRef }: { letterRef: string }) {
-	const [isModalOpen, setIsModalOpen] = useState(false);
+type Props = {
+	current_state: string;
+};
 
-	const handleOpenModal = () => setIsModalOpen(true);
-	const handleCloseModal = () => setIsModalOpen(false);
+function ActionDropDown({ current_state }: Props) {
+	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+	const handleClick = useCallback(() => {
+		setIsDialogOpen((prev) => !prev);
+	}, []);
 
 	return (
 		<>
-			<Popover>
-				<PopoverTrigger>
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger>
-								<Button variant={"outline"} size={"sm"}>
-									<EllipsisVertical size={15} />
-								</Button>
-							</TooltipTrigger>
-							<TooltipContent side="bottom" align="center">
-								<p>ተጨማሪ</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				</PopoverTrigger>
-				<PopoverContent className="flex w-[140px] flex-col gap-1 px-1">
-					<p className="text-center text-sm">ተጨማሪ</p>
-					<Separator />
-					<Button
-						variant={"ghost"}
-						size={"sm"}
-						className="flex items-center gap-2 text-sm"
-						onClick={handleOpenModal}
-					>
-						<Bell size={15} className="text-green-500" />
-						ማሳወቂያ ላክ
-					</Button>
-				</PopoverContent>
-			</Popover>
-
 			<PingNotificationModal
-				open={isModalOpen}
-				onClose={handleCloseModal}
-				letterRef={letterRef}
+				open={isDialogOpen}
+				handleClick={handleClick}
+				current_state={current_state}
 			/>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button size={"icon"} variant={"outline"}>
+						<Ellipsis size={20} />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent className="mr-7 min-w-[15rem] max-w-[15rem]">
+					<DropdownMenuLabel>ተጨማሪ አማራጮች</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem onClick={handleClick}>
+						<AlarmClock size={20} className="mr-2" />
+						<span>ማስታወሻ ማዋቀሪያ</span>
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</>
 	);
 }
+
+export default memo(ActionDropDown);
