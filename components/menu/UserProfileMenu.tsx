@@ -7,18 +7,24 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
+	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DOCS } from "@/constants";
 import { useUserStore } from "@/lib/stores";
 import { getInitials } from "@/lib/utils/getInitials";
 import type { CurrentUserType } from "@/types/user_module";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CircleHelp, LogOut, MonitorPlay, UserRound } from "lucide-react";
+import { FileText, LifeBuoy, LogOut, SquarePlay, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import NotificationPopover from "../drawers/NotificationDrawer";
-import { Separator } from "../ui/separator";
 import { VideoDialog } from "./VideoDialog";
 
 export default function UserProfileMenu() {
@@ -57,7 +63,7 @@ export default function UserProfileMenu() {
 	});
 
 	const handleSupport = () => {
-		window.open("/Training.pdf", "_blank");
+		window.open(DOCS.user_manual, "_blank");
 	};
 	const handleSupportVideo = () => {
 		setVideoDialogOpen(true);
@@ -85,43 +91,38 @@ export default function UserProfileMenu() {
 					</Avatar>
 				</DropdownMenuTrigger>
 
-				<DropdownMenuContent className="mr-2 flex flex-col">
-					<DropdownMenuItem className="flex w-full gap-3">
-						<div className="flex flex-col items-center ">
-							<p className="text-sm">{myProfile.full_name_am}</p>
-							<span className="text-xs text-muted-foreground">
-								{myProfile.department.department_name_am}
-							</span>
-						</div>
+				<DropdownMenuContent className="mr-5 min-w-[20rem] max-w-[20rem]">
+					<DropdownMenuLabel className="flex flex-col items-start">
+						<p>{myProfile.full_name_am}</p>
+						<p className="text-sm text-gray-600">{myProfile.job_title.title_am}</p>
+					</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem onClick={() => router.push("/myaccount")}>
+						<User size={20} className="mr-2" />
+						<span>የእኔ መገለጫ</span>
 					</DropdownMenuItem>
-					<Separator className="mb-1 h-1" />
-
-					<DropdownMenuItem
-						onClick={() => handleSupport()}
-						className="flex w-full gap-4"
-					>
-						<CircleHelp size={20} />
-						እርዳታ
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						onClick={() => handleSupportVideo()}
-						className="flex w-full gap-4"
-					>
-						<MonitorPlay size={20} />
-						የቪዲዮ እርዳታ
-					</DropdownMenuItem>
-					<Separator />
-					<DropdownMenuItem
-						onClick={() => router.push("/myaccount")}
-						className="flex w-full gap-4"
-					>
-						<UserRound size={20} />
-						የእኔ መገለጫ
-					</DropdownMenuItem>
-					<Separator />
+					<DropdownMenuSub>
+						<DropdownMenuSubTrigger>
+							<LifeBuoy size={20} className="mr-2" />
+							<span>የእገዛ ማዕከል</span>
+						</DropdownMenuSubTrigger>
+						<DropdownMenuPortal>
+							<DropdownMenuSubContent className="mr-2">
+								<DropdownMenuItem onClick={() => handleSupport()}>
+									<FileText size={20} className="mr-2" />
+									<span>የተጠቃሚ መመሪያ</span>
+								</DropdownMenuItem>
+								<DropdownMenuItem onClick={() => handleSupportVideo()}>
+									<SquarePlay size={20} className="mr-2" />
+									<span>የቪዲዮ አጋዥ ስልጠና</span>
+								</DropdownMenuItem>
+							</DropdownMenuSubContent>
+						</DropdownMenuPortal>
+					</DropdownMenuSub>
+					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => logOut()} className="flex w-full gap-4">
 						<LogOut size={20} />
-						ውጣ
+						<span>ውጣ</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>

@@ -26,10 +26,10 @@ type LetterCategoryTranslations = {
 	[key: string]: string;
 };
 
-interface Params {
+type Params = {
 	category?: string;
 	referenceNumber?: string;
-}
+};
 
 const letterCategoryTranslations: LetterCategoryTranslations =
 	letterCategoryTranslationsData;
