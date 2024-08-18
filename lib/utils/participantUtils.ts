@@ -158,6 +158,12 @@ export const isUserType = (option: any): option is UserType => {
 	return option.job_title ? true : false;
 };
 
+export const isUserParticipantType = (
+	participant: ParticipantDetailType
+): participant is ParticipantDetailType & { user: UserType } => {
+	return participant.participant_type === "user";
+};
+
 export const isEnterpriseType = (option: any): option is EnterpriseType => {
 	return option.name_en ? true : false;
 };
