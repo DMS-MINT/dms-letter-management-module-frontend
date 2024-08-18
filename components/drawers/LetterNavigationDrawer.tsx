@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/stores";
 import clsx from "clsx";
-import { FileText, Inbox, Send, Trash } from "lucide-react";
+import { CheckCheck, FileText, Inbox, Loader, Send, Trash } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -56,15 +56,15 @@ export default function LetterNavigationDrawer() {
 			},
 			{
 				id: uuidv4.v4(),
-				name: "መጽደቅን በመጠባበቅ ላይ",
-				icon: <></>,
+				name: "በመጠባበቅ ላይ",
+				icon: <Loader size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/pending",
 				isVisible: currentUser.is_staff,
 			},
 			{
 				id: uuidv4.v4(),
-				name: "የጸደቀ ደብዳቤ",
-				icon: <></>,
+				name: "የታተሙ",
+				icon: <CheckCheck size={ICON_SIZE} color={ICON_COLOR} />,
 				path: "/letters/published",
 				isVisible: currentUser.is_staff,
 			},
