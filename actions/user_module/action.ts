@@ -15,9 +15,9 @@ export async function getMyProfile() {
 	}
 }
 
-export async function getUsers() {
+export async function getUsers(is_staff: boolean = false) {
 	try {
-		const response = await axiosInstance.get("users/");
+		const response = await axiosInstance.get(`users/?is_staff=${is_staff}`);
 
 		return { ok: true, message: response.data.users };
 	} catch (error: any) {
