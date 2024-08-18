@@ -31,6 +31,12 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { toast } from "sonner";
 import { OTPInputForm } from "../forms";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "../ui/tooltip";
 
 export type ActionType = "create_and_submit" | "create_and_publish";
 
@@ -119,25 +125,34 @@ export default function SubmitLetterDialog({
 
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button
-					type="button"
-					disabled={
-						!canSubmitLetter({
-							subject,
-							body,
-							letter_type,
-							language,
-							participants,
-						})
-					}
-					onClick={() => {
-						form.reset();
-					}}
-				>
-					<Send size={15} />
-				</Button>
-			</DialogTrigger>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<DialogTrigger asChild>
+							<Button
+								type="button"
+								disabled={
+									!canSubmitLetter({
+										subject,
+										body,
+										letter_type,
+										language,
+										participants,
+									})
+								}
+								onClick={() => {
+									form.reset();
+								}}
+							>
+								<Send size={15} />
+							</Button>
+						</DialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent side="bottom" align="center">
+						<p>ወደ መዝገብ ቢሮ አስተላልፍ</p>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 			<DialogContent>
 				<DialogHeader className="gap-2">
 					<DialogTitle>ማንነትዎን ያረጋግጡ</DialogTitle>

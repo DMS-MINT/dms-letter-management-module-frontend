@@ -6,9 +6,13 @@ import getErrorMessage from "../getErrorMessage";
 import { notificationErrorMessages } from "./errorMessages";
 
 // Mark notification as notified
-export async function MarkNotificationAsNotified(notification_id: string) {
+export async function markNotificationAsNotified(notification_id: string) {
+	console.log(
+		"🚀 ~ markNotificationAsNotified ~ notification_id:",
+		notification_id
+	);
 	try {
-		const response = await axiosInstance.post(
+		const response = await axiosInstance.put(
 			`/notifications/${notification_id}/notified/`
 		);
 		return { ok: true, message: response.data };
@@ -21,9 +25,10 @@ export async function MarkNotificationAsNotified(notification_id: string) {
 }
 
 // Get all notifications
-export async function GetNotifications() {
+export async function getNotifications() {
 	try {
 		const response = await axiosInstance.get("/notifications/");
+
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return {
@@ -34,7 +39,7 @@ export async function GetNotifications() {
 }
 
 // Mark notification as read
-export async function MarkNotificationAsRead(notification_id: string) {
+export async function markNotificationAsRead(notification_id: string) {
 	try {
 		const response = await axiosInstance.post(
 			`/notifications/${notification_id}/read/`

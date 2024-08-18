@@ -225,7 +225,11 @@ export function PingNotificationModal({
 					name={RoleEnum.COLLABORATOR}
 					isClearable={true}
 					isDisabled={false}
-					options={current_state === "Draft" ? getCollaborators : options}
+					options={
+						current_state === "Draft" || current_state === "Rejected"
+							? getCollaborators
+							: options
+					}
 					getOptionLabel={(option) => getLabel(option, language)}
 					getOptionValue={(option) => getValue(option, language)}
 					onChange={handleMultiSelectChange}

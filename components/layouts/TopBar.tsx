@@ -21,6 +21,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserProfileMenu } from "../menu";
+import { NotificationPanel } from "../panels";
 
 type LetterCategoryTranslations = {
 	[key: string]: string;
@@ -100,6 +101,7 @@ export default function TopBar() {
 			</div>
 
 			<div className="flex items-center gap-4">
+				<NotificationPanel />
 				<UserProfileMenu />
 			</div>
 		</header>
