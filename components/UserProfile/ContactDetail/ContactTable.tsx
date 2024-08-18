@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	AddContacts,
-	DeleteContacts,
-	UpdateContacts,
-} from "@/actions/user_module/action";
+import { DeleteContacts, getContacts } from "@/actions/user_module/action";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -29,30 +25,25 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useToastMutation } from "@/hooks";
 import { getInitials } from "@/lib/utils/getInitials";
-import { ContactType } from "@/types/user_module";
+import type { ContactType } from "@/types/user_module";
 import {
 	ChevronLeft,
 	ChevronRight,
 	CirclePlus,
 	MoreHorizontal,
-	Pencil,
 	Trash,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomSheet } from "../CustomSheet";
 
 const ITEMS_PER_PAGE = 5; // Number of items per page
 
-export default function ContactTable({
-	contacts,
-	refetchContacts,
-}: {
-	contacts: ContactType[];
-	refetchContacts: () => void;
-}) {
+export default function ContactTable() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [contacts, setContacts] = useState<ContactType[]>([]);
 	const [isSheetOpen, setIsSheetOpen] = useState(false);
 	const [selectedContact, setSelectedContact] = useState<ContactType | null>(
 		null
@@ -72,46 +63,24 @@ export default function ContactTable({
 		setIsSheetOpen(false);
 	};
 
-	const handleSave = async (updatedContact: ContactType) => {
-		const { id } = selectedContact || {};
-
-		if (isAdding) {
-			// Add new contact logic
-			const result = await AddContacts(updatedContact);
-			if (result.ok) {
-				console.log("New contact added:", result.message);
-			} else {
-				console.error("Error adding contact:", result.message);
-			}
-		} else {
-			// Update the contact logic
-			if (id) {
-				// Ensure the ID exists before updating
-
-				const result = await UpdateContacts(id, updatedContact);
-				if (result.ok) {
-					console.log("Updated contact:", result.message);
-					refetchContacts();
-				} else {
-					console.error("Error updating contact:", result.message);
-				}
-			} else {
-				console.error("Contact ID is missing");
-			}
-		}
-
-		setIsSheetOpen(false);
-	};
-
-	const handleDelete = async (id: string) => {
-		const result = await DeleteContacts(id);
+	const fetchContacts = async () => {
+		const result = await getContacts();
 		if (result.ok) {
-			console.log("Deleted contact:", result.message);
-			refetchContacts();
+			setContacts(result.message);
 		} else {
-			console.error("Error deleting contact:", result.message);
+			console.error("Error fetching contacts:", result.message);
 		}
 	};
+
+	useEffect(() => {
+		fetchContacts();
+	}, []);
+
+	const { mutate: deleteContactMutation } = useToastMutation<string>(
+		"deleteContact",
+		DeleteContacts,
+		"እውቂያዎችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+	);
 
 	// Filter contacts based on search query
 	const filteredContacts = contacts.filter((contact) => {
@@ -208,15 +177,15 @@ export default function ContactTable({
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuLabel>ተግባሮች</DropdownMenuLabel>
-											<DropdownMenuItem
+											{/* <DropdownMenuItem
 												onClick={() => handleOpenSheet(contact)}
 												className="flex items-center gap-2 text-green-500"
 											>
 												<Pencil size={15} /> አርም
-											</DropdownMenuItem>
+											</DropdownMenuItem> */}
 											<DropdownMenuItem
 												className="flex items-center gap-2 text-red-500"
-												onClick={() => handleDelete(contact.id)}
+												onClick={() => deleteContactMutation(contact.id)}
 											>
 												<Trash size={15} />
 												አጥፋ
@@ -265,7 +234,6 @@ export default function ContactTable({
 				isOpen={isSheetOpen}
 				onClose={handleCloseSheet}
 				contact={selectedContact}
-				onSave={handleSave}
 			/>
 		</Card>
 	);

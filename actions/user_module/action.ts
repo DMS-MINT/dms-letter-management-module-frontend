@@ -44,30 +44,30 @@ export async function getContacts() {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}
 }
+
 export async function AddContacts(data: NewContactType) {
 	try {
-		console.log("added contact", data);
-		const response = await axiosInstance.post("contacts/create/", data);
+		await axiosInstance.post("contacts/create/", data);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: "አዲስ እውቂያ ተገኝቷል።" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}
 }
 export async function UpdateContacts(id: string, data: NewContactType) {
 	try {
-		const response = await axiosInstance.post(`contacts/${id}/update/`, data);
+		await axiosInstance.post(`contacts/${id}/update/`, data);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: "እውቂያው በተሳካ ሁኔታ ተቀይሯል።" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}
 }
 export async function DeleteContacts(id: string) {
 	try {
-		const response = await axiosInstance.delete(`contacts/${id}/delete/`);
+		await axiosInstance.delete(`contacts/${id}/delete/`);
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: "እውቂያው በተሳካ ሁኔታ ተሰርዟል።" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}

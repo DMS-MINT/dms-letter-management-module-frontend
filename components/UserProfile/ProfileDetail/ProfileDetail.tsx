@@ -46,7 +46,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 				<p>ግለመረጃ</p>
 				<Badge className="bg-red-400 text-secondary-foreground">የማይለወጥ</Badge>
 			</span>
-			<div className="space-y-4 rounded-md border-2 border-gray-300 p-4">
+			<div className="space-y-4 rounded-md border-2  p-4">
 				{/* Row 1: First Name, Middle Name, Last Name */}
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 					<div className="space-y-2">
@@ -125,7 +125,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 				<p>አድራሻ</p>
 				<Badge>የሚለወጥ</Badge>
 			</span>
-			<div className="space-y-4 rounded-md border-2 border-gray-300 p-4">
+			<div className="space-y-4 rounded-md border-2  p-4">
 				{/* Row 2: Email, Phone */}
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div className="col-span-3 space-y-2 md:col-span-1">
@@ -158,7 +158,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 				<p>መምሪያ</p>
 				<Badge className="bg-red-400 text-secondary-foreground">የማይለወጥ</Badge>
 			</span>
-			<div className="space-y-4 rounded-md border-2 border-gray-300 p-4">
+			<div className="space-y-4 rounded-md border-2  p-4">
 				{/* Row 3: Department Name, Job Title */}
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					<div className="col-span-2 space-y-2 md:col-span-1">

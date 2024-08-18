@@ -1,3 +1,4 @@
+import { AddContacts } from "@/actions/user_module/action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,8 +8,10 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { ContactType } from "@/types/user_module";
+import { useToastMutation } from "@/hooks";
+import type { ContactType, NewContactType } from "@/types/user_module";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CirclePlus } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -28,8 +31,8 @@ const contactSchema = z.object({
 	phone_number: z
 		.string()
 		.regex(
-			/^\+2519\d{8}$/,
-			"Phone number must start with +2519 and be 13 digits long"
+			/^\+251\d{9}$/,
+			"Phone number must start with +251 and be 13 digits long"
 		),
 	email: z.string().email({ message: "Invalid email address" }),
 });
@@ -39,7 +42,6 @@ type CustomSheetProps = {
 	onClose: () => void;
 	contact: ContactType | null;
 	isAdding: boolean;
-	onSave: (contact: ContactType) => void;
 };
 
 export function CustomSheet({
@@ -47,15 +49,13 @@ export function CustomSheet({
 	onClose,
 	contact,
 	isAdding,
-	onSave,
 }: CustomSheetProps) {
 	const {
 		register,
 		handleSubmit,
-		setValue,
 		reset,
 		formState: { errors },
-	} = useForm<ContactType>({
+	} = useForm<NewContactType>({
 		defaultValues: {
 			full_name_en: contact?.full_name_en || "",
 			full_name_am: contact?.full_name_am || "",
@@ -63,18 +63,25 @@ export function CustomSheet({
 				city_en: contact?.address?.city_en || "",
 				city_am: contact?.address?.city_am || "",
 			},
-			phone_number: contact?.phone_number || 0,
+			phone_number: contact?.phone_number || +251,
 			email: contact?.email || "",
 		},
 		resolver: zodResolver(contactSchema),
 	});
 
-	const onSubmit = (data: ContactType) => {
+	const { mutate: addContactMutation } = useToastMutation<NewContactType>(
+		"addContact",
+		AddContacts,
+		"እውቂያዎችን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+	);
+
+	const onSubmit = (data: NewContactType) => {
 		// Convert phone_number to string if needed before saving
 		data.phone_number = Number(data.phone_number);
-		onSave(data);
+		addContactMutation(data);
 		onClose();
 	};
+
 	useEffect(() => {
 		if (contact) {
 			reset({
@@ -88,21 +95,19 @@ export function CustomSheet({
 					city_en: "",
 					city_am: "",
 				},
-				phone_number: 0,
+				phone_number: +251,
 				email: "",
 			});
 		}
 	}, [contact, isOpen, reset]);
 	return (
 		<Sheet open={isOpen} onOpenChange={onClose}>
-			<SheetContent className="max-w-lg pr-0">
+			<SheetContent className="max-w-lg pl-4 pr-0">
 				<SheetHeader>
-					<SheetTitle>{isAdding ? "Add Contact" : "Edit Contact"}</SheetTitle>
-					<SheetDescription>
-						Fill in the contact details accurately.
-					</SheetDescription>
+					<SheetTitle>{isAdding ? "አዲስ እውቂያዎች ማስገቢያ" : "እውቂያዎች ማረሚያ"}</SheetTitle>
+					<SheetDescription>የእውቂያ ዝርዝሮችን በትክክል ይሙሉ።</SheetDescription>
 				</SheetHeader>
-				<div className="my-4 h-[90%] overflow-y-auto pr-4">
+				<div className="my-4 h-[90%] overflow-y-auto pl-1 pr-4">
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="space-y-2">
 							<div>
@@ -158,11 +163,14 @@ export function CustomSheet({
 								)}
 							</div>
 						</div>
-						<div className="mt-4 flex justify-end gap-2">
-							<Button type="button" onClick={onClose}>
-								Cancel
+						<div className="mt-4 flex justify-between gap-2">
+							<Button type="button" onClick={onClose} size={"sm"} variant={"outline"}>
+								አጥፋ
 							</Button>
-							<Button type="submit">{isAdding ? "Add" : "Save"}</Button>
+							<Button type="submit" size={"sm"} className="flex items-center gap-2">
+								<CirclePlus size={15} />
+								{isAdding ? "አስገባ" : "አስቀምጥ"}
+							</Button>
 						</div>
 					</form>
 				</div>

@@ -5,8 +5,8 @@ export type ContactType = {
 	full_name_en: string;
 	full_name_am: string;
 	address: AddressType;
-	email?: string | null;
-	phone_number?: number | null;
+	email: string | null;
+	phone_number: number | null;
 };
 
 export type NewContactType = {

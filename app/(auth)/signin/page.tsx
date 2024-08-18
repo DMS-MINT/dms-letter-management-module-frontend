@@ -5,7 +5,6 @@ import { signIn } from "@/actions/auth/action";
 import { BrandingSection } from "@/components/helpers";
 import { LetterSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
 	Form,
 	FormControl,
@@ -18,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -106,11 +104,11 @@ export default function SignIn() {
 								<FormItem>
 									<FormLabel className="flex justify-between">
 										የይለፍ ቃልዎን ያስገቡ
-										<Link href="/forgot-password" tabIndex={4}>
+										{/* <Link href="/forgot-password" tabIndex={4}>
 											<Button type="button" variant="link" className="h-fit py-0">
 												የይለፍ ቃልዎን ረስተዋል?
 											</Button>
-										</Link>
+										</Link> */}
 									</FormLabel>
 									<FormControl>
 										<div className="relative ">
@@ -135,7 +133,7 @@ export default function SignIn() {
 								</FormItem>
 							)}
 						/>
-						<FormField
+						{/* <FormField
 							control={form.control}
 							name="remember"
 							render={({ field }) => (
@@ -153,7 +151,7 @@ export default function SignIn() {
 									<FormMessage className="form-error-message" />
 								</FormItem>
 							)}
-						/>
+						/> */}
 
 						<Button
 							disabled={isPending}
