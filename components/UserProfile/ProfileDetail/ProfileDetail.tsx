@@ -1,10 +1,9 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { CurrentUserType } from "@/types/user_module";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle, MailCheck, Tag, UserCheck } from "lucide-react";
+import { MailCheck, Tag, UserCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -210,12 +209,12 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 				</div>
 			</div>
 
-			<div className="flex justify-end">
+			{/* <div className="flex justify-end">
 				<Button type="submit" className="flex items-center gap-2">
 					<CheckCircle size={18} />
 					ለውጡን አስቀምጥ
 				</Button>
-			</div>
+			</div> */}
 		</form>
 	);
 };
