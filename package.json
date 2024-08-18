@@ -102,6 +102,7 @@
 		"react-day-picker": "^8.10.1",
 		"react-dom": "^18",
 		"react-hook-form": "^7.52.1",
+		"react-hot-toast": "^2.4.1",
 		"react-loader-spinner": "^6.1.6",
 		"react-select": "^5.8.0",
 		"react-time-picker": "^7.0.0",
