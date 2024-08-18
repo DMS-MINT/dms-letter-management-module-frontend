@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
 import { useLetterRevisionStore } from "@/lib/stores";
@@ -11,6 +10,7 @@ import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
+import { Button } from "../ui/button";
 import ActionDropDown from "./ActionDropDown";
 import SaveUpdatedLetter from "./SaveUpdatedLetter";
 
@@ -27,22 +27,13 @@ export type ButtonConfigType = {
 };
 
 type Props = {
+	current_state: string;
 	owner: UserType;
 	permissions: PermissionsType;
 };
 
-function ActionButtons({ owner, permissions }: Props) {
-	const {
-		subject,
-		body,
-		letter_type,
-		reference_number,
-		published_at,
-		participants,
-		updateLetterField,
-		addParticipant,
-		removeParticipant,
-	} = useLetterRevisionStore();
+function ActionButtons({ owner, current_state, permissions }: Props) {
+	const { letter_type, reference_number } = useLetterRevisionStore();
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
 
@@ -114,6 +105,7 @@ function ActionButtons({ owner, permissions }: Props) {
 						triggerButtonText=""
 						triggerButtonTooltip="ወደ መዝገብ ቢሮ አስተላልፍ"
 						triggerButtonIcon={<Send size={20} />}
+						triggerButtonSize="icon"
 						triggerButtonVariant="default"
 						dialogTitle="ወደ መዝገብ ቢሮ አስተላልፍ"
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
@@ -127,11 +119,6 @@ function ActionButtons({ owner, permissions }: Props) {
 						requiresAuth={true}
 					/>
 				),
-			},
-			{
-				id: uuidv4.v4(),
-				isVisible: permissions.can_share_letter,
-				component: <ActionDropDown letterRef={reference_number} />,
 			},
 			{
 				id: uuidv4.v4(),
@@ -214,8 +201,29 @@ function ActionButtons({ owner, permissions }: Props) {
 				size: "default",
 				action: () => handleAction("reopen_letter"),
 			},
+			{
+				id: uuidv4.v4(),
+				isVisible: permissions.can_share_letter,
+				component: <ActionDropDown current_state={current_state} />,
+			},
 		];
-	}, [permissions, owner]);
+	}, [
+		current_state,
+		handleAction,
+		letter_type,
+		owner,
+		permissions.can_close_letter,
+		permissions.can_permanently_delete_letter,
+		permissions.can_publish_letter,
+		permissions.can_reject_letter,
+		permissions.can_reopen_letter,
+		permissions.can_restore_letter,
+		permissions.can_retract_letter,
+		permissions.can_share_letter,
+		permissions.can_submit_letter,
+		permissions.can_trash_letter,
+		permissions.can_update_letter,
+	]);
 
 	return (
 		<>
