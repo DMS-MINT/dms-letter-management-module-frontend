@@ -1,7 +1,5 @@
 "use client";
 
-import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
-
 export default function RefNoAndDate({
 	reference_number,
 	published_at,
@@ -29,7 +27,7 @@ export default function RefNoAndDate({
 				</span>
 				<div className="mb-1 flex w-full flex-col self-end">
 					<span className="text-center">
-						{convertToEthiopianDate(published_at) || ""}
+						{/* {convertToEthiopianDate(published_at) || ""} */}
 					</span>
 					<hr className="w-full border-black" />
 				</div>
