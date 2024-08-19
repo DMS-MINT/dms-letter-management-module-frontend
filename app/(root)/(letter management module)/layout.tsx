@@ -3,10 +3,13 @@ import { RequireAuth } from "@/components/hoc";
 import { TopBar } from "@/components/layouts";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
-import { Noto_Serif_Ethiopic } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "sonner";
 
-const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
+// const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
+const myFont = localFont({
+	src: "../../../public/fonts/NotoSerifEthiopic-VariableFont_wdth,wght.ttf",
+});
 
 export const metadata: Metadata = {
 	title: "የደብዳቤ አስተዳደር ሞጁል",
@@ -23,7 +26,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="am">
-			<body className={noto_serif_ethiopic.className}>
+			<body className={myFont.className}>
 				<Providers>
 					<RequireAuth>
 						<div className="flex h-full flex-col">
