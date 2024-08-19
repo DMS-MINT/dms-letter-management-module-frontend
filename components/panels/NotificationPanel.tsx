@@ -41,7 +41,7 @@ export default function NotificationPanel() {
 											<div className="flex-shrink-0 pt-0.5">
 												<Avatar>
 													<AvatarFallback className="bg-blue-200 text-sm">
-														{getInitials(details.sender.full_name)}
+														{getInitials(details?.sender?.full_name || "ሎረ")}
 													</AvatarFallback>
 												</Avatar>
 											</div>
@@ -59,7 +59,6 @@ export default function NotificationPanel() {
 									<div className="flex border-l border-gray-200">
 										<button
 											onClick={() => {
-												console.log(id);
 												toast.dismiss(t.id);
 												mutate(id);
 											}}

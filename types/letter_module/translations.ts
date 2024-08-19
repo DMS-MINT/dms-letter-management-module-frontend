@@ -12,8 +12,8 @@ export const letterCategoryTranslations: Record<string, string> = {
 	DRAFT: "ረቂቆች",
 	ARCHIVE: "ማህደር",
 	TRASH: "መጣያ",
-	PENDING: "መጽደቅን በመጠባበቅ ላይ",
-	PUBLISHED: "የጸደቀ ደብዳቤ",
+	PENDING: "በመጠባበቅ ላይ",
+	PUBLISHED: "የጸደቁ ደብዳቤዎች",
 };
 
 export const letterStatusTranslations: Record<string, string> = {
