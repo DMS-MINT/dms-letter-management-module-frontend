@@ -128,7 +128,7 @@ export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
 	try {
 		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/trash/", {
+		await axiosInstance.put("letters/bulk/trash/", {
 			reference_numbers,
 		});
 
@@ -144,7 +144,7 @@ export async function restoreFromTrashBatch({
 }: BatchParamsType) {
 	try {
 		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/restore/", {
+		await axiosInstance.put("letters/bulk/restore/", {
 			reference_numbers,
 		});
 
@@ -161,7 +161,7 @@ export async function permanentlyDeleteBatch({
 }: BatchParamsType) {
 	try {
 		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/permanently_delete/", {
+		await axiosInstance.put("letters/bulk/delete/", {
 			reference_numbers,
 			otp,
 		});

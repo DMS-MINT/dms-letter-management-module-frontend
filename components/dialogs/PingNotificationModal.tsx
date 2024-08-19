@@ -259,7 +259,7 @@ export function PingNotificationModal({
 								<FormItem>
 									<FormLabel className="text-base">ማሳወቂያ ዓይነቶች</FormLabel>
 									<FormDescription>ለመላክ የሚፈልጓቸውን የማሳወቂያ ዓይነቶች ይምረጡ።</FormDescription>
-									{notificationChannels.map((channel, index) => (
+									{notificationChannels.map((channel) => (
 										<div key={channel.id} className="flex items-center space-x-2">
 											<Switch
 												checked={field.value.includes(channel.id)}
