@@ -38,8 +38,8 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 	const currentUser = useUserStore((state) => state.currentUser);
 	const [createMode, setCreateMode] = useState<boolean>(false);
 	const [selectedCommentId, setSelectedCommentId] = useState<string>("");
-	const [updatedContent, setUpdatedContent] = useState<string>("");
-	const [content, setContent] = useState<string>("");
+	const [updatedMessage, setUpdatedMessage] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
 	const { mutate: createCommentMutation } =
 		useToastMutation<CreateCommentParams>(
 			"createComment",
@@ -58,15 +58,15 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 		"አስተያየቶችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
 	);
 
-	const toggleEditMode = (id: string = "", content: string = "") => {
+	const toggleEditMode = (id: string = "", message: string = "") => {
 		setSelectedCommentId(id);
-		setUpdatedContent(content);
+		setUpdatedMessage(message);
 	};
 
 	const toggleCreateMode = () => {
 		setCreateMode(!createMode);
 		setSelectedCommentId("");
-		setUpdatedContent("");
+		setUpdatedMessage("");
 	};
 
 	return (
@@ -130,7 +130,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 									className="px-2"
 									onClick={() => {
 										const reference_number = letter.reference_number;
-										createCommentMutation({ reference_number, content });
+										createCommentMutation({ reference_number, message });
 									}}
 								>
 									<Check size={18} className="text-green-500" />
@@ -142,9 +142,9 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 						</div>
 						<div>
 							<Textarea
-								value={content}
+								value={message}
 								onChange={(e) => {
-									setContent(e.target.value);
+									setMessage(e.target.value);
 								}}
 							/>
 						</div>
@@ -153,7 +153,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 			) : null}
 
 			{letter.comments.map(
-				({ id, content, created_at, author: { full_name_am, job_title } }) => (
+				({ id, message, created_at, author: { full_name_am, job_title } }) => (
 					<div key={id} className="flex min-h-16 gap-6">
 						<div className="flex w-[50px] flex-col items-center">
 							<Separator
@@ -193,7 +193,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 												onClick={() =>
 													updateCommentMutation({
 														comment_id: selectedCommentId,
-														content: updatedContent,
+														message: updatedMessage,
 													})
 												}
 											>
@@ -212,7 +212,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 											<Button
 												variant="ghost"
 												className="px-2"
-												onClick={() => toggleEditMode(id, content)}
+												onClick={() => toggleEditMode(id, message)}
 											>
 												<Pen size={18} className="text-gray-500" />
 											</Button>
@@ -231,13 +231,13 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 							<div>
 								{selectedCommentId === id ? (
 									<Textarea
-										value={updatedContent}
+										value={updatedMessage}
 										onChange={(e) => {
-											setUpdatedContent(e.target.value);
+											setUpdatedMessage(e.target.value);
 										}}
 									/>
-								) : content ? (
-									content
+								) : message ? (
+									message
 								) : (
 									""
 								)}
