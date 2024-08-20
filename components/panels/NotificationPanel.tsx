@@ -8,8 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { getInitials } from "@/lib/utils/getInitials";
 import type { NotificationDetailType } from "@/types/shared/NotificationType";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { X } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 export default function NotificationPanel() {
 	const { mutate } = useMutation({
@@ -56,17 +58,16 @@ export default function NotificationPanel() {
 											</div>
 										</div>
 									</div>
-									<div className="flex border-l border-gray-200">
-										<button
-											onClick={() => {
-												toast.dismiss(t.id);
-												mutate(id);
-											}}
-											className="flex w-full items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-										>
-											ዝጋ
-										</button>
-									</div>
+									<Button
+										size={"icon"}
+										variant={"ghost"}
+										onClick={() => {
+											toast.dismiss(t.id);
+											mutate(id);
+										}}
+									>
+										<X size={20} />
+									</Button>
 								</div>
 							),
 							{ duration: Infinity }
