@@ -109,6 +109,7 @@
 		"react-toastify": "^10.0.5",
 		"react-use-websocket": "^4.8.1",
 		"shadcn-ui": "^0.8.0",
+		"sharp": "^0.33.5",
 		"socket.io": "^4.7.5",
 		"socket.io-client": "^4.7.5",
 		"sonner": "^1.4.41",
