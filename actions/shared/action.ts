@@ -6,21 +6,21 @@ import { commentErrorMessages } from "./errorMessages";
 
 export type CreateCommentParams = {
 	reference_number: string;
-	content: string;
+	message: string;
 };
 
 export type UpdateCommentParams = {
 	comment_id: string;
-	content: string;
+	message: string;
 };
 
 export async function createComment({
 	reference_number,
-	content,
+	message,
 }: CreateCommentParams) {
 	try {
 		await axiosInstance.post(`comments/${reference_number}/create/`, {
-			content,
+			message,
 		});
 
 		return { ok: true, message: "ደብዳቤ ለተገለጹት ተባባሪዎች ተጋርቷል።" };
@@ -31,11 +31,14 @@ export async function createComment({
 
 export async function updateComment({
 	comment_id,
-	content,
+	message,
 }: UpdateCommentParams) {
+	console.log("🚀 ~ comment_id:", comment_id);
+	console.log("🚀 ~ message:", message);
+
 	try {
 		await axiosInstance.put(`comments/${comment_id}/update/`, {
-			content,
+			message,
 		});
 
 		return { ok: true, message: "አስተያየቱ በተሳካ ሁኔታ ተቀይሯል።" };
