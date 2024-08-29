@@ -24,6 +24,7 @@ import { FileText, LifeBuoy, LogOut, SquarePlay, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import NotificationPopover from "../drawers/NotificationDrawer";
 import { VideoDialog } from "./VideoDialog";
 
 export default function UserProfileMenu() {
@@ -77,6 +78,7 @@ export default function UserProfileMenu() {
 
 	return isSuccess && myProfile ? (
 		<div className="flex items-center gap-4">
+			<NotificationPopover />
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">

@@ -114,3 +114,25 @@ input[type="number"]::-webkit-inner-spin-button {
 .participant_selector__multi-value__label {
 	@apply !text-base;
 }
+
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari, Edge) */
+.hide-scrollbar::-webkit-scrollbar {
+	width: 5px;
+}
+.hide-scrollbar::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(60, 74, 86, 0.088);
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+	background-color: rgba(42, 128, 249, 0.307);
+}
+
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+	scrollbar-width: 8px;
+}
+
+/* Maintain scrollability */
+.hide-scrollbar {
+	overflow-y: auto; /* or scroll */
+}
