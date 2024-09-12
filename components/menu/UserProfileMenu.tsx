@@ -26,6 +26,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import NotificationPopover from "../drawers/NotificationDrawer";
 import { VideoDialog } from "./VideoDialog";
+import { handleLogout } from "@/actions/auth/remeberme";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
@@ -54,6 +55,7 @@ export default function UserProfileMenu() {
 			toast.loading("እርስዎን በማስወጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: () => {
+			handleLogout();
 			router.push("/signin");
 		},
 		onError: (errorMessage: string) => {
