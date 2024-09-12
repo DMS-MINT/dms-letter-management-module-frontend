@@ -149,7 +149,7 @@ function NotificationDrawer({
 					>
 						ከመተግበሪያው የተላኩ
 						<Badge variant="destructive" className="ml-1">
-							{systemNotifications.length}
+							{systemNotifications?.filter((n) => !n.has_read).length}
 						</Badge>
 					</TabsTrigger>
 					<TabsTrigger
@@ -158,7 +158,7 @@ function NotificationDrawer({
 					>
 						የከተጠቃሚ የተላኩ
 						<Badge variant="destructive" className="ml-1">
-							{userNotifications.length}
+							{userNotifications?.filter((n) => !n.has_read).length}
 						</Badge>
 					</TabsTrigger>
 				</TabsList>
