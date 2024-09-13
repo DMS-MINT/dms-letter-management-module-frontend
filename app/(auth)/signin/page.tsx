@@ -92,7 +92,8 @@ export default function SignIn() {
 		};
 
 		fetchCredentials();
-	});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		storeCredentials(values as ICredentials);
