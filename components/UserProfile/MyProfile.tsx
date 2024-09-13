@@ -63,7 +63,7 @@ const MyProfile = () => {
 						<AccordionTrigger className=" text-base hover:no-underline">
 							<span className="flex items-center gap-2">
 								<Contact size={25} />
-								የግል የእውቂያ መረጃ
+								የግል የማህደር መረጃ
 							</span>
 						</AccordionTrigger>
 						<AccordionContent>

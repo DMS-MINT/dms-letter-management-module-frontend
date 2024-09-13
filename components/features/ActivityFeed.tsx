@@ -44,18 +44,18 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 		useToastMutation<CreateCommentParams>(
 			"createComment",
 			createComment,
-			"አስተያየትዎን በማስቀመጥ ላይ፣ እባክዎ ይጠብቁ..."
+			"አስተያየትዎን በማስቀመጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ..."
 		);
 	const { mutate: updateCommentMutation } =
 		useToastMutation<UpdateCommentParams>(
 			"updateComment",
 			updateComment,
-			"ለውጦችን በማስቀመጥ ላይ ላይ፣ እባክዎ ይጠብቁ..."
+			"ለውጦችን በማስቀመጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ..."
 		);
 	const { mutate: deleteCommentMutation } = useToastMutation<string>(
 		"deleteComment",
 		deleteComment,
-		"አስተያየቶችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+		"አስተያየቶችዎን በመሰረዝ ላይ፣ እባክዎን ትንሽ ይጠብቁ..."
 	);
 
 	const toggleEditMode = (id: string = "", message: string = "") => {

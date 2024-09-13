@@ -48,11 +48,11 @@ export default function ColumnHeader<TData, TValue>({
 				<DropdownMenuContent align="start">
 					<DropdownMenuItem onClick={() => column.toggleSorting(false)}>
 						<MoveUp size={15} className="mr-2 text-muted-foreground/70" />
-						አሸቃቢ ሰርዓት
+						ከታች ወደ ላይ ቅደም ተከተል
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => column.toggleSorting(true)}>
 						<MoveDown size={15} className="mr-2 text-muted-foreground/70" />
-						አቆልቋይ ስርአት
+						ከላይ ወደ ታች በቅደም ተከተል
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => column.toggleVisibility(false)}>

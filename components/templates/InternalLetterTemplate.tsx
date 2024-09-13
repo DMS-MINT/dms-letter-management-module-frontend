@@ -24,7 +24,7 @@ export default function InternalLetterTemplate({
 				prefix={language === LanguageEnum.English ? "To" : "ለ"}
 				isDisabled={isLetterReadOnly}
 				name={RoleEnum["PRIMARY RECIPIENT"]}
-				placeholder="እባክዎ የደብዳቤውን ለማን እንደሚልኩ ያስገቡ"
+				placeholder="እባክዎን ደብዳቤውን ለማን እንደሚልኩ ያስገቡ"
 				participantScope="internal_staff"
 				participants={participants}
 				addParticipant={addParticipant}
@@ -52,7 +52,7 @@ export default function InternalLetterTemplate({
 							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["BLIND CARBON COPY RECIPIENT"]}
-							placeholder="እባክዎ ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
+							placeholder="እባክዎን ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
 							participantScope="internal_staff"
 							participants={participants}
 							addParticipant={addParticipant}
@@ -74,7 +74,7 @@ export default function InternalLetterTemplate({
 							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["CARBON COPY RECIPIENT"]}
-							placeholder="እባክዎ የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
+							placeholder="እባክዎን የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
 							participantScope="internal_staff"
 							participants={participants}
 							addParticipant={addParticipant}

@@ -16,11 +16,11 @@ export default function BrandingSection() {
 					የሰነድ አስተዳደር እና ኢ-ፊርማ
 				</h2>
 				<p className="text-sm font-light text-gray-200">
-					ለተጠቃሚ ምቹ የሆነ ሰነድ እና የፖስታ አስተዳደር፣ ፈጣን ፊርማዎች።
+					ለተጠቃሚ ምቹ ሰነዶች ፣ የደብዳቤ አስተዳደር እና ፊርማዎች።
 				</p>
 			</div>
 			<div className="flex items-end gap-2">
-				<p className="text-gray-200">በኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር በኩራት የተደገፈ</p>
+				<p className="text-gray-200">በኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር ስፖንሰር የተደረገ</p>
 				<Image
 					src={IMAGES.mint_logo}
 					alt="Ministry of Innovation and Technology logo"

@@ -66,7 +66,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎ ይጠብቁ...");
+			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
@@ -81,7 +81,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		if (values.email !== logedUser?.email)
-			return toast.error("እባኮ የራሶን ኢሜል ያስገቡ።");
+			return toast.error("እባክዎን የራሶን ኢሜል ያስገቡ።");
 		mutate(values as ICredentials);
 	}
 	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
@@ -233,7 +233,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 												</div>
 												<div className="col-span-2 space-y-2 md:col-span-1">
 													<label className="text-muted-forground block text-sm font-medium">
-														በድጋሜ አዲስ የሚስጥር ቁጥር - Confirm Password
+														በድጋሚ አዲስ የሚስጥር ቁጥር - Confirm Password
 													</label>
 													<Input type="text" className="mt-1 block w-full" />
 												</div>

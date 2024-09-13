@@ -35,11 +35,11 @@ export default function ComposeControlPanel() {
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
+			toast.loading("ደብዳቤዎን በመፍጠር ላይ፣ እባክዎን ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
-			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
+			toast.success("ደብዳቤዎ በተሳካ ሁኔታ ተፈጥሯል!");
 			resetContent();
 			resetParticipants();
 			router.push(`/letters/draft/${data.reference_number}`);

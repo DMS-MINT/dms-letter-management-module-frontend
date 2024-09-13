@@ -52,7 +52,7 @@ export default function UserProfileMenu() {
 		mutationFn: signOut,
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("እርስዎን በማስወጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
+			toast.loading("በመውጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: () => {
 			handleLogout();
