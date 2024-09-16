@@ -59,7 +59,8 @@ export default function SignIn() {
 			toast.dismiss();
 			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎ ይጠብቁ...");
 		},
-		onSuccess: (data) => {
+		onSuccess: (data, value) => {
+			storeCredentials(value);
 			toast.dismiss();
 			toast.success(data.message);
 			router.push("/letters/inbox");
@@ -96,7 +97,6 @@ export default function SignIn() {
 	}, []);
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		storeCredentials(values as ICredentials);
 		mutate(values as ICredentials);
 	}
 
