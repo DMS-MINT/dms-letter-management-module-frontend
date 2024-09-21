@@ -6,12 +6,14 @@ import { BlockEditor } from "../BlockEditor";
 import { Label } from "../ui/label";
 import Paper from "./Paper";
 import type { TemplateProps } from "./types";
+import { RefNoAndDate } from "@/components/templates";
 
 export default function InternalLetterTemplate({
 	editor,
 	language,
 	subject,
 	participants,
+	published_at,
 	isLetterReadOnly,
 	addParticipant,
 	removeParticipant,
@@ -19,6 +21,7 @@ export default function InternalLetterTemplate({
 }: TemplateProps) {
 	return (
 		<Paper>
+			<RefNoAndDate published_at={published_at} showRefNo={false} />
 			<ParticipantSelector
 				language={language}
 				prefix={language === LanguageEnum.English ? "To" : "ለ"}

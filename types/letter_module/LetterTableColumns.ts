@@ -7,7 +7,6 @@ export enum LetterTableColumns {
 	"SENDER" = "sender",
 	"RECIPIENT" = "recipient",
 	"LETTER_TYPE" = "letter_type",
-	"RECEIVED_AT" = "received_at",
 	"SUBMITTED_AT" = "submitted_at",
 	"PUBLISHED_AT" = "published_at",
 	"CREATED_AT" = "created_at",

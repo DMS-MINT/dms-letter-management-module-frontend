@@ -186,15 +186,15 @@ export const inboxTableColumns: LetterColumnDefType = [
 		},
 	},
 	{
-		accessorKey: LetterTableColumns.RECEIVED_AT,
+		accessorKey: LetterTableColumns.PUBLISHED_AT,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.RECEIVED_AT]}
+				title={columnTranslation[LetterTableColumns.PUBLISHED_AT]}
 			/>
 		),
 		cell: ({ row }) => {
-			const received_at: string = row.getValue(LetterTableColumns.RECEIVED_AT);
+			const received_at: string = row.getValue(LetterTableColumns.PUBLISHED_AT);
 			const { time, date } = convertToEthiopianDateAndTime(received_at);
 			return (
 				<div className="flex flex-col items-center text-xs font-normal text-muted-foreground">

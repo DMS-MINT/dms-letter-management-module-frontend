@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 import { monthTranslations } from "@/types/letter_module";
 const ethiopianDate = require("ethiopian-date");
 
@@ -25,14 +27,14 @@ export function convertToEthiopianDateAndTime(dateString: string): {
 		date.getDate()
 	);
 
-	// Formatting the time component
-	const hours = date.getHours().toString().padStart(2, "0");
-	const minutes = date.getMinutes().toString().padStart(2, "0");
-	// const seconds = date.getSeconds().toString().padStart(2, "0");
+	// const hours = date.getHours();
+	// const minutes = date.getMinutes().toString().padStart(2, "0");
 
-	// Return an object with separate parts
+	const dt = DateTime.fromJSDate(date);
+	const localTime = dt.setZone("Africa/Addis_Ababa").toFormat("hh:mm a");
+
 	return {
-		time: `${hours}:${minutes}`,
+		time: `${localTime}`,
 		date: `${monthTranslations[ethMonth]} ${ethDay}, ${ethYear}`,
 	};
 }
