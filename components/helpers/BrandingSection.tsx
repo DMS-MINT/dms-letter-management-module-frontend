@@ -19,16 +19,6 @@ export default function BrandingSection() {
 					ለተጠቃሚ ምቹ የሆነ ሰነድ እና የፖስታ አስተዳደር፣ ፈጣን ፊርማዎች።
 				</p>
 			</div>
-			<div className="flex items-end gap-2">
-				<p className="text-gray-200">በኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር በኩራት የተደገፈ</p>
-				<Image
-					src={IMAGES.mint_logo}
-					alt="Ministry of Innovation and Technology logo"
-					width={30}
-					height={60}
-					priority
-				/>
-			</div>
 		</section>
 	);
 }

@@ -28,9 +28,19 @@ export default function canSubmitLetter(
 		(participant) => participant.role === RoleEnum["PRIMARY RECIPIENT"]
 	);
 
+	const hasAuthor = letter.participants.some(
+		(participant) => participant.role === RoleEnum["AUTHOR"]
+	);
+
 	const hasSubject = letter.subject.trim() !== "";
 
 	const hasBody = !isBodyEmpty(letter.body);
+
+	const hasAttachment = true;
+
+	if (letter.letter_type === "incoming") {
+		return hasAuthor && hasPrimaryRecipient && hasSubject && hasAttachment;
+	}
 
 	return hasPrimaryRecipient && hasBody && hasSubject;
 }

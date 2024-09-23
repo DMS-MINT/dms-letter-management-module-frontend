@@ -10,6 +10,8 @@ export const curdErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.EMPTY_CONTENT]: "የደብዳቤው ይዘት ባዶ ሊሆን አይችልም።",
 	[ErrorCodeEnum.UNSIGNED_LETTER]: "ደብዳቤው ከመቀጠልዎ በፊት መፈረም አለበት።",
 	[ErrorCodeEnum.USERDEFAULTSIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
+	[ErrorCodeEnum.MISSING_ATTACHMENT]:
+		"ምንም ዓባሪ ስለሌለው ይህን ደብዳቤ ማተም አይችሉም። እባክዎ ከማተምዎ በፊት ቢያንስ አንድ ዓባሪ ያክሉ።",
 };
 
 export const deleteErrorMessages: ErrorMessageType = {

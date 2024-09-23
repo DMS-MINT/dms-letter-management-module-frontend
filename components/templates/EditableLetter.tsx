@@ -32,7 +32,7 @@ function EditableLetter({ editable }: { editable: boolean }) {
 		const templateMap: Record<string, React.FC<TemplateProps>> = {
 			internal: InternalLetterTemplate,
 			outgoing: OutgoingLetterTemplate,
-			IncomingLetterTemplate: IncomingLetterTemplate,
+			incoming: IncomingLetterTemplate,
 		};
 
 		return templateMap[letter_type] || null;

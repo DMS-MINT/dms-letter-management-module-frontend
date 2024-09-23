@@ -31,7 +31,7 @@ export default function Compose() {
 		const templateMap: Record<string, React.FC<TemplateProps>> = {
 			internal: InternalLetterTemplate,
 			outgoing: OutgoingLetterTemplate,
-			IncomingLetterTemplate: IncomingLetterTemplate,
+			incoming: IncomingLetterTemplate,
 		};
 
 		return templateMap[letter_type] || null;

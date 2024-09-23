@@ -1,6 +1,9 @@
 import { updateLetter } from "@/actions/letter_module/crudActions";
 import { useToastMutation } from "@/hooks";
-import { useLetterRevisionStore } from "@/lib/stores";
+import {
+	useAttachmentRevisionStore,
+	useLetterRevisionStore,
+} from "@/lib/stores";
 import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type { ModifiedLetterType } from "@/types/letter_module";
 import { Pencil } from "lucide-react";
@@ -16,7 +19,8 @@ import {
 export default function SaveUpdatedLetter() {
 	const { subject, body, participants, reference_number } =
 		useLetterRevisionStore();
-	const { mutate } = useToastMutation<[string, ModifiedLetterType]>(
+	const { newAttachments, removedAttachmentsIds } = useAttachmentRevisionStore();
+	const { mutate } = useToastMutation<[string, FormData]>(
 		"updateLetter",
 		updateLetter,
 		"ለውጦችን በማስቀመጥ ላይ፣ እባክዎ ይጠብቁ..."
@@ -27,12 +31,21 @@ export default function SaveUpdatedLetter() {
 	}, [participants]);
 
 	const onSubmit = () => {
+		const formData = new FormData();
 		const letter: ModifiedLetterType = {
 			subject,
 			body,
 			participants: draft_participants,
+			removedAttachmentsIds: removedAttachmentsIds,
 		};
-		mutate([reference_number, letter]);
+		formData.append("letter", JSON.stringify(letter));
+
+		newAttachments.forEach((attachment, index) => {
+			formData.append(`attachments[${index}].file`, attachment.file);
+			formData.append(`attachments[${index}].description`, attachment.description);
+		});
+
+		mutate([reference_number, formData]);
 	};
 
 	return (

@@ -8,9 +8,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { useDraftLetterStore, useUserStore } from "@/lib/stores";
+import {
+	useDraftAttachmentStore,
+	useDraftLetterStore,
+	useUserStore,
+} from "@/lib/stores";
 import { LanguageEnum } from "@/types/shared";
 import { Languages, Mail, Paperclip } from "lucide-react";
+import { FileUploadDialog } from "../dialogs";
 
 export default function LetterComposeDrawer() {
 	const is_staff = useUserStore((state) => state.currentUser.is_staff);
@@ -21,6 +26,14 @@ export default function LetterComposeDrawer() {
 			updateLetterField: state.updateLetterField,
 		})
 	);
+	const {
+		newAttachments,
+		removedAttachmentsIds,
+		addNewAttachment,
+		removeNewAttachment,
+		restoreUploadedAttachment,
+		removeUploadedAttachment,
+	} = useDraftAttachmentStore();
 
 	const handleLetterCategoryChange = (type: string): void => {
 		updateLetterField("letter_type", type);
@@ -79,6 +92,15 @@ export default function LetterComposeDrawer() {
 					<Paperclip size={20} className="text-gray-600" />
 					<p className="text-gray-600">የተያያዙ ፋይሎች</p>
 				</div>
+				<FileUploadDialog
+					editable={true}
+					newAttachments={newAttachments}
+					removedAttachmentsIds={removedAttachmentsIds}
+					addNewAttachment={addNewAttachment}
+					removeNewAttachment={removeNewAttachment}
+					restoreUploadedAttachment={restoreUploadedAttachment}
+					removeUploadedAttachment={removeUploadedAttachment}
+				/>
 			</div>
 		</section>
 	);

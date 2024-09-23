@@ -70,7 +70,10 @@ export default function LetterDetail({
 			</Subheader>
 			<section className="mt-2 flex flex-1 gap-6 px-5">
 				<Drawer>
-					<LetterDetailsDrawer letter={data.letter} />
+					<LetterDetailsDrawer
+						letter={data.letter}
+						editable={generateUserPermissions(data.permissions).can_update_letter}
+					/>
 				</Drawer>
 				<section className="flex-1 pb-5">
 					<section className="mb-5 flex flex-1 flex-col items-center bg-gray-100 py-5">
