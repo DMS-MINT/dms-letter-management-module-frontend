@@ -1,6 +1,8 @@
 "use client";
 import {
 	requestQRCode,
+	resetPassword,
+	setEmail,
 	signIn,
 	type ICredentials,
 } from "@/actions/auth/action";
@@ -36,6 +38,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
@@ -46,6 +49,8 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const [authenticated, setAuthenticated] = useState(false);
+	const [newPassword, setNewPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -119,6 +124,41 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 
 		requestQRCodeMutate();
 	}, [myProfile, requestQRCodeMutate]);
+
+	const router = useRouter();
+	const { mutate: resetPasswordMutate } = useMutation({
+		mutationKey: ["resetPassword"],
+		mutationFn: async () => {
+			if (newPassword !== confirmPassword) {
+				return toast.error("Passwords do not match!");
+			}
+			setEmail(logedUser.email);
+			// Pass email and new password to resetPassword function
+			const response = await resetPassword(newPassword, confirmPassword);
+
+			if (!response.ok) throw new Error("Failed to reset password.");
+
+			return response;
+		},
+		onMutate: () => {
+			toast.dismiss();
+			toast.loading("Resetting password, please wait...");
+		},
+		onError: (error: any) => {
+			toast.error(error.message);
+		},
+		onSuccess: () => {
+			toast.success("Password reset successfully!");
+			router.push("/signin");
+		},
+	});
+
+	const handleSubmit = () => {
+		if (!logedUser?.email) {
+			return toast.error("Email not found.");
+		}
+		resetPasswordMutate();
+	};
 
 	return (
 		<div className="my-10 space-y-4">
@@ -229,18 +269,28 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 													<label className="text-muted-forground block text-sm font-medium">
 														አዲስ የሚስጥር ቁጥር - New Password
 													</label>
-													<Input type="text" className="mt-1 block w-full" />
+													<Input
+														type="text"
+														className="mt-1 block w-full"
+														value={newPassword}
+														onChange={(e) => setNewPassword(e.target.value)}
+													/>
 												</div>
 												<div className="col-span-2 space-y-2 md:col-span-1">
 													<label className="text-muted-forground block text-sm font-medium">
 														በድጋሚ አዲስ የሚስጥር ቁጥር - Confirm Password
 													</label>
-													<Input type="text" className="mt-1 block w-full" />
+													<Input
+														type="text"
+														className="mt-1 block w-full"
+														value={confirmPassword}
+														onChange={(e) => setConfirmPassword(e.target.value)}
+													/>
 												</div>
 											</div>
 										</div>
 										<div className="flex justify-end">
-											<Button className="flex items-center gap-2">
+											<Button className="flex items-center gap-2" onClick={handleSubmit}>
 												<CheckCircle size={18} />
 												ለውጡን አስቀምጥ
 											</Button>
