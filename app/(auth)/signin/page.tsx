@@ -25,7 +25,7 @@ import { z } from "zod";
 import {
 	retrieveCredentials,
 	storeCredentials,
-} from "../../../actions/auth/remeberme";
+} from "@/actions/auth/remeberme";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 

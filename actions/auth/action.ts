@@ -17,6 +17,15 @@ export interface ICredentials {
 	password: string;
 }
 
+let storeEmail: string = "";
+export async function setEmail(email: string) {
+	storeEmail = email; // Set the value asynchronously
+}
+
+export async function getEmail() {
+	return storeEmail; // Retrieve the value asynchronously
+}
+
 export async function encrypt(payload: any) {
 	return await new SignJWT(payload)
 		.setProtectedHeader({ alg: "HS256" })
@@ -95,6 +104,61 @@ export async function validateOneTimePassword(otp: string) {
 	try {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
 
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
+	}
+}
+
+export async function forgotPassword(email: string) {
+	try {
+		const response = await axiosInstance.post("/auth/forgot-password/", {
+			email,
+		});
+		await setEmail(email);
+		console.log(storeEmail);
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		console.log("failed");
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
+	}
+}
+
+export async function verifyOTP(otpArray: number[]) {
+	const email: string = await getEmail();
+	console.log("Email retrieved:", email);
+	const otp: string = otpArray.join("");
+	try {
+		console.log("Sending OTP:", otp);
+		const response = await axiosInstance.post("/auth/verify-otp/", {
+			otp,
+			email,
+		});
+		console.log("Response received:", response.data);
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		console.error(
+			"Error during OTP verification:",
+			error.response ? error.response.data : error.message
+		);
+		return { ok: false, message: error.response?.data?.message || error.message };
+	}
+}
+
+export async function resetPassword(
+	newPassword: string,
+	confirmPassword: string
+) {
+	const email: string = await getEmail();
+	if (newPassword !== confirmPassword) {
+		return { ok: false, message: "Passwords do not match" };
+	}
+
+	try {
+		const response = await axiosInstance.post("/auth/reset-password/", {
+			new_password: newPassword,
+			email,
+		});
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };

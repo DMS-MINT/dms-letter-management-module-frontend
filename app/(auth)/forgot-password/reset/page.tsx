@@ -1,10 +1,16 @@
+"use client";
+
+import { resetPassword } from "@/actions/auth/action";
 import { BrandingSection } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Reset() {
+	const [newPassword, setNewPassword] = useState("");
+	const [confirmNewPassword, setConfirmNewPassword] = useState("");
 	return (
 		<main className="grid h-full grid-cols-2">
 			<BrandingSection />
@@ -20,7 +26,12 @@ export default function Reset() {
 				<form className="flex flex-col gap-5 ">
 					<div className="grid items-center gap-1.5">
 						<Label htmlFor="የላኪ ፖስታ ቁጥር">አዲስ የይለፍ ቃል ያስገቡ</Label>
-						<Input type="text" id="የላኪ ፖስታ ቁጥር" />
+						<Input
+							type="text"
+							id="የላኪ ፖስታ ቁጥር"
+							value={newPassword}
+							onChange={(e) => setNewPassword(e.target.value)}
+						/>
 						<div className="my-3 ml-5">
 							<ul className="list-disc text-sm font-light text-gray-700">
 								<li> የይለፍ ቃልህ ከሌላ የግል መረጃህ ጋር በጣም ተመሳሳይ ሊሆን አይችልም።</li>
@@ -33,10 +44,19 @@ export default function Reset() {
 					</div>
 					<div className="grid items-center gap-1.5">
 						<Label htmlFor="የላኪ ፖስታ ቁጥር">አዲሱን የይለፍ ቃልዎን ያረጋግጡ</Label>
-						<Input type="text" id="የላኪ ፖስታ ቁጥር" />
+						<Input
+							type="text"
+							id="የላኪ ፖስታ ቁጥር"
+							value={confirmNewPassword}
+							onChange={(e) => setConfirmNewPassword(e.target.value)}
+						/>
 					</div>
 					<Link href="/letters/inbox">
-						<Button variant="secondary" className="w-full">
+						<Button
+							variant="secondary"
+							className="w-full"
+							onClick={() => resetPassword(newPassword, confirmNewPassword)}
+						>
 							ጨርስ
 						</Button>
 					</Link>

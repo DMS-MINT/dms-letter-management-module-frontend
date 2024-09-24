@@ -1,11 +1,17 @@
+"use client";
+
+import { forgotPassword } from "@/actions/auth/action";
 import { BrandingSection } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function ForgotPassword() {
+	const [email, setEmail] = useState("");
+
 	return (
 		<main className="grid h-full grid-cols-2">
 			<BrandingSection />
@@ -21,17 +27,26 @@ export default function ForgotPassword() {
 				<form className="flex flex-col gap-5 ">
 					<div className="grid items-center gap-1.5">
 						<Label htmlFor="የላኪ ፖስታ ቁጥር">የተጠቃሚ መለያዎን ያስገቡ</Label>
-						<Input type="text" id="የላኪ ፖስታ ቁጥር" />
+						<Input
+							type="text"
+							id="የላኪ ፖስታ ቁጥር"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
 					</div>
 					<Link href="forgot-password/verify">
-						<Button variant="secondary" className="w-full">
+						<Button
+							variant="secondary"
+							className="w-full"
+							onClick={() => (forgotPassword(email), console.log(email))}
+						>
 							ቀጥል
 						</Button>
 					</Link>
 				</form>
 				<div className="flex items-center justify-between">
 					<Link href="/signin">
-						<Button variant="outline" className="flex items-center gap-2 ">
+						<Button variant="outline" className="flex items-center gap-2">
 							<ChevronLeft size={20} />
 							ተመለስ
 						</Button>

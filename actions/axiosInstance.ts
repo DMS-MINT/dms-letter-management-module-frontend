@@ -15,7 +15,12 @@ const axiosInstance: AxiosInstance = axios.create({
 // Add a request interceptor to include the session ID in every request
 axiosInstance.interceptors.request.use(
 	async (config) => {
-		if (!config.url?.includes("auth/login/")) {
+		if (
+			!config.url?.includes("auth/login/") &&
+			!config.url?.includes("auth/forgot-password/") &&
+			!config.url?.includes("auth/verify-otp/") &&
+			!config.url?.includes("auth/reset-password/")
+		) {
 			const session = await get_session();
 			const sessionId = session.sessionId;
 
