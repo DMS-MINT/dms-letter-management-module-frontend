@@ -59,7 +59,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 			password: "",
 		},
 	});
-	
+
 	const { mutate, isPending } = useMutation({
 		mutationKey: ["signIn"],
 		mutationFn: async (values: z.infer<typeof formSchema>) => {
@@ -129,7 +129,6 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	const { mutate: resetPasswordMutate } = useMutation({
 		mutationKey: ["resetPassword"],
 		mutationFn: async () => {
-
 			setEmail(logedUser.email);
 			// Pass email and new password to resetPassword function
 			const response = await resetPassword(newPassword, confirmPassword);
