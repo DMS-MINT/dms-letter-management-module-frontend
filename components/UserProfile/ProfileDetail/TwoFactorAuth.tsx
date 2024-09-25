@@ -59,7 +59,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 			password: "",
 		},
 	});
-
+	
 	const { mutate, isPending } = useMutation({
 		mutationKey: ["signIn"],
 		mutationFn: async (values: z.infer<typeof formSchema>) => {
@@ -129,9 +129,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	const { mutate: resetPasswordMutate } = useMutation({
 		mutationKey: ["resetPassword"],
 		mutationFn: async () => {
-			if (newPassword !== confirmPassword) {
-				return toast.error("Passwords do not match!");
-			}
+
 			setEmail(logedUser.email);
 			// Pass email and new password to resetPassword function
 			const response = await resetPassword(newPassword, confirmPassword);
@@ -145,9 +143,11 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 			toast.loading("Resetting password, please wait...");
 		},
 		onError: (error: any) => {
+			toast.dismiss();
 			toast.error(error.message);
 		},
 		onSuccess: () => {
+			toast.dismiss();
 			toast.success("Password reset successfully!");
 			router.push("/signin");
 		},
@@ -290,7 +290,11 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 											</div>
 										</div>
 										<div className="flex justify-end">
-											<Button className="flex items-center gap-2" onClick={handleSubmit}>
+											<Button
+												disabled={newPassword !== confirmPassword}
+												className="flex items-center gap-2"
+												onClick={handleSubmit}
+											>
 												<CheckCircle size={18} />
 												ለውጡን አስቀምጥ
 											</Button>
