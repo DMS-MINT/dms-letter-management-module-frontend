@@ -7,6 +7,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAttachmentRevisionStore } from "@/lib/stores";
 import type { LetterDetailType } from "@/types/letter_module";
 import { letterTypeTranslations } from "@/types/letter_module";
 import {
@@ -17,6 +18,7 @@ import {
 	Paperclip,
 } from "lucide-react";
 import React, { Fragment, memo, useMemo } from "react";
+import { FileUploadDialog } from "../dialogs";
 
 interface ILetterMetaData {
 	label: string;
@@ -31,10 +33,22 @@ function LetterDetailsDrawer({
 		reference_number,
 		reference_number_am,
 		comments,
+		letter_attachments,
 	},
+	editable,
 }: {
 	letter: LetterDetailType;
+	editable: boolean;
 }) {
+	const {
+		newAttachments,
+		removedAttachmentsIds,
+		addNewAttachment,
+		removeNewAttachment,
+		restoreUploadedAttachment,
+		removeUploadedAttachment,
+	} = useAttachmentRevisionStore();
+
 	const letterMeta: ILetterMetaData[] = useMemo(() => {
 		return [
 			{
@@ -73,6 +87,16 @@ function LetterDetailsDrawer({
 					<Paperclip size={20} className="text-gray-600" />
 					<p className="text-gray-600">የተያያዙ ፋይሎች</p>
 				</div>
+				<FileUploadDialog
+					editable={editable}
+					uploadedAttachments={letter_attachments}
+					newAttachments={newAttachments}
+					removedAttachmentsIds={removedAttachmentsIds}
+					addNewAttachment={addNewAttachment}
+					removeNewAttachment={removeNewAttachment}
+					restoreUploadedAttachment={restoreUploadedAttachment}
+					removeUploadedAttachment={removeUploadedAttachment}
+				/>
 			</div>
 			<TooltipProvider>
 				<Tooltip>

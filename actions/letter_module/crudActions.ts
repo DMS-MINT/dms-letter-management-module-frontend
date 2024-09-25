@@ -2,10 +2,6 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
-import type {
-	DraftLetterType,
-	ModifiedLetterType,
-} from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
 import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
@@ -33,9 +29,13 @@ export async function getLetterDetails(referenceNumber: string) {
 	}
 }
 
-export async function createLetter(letter: DraftLetterType) {
+export async function createLetter(formData: FormData) {
 	try {
-		const response = await axiosInstance.post("letters/create/", letter);
+		const response = await axiosInstance.post("letters/create/", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 
 		return { ok: true, message: response.data.letter };
 	} catch (error: any) {
@@ -43,18 +43,17 @@ export async function createLetter(letter: DraftLetterType) {
 	}
 }
 
-export async function createAndSubmitLetter({
-	letter,
-	otp,
-}: {
-	letter: DraftLetterType;
-	otp: string;
-}) {
+export async function createAndSubmitLetter(formData: FormData) {
 	try {
-		const response = await axiosInstance.post("letters/create_and_submit/", {
-			letter,
-			otp,
-		});
+		const response = await axiosInstance.post(
+			"letters/create_and_submit/",
+			formData,
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -62,18 +61,19 @@ export async function createAndSubmitLetter({
 	}
 }
 
-export async function createAndPublishLetter({
-	letter,
-	otp,
-}: {
-	letter: DraftLetterType;
-	otp: string;
-}) {
+export async function createAndPublishLetter(formData: FormData) {
 	try {
-		const response = await axiosInstance.post("letters/create_and_publish/", {
-			letter,
-			otp,
-		});
+		const response = await axiosInstance.post(
+			"letters/create_and_publish/",
+			formData,
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
+
+		console.log(response.data);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -81,10 +81,14 @@ export async function createAndPublishLetter({
 	}
 }
 
-export async function updateLetter(params: [string, ModifiedLetterType]) {
+export async function updateLetter(params: [string, FormData]) {
 	try {
-		const [referenceNumber, letter] = params;
-		await axiosInstance.put(`letters/${referenceNumber}/update/`, letter);
+		const [referenceNumber, formData] = params;
+		await axiosInstance.put(`letters/${referenceNumber}/update/`, formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 
 		return { ok: true, message: "ለውጦችን በተሳካ ሁኔታ ተቀምጠዋል።" };
 	} catch (error: any) {

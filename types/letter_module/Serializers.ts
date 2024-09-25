@@ -25,6 +25,7 @@ export type ModifiedLetterType = {
 	subject: string;
 	body: string;
 	participants: ParticipantDraftType[];
+	removedAttachmentsIds: string[];
 };
 
 export type UpdatedLetterType = {};

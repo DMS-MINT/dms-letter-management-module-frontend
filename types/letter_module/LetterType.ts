@@ -1,5 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { CommentType, LanguageEnum } from "../shared";
+import type {
+	CommentType,
+	LanguageEnum,
+	UploadedAttachmentType,
+} from "../shared";
 import type { UserType } from "../user_module";
 import type { ParticipantDetailType } from "./ParticipantType";
 
@@ -42,4 +46,5 @@ export type LetterDetailType = {
 	updated_at: string;
 	participants: ParticipantDetailType[];
 	comments: CommentType[];
+	letter_attachments: UploadedAttachmentType[];
 };

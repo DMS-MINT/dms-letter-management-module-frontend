@@ -17,7 +17,7 @@ export default function IncomingLetterTemplate({
 }: TemplateProps) {
 	return (
 		<Paper>
-			<div className="mb-2 flex w-full items-center justify-center gap-2 self-center">
+			<div className="mb-7 flex w-full items-center justify-center gap-2 self-center">
 				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
 				<input
 					type="text"
