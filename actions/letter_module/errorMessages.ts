@@ -16,7 +16,7 @@ export const curdErrorMessages: ErrorMessageType = {
 
 export const deleteErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.INTERNAL_SERVER_ERROR]:
-		"ቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
+		"ይቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
 	[ErrorCodeEnum.VALIDATION_ERROR]: "የተጠቀሰው የመዝገብ ቁጥር ያለው ደብዳቤ የለም።",
 	[ErrorCodeEnum.INVALID_OTP]:
 		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
@@ -26,7 +26,7 @@ export const deleteErrorMessages: ErrorMessageType = {
 
 export const workflowErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.INTERNAL_SERVER_ERROR]:
-		"ቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
+		"ይቅርታ እንጠይቃለን፣ ነገር ግን ጥያቄዎን በማስኬድ ላይ ያልተጠበቀ ስህተት ተፈጥሯል። እባክዎ ቆየት ብለው ይሞክሩ።",
 	[ErrorCodeEnum.INVALID_OTP]:
 		"ያስገቡት የአንድ ጊዜ የይለፍ ቃሎ ልክ ያልሆነ ነው። እባክዎ ያረጋግጡ እና እንደገና ይሞክሩ።",
 	[ErrorCodeEnum.EMPTY_CONTENT]: "የደብዳቤው ይዘት ባዶ ሊሆን አይችልም።",

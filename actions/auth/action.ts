@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import getErrorMessage from "../getErrorMessage";
 import { workflowErrorMessages } from "../letter_module/errorMessages";
 import { authErrorMessages } from "./errorMessages";
+import { Console } from "console";
 
 const SESSION_NAME = "DMS";
 
@@ -116,11 +117,16 @@ export async function forgotPassword(email: string) {
 			email,
 		});
 		await setEmail(email);
-		console.log(storeEmail);
 		return { ok: true, message: response.data };
 	} catch (error: any) {
-		console.log("failed");
-		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
+		if (error.response.status == 404) {
+			return { ok: false, message: "ይህ ኢሜይል አይታወቅም፡ እባክዎን ትክክለኛ ኢሜል ያስገቡ።" };
+		} else {
+			return {
+				ok: false,
+				message: getErrorMessage(workflowErrorMessages, error),
+			};
+		}
 	}
 }
 
@@ -129,7 +135,6 @@ export async function verifyOTP(otpArray: number[]) {
 	console.log("Email retrieved:", email);
 	const otp: string = otpArray.join("");
 	try {
-		console.log("Sending OTP:", otp);
 		const response = await axiosInstance.post("/auth/verify-otp/", {
 			otp,
 			email,
@@ -141,7 +146,10 @@ export async function verifyOTP(otpArray: number[]) {
 			"Error during OTP verification:",
 			error.response ? error.response.data : error.message
 		);
-		return { ok: false, message: error.response?.data?.message || error.message };
+		return {
+			ok: false,
+			message: error.response?.data?.message || error.message,
+		};
 	}
 }
 
@@ -159,7 +167,8 @@ export async function resetPassword(
 			new_password: newPassword,
 			email,
 		});
-		return { ok: true, message: response.data };
+		console.log(response.data);
+		return { ok: true, message: "የይለፍ ቃልዎ በሚገባ ተቀይሯል እባኮትን በቀየሩት የይለፍ ቃል ይግቡ፡፡" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}

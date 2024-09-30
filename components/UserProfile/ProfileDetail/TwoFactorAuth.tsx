@@ -130,7 +130,6 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		mutationKey: ["resetPassword"],
 		mutationFn: async () => {
 			setEmail(logedUser.email);
-			// Pass email and new password to resetPassword function
 			const response = await resetPassword(newPassword, confirmPassword);
 
 			if (!response.ok) throw new Error("Failed to reset password.");
@@ -139,7 +138,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("Resetting password, please wait...");
+			toast.loading("የይለፍ ቃል በመቀየር ላይ እባኮትን ይጠብቁ...");
 		},
 		onError: (error: any) => {
 			toast.dismiss();
@@ -147,7 +146,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		},
 		onSuccess: () => {
 			toast.dismiss();
-			toast.success("Password reset successfully!");
+			toast.success("የይለፍ ቃልዎ በሚገባ ተቀይሯል እባኮትን በቀየሩት የይለፍ ቃል ይግቡ፡፡");
 			router.push("/signin");
 		},
 	});
