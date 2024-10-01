@@ -20,15 +20,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
 });
 
 export default function ForgotPassword() {
-	// Add a state to store the email for later use
-	const [email, setEmail] = useState("");
 	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -53,10 +50,9 @@ export default function ForgotPassword() {
 			toast.dismiss();
 			toast.loading("ኢሜልዎን በማረጋገጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
-		onSuccess: (data, values) => {
+		onSuccess: () => {
 			toast.dismiss();
 			toast.success("የማረጋገጫ ቁጥር ወደ ኢሜይልዎ ተልኳል እባኮትን ኢሜይልዎን ይመልከቱ።");
-			setEmail(values.email);
 			router.push("forgot-password/verify");
 		},
 		onError: (error: any) => {

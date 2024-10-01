@@ -6,7 +6,6 @@ import { cookies } from "next/headers";
 import getErrorMessage from "../getErrorMessage";
 import { workflowErrorMessages } from "../letter_module/errorMessages";
 import { authErrorMessages } from "./errorMessages";
-import { Console } from "console";
 
 const SESSION_NAME = "DMS";
 
@@ -18,13 +17,14 @@ export interface ICredentials {
 	password: string;
 }
 
-let storeEmail: string = "";
 export async function setEmail(email: string) {
-	storeEmail = email; // Set the value asynchronously
+	cookies().set("email", email, { httpOnly: true });
 }
 
 export async function getEmail() {
-	return storeEmail; // Retrieve the value asynchronously
+	const email = cookies().get("email")?.value;
+	if (!email) throw new Error("Email not set");
+	return email;
 }
 
 export async function encrypt(payload: any) {
@@ -132,7 +132,6 @@ export async function forgotPassword(email: string) {
 
 export async function verifyOTP(otpArray: number[]) {
 	const email: string = await getEmail();
-	console.log("Email retrieved:", email);
 	const otp: string = otpArray.join("");
 	try {
 		const response = await axiosInstance.post("/auth/verify-otp/", {
