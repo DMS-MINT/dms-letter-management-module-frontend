@@ -15,12 +15,13 @@ import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
 import type { NewAttachmentType, UploadedAttachmentType } from "@/types/shared";
 import clsx from "clsx";
 import { filesize } from "filesize";
-import { Dot, Plus, RotateCcw, Trash } from "lucide-react";
+import { Dot, Eye, Plus, RotateCcw, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import * as uuidv4 from "uuid";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 type Props = {
@@ -98,10 +99,24 @@ export default function FileUploadDialog({
 				<Button
 					type="button"
 					variant="outline"
-					className="flex w-full justify-start gap-2"
+					className="relative flex w-full justify-start gap-2"
 				>
-					<Plus size={20} />
-					ፋይል አያይዝ
+					{newAttachments.length > 0 ||
+					(uploadedAttachments && uploadedAttachments?.length > 0) ? (
+						<>
+							<Eye size={20} />
+							የተያያዙ ፋይሎች
+						</>
+					) : (
+						<>
+							<Plus size={20} />
+							ፋይል አያይዝ
+						</>
+					)}
+					<Badge className="absolute -right-1 -top-1 rounded-full">
+						{newAttachments.length +
+							(uploadedAttachments ? uploadedAttachments.length : 0)}
+					</Badge>
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="flex h-[30rem] min-w-[50rem] flex-col">
