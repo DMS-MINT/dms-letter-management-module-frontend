@@ -33,18 +33,28 @@ type Props = {
 };
 
 function ActionButtons({ owner, current_state, permissions }: Props) {
-	const { letter_type, reference_number } = useLetterRevisionStore();
+	const { letter_type, id, reference_number, published_at, department, year } =
+		useLetterRevisionStore();
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
 
 	const handleAction = useCallback(
-		(actionType: ActionType, otp?: string, message?: string) => {
+		(
+			actionType: ActionType,
+			otp?: string,
+			message?: string,
+			reference_number?: string,
+			published_at?: string
+		) => {
+			console.log("message: ", message);
+			console.log("message refno: ", reference_number);
+			console.log("message 2: ", published_at);
 			mutate({
 				actionType,
-				params: { referenceNumber: reference_number, otp, message },
+				params: { id, otp, message, reference_number, published_at },
 			});
 		},
-		[mutate, reference_number]
+		[mutate, id]
 	);
 
 	const buttonConfigs: ButtonConfigType[] = useMemo(() => {
@@ -179,9 +189,22 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						onConfirm={() => {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
-							handleAction("publish_letter", otp);
+							if (!published_at) {
+								console.error("Published At is required");
+								return;
+							}
+							if (!department || !year || !reference_number) {
+								console.error("Required fields for reference number are missing");
+								return;
+							}
+							const newRefNo = `${department}-${year}-${reference_number}`;
+							console.log("new Ref:", newRefNo);
+							console.log("Published at", published_at);
+
+							handleAction("publish_letter", otp, undefined, newRefNo, published_at);
 						}}
 						requiresAuth={true}
+						requiresMessage={false}
 					/>
 				),
 			},
@@ -208,9 +231,13 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			},
 		];
 	}, [
+		reference_number,
+		published_at,
 		current_state,
 		handleAction,
 		letter_type,
+		department,
+		year,
 		owner,
 		permissions.can_close_letter,
 		permissions.can_permanently_delete_letter,

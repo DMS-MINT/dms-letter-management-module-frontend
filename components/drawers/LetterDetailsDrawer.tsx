@@ -34,6 +34,7 @@ function LetterDetailsDrawer({
 		reference_number_am,
 		comments,
 		letter_attachments,
+		current_state,
 	},
 	editable,
 }: {
@@ -58,7 +59,12 @@ function LetterDetailsDrawer({
 			},
 			{
 				label: "የመዝገብ ቁጥር",
-				value: language === "English" ? reference_number : reference_number_am,
+				value:
+					current_state === "Published"
+						? language === "English"
+							? reference_number
+							: reference_number_am
+						: " ",
 				icon: <FileDigit size={20} className="text-gray-600" />,
 			},
 			{
@@ -67,7 +73,13 @@ function LetterDetailsDrawer({
 				icon: <Languages size={20} className="text-gray-600" />,
 			},
 		];
-	}, [language, reference_number, reference_number_am, letter_type]);
+	}, [
+		language,
+		reference_number,
+		reference_number_am,
+		letter_type,
+		current_state,
+	]);
 
 	return (
 		<section className="flex flex-col gap-10">

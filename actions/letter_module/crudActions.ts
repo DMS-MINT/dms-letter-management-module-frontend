@@ -6,7 +6,7 @@ import getErrorMessage from "../getErrorMessage";
 import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
 interface BatchParamsType {
-	referenceNumbers: string[];
+	id: string[] | "";
 	otp?: string;
 }
 
@@ -19,9 +19,9 @@ export async function getLetters(category: string) {
 	}
 }
 
-export async function getLetterDetails(referenceNumber: string) {
+export async function getLetterDetails(id: string) {
 	try {
-		const response = await axiosInstance.get(`letters/${referenceNumber}/`);
+		const response = await axiosInstance.get(`letters/${id}/`);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -44,6 +44,7 @@ export async function createLetter(formData: FormData) {
 }
 
 export async function createAndSubmitLetter(formData: FormData) {
+	console.log(formData);
 	try {
 		const response = await axiosInstance.post(
 			"letters/create_and_submit/",
@@ -83,8 +84,8 @@ export async function createAndPublishLetter(formData: FormData) {
 
 export async function updateLetter(params: [string, FormData]) {
 	try {
-		const [referenceNumber, formData] = params;
-		await axiosInstance.put(`letters/${referenceNumber}/update/`, formData, {
+		const [id, formData] = params;
+		await axiosInstance.put(`letters/${id}/update/`, formData, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
@@ -96,9 +97,9 @@ export async function updateLetter(params: [string, FormData]) {
 	}
 }
 
-export async function moveToTrash(referenceNumber: string) {
+export async function moveToTrash(id: string) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/trash/`);
+		await axiosInstance.put(`letters/${id}/trash/`);
 
 		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መጣያው ተወስዷል።" };
 	} catch (error: any) {
@@ -106,9 +107,9 @@ export async function moveToTrash(referenceNumber: string) {
 	}
 }
 
-export async function restoreFromTrash(referenceNumber: string) {
+export async function restoreFromTrash(id: string) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/restore/`);
+		await axiosInstance.put(`letters/${id}/restore/`);
 
 		return { ok: true, message: "ደብዳቤው ከመጣያው ተመልሷል።" };
 	} catch (error: any) {
@@ -116,9 +117,9 @@ export async function restoreFromTrash(referenceNumber: string) {
 	}
 }
 
-export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
+export async function permanentlyDelete({ id, otp }: ParamsType) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/permanently_delete/`, {
+		await axiosInstance.put(`letters/${id}/delete/`, {
 			otp,
 		});
 
@@ -129,11 +130,11 @@ export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 }
 
 // Move multiple rows to trash
-export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
+export async function moveToTrashBatch({ id }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
+		const ids = id;
 		await axiosInstance.put("letters/bulk/trash/", {
-			reference_numbers,
+			ids,
 		});
 
 		return { ok: true, message: "ደብዳቤዎቹ በተሳካ ሁኔታ ወደ መጣያው ተወስደዋል።" };
@@ -143,13 +144,11 @@ export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
 }
 
 // Restore multiple rows from trash
-export async function restoreFromTrashBatch({
-	referenceNumbers,
-}: BatchParamsType) {
+export async function restoreFromTrashBatch({ id }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
+		const ids = id;
 		await axiosInstance.put("letters/bulk/restore/", {
-			reference_numbers,
+			ids,
 		});
 
 		return { ok: true, message: "ደብዳቤዎቹ ከመጣያው ተመልሰዋል።" };
@@ -159,14 +158,11 @@ export async function restoreFromTrashBatch({
 }
 
 // Permanently delete multiple rows
-export async function permanentlyDeleteBatch({
-	referenceNumbers,
-	otp,
-}: BatchParamsType) {
+export async function permanentlyDeleteBatch({ id, otp }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
+		const ids = id;
 		await axiosInstance.put("letters/bulk/delete/", {
-			reference_numbers,
+			ids,
 			otp,
 		});
 

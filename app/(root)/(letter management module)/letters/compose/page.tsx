@@ -50,6 +50,7 @@ export default function Compose() {
 				</Drawer>
 				<main className="mb-0 flex flex-1 flex-col items-center bg-gray-100 py-5">
 					<TemplateComponent
+						publishable={false}
 						editor={editor}
 						language={language}
 						subject={subject}

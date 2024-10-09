@@ -13,4 +13,5 @@ export type TemplateProps = ParticipantSelectorActions & {
 	participants: ParticipantDetailType[];
 	isLetterReadOnly: boolean;
 	updateLetterField: ContentStoreActions["updateLetterField"];
+	publishable: boolean;
 };

@@ -18,9 +18,9 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export default function LetterDetail({
-	params: { referenceNumber },
+	params: { id },
 }: {
-	params: { referenceNumber: string };
+	params: { id: string };
 }) {
 	const { initializeContent, initializeParticipants } = useLetterRevisionStore(
 		(state) => ({
@@ -30,18 +30,17 @@ export default function LetterDetail({
 	);
 
 	const { data, isSuccess } = useQuery({
-		queryKey: ["getLetterDetails", referenceNumber],
+		queryKey: ["getLetterDetails", id],
 		queryFn: async () => {
 			try {
 				toast.dismiss();
 				toast.loading("የደብዳቤዉን ዝርዝር መረጃ በማምጣት ላይ፣ እባክዎ ይጠብቁ...");
-				const response = await getLetterDetails(referenceNumber);
+				const response = await getLetterDetails(id);
 
 				toast.dismiss();
 				if (!response.ok) throw response;
 
 				const data = response.message as LetterDetailResponseType;
-
 				const content: LetterContentStoreType = {
 					subject: data.letter.subject || "",
 					body: data.letter.body || "",
@@ -49,6 +48,13 @@ export default function LetterDetail({
 					language: LanguageEnum[data.letter.language],
 					reference_number: data.letter.reference_number,
 					published_at: data.letter.published_at,
+					id: data.letter.id,
+					current_state: data.letter.current_state,
+					department:
+						data.letter.language === "English"
+							? data.letter.owner.department.abbreviation_en
+							: data.letter.owner.department.abbreviation_am,
+					year: "2017",
 				};
 
 				initializeContent(content);
@@ -59,7 +65,7 @@ export default function LetterDetail({
 				toast.error(error.message);
 			}
 		},
-		enabled: !!referenceNumber,
+		enabled: !!id,
 		staleTime: Infinity,
 	});
 
@@ -79,6 +85,9 @@ export default function LetterDetail({
 					<section className="mb-5 flex flex-1 flex-col items-center bg-gray-100 py-5">
 						<EditableLetter
 							editable={generateUserPermissions(data.permissions).can_update_letter}
+							publishable={
+								generateUserPermissions(data.permissions).can_publish_letter
+							}
 						/>
 					</section>
 					<ActivityFeed letter={data.letter} />

@@ -8,7 +8,13 @@ import {
 } from ".";
 import type { TemplateProps } from "./types";
 
-function EditableLetter({ editable }: { editable: boolean }) {
+function EditableLetter({
+	editable,
+	publishable,
+}: {
+	editable: boolean;
+	publishable: boolean;
+}) {
 	const {
 		subject,
 		body,
@@ -52,6 +58,7 @@ function EditableLetter({ editable }: { editable: boolean }) {
 			updateLetterField={updateLetterField}
 			addParticipant={addParticipant}
 			removeParticipant={removeParticipant}
+			publishable={publishable}
 		/>
 	);
 }

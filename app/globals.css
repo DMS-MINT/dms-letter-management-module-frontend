@@ -136,3 +136,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .hide-scrollbar {
 	overflow-y: auto; /* or scroll */
 }
+
+.limited-chars {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 35ch; /* Set the width to accommodate 10 characters */
+	display: inline-block;
+	box-sizing: border-box;
+}

@@ -40,13 +40,15 @@ export default function ComposeControlPanel() {
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
+			console.log("Letter data:", data);
 			toast.success("ደብዳቤዎ በተሳካ ሁኔታ ተፈጥሯል!");
 			resetContent();
 			resetParticipants();
 			if (data.current_state === "Draft") {
-				router.push(`/letters/draft/${data.reference_number}`);
+				console.log("Letter data:", data);
+				router.push(`/letters/draft/${data.id}`);
 			} else {
-				router.push(`/letters/outbox/${data.reference_number}`);
+				router.push(`/letters/outbox/${data.id}`);
 			}
 		},
 		onError: (error: any) => {

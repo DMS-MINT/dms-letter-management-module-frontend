@@ -7,12 +7,15 @@ import { Label } from "../ui/label";
 import Paper from "./Paper";
 import type { TemplateProps } from "./types";
 import { RefNoAndDate } from "@/components/templates";
+import { Textarea } from "../ui/textarea";
 
 export default function InternalLetterTemplate({
+	publishable,
 	editor,
 	language,
 	subject,
 	participants,
+	reference_number,
 	published_at,
 	isLetterReadOnly,
 	addParticipant,
@@ -21,7 +24,11 @@ export default function InternalLetterTemplate({
 }: TemplateProps) {
 	return (
 		<Paper>
-			<RefNoAndDate published_at={published_at} showRefNo={false} />
+			<RefNoAndDate
+				published_at={published_at}
+				publishable={publishable}
+				reference_number={reference_number}
+			/>
 			<ParticipantSelector
 				language={language}
 				prefix={language === LanguageEnum.English ? "To" : "ለ"}
@@ -36,13 +43,13 @@ export default function InternalLetterTemplate({
 			/>
 			<div className="mb-2 flex w-full items-center justify-center gap-2 self-center">
 				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
-				<input
-					type="text"
+				<Textarea
 					value={subject}
 					disabled={isLetterReadOnly}
-					className="min-w-20 flex-grow rounded-none focus:border-b focus:outline-0 disabled:bg-transparent"
+					className="h-auto min-h-10 min-w-20 flex-grow resize-none rounded-none border-none ring-offset-0 focus-visible:border-b focus-visible:ring-0  disabled:bg-transparent"
 					onChange={(e) => updateLetterField("subject", e.target.value)}
 					placeholder="የደብዳቤዎን ርዕሰ ጉዳይ እዚህ ያስገቡ..."
+					rows={1}
 				/>
 			</div>
 			<BlockEditor editor={editor} />

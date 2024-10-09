@@ -22,6 +22,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserProfileMenu } from "../menu";
 import { NotificationPanel } from "../panels";
+import { useLetterRevisionStore } from "@/lib/stores";
 
 type LetterCategoryTranslations = {
 	[key: string]: string;
@@ -29,7 +30,7 @@ type LetterCategoryTranslations = {
 
 type Params = {
 	category?: string;
-	referenceNumber?: string;
+	id: string;
 };
 
 const letterCategoryTranslations: LetterCategoryTranslations =
@@ -42,6 +43,8 @@ export default function TopBar() {
 	useEffect(() => {
 		setIsClient(true);
 	}, []);
+
+	const subject = useLetterRevisionStore((state) => state.subject);
 
 	return (
 		<header className="flex min-h-14 w-full items-center justify-between bg-white px-5">
@@ -90,9 +93,9 @@ export default function TopBar() {
 									<BreadcrumbSeparator />
 								</>
 							)}
-							{params.referenceNumber ? (
+							{params.id ? (
 								<BreadcrumbItem>
-									<BreadcrumbPage>{params.referenceNumber}</BreadcrumbPage>
+									<BreadcrumbPage className="limited-chars">{subject}</BreadcrumbPage>
 								</BreadcrumbItem>
 							) : null}
 						</BreadcrumbList>

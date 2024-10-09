@@ -35,6 +35,15 @@ export async function getEnterprises() {
 	}
 }
 
+export async function getDepartments() {
+	try {
+		const response = await axiosInstance.get("departments/");
+		return { ok: true, message: response.data.departments };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+
 export async function getContacts() {
 	try {
 		const response = await axiosInstance.get("contacts/");

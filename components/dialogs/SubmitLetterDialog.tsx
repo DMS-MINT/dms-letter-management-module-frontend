@@ -50,14 +50,27 @@ export default function SubmitLetterDialog({
 }: {
 	actionType: ActionType;
 }) {
-	const { subject, body, letter_type, language, participants } =
-		useDraftLetterStore((state) => ({
-			subject: state.subject,
-			body: state.body,
-			letter_type: state.letter_type,
-			language: state.language,
-			participants: state.participants,
-		}));
+	const {
+		subject,
+		body,
+		letter_type,
+		language,
+		participants,
+		id,
+		current_state,
+		department,
+		year,
+	} = useDraftLetterStore((state) => ({
+		subject: state.subject,
+		body: state.body,
+		letter_type: state.letter_type,
+		language: state.language,
+		participants: state.participants,
+		id: state.id,
+		current_state: state.current_state,
+		department: state.department,
+		year: state.year,
+	}));
 	const { newAttachments } = useDraftAttachmentStore();
 
 	const { form, getOTP, handleInputChange } = useOTP();
@@ -91,9 +104,10 @@ export default function SubmitLetterDialog({
 			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
+			console.log("Letter data:", data);
 			toast.dismiss();
 			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
-			router.push(`/letters/draft/${data.letter.reference_number}`);
+			router.push(`/letters/draft/${data.letter.id}`);
 		},
 		onError: (error: any) => {
 			toast.dismiss();
@@ -145,6 +159,10 @@ export default function SubmitLetterDialog({
 										letter_type,
 										language,
 										participants,
+										id,
+										current_state,
+										department,
+										year,
 									})
 								}
 								onClick={() => {

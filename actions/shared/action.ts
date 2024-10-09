@@ -5,7 +5,7 @@ import getErrorMessage from "../getErrorMessage";
 import { commentErrorMessages } from "./errorMessages";
 
 export type CreateCommentParams = {
-	reference_number: string;
+	id: string;
 	message: string;
 };
 
@@ -14,12 +14,9 @@ export type UpdateCommentParams = {
 	message: string;
 };
 
-export async function createComment({
-	reference_number,
-	message,
-}: CreateCommentParams) {
+export async function createComment({ id, message }: CreateCommentParams) {
 	try {
-		await axiosInstance.post(`comments/${reference_number}/create/`, {
+		await axiosInstance.post(`comments/${id}/create/`, {
 			message,
 		});
 

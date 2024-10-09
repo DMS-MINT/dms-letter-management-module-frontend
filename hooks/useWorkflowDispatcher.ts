@@ -32,9 +32,11 @@ export type ActionType =
 	| "permanently_delete_batch";
 
 export type ParamsType = {
-	referenceNumber: string | string[]; // Adjusted to handle both single and multiple reference numbers
+	id: string | string[]; // Adjusted to handle both single and multiple reference numbers
 	otp?: string;
 	message?: string;
+	reference_number?: string;
+	published_at?: string;
 };
 
 export type PropType = {
@@ -43,58 +45,58 @@ export type PropType = {
 };
 
 const actionDispatcher = async ({ actionType, params }: PropType) => {
-	const referenceNumbers = Array.isArray(params.referenceNumber)
-		? params.referenceNumber
-		: [params.referenceNumber];
+	const ids = Array.isArray(params.id) ? params.id : [params.id];
 
 	switch (actionType) {
 		case "close_letter":
-			return await closeLetter(referenceNumbers[0]);
+			return await closeLetter(ids[0]);
 		case "publish_letter":
 			return await publishLetter({
-				referenceNumber: referenceNumbers[0],
+				id: ids[0],
 				otp: params.otp,
+				reference_number: params.reference_number,
+				published_at: params.published_at,
 			});
 		case "reject_letter":
 			return await rejectLetter({
-				referenceNumber: referenceNumbers[0],
+				id: ids[0],
 				otp: params.otp,
 				message: params.message,
 			});
 		case "permanently_delete":
 			return await permanentlyDelete({
-				referenceNumber: referenceNumbers[0],
+				id: ids[0],
 				otp: params.otp,
 			});
 		case "moveToTrash_batch":
 			return await moveToTrashBatch({
-				referenceNumbers,
+				id: ids,
 			});
 		case "restoreFromTrash_batch":
 			return await restoreFromTrashBatch({
-				referenceNumbers,
+				id: ids,
 			});
 		case "permanently_delete_batch":
 			return await permanentlyDeleteBatch({
-				referenceNumbers,
+				id: ids,
 				otp: params.otp,
 			});
 		case "reopen_letter":
-			return await reopenLetter(referenceNumbers[0]);
+			return await reopenLetter(ids[0]);
 		case "retract_letter":
 			return await retractLetter({
-				referenceNumber: referenceNumbers[0],
+				id: ids[0],
 				otp: params.otp,
 			});
 		case "restore_letter":
-			return await restoreFromTrash(referenceNumbers[0]);
+			return await restoreFromTrash(ids[0]);
 		case "submit_letter":
 			return await submitLetter({
-				referenceNumber: params.referenceNumber,
+				id: params.id,
 				otp: params.otp,
 			});
 		case "trash_letter":
-			return await moveToTrash(referenceNumbers[0]);
+			return await moveToTrash(ids[0]);
 		default:
 			throw new Error("Invalid action type");
 	}
@@ -104,8 +106,8 @@ export default function useWorkflowDispatcher() {
 	const { mutate, isPending, isSuccess } = useMutation({
 		mutationKey: ["letter-workflow"],
 		mutationFn: async (action: PropType) => {
+			console.log("Action", action);
 			const response = await actionDispatcher(action);
-
 			if (!response.ok) throw response;
 
 			return response;

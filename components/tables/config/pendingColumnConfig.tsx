@@ -65,11 +65,18 @@ export const pendingTableColumns: LetterColumnDefType = [
 		size: 10,
 	},
 	{
+		accessorKey: LetterTableColumns.ID,
+		size: undefined,
+		cell: () => null,
+		header: () => null,
+		enableHiding: true,
+	},
+	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
+				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER] || " - - - "}
 			/>
 		),
 		size: 30,

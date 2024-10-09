@@ -5,6 +5,7 @@ import { LanguageEnum } from "@/types/shared";
 import { Label } from "@radix-ui/react-label";
 import Paper from "./Paper";
 import type { TemplateProps } from "./types";
+import { Textarea } from "../ui/textarea";
 
 export default function IncomingLetterTemplate({
 	language,
@@ -19,13 +20,13 @@ export default function IncomingLetterTemplate({
 		<Paper>
 			<div className="mb-7 flex w-full items-center justify-center gap-2 self-center">
 				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
-				<input
-					type="text"
+				<Textarea
 					value={subject}
 					disabled={isLetterReadOnly}
-					className="min-w-20 flex-grow rounded-none focus:border-b focus:outline-0 disabled:bg-transparent"
+					className="h-auto min-h-10 min-w-20 flex-grow resize-none rounded-none border-none ring-offset-0 focus-visible:border-b focus-visible:ring-0  disabled:bg-transparent"
 					onChange={(e) => updateLetterField("subject", e.target.value)}
 					placeholder="የደብዳቤዎን ርዕሰ ጉዳይ እዚህ ያስገቡ..."
+					rows={1}
 				/>
 			</div>
 			<ParticipantSelector

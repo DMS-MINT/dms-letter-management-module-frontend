@@ -129,8 +129,8 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 									variant="ghost"
 									className="px-2"
 									onClick={() => {
-										const reference_number = letter.reference_number;
-										createCommentMutation({ reference_number, message });
+										const id = letter.id;
+										createCommentMutation({ id, message });
 									}}
 								>
 									<Check size={18} className="text-green-500" />

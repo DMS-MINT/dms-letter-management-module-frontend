@@ -48,6 +48,7 @@ export const draftTableColumns: LetterColumnDefType = [
 		),
 		size: 30,
 	},
+
 	{
 		accessorKey: "has_read",
 		header: () => <Circle size={13} className="text-gray-400" />,
@@ -65,14 +66,11 @@ export const draftTableColumns: LetterColumnDefType = [
 		size: 30,
 	},
 	{
-		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
-		header: ({ column }) => (
-			<ColumnHeader
-				column={column}
-				title={columnTranslation[LetterTableColumns.REFERENCE_NUMBER]}
-			/>
-		),
-		size: 60,
+		accessorKey: LetterTableColumns.ID,
+		size: undefined,
+		cell: () => null,
+		header: () => null,
+		enableHiding: true,
 	},
 	{
 		accessorKey: LetterTableColumns.RECIPIENT,

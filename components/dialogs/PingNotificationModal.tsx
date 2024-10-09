@@ -117,7 +117,7 @@ export function PingNotificationModal({
 		removeParticipant,
 	});
 
-	const { language, participants, reference_number } = useLetterRevisionStore();
+	const { language, participants, id } = useLetterRevisionStore();
 
 	const { mutate } = useToastMutation<[NotificationCreateDTO]>(
 		"sendReminderNotification",
@@ -198,7 +198,7 @@ export function PingNotificationModal({
 			channels: data.channels,
 			details: {
 				source: "user",
-				letter_ref: reference_number,
+				letter_ref: id,
 			},
 		};
 

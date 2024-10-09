@@ -88,7 +88,7 @@ const permissions: SelectType[] = [
 ];
 
 function ShareLetterDialog({ owner }: Props) {
-	const { reference_number, language, participants } = useLetterRevisionStore();
+	const { id, language, participants } = useLetterRevisionStore();
 	const {
 		addParticipant,
 		removeParticipant,
@@ -124,7 +124,7 @@ function ShareLetterDialog({ owner }: Props) {
 
 	const handleSubmit = () => {
 		shareLetterMutation([
-			reference_number,
+			id,
 			{
 				participants: generateDraftParticipant(newCollaborators),
 				message: formData.message,

@@ -9,6 +9,10 @@ export type LetterContentStoreType = {
 	language: LanguageEnum;
 	reference_number: string;
 	published_at: string;
+	id: string;
+	current_state: string;
+	department: string;
+	year: string;
 };
 
 export type ContentStoreActions = {
@@ -77,6 +81,10 @@ export const createLetterStore = () =>
 		reference_number: "",
 		published_at: "",
 		participants: [],
+		id: "",
+		current_state: "",
+		department: "",
+		year: "",
 
 		initializeContent: (content) => set({ ...content }),
 

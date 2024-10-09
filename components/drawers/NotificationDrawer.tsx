@@ -279,10 +279,10 @@ function NotificationDrawer({
 												</Avatar>
 												<div className="flex flex-col items-start justify-center gap-0 leading-4">
 													<span className="font-semibold ">
-														{item.details.sender.full_name}
+														{item.details?.sender?.full_name}
 													</span>
 													<span className="text-gray-400">
-														{item.details.sender.job_title}
+														{item.details?.sender?.job_title}
 													</span>
 												</div>
 											</div>

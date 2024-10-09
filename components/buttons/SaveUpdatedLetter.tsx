@@ -17,8 +17,7 @@ import {
 } from "../ui/tooltip";
 
 export default function SaveUpdatedLetter() {
-	const { subject, body, participants, reference_number } =
-		useLetterRevisionStore();
+	const { subject, body, participants, id } = useLetterRevisionStore();
 	const { newAttachments, removedAttachmentsIds } = useAttachmentRevisionStore();
 	const { mutate } = useToastMutation<[string, FormData]>(
 		"updateLetter",
@@ -45,7 +44,7 @@ export default function SaveUpdatedLetter() {
 			formData.append(`attachments[${index}].description`, attachment.description);
 		});
 
-		mutate([reference_number, formData]);
+		mutate([id, formData]);
 	};
 
 	return (
