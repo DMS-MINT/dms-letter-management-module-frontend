@@ -25,10 +25,8 @@ import type { DepartmentAbbrType } from "@/types/user_module";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
-// import { DatePicker } from "../ui/datepicker";
 import { Input } from "../ui/input";
 import React from "react";
-// import { getInitials } from "@/lib/utils/getInitials";
 export default function RefNoAndDate({
 	reference_number,
 	published_at,
@@ -105,7 +103,7 @@ export default function RefNoAndDate({
 				<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
 					{publishable ? (
 						<>
-							{letter_type == "incoming" ? (
+							{letter_type === "incoming" ? (
 								<>
 									<div className="-mb-2 flex h-8 w-full flex-row gap-1 text-xl">
 										<Select
@@ -114,7 +112,7 @@ export default function RefNoAndDate({
 												updateLetterField("department", e);
 											}}
 										>
-											<SelectTrigger className="h-6 w-14 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
+											<SelectTrigger className="h-6 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
 												<SelectValue placeholder="Dep">{department || "Dep"} </SelectValue>
 											</SelectTrigger>
 											<SelectContent>
@@ -135,12 +133,21 @@ export default function RefNoAndDate({
 													))}
 											</SelectContent>
 										</Select>
+
+										<Input
+											type="text"
+											className="h-6 cursor-pointer border-none bg-inherit p-0 text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
+											onChange={(e) =>
+												updateLetterField("reference_number", e.target.value)
+											}
+										/>
+
 										<Select
 											onValueChange={(e) => {
 												updateLetterField("year", e);
 											}}
 										>
-											<SelectTrigger className="h-6 w-16 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
+											<SelectTrigger className="h-6 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
 												<SelectValue placeholder="Year" />
 											</SelectTrigger>
 											<SelectContent>
@@ -151,14 +158,6 @@ export default function RefNoAndDate({
 												)}
 											</SelectContent>
 										</Select>
-
-										<Input
-											type="text"
-											className="h-6 w-full cursor-pointer border-none bg-inherit p-0 text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
-											onChange={(e) =>
-												updateLetterField("reference_number", e.target.value)
-											}
-										/>
 									</div>
 									<div className="w-full">
 										<hr className="border-black" />
@@ -169,15 +168,15 @@ export default function RefNoAndDate({
 									<div className="-mb-1 flex w-full flex-row gap-x-1 text-xl">
 										<label>{department}</label>
 										<p>-</p>
-										<label>{year}</label>
-										<p>-</p>
 										<Input
 											type="text"
-											className="h-7 w-full  cursor-pointer border-none bg-inherit p-0 text-lg ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
+											className="h-7 w-full cursor-pointer border-none bg-inherit p-0 text-center text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
 											onChange={(e) =>
 												updateLetterField("reference_number", e.target.value)
 											}
 										/>
+										<p>-</p>
+										<label>{year}</label>
 									</div>
 									<div className="w-full">
 										<hr className="border-black" />

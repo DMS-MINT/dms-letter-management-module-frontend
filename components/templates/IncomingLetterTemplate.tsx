@@ -3,6 +3,7 @@ import { getDefaultValue } from "@/lib/utils/participantUtils";
 import { RoleEnum } from "@/types/letter_module";
 import { LanguageEnum } from "@/types/shared";
 import { Label } from "@radix-ui/react-label";
+import { RefNoAndDate } from "@/components/templates";
 import Paper from "./Paper";
 import type { TemplateProps } from "./types";
 import { Textarea } from "../ui/textarea";
@@ -12,12 +13,19 @@ export default function IncomingLetterTemplate({
 	subject,
 	participants,
 	isLetterReadOnly,
+	published_at,
+	reference_number,
 	addParticipant,
 	removeParticipant,
 	updateLetterField,
 }: TemplateProps) {
 	return (
 		<Paper>
+			<RefNoAndDate
+				reference_number={reference_number}
+				published_at={published_at}
+				publishable={true}
+			/>
 			<div className="mb-7 flex w-full items-center justify-center gap-2 self-center">
 				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
 				<Textarea
