@@ -5,7 +5,6 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
@@ -15,6 +14,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IMAGES } from "@/constants";
+import { useLetterRevisionStore } from "@/lib/stores";
 import { letterCategoryTranslations as letterCategoryTranslationsData } from "@/types/letter_module";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserProfileMenu } from "../menu";
 import { NotificationPanel } from "../panels";
-import { useLetterRevisionStore } from "@/lib/stores";
 
 type LetterCategoryTranslations = {
 	[key: string]: string;
@@ -93,11 +92,11 @@ export default function TopBar() {
 									<BreadcrumbSeparator />
 								</>
 							)}
-							{params.id ? (
+							{/* {params.id ? (
 								<BreadcrumbItem>
 									<BreadcrumbPage className="limited-chars">{subject}</BreadcrumbPage>
 								</BreadcrumbItem>
-							) : null}
+							) : null} */}
 						</BreadcrumbList>
 					</Breadcrumb>
 				)}

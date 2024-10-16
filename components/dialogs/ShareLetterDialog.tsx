@@ -149,7 +149,7 @@ function ShareLetterDialog({ owner }: Props) {
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-			<DialogContent className="max-h-[40rem] min-w-[45rem] max-w-[45rem]">
+			<DialogContent className="max-h-[40rem] min-w-[50rem] max-w-[45rem]">
 				<DialogHeader>
 					<DialogTitle>የደብዳቤ ማጋሪያ</DialogTitle>
 					<DialogDescription>

@@ -46,9 +46,6 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			reference_number?: string,
 			published_at?: string
 		) => {
-			console.log("message: ", message);
-			console.log("message refno: ", reference_number);
-			console.log("message 2: ", published_at);
 			mutate({
 				actionType,
 				params: { id, otp, message, reference_number, published_at },
@@ -176,10 +173,11 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: letter_type !== "incoming" && permissions.can_publish_letter,
+				isVisible: permissions.can_publish_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
+						disabledButton={reference_number && published_at ? false : true}
 						triggerButtonText="ደብዳቤውን አከፋፍል"
 						triggerButtonVariant="third"
 						dialogTitle="ደብዳቤውን አከፋፍል"
@@ -189,17 +187,8 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						onConfirm={() => {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
-							if (!published_at) {
-								console.error("Published At is required");
-								return;
-							}
-							if (!department || !year || !reference_number) {
-								console.error("Required fields for reference number are missing");
-								return;
-							}
-							const newRefNo = `${department}-${year}-${reference_number}`;
-							console.log("new Ref:", newRefNo);
-							console.log("Published at", published_at);
+
+							const newRefNo = `${department}-${reference_number}-${year}`;
 
 							handleAction("publish_letter", otp, undefined, newRefNo, published_at);
 						}}

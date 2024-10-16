@@ -87,7 +87,8 @@ export default function ComposeControlPanel() {
 			case "outgoing":
 				return <SubmitLetterDialog actionType="create_and_submit" />;
 			case "incoming":
-				return <SubmitLetterDialog actionType="create_and_publish" />;
+				// return <SubmitLetterDialog actionType="create_and_publish" />;
+				return;
 			default:
 				throw new Error("Invalid letter type");
 		}
