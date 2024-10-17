@@ -86,10 +86,21 @@ export default function RefNoAndDate({
 					now.getSeconds()
 				)
 			: new Date();
-		// Format the date as YYYY-MM-DDTHH:MM:SS.ssssss+00:00 (ISO format for Django)
-		const formattedDate = `${dateToUse.getUTCFullYear()}-${String(dateToUse.getUTCMonth() + 1).padStart(2, "0")}-${String(dateToUse.getUTCDate()).padStart(2, "0")}T${String(dateToUse.getUTCHours()).padStart(2, "0")}:${String(dateToUse.getUTCMinutes()).padStart(2, "0")}:${String(dateToUse.getUTCSeconds()).padStart(2, "0")}.${String(dateToUse.getUTCMilliseconds()).padStart(3, "0")}000+00:00`;
 
-		updateLetterField("published_at", formattedDate);
+		// Format the date as YYYY-MM-DDTHH:MM:SS.ssssss+00:00 (ISO format for Django)
+		// const fullDateFormatted = `${dateToUse.getUTCFullYear()}-${String(dateToUse.getUTCMonth() + 1).padStart(2, "0")}-${String(dateToUse.getUTCDate()).padStart(2, "0")}T${String(dateToUse.getUTCHours()).padStart(2, "0")}:${String(dateToUse.getUTCMinutes()).padStart(2, "0")}:${String(dateToUse.getUTCSeconds()).padStart(2, "0")}.${String(dateToUse.getUTCMilliseconds()).padStart(3, "0")}000+00:00`;
+		// updateLetterField("fullDate", fullDateFormatted);
+
+		if (language === LanguageEnum.English) {
+			const formattedDate = format(dateToUse, "MMMM dd, yyyy");
+			updateLetterField("published_at", formattedDate);
+		} else {
+			// const dateString = dateToUse.toISOString();
+			updateLetterField(
+				"published_at",
+				convertToEthiopianDate(dateToUse.toISOString())
+			);
+		}
 		setDate(date);
 	};
 
@@ -245,9 +256,7 @@ export default function RefNoAndDate({
 						</>
 					) : published_at ? (
 						<>
-							<span className="text-center">
-								{convertToEthiopianDate(published_at)}
-							</span>
+							<span className="text-center">{published_at}</span>
 							<div className="mb-0.5 w-full self-end">
 								<hr className="ml-0.5 border-black" />
 							</div>
