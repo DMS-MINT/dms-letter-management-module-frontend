@@ -205,12 +205,12 @@ export const inboxTableColumns: LetterColumnDefType = [
 			// const { time, date } = convertToEthiopianDateAndTime(received_at);
 			return (
 				<div className="flex flex-col items-center text-xs font-normal text-muted-foreground">
-					{/*<span>{time}</span>
+					{/*<span>{time}</span>*/}
 					<span className="flex gap-1 ">
-						{" "}*/}
-					<CalendarIcon size={12} />
-					{received_at}
-					{/*</span>*/}
+						{" "}
+					    <CalendarIcon size={12} />
+					    {received_at}
+					</span>
 				</div>
 			);
 		},
