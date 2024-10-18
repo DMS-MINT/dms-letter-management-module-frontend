@@ -33,18 +33,25 @@ type Props = {
 };
 
 function ActionButtons({ owner, current_state, permissions }: Props) {
-	const { letter_type, reference_number } = useLetterRevisionStore();
+	const { letter_type, id, reference_number, published_at, department, year } =
+		useLetterRevisionStore();
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const { mutate } = useWorkflowDispatcher();
 
 	const handleAction = useCallback(
-		(actionType: ActionType, otp?: string, message?: string) => {
+		(
+			actionType: ActionType,
+			otp?: string,
+			message?: string,
+			reference_number?: string,
+			published_at?: string
+		) => {
 			mutate({
 				actionType,
-				params: { referenceNumber: reference_number, otp, message },
+				params: { id, otp, message, reference_number, published_at },
 			});
 		},
-		[mutate, reference_number]
+		[mutate, id]
 	);
 
 	const buttonConfigs: ButtonConfigType[] = useMemo(() => {
@@ -166,10 +173,11 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: letter_type !== "incoming" && permissions.can_publish_letter,
+				isVisible: permissions.can_publish_letter,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
+						disabledButton={reference_number && published_at ? false : true}
 						triggerButtonText="ደብዳቤውን አከፋፍል"
 						triggerButtonVariant="third"
 						dialogTitle="ደብዳቤውን አከፋፍል"
@@ -179,9 +187,13 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						onConfirm={() => {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
-							handleAction("publish_letter", otp);
+
+							const newRefNo = `${department}-${reference_number}-${year}`;
+
+							handleAction("publish_letter", otp, undefined, newRefNo, published_at);
 						}}
 						requiresAuth={true}
+						requiresMessage={false}
 					/>
 				),
 			},
@@ -208,9 +220,13 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			},
 		];
 	}, [
+		reference_number,
+		published_at,
 		current_state,
 		handleAction,
 		letter_type,
+		department,
+		year,
 		owner,
 		permissions.can_close_letter,
 		permissions.can_permanently_delete_letter,

@@ -31,7 +31,7 @@ export default function Compose() {
 		const templateMap: Record<string, React.FC<TemplateProps>> = {
 			internal: InternalLetterTemplate,
 			outgoing: OutgoingLetterTemplate,
-			IncomingLetterTemplate: IncomingLetterTemplate,
+			incoming: IncomingLetterTemplate,
 		};
 
 		return templateMap[letter_type] || null;
@@ -50,6 +50,7 @@ export default function Compose() {
 				</Drawer>
 				<main className="mb-0 flex flex-1 flex-col items-center bg-gray-100 py-5">
 					<TemplateComponent
+						publishable={false}
 						editor={editor}
 						language={language}
 						subject={subject}

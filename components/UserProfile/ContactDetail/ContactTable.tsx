@@ -79,7 +79,7 @@ export default function ContactTable() {
 	const { mutate: deleteContactMutation } = useToastMutation<string>(
 		"deleteContact",
 		DeleteContacts,
-		"እውቂያዎችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+		"ማህደሮችዎን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
 	);
 
 	// Filter contacts based on search query
@@ -111,15 +111,15 @@ export default function ContactTable() {
 	return (
 		<Card className="my-8">
 			<CardHeader>
-				<CardTitle>የእርስዎ እውቂያዎች</CardTitle>
-				<CardDescription>የእርስዎን የግል እውቂያዎች እና መረጃቸውን ያስተዳድሩ።</CardDescription>
+				<CardTitle>የእርስዎ ማህደሮች</CardTitle>
+				<CardDescription>የእርስዎን የግል ማህደሮች እና መረጃቸውን ያስተዳድሩ።</CardDescription>
 				<span className="flex w-full  items-center justify-end  text-sm text-muted-foreground">
 					<Button
 						className="flex items-center gap-2"
 						onClick={() => handleOpenSheet(null, true)}
 					>
 						<CirclePlus size={18} />
-						አዲስ እውቂያዎች
+						አዲስ ማህደሮች
 					</Button>
 				</span>
 			</CardHeader>
@@ -127,7 +127,7 @@ export default function ContactTable() {
 				<div className="mb-4">
 					<input
 						type="text"
-						placeholder="የእርስዎ የእውቂያ መረጃዎች ፈልግ..."
+						placeholder="የማህደር መረጃዎችን ፈልግ..."
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 						className="w-full rounded border p-2"
@@ -203,7 +203,7 @@ export default function ContactTable() {
 					<div className="text-xs text-muted-foreground">
 						<strong>{startIndex + 1}</strong> -{" "}
 						<strong>{Math.min(endIndex, filteredContacts.length)}</strong> በማሳየት ላይ ከ{" "}
-						<strong>{filteredContacts.length}</strong> እውቂያዎች
+						<strong>{filteredContacts.length}</strong> ማህደሮች
 					</div>
 					<div className="flex items-center gap-2">
 						<Button

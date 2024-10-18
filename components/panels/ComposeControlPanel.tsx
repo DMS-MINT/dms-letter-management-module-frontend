@@ -1,7 +1,7 @@
 "use client";
 
 import { createLetter } from "@/actions/letter_module/crudActions";
-import { useDraftLetterStore } from "@/lib/stores";
+import { useDraftAttachmentStore, useDraftLetterStore } from "@/lib/stores";
 import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type { DraftLetterType, LetterDetailType } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
@@ -21,13 +21,14 @@ export default function ComposeControlPanel() {
 		resetContent,
 		resetParticipants,
 	} = useDraftLetterStore();
+	const { newAttachments } = useDraftAttachmentStore();
 
 	const router = useRouter();
 
 	const { mutate } = useMutation({
 		mutationKey: ["createLetter"],
-		mutationFn: async (letter: DraftLetterType) => {
-			const response = await createLetter(letter);
+		mutationFn: async (formData: FormData) => {
+			const response = await createLetter(formData);
 
 			if (!response.ok) throw response;
 
@@ -35,14 +36,19 @@ export default function ComposeControlPanel() {
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
+			toast.loading("ደብዳቤዎን በመፍጠር ላይ፣ እባክዎን ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
-			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
+			console.log("Letter data:", data);
+			toast.success("ደብዳቤዎ በተሳካ ሁኔታ ተፈጥሯል!");
 			resetContent();
 			resetParticipants();
-			router.push(`/letters/draft/${data.reference_number}`);
+			if (data.current_state === "Draft") {
+				router.push(`/letters/draft/${data.id}`);
+			} else {
+				router.push(`/letters/outbox/${data.id}`);
+			}
 		},
 		onError: (error: any) => {
 			toast.dismiss();
@@ -55,6 +61,7 @@ export default function ComposeControlPanel() {
 	}, [participants]);
 
 	const onSubmit = () => {
+		const formData = new FormData();
 		const letter: DraftLetterType = {
 			subject,
 			body,
@@ -62,8 +69,14 @@ export default function ComposeControlPanel() {
 			language,
 			participants: draft_participants,
 		};
+		formData.append("letter", JSON.stringify(letter));
 
-		mutate(letter);
+		newAttachments.forEach((attachment, index) => {
+			formData.append(`attachments[${index}].file`, attachment.file);
+			formData.append(`attachments[${index}].description`, attachment.description);
+		});
+
+		mutate(formData);
 	};
 
 	const renderDialog = useMemo(() => {
@@ -73,7 +86,8 @@ export default function ComposeControlPanel() {
 			case "outgoing":
 				return <SubmitLetterDialog actionType="create_and_submit" />;
 			case "incoming":
-				return <SubmitLetterDialog actionType="create_and_publish" />;
+				// return <SubmitLetterDialog actionType="create_and_publish" />;
+				return;
 			default:
 				throw new Error("Invalid letter type");
 		}

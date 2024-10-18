@@ -1,3 +1,4 @@
+export * from "./attachmentStore";
 export * from "./letterStore";
 export * from "./letterStoreCreator";
 export * from "./uiStore";

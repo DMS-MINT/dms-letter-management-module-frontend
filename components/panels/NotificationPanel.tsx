@@ -24,8 +24,7 @@ export default function NotificationPanel() {
 			try {
 				const response = await getNotifications();
 				if (!response.ok) throw response;
-				const notifications = response.message
-					.notifications as NotificationDetailType[];
+				const notifications = response.message as NotificationDetailType[];
 
 				notifications
 					.filter((notification) => !notification.has_notified)

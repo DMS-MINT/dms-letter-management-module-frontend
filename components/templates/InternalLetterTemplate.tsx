@@ -6,12 +6,17 @@ import { BlockEditor } from "../BlockEditor";
 import { Label } from "../ui/label";
 import Paper from "./Paper";
 import type { TemplateProps } from "./types";
+import { RefNoAndDate } from "@/components/templates";
+import { Textarea } from "../ui/textarea";
 
 export default function InternalLetterTemplate({
+	publishable,
 	editor,
 	language,
 	subject,
 	participants,
+	reference_number,
+	published_at,
 	isLetterReadOnly,
 	addParticipant,
 	removeParticipant,
@@ -19,12 +24,17 @@ export default function InternalLetterTemplate({
 }: TemplateProps) {
 	return (
 		<Paper>
+			<RefNoAndDate
+				published_at={published_at}
+				publishable={publishable}
+				reference_number={reference_number}
+			/>
 			<ParticipantSelector
 				language={language}
 				prefix={language === LanguageEnum.English ? "To" : "ለ"}
 				isDisabled={isLetterReadOnly}
 				name={RoleEnum["PRIMARY RECIPIENT"]}
-				placeholder="እባክዎ የደብዳቤውን ለማን እንደሚልኩ ያስገቡ"
+				placeholder="እባክዎን ደብዳቤውን ለማን እንደሚልኩ ያስገቡ"
 				participantScope="internal_staff"
 				participants={participants}
 				addParticipant={addParticipant}
@@ -33,13 +43,13 @@ export default function InternalLetterTemplate({
 			/>
 			<div className="mb-2 flex w-full items-center justify-center gap-2 self-center">
 				<Label>{language === LanguageEnum.English ? "Subject" : "ጉዳዩ"}:-</Label>
-				<input
-					type="text"
+				<Textarea
 					value={subject}
 					disabled={isLetterReadOnly}
-					className="min-w-20 flex-grow rounded-none focus:border-b focus:outline-0 disabled:bg-transparent"
+					className="h-auto min-h-10 min-w-20 flex-grow resize-none rounded-none border-none ring-offset-0 focus-visible:border-b focus-visible:ring-0  disabled:bg-transparent"
 					onChange={(e) => updateLetterField("subject", e.target.value)}
 					placeholder="የደብዳቤዎን ርዕሰ ጉዳይ እዚህ ያስገቡ..."
+					rows={1}
 				/>
 			</div>
 			<BlockEditor editor={editor} />
@@ -52,7 +62,7 @@ export default function InternalLetterTemplate({
 							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["BLIND CARBON COPY RECIPIENT"]}
-							placeholder="እባክዎ ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
+							placeholder="እባክዎን ስለ ደብዳቤው እንዲያውቁ የሚገባቸውን ሰዎች ይምረጡ"
 							participantScope="internal_staff"
 							participants={participants}
 							addParticipant={addParticipant}
@@ -74,7 +84,7 @@ export default function InternalLetterTemplate({
 							prefix={language === LanguageEnum.English ? "To" : "ለ"}
 							isDisabled={isLetterReadOnly}
 							name={RoleEnum["CARBON COPY RECIPIENT"]}
-							placeholder="እባክዎ የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
+							placeholder="እባክዎን የደብዳቤው ግልባጭ የሚላክላቸውን ሰዎች ይምረጡ"
 							participantScope="internal_staff"
 							participants={participants}
 							addParticipant={addParticipant}

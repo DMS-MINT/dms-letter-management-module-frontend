@@ -21,7 +21,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { useParticipantSelector, useToastMutation } from "@/hooks";
-import { useCollaboratorStore, useLetterRevisionStore } from "@/lib/stores";
+import {
+	useCollaboratorStore,
+	useLetterRevisionStore,
+	useUserStore,
+} from "@/lib/stores";
 import {
 	getLabel,
 	getValue,
@@ -78,6 +82,7 @@ export function PingNotificationModal({
 	handleClick,
 	current_state,
 }: Props) {
+	const currentUser = useUserStore((state) => state.currentUser);
 	const { data: options } = useQuery({
 		queryKey: ["users"],
 		queryFn: async () => {
@@ -117,7 +122,7 @@ export function PingNotificationModal({
 		removeParticipant,
 	});
 
-	const { language, participants, reference_number } = useLetterRevisionStore();
+	const { language, participants, id } = useLetterRevisionStore();
 
 	const { mutate } = useToastMutation<[NotificationCreateDTO]>(
 		"sendReminderNotification",
@@ -181,8 +186,9 @@ export function PingNotificationModal({
 		return participants
 			.filter((participant) => participant.role === RoleEnum.COLLABORATOR)
 			.filter(isUserParticipantType)
+			.filter((participants) => participants.user.id !== currentUser.id)
 			.map((participant) => participant.user);
-	}, [participants]);
+	}, [currentUser, participants]);
 
 	const getUserIds = useMemo(() => {
 		return recipients
@@ -198,7 +204,7 @@ export function PingNotificationModal({
 			channels: data.channels,
 			details: {
 				source: "user",
-				letter_ref: reference_number,
+				letter_ref: id,
 			},
 		};
 
@@ -226,7 +232,9 @@ export function PingNotificationModal({
 					isClearable={true}
 					isDisabled={false}
 					options={
-						current_state === "Draft" || current_state === "Rejected"
+						current_state === "Draft" ||
+						current_state === "Rejected" ||
+						current_state === "Published"
 							? getCollaborators
 							: options
 					}
@@ -259,7 +267,7 @@ export function PingNotificationModal({
 								<FormItem>
 									<FormLabel className="text-base">ማሳወቂያ ዓይነቶች</FormLabel>
 									<FormDescription>ለመላክ የሚፈልጓቸውን የማሳወቂያ ዓይነቶች ይምረጡ።</FormDescription>
-									{notificationChannels.map((channel, index) => (
+									{notificationChannels.map((channel) => (
 										<div key={channel.id} className="flex items-center space-x-2">
 											<Switch
 												checked={field.value.includes(channel.id)}

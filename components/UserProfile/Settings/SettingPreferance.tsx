@@ -1,6 +1,4 @@
-type Props = {};
-
-const SettingPreferance = (props: Props) => {
+const SettingPreferance = () => {
 	return <div>SettingPreferance</div>;
 };
 

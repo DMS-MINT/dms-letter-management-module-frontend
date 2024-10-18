@@ -28,7 +28,11 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { useWorkflowDispatcher, type ActionType } from "@/hooks";
-import type { LetterColumnDefType, LetterType } from "@/types/letter_module";
+import {
+	LetterTableColumns,
+	type LetterColumnDefType,
+	type LetterType,
+} from "@/types/letter_module";
 import { Trash, UndoDot } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -57,7 +61,9 @@ interface DataTableProps {
 function DataTable({ columns, data, param }: DataTableProps) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+		[LetterTableColumns.ID]: false,
+	});
 	const [rowSelection, setRowSelection] = useState({});
 	const [globalFilter, setGlobalFilter] = useState("");
 
@@ -114,27 +120,23 @@ function DataTable({ columns, data, param }: DataTableProps) {
 	const handleDelete = async (otp?: string) => {
 		const selectedRowIds = Object.keys(rowSelection);
 
-		const referenceNumbers = selectedRowIds
+		const ids = selectedRowIds
 			.map((id) =>
 				table
 					.getRowModel()
 					.rows.find((row) => row.id === id)
-					?.getValue("reference_number")
+					?.getValue("id")
 			)
 			.filter((refNum): refNum is string => !!refNum);
 
-		if (referenceNumbers.length > 0) {
+		if (ids.length > 0) {
 			switch (param) {
 				case "draft":
-					await handleBatchAction("moveToTrash_batch", referenceNumbers);
+					await handleBatchAction("moveToTrash_batch", ids);
 					break;
 				case "trash":
 					if (otp !== undefined) {
-						await handleBatchAction(
-							"permanently_delete_batch",
-							referenceNumbers,
-							otp
-						);
+						await handleBatchAction("permanently_delete_batch", ids, otp);
 					} else {
 						toast.dismiss();
 						toast.error("OTP ይህ ቅድሚያ የማስወገጃ ስርዓት የሚፈልጉትን ማነስ አልተቻለም።");
@@ -153,18 +155,18 @@ function DataTable({ columns, data, param }: DataTableProps) {
 	const handleRestore = async () => {
 		const selectedRowIds = Object.keys(rowSelection);
 
-		const referenceNumbers = selectedRowIds
+		const ids = selectedRowIds
 			.map((id) =>
 				table
 					.getRowModel()
 					.rows.find((row) => row.id === id)
-					?.getValue("reference_number")
+					?.getValue("id")
 			)
 			.filter((refNum): refNum is string => !!refNum);
 
-		if (referenceNumbers.length > 0) {
+		if (ids.length > 0) {
 			if (param === "trash") {
-				await handleBatchAction("restoreFromTrash_batch", referenceNumbers);
+				await handleBatchAction("restoreFromTrash_batch", ids);
 			} else {
 				toast.error("ይህ ዓይነት የተመረጠ እንዲሆን አልተዘጋጅም።");
 			}
@@ -174,11 +176,11 @@ function DataTable({ columns, data, param }: DataTableProps) {
 	};
 
 	const handleBatchAction = useCallback(
-		async (actionType: ActionType, referenceNumber: string[], otp?: string) => {
+		async (actionType: ActionType, id: string[], otp?: string) => {
 			try {
 				await mutate({
 					actionType,
-					params: { referenceNumber, otp },
+					params: { id, otp },
 				});
 				toast.dismiss();
 				toast.success("የተመረጡት ደብዳቤዎች በቋሚነት እንዲጠፉ ተደርጓል።");
@@ -308,7 +310,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 					<TableBody>
 						{table.getRowModel().rows.length ? (
 							table.getRowModel().rows.map((row) => {
-								const reference_number = row.getValue("reference_number");
+								const id = row.getValue("id");
 								return (
 									<TableRow
 										key={row.id}
@@ -318,7 +320,7 @@ function DataTable({ columns, data, param }: DataTableProps) {
 											if (
 												!(e.target as HTMLInputElement).closest('input[type="checkbox"]')
 											) {
-												router.push(`${pathname}/${reference_number}`);
+												router.push(`${pathname}/${id}`);
 											}
 										}}
 									>

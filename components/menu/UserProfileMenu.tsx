@@ -24,7 +24,9 @@ import { FileText, LifeBuoy, LogOut, SquarePlay, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import NotificationPopover from "../drawers/NotificationDrawer";
 import { VideoDialog } from "./VideoDialog";
+import { handleLogout } from "@/actions/auth/remeberme";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
@@ -50,9 +52,10 @@ export default function UserProfileMenu() {
 		mutationFn: signOut,
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("እርስዎን በማስወጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
+			toast.loading("በመውጣት ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: () => {
+			handleLogout();
 			router.push("/signin");
 		},
 		onError: (errorMessage: string) => {
@@ -77,6 +80,7 @@ export default function UserProfileMenu() {
 
 	return isSuccess && myProfile ? (
 		<div className="flex items-center gap-4">
+			<NotificationPopover />
 			<DropdownMenu>
 				<DropdownMenuTrigger>
 					<Avatar className="bg-blue-400">

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { LINKS } from "@/constants";
 import { useOTP } from "@/hooks";
-import { useDraftLetterStore } from "@/lib/stores";
+import { useDraftAttachmentStore, useDraftLetterStore } from "@/lib/stores";
 import canSubmitLetter from "@/lib/utils/canSubmitLetter";
 import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type {
@@ -40,14 +40,9 @@ import {
 
 export type ActionType = "create_and_submit" | "create_and_publish";
 
-export type CreateLetterParams = {
-	letter: DraftLetterType;
-	otp: string;
-};
-
 export type LetterActionProps = {
 	actionType: ActionType;
-	params: CreateLetterParams;
+	formData: FormData;
 };
 
 export default function SubmitLetterDialog({
@@ -55,24 +50,41 @@ export default function SubmitLetterDialog({
 }: {
 	actionType: ActionType;
 }) {
-	const { subject, body, letter_type, language, participants } =
-		useDraftLetterStore((state) => ({
-			subject: state.subject,
-			body: state.body,
-			letter_type: state.letter_type,
-			language: state.language,
-			participants: state.participants,
-		}));
+	const {
+		subject,
+		body,
+		letter_type,
+		language,
+		participants,
+		id,
+		current_state,
+		department,
+		year,
+	} = useDraftLetterStore((state) => ({
+		subject: state.subject,
+		body: state.body,
+		letter_type: state.letter_type,
+		language: state.language,
+		participants: state.participants,
+		id: state.id,
+		current_state: state.current_state,
+		department: state.department,
+		year: state.year,
+	}));
+	const { newAttachments } = useDraftAttachmentStore();
 
 	const { form, getOTP, handleInputChange } = useOTP();
 	const router = useRouter();
 
-	const actionDispatcher = async ({ actionType, params }: LetterActionProps) => {
+	const actionDispatcher = async ({
+		actionType,
+		formData,
+	}: LetterActionProps) => {
 		switch (actionType) {
 			case "create_and_submit":
-				return await createAndSubmitLetter(params);
+				return await createAndSubmitLetter(formData);
 			case "create_and_publish":
-				return await createAndPublishLetter(params);
+				return await createAndPublishLetter(formData);
 			default:
 				throw new Error("Invalid action type");
 		}
@@ -92,9 +104,10 @@ export default function SubmitLetterDialog({
 			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
+			console.log("Letter data:", data);
 			toast.dismiss();
 			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
-			router.push(`/letters/draft/${data.letter.reference_number}`);
+			router.push(`/letters/draft/${data.letter.id}`);
 		},
 		onError: (error: any) => {
 			toast.dismiss();
@@ -107,18 +120,26 @@ export default function SubmitLetterDialog({
 	}, [participants]);
 
 	const onContinue = (otp: string) => {
+		const formData = new FormData();
+		const letter: DraftLetterType = {
+			subject,
+			body,
+			letter_type,
+			language,
+			participants: draft_participants,
+		};
+		formData.append("letter", JSON.stringify(letter));
+
+		newAttachments.forEach((attachment, index) => {
+			formData.append(`attachments[${index}].file`, attachment.file);
+			formData.append(`attachments[${index}].description`, attachment.description);
+		});
+
+		formData.append("otp", JSON.stringify(otp));
+
 		const action: LetterActionProps = {
 			actionType,
-			params: {
-				letter: {
-					subject: subject,
-					body: body,
-					letter_type: letter_type,
-					language: language,
-					participants: draft_participants,
-				},
-				otp: otp,
-			},
+			formData,
 		};
 		mutate(action);
 	};
@@ -138,6 +159,10 @@ export default function SubmitLetterDialog({
 										letter_type,
 										language,
 										participants,
+										id,
+										current_state,
+										department,
+										year,
 									})
 								}
 								onClick={() => {

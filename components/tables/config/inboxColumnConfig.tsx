@@ -6,7 +6,7 @@ import {
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { convertToEthiopianDateAndTime } from "@/lib/utils/convertToEthiopianDate";
+// import { convertToEthiopianDateAndTime } from "@/lib/utils/convertToEthiopianDate";
 import getParticipantInfo from "@/lib/utils/getParticipantInfo";
 import type {
 	LetterColumnDefType,
@@ -63,6 +63,13 @@ export const inboxTableColumns: LetterColumnDefType = [
 			);
 		},
 		size: 30,
+	},
+	{
+		accessorKey: LetterTableColumns.ID,
+		size: undefined,
+		cell: () => null,
+		header: () => null,
+		enableHiding: true,
 	},
 	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
@@ -186,23 +193,23 @@ export const inboxTableColumns: LetterColumnDefType = [
 		},
 	},
 	{
-		accessorKey: LetterTableColumns.RECEIVED_AT,
+		accessorKey: LetterTableColumns.PUBLISHED_AT,
 		header: ({ column }) => (
 			<ColumnHeader
 				column={column}
-				title={columnTranslation[LetterTableColumns.RECEIVED_AT]}
+				title={columnTranslation[LetterTableColumns.PUBLISHED_AT]}
 			/>
 		),
 		cell: ({ row }) => {
-			const received_at: string = row.getValue(LetterTableColumns.RECEIVED_AT);
-			const { time, date } = convertToEthiopianDateAndTime(received_at);
+			const received_at: string = row.getValue(LetterTableColumns.PUBLISHED_AT);
+			// const { time, date } = convertToEthiopianDateAndTime(received_at);
 			return (
 				<div className="flex flex-col items-center text-xs font-normal text-muted-foreground">
-					<span>{time}</span>
+					{/*<span>{time}</span>*/}
 					<span className="flex gap-1 ">
 						{" "}
 						<CalendarIcon size={12} />
-						{date}
+						{received_at}
 					</span>
 				</div>
 			);

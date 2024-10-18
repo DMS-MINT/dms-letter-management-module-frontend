@@ -29,7 +29,7 @@ export async function getNotifications() {
 	try {
 		const response = await axiosInstance.get("/notifications/");
 
-		return { ok: true, message: response.data };
+		return { ok: true, message: response.data.notifications };
 	} catch (error: any) {
 		return {
 			ok: false,
@@ -41,9 +41,10 @@ export async function getNotifications() {
 // Mark notification as read
 export async function markNotificationAsRead(notification_id: string) {
 	try {
-		const response = await axiosInstance.post(
+		const response = await axiosInstance.put(
 			`/notifications/${notification_id}/read/`
 		);
+
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return {
@@ -53,12 +54,23 @@ export async function markNotificationAsRead(notification_id: string) {
 	}
 }
 
-// Mark multiple notifications as read (bulk)
 export async function MarkBulkNotificationsAsRead(data: {
 	notification_ids: string[];
 }) {
+	console.log("🚀 ~ markBulkNotificationAsRead ~ notifications:", data);
+
+	// Transform the data to match the expected API format
+	const payload = {
+		fields: {
+			ids: data.notification_ids,
+		},
+	};
+	console.log("🚀 ~ markBulkNotificationAsRead ~ ", payload);
 	try {
-		const response = await axiosInstance.post("/notifications/bulk/read/", data);
+		const response = await axiosInstance.put(
+			"/notifications/bulk/read/",
+			payload
+		);
 		return { ok: true, message: response.data };
 	} catch (error: any) {
 		return {

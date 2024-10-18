@@ -2,15 +2,11 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ParamsType } from "@/hooks";
-import type {
-	DraftLetterType,
-	ModifiedLetterType,
-} from "@/types/letter_module";
 import getErrorMessage from "../getErrorMessage";
 import { curdErrorMessages, deleteErrorMessages } from "./errorMessages";
 
 interface BatchParamsType {
-	referenceNumbers: string[];
+	id: string[] | "";
 	otp?: string;
 }
 
@@ -23,9 +19,9 @@ export async function getLetters(category: string) {
 	}
 }
 
-export async function getLetterDetails(referenceNumber: string) {
+export async function getLetterDetails(id: string) {
 	try {
-		const response = await axiosInstance.get(`letters/${referenceNumber}/`);
+		const response = await axiosInstance.get(`letters/${id}/`);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -33,9 +29,13 @@ export async function getLetterDetails(referenceNumber: string) {
 	}
 }
 
-export async function createLetter(letter: DraftLetterType) {
+export async function createLetter(formData: FormData) {
 	try {
-		const response = await axiosInstance.post("letters/create/", letter);
+		const response = await axiosInstance.post("letters/create/", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 
 		return { ok: true, message: response.data.letter };
 	} catch (error: any) {
@@ -43,18 +43,18 @@ export async function createLetter(letter: DraftLetterType) {
 	}
 }
 
-export async function createAndSubmitLetter({
-	letter,
-	otp,
-}: {
-	letter: DraftLetterType;
-	otp: string;
-}) {
+export async function createAndSubmitLetter(formData: FormData) {
+	console.log(formData);
 	try {
-		const response = await axiosInstance.post("letters/create_and_submit/", {
-			letter,
-			otp,
-		});
+		const response = await axiosInstance.post(
+			"letters/create_and_submit/",
+			formData,
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -62,18 +62,19 @@ export async function createAndSubmitLetter({
 	}
 }
 
-export async function createAndPublishLetter({
-	letter,
-	otp,
-}: {
-	letter: DraftLetterType;
-	otp: string;
-}) {
+export async function createAndPublishLetter(formData: FormData) {
 	try {
-		const response = await axiosInstance.post("letters/create_and_publish/", {
-			letter,
-			otp,
-		});
+		const response = await axiosInstance.post(
+			"letters/create_and_publish/",
+			formData,
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
+
+		console.log(response.data);
 
 		return { ok: true, message: response.data };
 	} catch (error: any) {
@@ -81,10 +82,14 @@ export async function createAndPublishLetter({
 	}
 }
 
-export async function updateLetter(params: [string, ModifiedLetterType]) {
+export async function updateLetter(params: [string, FormData]) {
 	try {
-		const [referenceNumber, letter] = params;
-		await axiosInstance.put(`letters/${referenceNumber}/update/`, letter);
+		const [id, formData] = params;
+		await axiosInstance.put(`letters/${id}/update/`, formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
 
 		return { ok: true, message: "ለውጦችን በተሳካ ሁኔታ ተቀምጠዋል።" };
 	} catch (error: any) {
@@ -92,9 +97,9 @@ export async function updateLetter(params: [string, ModifiedLetterType]) {
 	}
 }
 
-export async function moveToTrash(referenceNumber: string) {
+export async function moveToTrash(id: string) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/trash/`);
+		await axiosInstance.put(`letters/${id}/trash/`);
 
 		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መጣያው ተወስዷል።" };
 	} catch (error: any) {
@@ -102,9 +107,9 @@ export async function moveToTrash(referenceNumber: string) {
 	}
 }
 
-export async function restoreFromTrash(referenceNumber: string) {
+export async function restoreFromTrash(id: string) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/restore/`);
+		await axiosInstance.put(`letters/${id}/restore/`);
 
 		return { ok: true, message: "ደብዳቤው ከመጣያው ተመልሷል።" };
 	} catch (error: any) {
@@ -112,9 +117,9 @@ export async function restoreFromTrash(referenceNumber: string) {
 	}
 }
 
-export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
+export async function permanentlyDelete({ id, otp }: ParamsType) {
 	try {
-		await axiosInstance.put(`letters/${referenceNumber}/permanently_delete/`, {
+		await axiosInstance.put(`letters/${id}/delete/`, {
 			otp,
 		});
 
@@ -125,11 +130,11 @@ export async function permanentlyDelete({ referenceNumber, otp }: ParamsType) {
 }
 
 // Move multiple rows to trash
-export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
+export async function moveToTrashBatch({ id }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/trash/", {
-			reference_numbers,
+		const ids = id;
+		await axiosInstance.put("letters/bulk/trash/", {
+			ids,
 		});
 
 		return { ok: true, message: "ደብዳቤዎቹ በተሳካ ሁኔታ ወደ መጣያው ተወስደዋል።" };
@@ -139,13 +144,11 @@ export async function moveToTrashBatch({ referenceNumbers }: BatchParamsType) {
 }
 
 // Restore multiple rows from trash
-export async function restoreFromTrashBatch({
-	referenceNumbers,
-}: BatchParamsType) {
+export async function restoreFromTrashBatch({ id }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/restore/", {
-			reference_numbers,
+		const ids = id;
+		await axiosInstance.put("letters/bulk/restore/", {
+			ids,
 		});
 
 		return { ok: true, message: "ደብዳቤዎቹ ከመጣያው ተመልሰዋል።" };
@@ -155,14 +158,11 @@ export async function restoreFromTrashBatch({
 }
 
 // Permanently delete multiple rows
-export async function permanentlyDeleteBatch({
-	referenceNumbers,
-	otp,
-}: BatchParamsType) {
+export async function permanentlyDeleteBatch({ id, otp }: BatchParamsType) {
 	try {
-		const reference_numbers = referenceNumbers;
-		await axiosInstance.put("letters/batch/permanently_delete/", {
-			reference_numbers,
+		const ids = id;
+		await axiosInstance.put("letters/bulk/delete/", {
+			ids,
 			otp,
 		});
 

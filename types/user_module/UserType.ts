@@ -1,10 +1,15 @@
-import type { DepartmentType, JobTitleType } from "./DepartmentType";
+import type {
+	DepartmentType,
+	DepartmentAbbrType,
+	JobTitleType,
+} from "./DepartmentType";
 
 export type UserType = {
 	id: string;
 	full_name_en: string;
 	full_name_am: string;
 	job_title: JobTitleType;
+	department: DepartmentAbbrType;
 };
 
 export type CurrentUserType = {

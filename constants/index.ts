@@ -4,6 +4,7 @@ export const IMAGES = Object.freeze({
 	pentagram: "/images/pentagram.png",
 	qr_code: "/images/qr_code.png",
 	"halftone-pattern": "/images/halftone-pattern.svg",
+	cloud_upload: "/images/cloud-upload.svg",
 });
 
 export const LINKS = Object.freeze({
@@ -15,4 +16,16 @@ export const LINKS = Object.freeze({
 
 export const DOCS = Object.freeze({
 	user_manual: "/docs/user-manual.pdf",
+});
+
+export const FILE_ICON = Object.freeze({
+	csv: "/icons/csv.png",
+	default: "/icons/default.png",
+	doc: "/icons/docx.png",
+	docx: "/icons/docx.png",
+	jpeg: "/icons/jpeg.png",
+	pdf: "/icons/pdf.png",
+	plain: "/icons/text.png",
+	png: "/icons/png.png",
+	ppt: "/icons/ppt.png",
 });

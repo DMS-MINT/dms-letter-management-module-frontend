@@ -17,6 +17,16 @@ export interface ICredentials {
 	password: string;
 }
 
+export async function setEmail(email: string) {
+	cookies().set("email", email, { httpOnly: true });
+}
+
+export async function getEmail() {
+	const email = cookies().get("email")?.value;
+	if (!email) throw new Error("Email not set");
+	return email;
+}
+
 export async function encrypt(payload: any) {
 	return await new SignJWT(payload)
 		.setProtectedHeader({ alg: "HS256" })
@@ -96,6 +106,68 @@ export async function validateOneTimePassword(otp: string) {
 		const response = await axiosInstance.post("auth/validate-otp/", { otp });
 
 		return { ok: true, message: response.data };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
+	}
+}
+
+export async function forgotPassword(email: string) {
+	try {
+		const response = await axiosInstance.post("/auth/forgot-password/", {
+			email,
+		});
+		await setEmail(email);
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		if (error.response.status == 404) {
+			return { ok: false, message: "ይህ ኢሜይል አይታወቅም፡ እባክዎን ትክክለኛ ኢሜል ያስገቡ።" };
+		} else {
+			return {
+				ok: false,
+				message: getErrorMessage(workflowErrorMessages, error),
+			};
+		}
+	}
+}
+
+export async function verifyOTP(otpArray: number[]) {
+	const email: string = await getEmail();
+	const otp: string = otpArray.join("");
+	try {
+		const response = await axiosInstance.post("/auth/verify-otp/", {
+			otp,
+			email,
+		});
+		console.log("Response received:", response.data);
+		return { ok: true, message: response.data };
+	} catch (error: any) {
+		console.error(
+			"Error during OTP verification:",
+			error.response ? error.response.data : error.message
+		);
+		return {
+			ok: false,
+			message: error.response?.data?.message || error.message,
+		};
+	}
+}
+
+export async function resetPassword(
+	newPassword: string,
+	confirmPassword: string
+) {
+	const email: string = await getEmail();
+	if (newPassword !== confirmPassword) {
+		return { ok: false, message: "Passwords do not match" };
+	}
+
+	try {
+		const response = await axiosInstance.post("/auth/reset-password/", {
+			new_password: newPassword,
+			email,
+		});
+		console.log(response.data);
+		return { ok: true, message: "የይለፍ ቃልዎ በሚገባ ተቀይሯል እባኮትን በቀየሩት የይለፍ ቃል ይግቡ፡፡" };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}

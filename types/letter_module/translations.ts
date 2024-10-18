@@ -41,6 +41,21 @@ export const monthTranslations: Record<number, string> = {
 	13: "ጳጉሜ",
 };
 
+export const hourTranslations: Record<number, { AM: string; PM: string }> = {
+	1: { AM: "ከለሊቱ 7", PM: "ከቀኑ 7" },
+	2: { AM: "ከለሊቱ 8", PM: "ከቀኑ 8" },
+	3: { AM: "ከለሊቱ 9", PM: "ከቀኑ 9" },
+	4: { AM: "ከለሊቱ 10", PM: "ከቀኑ 10" },
+	5: { AM: "ከለሊቱ 11", PM: "ከቀኑ 11" },
+	6: { AM: "ማለዳ 12", PM: "ከምሽቱ 12" },
+	7: { AM: "ከጠዋቱ 1", PM: "ከምሽቱ 1" },
+	8: { AM: "ከጠዋቱ 2", PM: "ከምሽቱ 2" },
+	9: { AM: "ከጠዋቱ 3", PM: "ከምሽቱ 3" },
+	10: { AM: "ከጠዋቱ 4", PM: "ከምሽቱ 4" },
+	11: { AM: "ከጠዋቱ 5", PM: "ከምሽቱ 5" },
+	12: { AM: "ከቀኑ 6", PM: "ከለሊቱ 6" },
+};
+
 export const columnTranslation: Record<LetterTableColumns, string> = {
 	[LetterTableColumns.ID]: "የደብዳቤ ቁጥር",
 	[LetterTableColumns.REFERENCE_NUMBER]: "የመዝገብ ቁጥር",
@@ -49,7 +64,7 @@ export const columnTranslation: Record<LetterTableColumns, string> = {
 	[LetterTableColumns.CURRENT_STATE]: "የደብዳቤ ሁኔታ",
 	[LetterTableColumns.SENDER]: "ከ",
 	[LetterTableColumns.RECIPIENT]: "ለ",
-	[LetterTableColumns.RECEIVED_AT]: "የደረሰበት ቀን",
+	// [LetterTableColumns.RECEIVED_AT]: "የደረሰበት ቀን",
 	[LetterTableColumns.LETTER_TYPE]: "የደብዳቤ አይነት",
 	[LetterTableColumns.SUBMITTED_AT]: "የተላለፈበት ቀን",
 	[LetterTableColumns.PUBLISHED_AT]: "ያከፋፈለበት ቀን",

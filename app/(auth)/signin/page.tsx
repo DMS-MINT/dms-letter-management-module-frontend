@@ -18,10 +18,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import {
+	retrieveCredentials,
+	storeCredentials,
+} from "@/actions/auth/remeberme";
+import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
@@ -54,7 +60,8 @@ export default function SignIn() {
 			toast.dismiss();
 			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎ ይጠብቁ...");
 		},
-		onSuccess: (data) => {
+		onSuccess: (data, value) => {
+			storeCredentials(value);
 			toast.dismiss();
 			toast.success(data.message);
 			router.push("/letters/inbox");
@@ -64,6 +71,31 @@ export default function SignIn() {
 			toast.error(error.message);
 		},
 	});
+
+	useEffect(() => {
+		const fetchCredentials = async () => {
+			try {
+				const storedCredentials = await retrieveCredentials();
+
+				if (storedCredentials) {
+					form.setValue("email", storedCredentials.email);
+					form.setValue("password", storedCredentials.password);
+					form.setValue("remember", true);
+
+					onSubmit({
+						email: storedCredentials.email,
+						password: storedCredentials.password,
+						remember: true,
+					});
+				}
+			} catch (error) {
+				console.error("Error retrieving credentials:", error);
+			}
+		};
+
+		fetchCredentials();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		mutate(values as ICredentials);
@@ -104,11 +136,11 @@ export default function SignIn() {
 								<FormItem>
 									<FormLabel className="flex justify-between">
 										የይለፍ ቃልዎን ያስገቡ
-										{/* <Link href="/forgot-password" tabIndex={4}>
+										<Link href="/forgot-password" tabIndex={4}>
 											<Button type="button" variant="link" className="h-fit py-0">
 												የይለፍ ቃልዎን ረስተዋል?
 											</Button>
-										</Link> */}
+										</Link>
 									</FormLabel>
 									<FormControl>
 										<div className="relative ">
@@ -133,7 +165,7 @@ export default function SignIn() {
 								</FormItem>
 							)}
 						/>
-						{/* <FormField
+						<FormField
 							control={form.control}
 							name="remember"
 							render={({ field }) => (
@@ -151,7 +183,7 @@ export default function SignIn() {
 									<FormMessage className="form-error-message" />
 								</FormItem>
 							)}
-						/> */}
+						/>
 
 						<Button
 							disabled={isPending}

@@ -72,7 +72,7 @@ export function CustomSheet({
 	const { mutate: addContactMutation } = useToastMutation<NewContactType>(
 		"addContact",
 		AddContacts,
-		"እውቂያዎችን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
+		"ማህደሮችን በመሰረዝ ላይ፣ እባክዎ ይጠብቁ..."
 	);
 
 	const onSubmit = (data: NewContactType) => {
@@ -104,8 +104,8 @@ export function CustomSheet({
 		<Sheet open={isOpen} onOpenChange={onClose}>
 			<SheetContent className="max-w-lg pl-4 pr-0">
 				<SheetHeader>
-					<SheetTitle>{isAdding ? "አዲስ እውቂያዎች ማስገቢያ" : "እውቂያዎች ማረሚያ"}</SheetTitle>
-					<SheetDescription>የእውቂያ ዝርዝሮችን በትክክል ይሙሉ።</SheetDescription>
+					<SheetTitle>{isAdding ? "አዲስ ማህደሮችን ማስገቢያ" : "ማህደሮችን ማረሚያ"}</SheetTitle>
+					<SheetDescription>የማህደር ዝርዝሮችን በትክክል ይሙሉ።</SheetDescription>
 				</SheetHeader>
 				<div className="my-4 h-[90%] overflow-y-auto pl-1 pr-4">
 					<form onSubmit={handleSubmit(onSubmit)}>

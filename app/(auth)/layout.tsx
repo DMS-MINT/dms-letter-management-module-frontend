@@ -1,10 +1,14 @@
 import "@/app/globals.css";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
-import { Noto_Serif_Ethiopic } from "next/font/google";
+// import { Noto_Serif_Ethiopic } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "sonner";
 
-const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
+// const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
+const myFont = localFont({
+	src: "../../public/fonts/NotoSerifEthiopic-VariableFont_wdth,wght.ttf",
+});
 
 export const metadata: Metadata = {
 	title: "የተጠቃሚ መግቢያ",
@@ -21,7 +25,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="am">
-			<body className={noto_serif_ethiopic.className}>
+			<body className={myFont.className}>
 				<Providers>
 					<div className="absolute">
 						<Toaster richColors position="top-center" />

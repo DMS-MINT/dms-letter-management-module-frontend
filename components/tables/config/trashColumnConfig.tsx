@@ -65,6 +65,13 @@ export const trashTableColumns: LetterColumnDefType = [
 		size: 30,
 	},
 	{
+		accessorKey: LetterTableColumns.ID,
+		size: undefined,
+		cell: () => null,
+		header: () => null,
+		enableHiding: true,
+	},
+	{
 		accessorKey: LetterTableColumns.REFERENCE_NUMBER,
 		header: ({ column }) => (
 			<ColumnHeader

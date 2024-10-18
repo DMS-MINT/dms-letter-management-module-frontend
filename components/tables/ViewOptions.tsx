@@ -11,7 +11,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import type { LetterTableColumns } from "@/types/letter_module";
+import { LetterTableColumns } from "@/types/letter_module";
 import { columnTranslation } from "@/types/letter_module";
 import { Settings2 } from "lucide-react";
 
@@ -55,7 +55,9 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
 					.getAllColumns()
 					.filter(
 						(column) =>
-							typeof column.accessorFn !== "undefined" && column.getCanHide()
+							typeof column.accessorFn !== "undefined" &&
+							column.getCanHide() &&
+							column.id !== LetterTableColumns.ID
 					)
 					.map((column) => {
 						return (

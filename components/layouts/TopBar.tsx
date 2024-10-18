@@ -5,7 +5,6 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
@@ -15,6 +14,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IMAGES } from "@/constants";
+import { useLetterRevisionStore } from "@/lib/stores";
 import { letterCategoryTranslations as letterCategoryTranslationsData } from "@/types/letter_module";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,7 +29,7 @@ type LetterCategoryTranslations = {
 
 type Params = {
 	category?: string;
-	referenceNumber?: string;
+	id: string;
 };
 
 const letterCategoryTranslations: LetterCategoryTranslations =
@@ -42,6 +42,8 @@ export default function TopBar() {
 	useEffect(() => {
 		setIsClient(true);
 	}, []);
+
+	const subject = useLetterRevisionStore((state) => state.subject);
 
 	return (
 		<header className="flex min-h-14 w-full items-center justify-between bg-white px-5">
@@ -90,11 +92,11 @@ export default function TopBar() {
 									<BreadcrumbSeparator />
 								</>
 							)}
-							{params.referenceNumber ? (
+							{/* {params.id ? (
 								<BreadcrumbItem>
-									<BreadcrumbPage>{params.referenceNumber}</BreadcrumbPage>
+									<BreadcrumbPage className="limited-chars">{subject}</BreadcrumbPage>
 								</BreadcrumbItem>
-							) : null}
+							) : null} */}
 						</BreadcrumbList>
 					</Breadcrumb>
 				)}

@@ -21,18 +21,23 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { useToastMutation } from "@/hooks";
-import { useCollaboratorStore, useLetterRevisionStore } from "@/lib/stores";
+import {
+	useCollaboratorStore,
+	useLetterRevisionStore,
+	useUserStore,
+} from "@/lib/stores";
 import { getInitials } from "@/lib/utils/getInitials";
 import {
 	generateDraftParticipant,
 	getDefaultValue,
+	isUserParticipantType,
 } from "@/lib/utils/participantUtils";
 import { RoleEnum, type ShareLetterRequestType } from "@/types/letter_module";
 import { LanguageEnum } from "@/types/shared";
 import type { UserType } from "@/types/user_module";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Share2, X } from "lucide-react";
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import * as uuidv4 from "uuid";
 import { ParticipantSelector } from "../forms";
 import { Avatar, AvatarFallback } from "../ui/avatar";
@@ -88,7 +93,7 @@ const permissions: SelectType[] = [
 ];
 
 function ShareLetterDialog({ owner }: Props) {
-	const { reference_number, language, participants } = useLetterRevisionStore();
+	const { id, language, participants, current_state } = useLetterRevisionStore();
 	const {
 		addParticipant,
 		removeParticipant,
@@ -106,10 +111,22 @@ function ShareLetterDialog({ owner }: Props) {
 		"ፈቃዶችን በማስወገድ ላይ፣ እባክዎ ይጠብቁ..."
 	);
 
+	const currentUser = useUserStore((state) => state.currentUser);
 	const [formData, setFormData] = useState<FormDataType>({
 		message: "",
 		permissions: "can_view_letter",
 	});
+
+	const isForwardingEnabled = useCallback(() => {
+		const my_role = participants
+			.filter(isUserParticipantType)
+			.find((participant) => participant.user.id === currentUser.id)?.role;
+
+		return (
+			current_state === "Published" &&
+			(my_role === "Primary Recipient" || my_role === "Collaborator")
+		);
+	}, [participants, currentUser, current_state]);
 
 	const handleMessageChange = (message: string) => {
 		setFormData((prevData: FormDataType) => ({ ...prevData, message }));
@@ -124,11 +141,13 @@ function ShareLetterDialog({ owner }: Props) {
 
 	const handleSubmit = () => {
 		shareLetterMutation([
-			reference_number,
+			id,
 			{
 				participants: generateDraftParticipant(newCollaborators),
 				message: formData.message,
-				permissions: [formData.permissions],
+				permissions: isForwardingEnabled()
+					? ["can_share_letter", "can_comment_letter"]
+					: [formData.permissions],
 			},
 		]);
 	};
@@ -149,7 +168,7 @@ function ShareLetterDialog({ owner }: Props) {
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-			<DialogContent className="max-h-[40rem] min-w-[45rem] max-w-[45rem]">
+			<DialogContent className="max-h-[40rem] min-w-[50rem] max-w-[45rem]">
 				<DialogHeader>
 					<DialogTitle>የደብዳቤ ማጋሪያ</DialogTitle>
 					<DialogDescription>
@@ -173,7 +192,7 @@ function ShareLetterDialog({ owner }: Props) {
 							value={getDefaultValue(newCollaborators, RoleEnum["COLLABORATOR"])}
 							classNamePrefix="none"
 						/>
-						{newCollaborators.length ? (
+						{!isForwardingEnabled() && newCollaborators.length ? (
 							<Select
 								value={formData.permissions}
 								onValueChange={handlePermissionChange}
