@@ -3,7 +3,6 @@
 import { resetPassword } from "@/actions/auth/action";
 import { BrandingSection } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Form,
 	FormControl,
@@ -12,12 +11,13 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const formSchema = z
 	.object({
@@ -126,7 +126,7 @@ export default function Reset() {
 							)}
 						/>
 
-						<Button variant="secondary" className="w-full" type="submit">
+						<Button variant="default" className="w-full" type="submit">
 							ጨርስ
 						</Button>
 					</form>

@@ -47,7 +47,6 @@ const formSchema = z.object({
 
 const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	const currentUser = useUserStore((state) => state.currentUser);
-	const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const [authenticated, setAuthenticated] = useState(false);
 	const [newPassword, setNewPassword] = useState("");
@@ -212,7 +211,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 								<Button
 									disabled={isPending}
 									type="submit"
-									variant="secondary"
+									variant="default"
 									className="flex w-full items-center gap-2"
 									tabIndex={3}
 								>

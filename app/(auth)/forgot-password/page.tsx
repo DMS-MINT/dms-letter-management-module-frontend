@@ -3,8 +3,6 @@
 import { forgotPassword } from "@/actions/auth/action";
 import { BrandingSection } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ChevronLeft } from "lucide-react";
 import {
 	Form,
 	FormControl,
@@ -13,13 +11,15 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
@@ -96,7 +96,7 @@ export default function ForgotPassword() {
 							)}
 						/>
 						<Button
-							variant="secondary"
+							variant="default"
 							className="w-full"
 							type="submit"
 							disabled={isPending}
