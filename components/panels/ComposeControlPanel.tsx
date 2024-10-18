@@ -45,7 +45,6 @@ export default function ComposeControlPanel() {
 			resetContent();
 			resetParticipants();
 			if (data.current_state === "Draft") {
-				console.log("Letter data:", data);
 				router.push(`/letters/draft/${data.id}`);
 			} else {
 				router.push(`/letters/outbox/${data.id}`);

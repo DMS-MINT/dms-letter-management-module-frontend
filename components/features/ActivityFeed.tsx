@@ -152,38 +152,37 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 				</div>
 			) : null}
 
-			{letter.comments.map(
-				({ id, message, created_at, author: { full_name_am, job_title } }) => (
-					<div key={id} className="flex min-h-16 gap-6">
-						<div className="flex w-[50px] flex-col items-center">
-							<Separator
-								orientation="vertical"
-								className="w-[2px] flex-1 bg-gray-300"
-							/>
-							<TooltipProvider>
-								<Tooltip>
-									<TooltipTrigger className="h-fit w-fit rounded-full border-2 border-gray-300 p-2">
-										<MessageSquareText size={18} className="text-gray-500" />
-									</TooltipTrigger>
-									<TooltipContent>
-										<p>{convertToEthiopianDate(created_at)}</p>
-									</TooltipContent>
-								</Tooltip>
-							</TooltipProvider>
-							<Separator
-								orientation="vertical"
-								className="w-[2px] flex-1 bg-gray-300"
-							/>
-						</div>
-
-						<div className="card my-2 flex w-[800px] flex-col gap-4 px-1 py-2">
-							<div className="flex items-center gap-4">
-								<Avatar className="h-11 w-11">
-									<AvatarFallback>
-										{full_name_am ? full_name_am.substring(0, 2) : ""}
-									</AvatarFallback>
-								</Avatar>
-								<h4 className="text-base font-semibold">{`${full_name_am} - ${job_title.title_am}`}</h4>
+			{letter.comments.map(({ id, message, created_at, author }) => (
+				<div key={id} className="flex min-h-16 gap-6">
+					<div className="flex w-[50px] flex-col items-center">
+						<Separator
+							orientation="vertical"
+							className="w-[2px] flex-1 bg-gray-300"
+						/>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger className="h-fit w-fit rounded-full border-2 border-gray-300 p-2">
+									<MessageSquareText size={18} className="text-gray-500" />
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>{convertToEthiopianDate(created_at)}</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+						<Separator
+							orientation="vertical"
+							className="w-[2px] flex-1 bg-gray-300"
+						/>
+					</div>
+					<div className="card my-2 flex w-[800px] flex-col gap-4 px-1 py-2">
+						<div className="flex items-center gap-4">
+							<Avatar className="h-11 w-11">
+								<AvatarFallback>
+									{author.full_name_am ? author.full_name_am.substring(0, 2) : ""}
+								</AvatarFallback>
+							</Avatar>
+							<h4 className="text-base font-semibold">{`${author.full_name_am} - ${author.job_title.title_am}`}</h4>
+							{author.id === currentUser.id ? (
 								<div className="ml-auto flex gap-1">
 									{selectedCommentId === id ? (
 										<>
@@ -227,25 +226,25 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 										</>
 									)}
 								</div>
-							</div>
-							<div>
-								{selectedCommentId === id ? (
-									<Textarea
-										value={updatedMessage}
-										onChange={(e) => {
-											setUpdatedMessage(e.target.value);
-										}}
-									/>
-								) : message ? (
-									message
-								) : (
-									""
-								)}
-							</div>
+							) : null}
+						</div>
+						<div>
+							{selectedCommentId === id ? (
+								<Textarea
+									value={updatedMessage}
+									onChange={(e) => {
+										setUpdatedMessage(e.target.value);
+									}}
+								/>
+							) : message ? (
+								message
+							) : (
+								""
+							)}
 						</div>
 					</div>
-				)
-			)}
+				</div>
+			))}
 
 			<div className="flex min-h-16 gap-6">
 				<div className="flex w-[50px] flex-col items-center">

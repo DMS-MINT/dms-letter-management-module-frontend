@@ -18,7 +18,7 @@ import { filesize } from "filesize";
 import { Dot, Eye, Plus, RotateCcw, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { toast } from "sonner";
 import * as uuidv4 from "uuid";
 import { Badge } from "../ui/badge";
@@ -79,10 +79,6 @@ export default function FileUploadDialog({
 			}
 		}
 	};
-
-	useEffect(() => {
-		console.log(uploadedAttachments && uploadedAttachments.length !== 0);
-	}, [uploadedAttachments]);
 
 	const getFileIcon = (fileType: string) => {
 		const fileExtension = fileType.split("/").pop() as keyof typeof FILE_ICON;

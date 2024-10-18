@@ -208,8 +208,8 @@ export const inboxTableColumns: LetterColumnDefType = [
 					{/*<span>{time}</span>*/}
 					<span className="flex gap-1 ">
 						{" "}
-					    <CalendarIcon size={12} />
-					    {received_at}
+						<CalendarIcon size={12} />
+						{received_at}
 					</span>
 				</div>
 			);

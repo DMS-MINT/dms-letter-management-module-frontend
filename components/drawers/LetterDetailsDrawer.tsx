@@ -58,7 +58,7 @@ function LetterDetailsDrawer({
 				icon: <Mail size={20} className="text-gray-600" />,
 			},
 			{
-				label: "የመዝገብ ቁጥር",
+				label: "ደብዳቤ ቁጥር",
 				value:
 					current_state === "Published"
 						? language === "English"

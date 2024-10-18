@@ -76,6 +76,8 @@ const config = {
 				"accordion-up": "accordion-up 0.2s ease-out",
 			},
 			backgroundImage: {
+				"brand-gradient":
+					"linear-gradient(to right bottom, #4f5d99, #415284, #344770, #2a3c5c, #223148)",
 				"halftone-pattern": `url('${IMAGES["halftone-pattern"]}')`,
 			},
 		},

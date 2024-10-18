@@ -11,6 +11,7 @@ export type AttachmentActions = {
 	removeNewAttachment: (_id: string) => void;
 	restoreUploadedAttachment: (_id: string) => void;
 	removeUploadedAttachment: (_id: string) => void;
+	resetAttachmentStore: () => void;
 };
 
 export const createAttachmentStore = () =>
@@ -41,6 +42,9 @@ export const createAttachmentStore = () =>
 			set((state) => ({
 				removedAttachmentsIds: [...state.removedAttachmentsIds, id],
 			})),
+
+		resetAttachmentStore: () =>
+			set({ newAttachments: [], removedAttachmentsIds: [] }),
 	}));
 
 export const useDraftAttachmentStore = createAttachmentStore();

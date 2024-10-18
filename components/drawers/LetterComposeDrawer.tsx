@@ -15,17 +15,24 @@ import {
 } from "@/lib/stores";
 import { LanguageEnum } from "@/types/shared";
 import { Languages, Mail, Paperclip } from "lucide-react";
+import { useEffect } from "react";
 import { FileUploadDialog } from "../dialogs";
 
 export default function LetterComposeDrawer() {
 	const is_staff = useUserStore((state) => state.currentUser.is_staff);
-	const { updateLetterField, letter_type, language } = useDraftLetterStore(
-		(state) => ({
-			letter_type: state.letter_type,
-			language: state.language,
-			updateLetterField: state.updateLetterField,
-		})
-	);
+	const {
+		updateLetterField,
+		letter_type,
+		language,
+		resetContent,
+		resetParticipants,
+	} = useDraftLetterStore((state) => ({
+		letter_type: state.letter_type,
+		language: state.language,
+		updateLetterField: state.updateLetterField,
+		resetContent: state.resetContent,
+		resetParticipants: state.resetParticipants,
+	}));
 	const {
 		newAttachments,
 		removedAttachmentsIds,
@@ -33,7 +40,14 @@ export default function LetterComposeDrawer() {
 		removeNewAttachment,
 		restoreUploadedAttachment,
 		removeUploadedAttachment,
+		resetAttachmentStore,
 	} = useDraftAttachmentStore();
+
+	useEffect(() => {
+		resetContent();
+		resetParticipants();
+		resetAttachmentStore();
+	}, [resetAttachmentStore, resetContent, resetParticipants]);
 
 	const handleLetterCategoryChange = (type: string): void => {
 		updateLetterField("letter_type", type);

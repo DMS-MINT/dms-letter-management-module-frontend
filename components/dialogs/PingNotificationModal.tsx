@@ -21,7 +21,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { useParticipantSelector, useToastMutation } from "@/hooks";
-import { useCollaboratorStore, useLetterRevisionStore } from "@/lib/stores";
+import {
+	useCollaboratorStore,
+	useLetterRevisionStore,
+	useUserStore,
+} from "@/lib/stores";
 import {
 	getLabel,
 	getValue,
@@ -78,6 +82,7 @@ export function PingNotificationModal({
 	handleClick,
 	current_state,
 }: Props) {
+	const currentUser = useUserStore((state) => state.currentUser);
 	const { data: options } = useQuery({
 		queryKey: ["users"],
 		queryFn: async () => {
@@ -181,8 +186,9 @@ export function PingNotificationModal({
 		return participants
 			.filter((participant) => participant.role === RoleEnum.COLLABORATOR)
 			.filter(isUserParticipantType)
+			.filter((participants) => participants.user.id !== currentUser.id)
 			.map((participant) => participant.user);
-	}, [participants]);
+	}, [currentUser, participants]);
 
 	const getUserIds = useMemo(() => {
 		return recipients
@@ -226,7 +232,9 @@ export function PingNotificationModal({
 					isClearable={true}
 					isDisabled={false}
 					options={
-						current_state === "Draft" || current_state === "Rejected"
+						current_state === "Draft" ||
+						current_state === "Rejected" ||
+						current_state === "Published"
 							? getCollaborators
 							: options
 					}

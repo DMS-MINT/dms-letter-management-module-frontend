@@ -34,5 +34,5 @@ export const workflowErrorMessages: ErrorMessageType = {
 	[ErrorCodeEnum.UNSIGNED_LETTER]: "ደብዳቤው ከመቀጠልዎ በፊት መፈረም አለበት።",
 	[ErrorCodeEnum.USERDEFAULTSIGNATURE_NOT_FOUND]: "ፊርማዎን ማግኘት አልተቻለም።",
 	[ErrorCodeEnum.Letter_NOT_FOUND]: "የተሰጠው የመዝገብ ቁጥር ያለው ደብዳቤ ሊገኝ አልቻለም።",
-	[ErrorCodeEnum.VALIDATION_ERROR]: "የማጣቀሻ ቁጥር አስቀድሞ አለ። እባክዎ የተለየ ይጠቀሙ።",
+	[ErrorCodeEnum.VALIDATION_ERROR]: "ደብዳቤ ቁጥር አስቀድሞ አለ። እባክዎ የተለየ ይጠቀሙ።",
 };

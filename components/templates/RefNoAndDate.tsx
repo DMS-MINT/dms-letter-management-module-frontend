@@ -70,7 +70,6 @@ export default function RefNoAndDate({
 		} else {
 			updateLetterField("year", "2017");
 		}
-		console.log(department);
 		updateLetterField("department", department);
 	}, [language, department, updateLetterField]);
 
