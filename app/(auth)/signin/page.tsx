@@ -2,6 +2,10 @@
 
 import type { ICredentials } from "@/actions/auth/action";
 import { signIn } from "@/actions/auth/action";
+import {
+	retrieveCredentials,
+	storeCredentials,
+} from "@/actions/auth/remeberme";
 import { BrandingSection } from "@/components/helpers";
 import { LetterSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
@@ -17,17 +21,12 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff, LogIn } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import {
-	retrieveCredentials,
-	storeCredentials,
-} from "@/actions/auth/remeberme";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
@@ -165,7 +164,7 @@ export default function SignIn() {
 								</FormItem>
 							)}
 						/>
-						<FormField
+						{/* <FormField
 							control={form.control}
 							name="remember"
 							render={({ field }) => (
@@ -175,7 +174,7 @@ export default function SignIn() {
 											<Checkbox
 												checked={field.value}
 												onCheckedChange={field.onChange}
-												className=" h-5 w-5 "
+												className="w-5 h-5 "
 											/>
 										</FormControl>
 										አስታውሰኝ
@@ -183,12 +182,12 @@ export default function SignIn() {
 									<FormMessage className="form-error-message" />
 								</FormItem>
 							)}
-						/>
+						/> */}
 
 						<Button
 							disabled={isPending}
 							type="submit"
-							variant="secondary"
+							variant="default"
 							className="flex w-full items-center gap-2"
 							tabIndex={3}
 						>

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function BrandingSection() {
 	return (
-		<section className="flex flex-col justify-between bg-brand-gradient px-14 pb-14 pt-20">
+		<section className="flex flex-col justify-between bg-gradient px-14 pb-14 pt-20">
 			<div>
 				<Image
 					src={IMAGES.mint}
@@ -19,6 +19,9 @@ export default function BrandingSection() {
 					ለተጠቃሚ ምቹ ሰነዶች ፣ የደብዳቤ አስተዳደር እና ፊርማዎች።
 				</p>
 			</div>
+			<footer className="text-sm font-light text-gray-200">
+				&copy; 2017 የኢኖቬሽን እና ቴክኖሎጂ ሚኒስቴር
+			</footer>
 		</section>
 	);
 }

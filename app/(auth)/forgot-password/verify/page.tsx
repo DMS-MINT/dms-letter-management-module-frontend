@@ -55,7 +55,7 @@ export default function Verify() {
 						))}
 					</div>
 					<Button
-						variant="secondary"
+						variant="default"
 						className="w-full"
 						onClick={handleOTPVerification}
 					>

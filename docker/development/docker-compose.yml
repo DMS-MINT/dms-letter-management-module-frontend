@@ -1,0 +1,13 @@
+services:
+ dms_frontend:
+  build:
+   context: ../../
+   dockerfile: docker/development/Dockerfile
+  command: "node server.js"
+  environment:
+   - PORT=3000
+   - NODE_ENV=development
+  env_file:
+   - ../../.env
+  ports:
+   - "3000:3000"
