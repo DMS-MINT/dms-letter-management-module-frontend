@@ -4,6 +4,8 @@ import axiosInstance from "@/actions/axiosInstance";
 import getErrorMessage from "../getErrorMessage";
 import { commentErrorMessages } from "./errorMessages";
 
+
+
 export type CreateCommentParams = {
 	id: string;
 	message: string;
@@ -30,9 +32,6 @@ export async function updateComment({
 	comment_id,
 	message,
 }: UpdateCommentParams) {
-	console.log("🚀 ~ comment_id:", comment_id);
-	console.log("🚀 ~ message:", message);
-
 	try {
 		await axiosInstance.put(`comments/${comment_id}/update/`, {
 			message,

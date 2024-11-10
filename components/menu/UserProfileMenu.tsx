@@ -1,7 +1,7 @@
 "use client";
 
 import { signOut } from "@/actions/auth/action";
-import { getMyProfile } from "@/actions/user_module/action";
+import { handleLogout } from "@/actions/auth/remeberme";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -18,34 +18,18 @@ import {
 import { DOCS } from "@/constants";
 import { useUserStore } from "@/lib/stores";
 import { getInitials } from "@/lib/utils/getInitials";
-import type { CurrentUserType } from "@/types/user_module";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { FileText, LifeBuoy, LogOut, SquarePlay, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import NotificationPopover from "../drawers/NotificationDrawer";
 import { VideoDialog } from "./VideoDialog";
-import { handleLogout } from "@/actions/auth/remeberme";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
 	const [isVideoDialogOpen, setVideoDialogOpen] = useState(false);
-	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
-
-	const { isSuccess, data: myProfile } = useQuery({
-		queryKey: ["getMyProfile"],
-		queryFn: async () => {
-			try {
-				const data = await getMyProfile();
-				setCurrentUser(data.my_profile);
-				return data.my_profile as CurrentUserType;
-			} catch (error: any) {
-				toast.error(error.message);
-			}
-		},
-		enabled: true,
-	});
+	const currentUser = useUserStore((state) => state.currentUser);
 
 	const { mutate: logOut } = useMutation({
 		mutationKey: ["signOut"],
@@ -75,10 +59,11 @@ export default function UserProfileMenu() {
 		setVideoDialogOpen(false);
 	};
 
-	const fullName = myProfile?.full_name_am;
-	const initials = fullName ? getInitials(fullName) : "";
+	const initials = currentUser.member_profile.full_name_am
+		? getInitials(currentUser.member_profile.full_name_am)
+		: "";
 
-	return isSuccess && myProfile ? (
+	return (
 		<div className="flex items-center gap-4">
 			<NotificationPopover />
 			<DropdownMenu>
@@ -90,8 +75,10 @@ export default function UserProfileMenu() {
 
 				<DropdownMenuContent className="mr-5 min-w-[20rem] max-w-[20rem]">
 					<DropdownMenuLabel className="flex flex-col items-start">
-						<p>{myProfile.full_name_am}</p>
-						<p className="text-sm text-gray-600">{myProfile.job_title.title_am}</p>
+						<p>{currentUser.member_profile.full_name_am}</p>
+						<p className="text-sm text-gray-600">
+							{currentUser.member_profile.job_title.title_am}
+						</p>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => router.push("/myaccount")}>
@@ -125,5 +112,5 @@ export default function UserProfileMenu() {
 			</DropdownMenu>
 			<VideoDialog isOpen={isVideoDialogOpen} onClose={closeVideoDialog} />
 		</div>
-	) : null;
+	);
 }

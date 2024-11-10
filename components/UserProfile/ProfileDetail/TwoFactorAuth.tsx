@@ -6,7 +6,6 @@ import {
 	signIn,
 	type ICredentials,
 } from "@/actions/auth/action";
-import { getMyProfile } from "@/actions/user_module/action";
 import { Spinner } from "@/components/helpers";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,12 +19,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/lib/stores";
-import type { CurrentUserType } from "@/types/user_module";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
 	CheckCircle,
-	ChevronDown,
 	Eye,
 	EyeOff,
 	LockKeyhole,
@@ -34,18 +31,20 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "እባክዎ ትክክለኛ ኢሜል ያስገቡ።" }),
 	password: z.string().min(1, { message: "እባክዎ የይለፍ ቃልዎን ያስገቡ።" }),
 });
 
-const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
+const TwoFactorAuth = () => {
+	const router = useRouter();
+	const currentUser = useUserStore((state) => state.currentUser);
 	const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const [authenticated, setAuthenticated] = useState(false);
@@ -55,7 +54,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "",
+			email: currentUser.email,
 			password: "",
 		},
 	});
@@ -71,7 +70,7 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		},
 		onMutate: () => {
 			toast.dismiss();
-			toast.loading("ኢሜልዎን እና የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
+			toast.loading("የይለፍ ቃልዎን በማረጋገጥ ላይ፣ እባክዎን ትንሽ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
 			toast.dismiss();
@@ -80,29 +79,13 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 		},
 		onError: (error: any) => {
 			toast.dismiss();
-			toast.error(error.message);
+			toast.error("የተሳሳተ የይለፍ ቃል አስገብተዋል። እባክዎ እንደገና ይሞክሩ።");
 		},
 	});
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
-		if (values.email !== logedUser?.email)
-			return toast.error("እባክዎን የራሶን ኢሜል ያስገቡ።");
 		mutate(values as ICredentials);
 	}
-	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
-	const { data: myProfile } = useQuery({
-		queryKey: ["getMyProfile"],
-		queryFn: async () => {
-			try {
-				const data = await getMyProfile();
-				setCurrentUser(data.my_profile);
-				return data.my_profile as CurrentUserType;
-			} catch (error: any) {
-				toast.error(error.message);
-			}
-		},
-		enabled: true,
-	});
 
 	const { mutate: requestQRCodeMutate, data: qrCodeImage } = useMutation({
 		mutationKey: ["requestQRCode"],
@@ -120,16 +103,15 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	});
 
 	useEffect(() => {
-		if (!myProfile) return;
+		if (!currentUser) return;
 
 		requestQRCodeMutate();
-	}, [myProfile, requestQRCodeMutate]);
+	}, [currentUser, requestQRCodeMutate]);
 
-	const router = useRouter();
 	const { mutate: resetPasswordMutate } = useMutation({
 		mutationKey: ["resetPassword"],
 		mutationFn: async () => {
-			setEmail(logedUser.email);
+			setEmail(currentUser.email);
 			const response = await resetPassword(newPassword, confirmPassword);
 
 			if (!response.ok) throw new Error("Failed to reset password.");
@@ -152,9 +134,6 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 	});
 
 	const handleSubmit = () => {
-		if (!logedUser?.email) {
-			return toast.error("Email not found.");
-		}
 		resetPasswordMutate();
 	};
 
@@ -176,19 +155,6 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 								onSubmit={form.handleSubmit(onSubmit)}
 								className="w-[30rem] space-y-5"
 							>
-								<FormField
-									control={form.control}
-									name="email"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>የኢሜይል አድራሻዎን ያስገቡ</FormLabel>
-											<FormControl>
-												<Input readOnly={isPending} tabIndex={1} {...field} />
-											</FormControl>
-											<FormMessage className="form-error-message" />
-										</FormItem>
-									)}
-								/>
 								<FormField
 									control={form.control}
 									name="password"
@@ -236,72 +202,48 @@ const TwoFactorAuth = ({ logedUser }: { logedUser: CurrentUserType }) => {
 					</CardContent>
 				) : (
 					<CardContent className="mb-20 ">
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-							<div className=" space-y-2 ">
+						<div className="flex">
+							<div className="flex-1">
 								<span className="flex items-center gap-2 text-sm text-muted-foreground">
 									<LockKeyholeOpen size={18} />
 									<p>የሚስጥር ቁጥሮን መቀየር ከፈለጉ ከታች ያለውን ይጫኑ</p>
 								</span>
-								<Button
-									size={"sm"}
-									variant={"outline"}
-									onClick={() => setShowPasswordDialog(!showPasswordDialog)}
-									className={`flex w-80 justify-between ${showPasswordDialog ? "bg-gray-100" : "bg-gray-300"} text-sm text-black `}
-								>
-									<span className="flex items-center gap-2">
-										{showPasswordDialog ? (
-											<LockKeyholeOpen size={18} />
-										) : (
-											<LockKeyhole size={18} />
-										)}
-										የሚስጥር ቁጥር
-									</span>
-									<ChevronDown size={18} />
-								</Button>
-								{showPasswordDialog && (
-									<>
-										<div className="space-y-4 rounded-md border-2 border-gray-300 p-4">
-											{/* Row 3: Password */}
-											<div className="grid grid-cols-1 gap-4 ">
-												<div className="col-span-2 space-y-2 md:col-span-1">
-													<label className="text-muted-forground block text-sm font-medium">
-														አዲስ የሚስጥር ቁጥር - New Password
-													</label>
-													<Input
-														type="text"
-														className="mt-1 block w-full"
-														value={newPassword}
-														onChange={(e) => setNewPassword(e.target.value)}
-													/>
-												</div>
-												<div className="col-span-2 space-y-2 md:col-span-1">
-													<label className="text-muted-forground block text-sm font-medium">
-														በድጋሚ አዲስ የሚስጥር ቁጥር - Confirm Password
-													</label>
-													<Input
-														type="text"
-														className="mt-1 block w-full"
-														value={confirmPassword}
-														onChange={(e) => setConfirmPassword(e.target.value)}
-													/>
-												</div>
-											</div>
-										</div>
-										<div className="flex justify-end">
-											<Button
-												disabled={newPassword !== confirmPassword}
-												className="flex items-center gap-2"
-												onClick={handleSubmit}
-											>
-												<CheckCircle size={18} />
-												ለውጡን አስቀምጥ
-											</Button>
-										</div>
-									</>
-								)}
+								<div className="mt-5 space-y-4">
+									{/* Row 3: Password */}
+									<div className="col-span-2 space-y-2 md:col-span-1">
+										<label className="text-muted-forground block text-sm font-medium">
+											አዲስ የሚስጥር ቁጥር - New Password
+										</label>
+										<Input
+											type="text"
+											className="mt-1 block w-full"
+											value={newPassword}
+											onChange={(e) => setNewPassword(e.target.value)}
+										/>
+									</div>
+									<div className="col-span-2 space-y-2 md:col-span-1">
+										<label className="text-muted-forground block text-sm font-medium">
+											በድጋሚ አዲስ የሚስጥር ቁጥር - Confirm Password
+										</label>
+										<Input
+											type="text"
+											className="mt-1 block w-full"
+											value={confirmPassword}
+											onChange={(e) => setConfirmPassword(e.target.value)}
+										/>
+									</div>
+									<Button
+										disabled={newPassword !== confirmPassword}
+										className="flex items-center gap-2"
+										onClick={handleSubmit}
+									>
+										<CheckCircle size={18} />
+										ለውጡን አስቀምጥ
+									</Button>
+								</div>
 							</div>
-							<div className=" flex flex-col items-center justify-center  space-y-2">
-								<span className="flex items-center gap-2 text-sm text-muted-foreground">
+							<div className="flex-1">
+								<span className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
 									<LockKeyholeOpen size={18} />
 									<p>የሚስጥር ቁጥሮን መቀየር ከፈለጉ ከታች ያለውን ይጫኑ</p>
 								</span>

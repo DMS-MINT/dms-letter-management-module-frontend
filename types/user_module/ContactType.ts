@@ -19,15 +19,3 @@ export type NewContactType = {
 		city_am: string;
 	};
 };
-
-// Updated contact type with image file
-export type ContactTypeWithImage = {
-	id: string;
-	fullName: string;
-	fullNameAmharic: string;
-	address: string;
-	addressAmharic: string;
-	phone: string;
-	email: string;
-	photo?: File | string | null; // File, string URL, or null
-};

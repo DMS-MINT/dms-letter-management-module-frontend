@@ -10,8 +10,8 @@ import {
 	getValue,
 	isContactType,
 	isEnterpriseType,
+	isMemberType,
 	isOptionDisabled,
-	isUserType,
 	type OptionType,
 	type ParticipantScopeType,
 } from "@/lib/utils/participantUtils";
@@ -20,7 +20,7 @@ import { LanguageEnum } from "@/types/shared";
 import type {
 	ContactType,
 	EnterpriseType,
-	UserType,
+	MemberListType,
 } from "@/types/user_module";
 import { useQuery } from "@tanstack/react-query";
 import { memo } from "react";
@@ -40,7 +40,7 @@ type Props = ParticipantSelectorActions & {
 	language: LanguageEnum;
 	participants: ParticipantDetailType[];
 	participantScope: ParticipantScopeType;
-} & ReactSelectProps<UserType | EnterpriseType | ContactType, true>;
+} & ReactSelectProps<MemberListType | EnterpriseType | ContactType, true>;
 
 function ParticipantSelector({
 	prefix,
@@ -53,7 +53,7 @@ function ParticipantSelector({
 	...reactSelectProps
 }: Props) {
 	const { data: options } = useQuery({
-		queryKey: ["users", { participantScope }],
+		queryKey: ["participantEntries", { participantScope }],
 		queryFn: async () => {
 			try {
 				const response = await actionDispatcher(participantScope);
@@ -100,17 +100,17 @@ function ParticipantSelector({
 		return (
 			<div>
 				<components.Option {...props} className="!p-1">
-					{isUserType(data) ? (
+					{isMemberType(data) ? (
 						<OptionItem
 							primaryText={
 								language === LanguageEnum.English
-									? data.job_title.title_en
-									: data.job_title.title_am
+									? data.member_profile.job_title.title_en
+									: data.member_profile.job_title.title_am
 							}
 							secondaryText={
 								language === LanguageEnum.English
-									? data.full_name_en
-									: data.full_name_am
+									? data.member_profile.full_name_en
+									: data.member_profile.full_name_am
 							}
 						/>
 					) : null}

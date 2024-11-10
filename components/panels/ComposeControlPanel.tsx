@@ -70,6 +70,7 @@ export default function ComposeControlPanel() {
 			language,
 			participants: draft_participants,
 		};
+
 		formData.append("letter", JSON.stringify(letter));
 
 		newAttachments.forEach((attachment, index) => {

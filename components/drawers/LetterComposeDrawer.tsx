@@ -18,7 +18,9 @@ import { Languages, Mail, Paperclip } from "lucide-react";
 import { FileUploadDialog } from "../dialogs";
 
 export default function LetterComposeDrawer() {
-	const is_staff = useUserStore((state) => state.currentUser.is_staff);
+	const is_staff = useUserStore(
+		(state) => state.currentUser.member_permissions.is_staff
+	);
 	const { updateLetterField, letter_type, language } = useDraftLetterStore(
 		(state) => ({
 			letter_type: state.letter_type,

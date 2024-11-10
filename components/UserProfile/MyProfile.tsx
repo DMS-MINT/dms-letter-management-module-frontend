@@ -1,10 +1,4 @@
-"use client";
-import { getMyProfile } from "@/actions/user_module/action";
-import { useUserStore } from "@/lib/stores";
-import type { CurrentUserType } from "@/types/user_module";
-import { useQuery } from "@tanstack/react-query";
 import { Contact, QrCode, User } from "lucide-react";
-import { toast } from "sonner";
 import {
 	Accordion,
 	AccordionContent,
@@ -17,23 +11,7 @@ import ProfileDetail from "./ProfileDetail/ProfileDetail";
 import TwoFactorAuth from "./ProfileDetail/TwoFactorAuth";
 
 const MyProfile = () => {
-	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
-
-	const { isSuccess, data: myProfile } = useQuery({
-		queryKey: ["getMyProfile"],
-		queryFn: async () => {
-			try {
-				const data = await getMyProfile();
-				setCurrentUser(data.my_profile);
-				return data.my_profile as CurrentUserType;
-			} catch (error: any) {
-				toast.error(error.message);
-			}
-		},
-		enabled: true,
-	});
-
-	return isSuccess && myProfile ? (
+	return (
 		<Card className=" w-full  gap-6 pb-44">
 			<CardContent className="w-full">
 				<Accordion type="single" collapsible defaultValue="item-1">
@@ -45,7 +23,7 @@ const MyProfile = () => {
 							</span>
 						</AccordionTrigger>
 						<AccordionContent>
-							<ProfileDetail myProfile={myProfile} />
+							<ProfileDetail />
 						</AccordionContent>
 					</AccordionItem>
 					<AccordionItem value="item-2">
@@ -56,7 +34,7 @@ const MyProfile = () => {
 							</span>
 						</AccordionTrigger>
 						<AccordionContent>
-							<TwoFactorAuth logedUser={myProfile} />
+							<TwoFactorAuth />
 						</AccordionContent>
 					</AccordionItem>
 					<AccordionItem value="item-3">
@@ -84,7 +62,7 @@ const MyProfile = () => {
 				</Accordion>
 			</CardContent>
 		</Card>
-	) : null;
+	);
 };
 
 export default MyProfile;

@@ -1,32 +1,29 @@
-import {
-	getContacts,
-	getEnterprises,
-	getUsers,
-} from "@/actions/user_module/action";
+import { getParticipantEntries } from "@/actions/user_module/action";
 import type {
 	ParticipantDetailType,
 	ParticipantDraftType,
+	ParticipantEntriesType,
 	RoleEnum,
 } from "@/types/letter_module";
 import { LanguageEnum } from "@/types/shared";
 import type {
 	ContactType,
 	EnterpriseType,
-	UserType,
+	MemberListType,
 } from "@/types/user_module";
 import * as uuidv4 from "uuid";
 
-export type OptionType = UserType | EnterpriseType | ContactType;
+export type OptionType = MemberListType | EnterpriseType | ContactType;
 
 export type ParticipantScopeType = "all" | "internal_staff" | "external_staff";
 
 export type GroupedOption =
-	| { label: "የMINT ሰራተኞች"; options: UserType[] }
+	| { label: "የMINT ሰራተኞች"; options: MemberListType[] }
 	| { label: "የእኔ ደንበኞች"; options: ContactType[] }
 	| { label: "የመንግስት ድርጅቶች"; options: EnterpriseType[] };
 
 export type Options = {
-	users: UserType[];
+	users: MemberListType[];
 	contacts: ContactType[];
 	enterprises: EnterpriseType[];
 };
@@ -34,72 +31,65 @@ export type Options = {
 export const actionDispatcher = async (scope: ParticipantScopeType) => {
 	switch (scope) {
 		case "all": {
-			const [users, enterprises, contacts] = await Promise.all([
-				getUsers(),
-				getEnterprises(),
-				getContacts(),
-			]);
+			const response = await getParticipantEntries(["all", true, true]);
 
-			if (!users.ok || !enterprises.ok || !contacts.ok) {
-				throw {
-					ok: false,
-					message:
-						`${!users.ok ? "ተጠቃሚዎችን" : ""} ${!enterprises.ok ? "የመንግስት ድርጅቶችን" : ""} ${!contacts.ok ? "የደንበኛ ዝርዝሮችን" : ""} ማምጣት አልተቻለም።`.trim(),
-				};
+			if (!response.ok) {
+				throw new Error("");
 			}
+
+			const entries = response.message as ParticipantEntriesType;
 
 			const groups: GroupedOption[] = [
 				{
 					label: "የMINT ሰራተኞች",
-					options: users.message,
+					options: entries.members,
 				},
 				{
 					label: "የእኔ ደንበኞች",
-					options: contacts.message,
+					options: entries.contacts,
 				},
 				{
 					label: "የመንግስት ድርጅቶች",
-					options: enterprises.message,
+					options: entries.enterprises,
 				},
 			];
 
 			return groups;
 		}
 		case "internal_staff": {
-			const response = await getUsers();
+			const response = await getParticipantEntries(["all", false, false]);
 
-			if (!response.ok) throw response;
+			if (!response.ok) {
+				throw new Error("");
+			}
+
+			const entries = response.message as ParticipantEntriesType;
 
 			const groups: GroupedOption[] = [
 				{
 					label: "የMINT ሰራተኞች",
-					options: response.message,
+					options: entries.members,
 				},
 				{
 					label: "የእኔ ደንበኞች",
-					options: [],
+					options: entries.contacts,
 				},
 				{
 					label: "የመንግስት ድርጅቶች",
-					options: [],
+					options: entries.enterprises,
 				},
 			];
 
 			return groups;
 		}
 		case "external_staff": {
-			const [enterprises, contacts] = await Promise.all([
-				getEnterprises(),
-				getContacts(),
-			]);
+			const response = await getParticipantEntries(["staff", true, true]);
 
-			if (!enterprises.ok || !contacts.ok) {
-				throw {
-					ok: false,
-					message:
-						`${!enterprises.ok ? "የመንግስት ድርጅቶችን" : ""} ${!contacts.ok ? "የደንበኛ ዝርዝሮችን" : ""} ማምጣት አልተቻለም።`.trim(),
-				};
+			if (!response.ok) {
+				throw new Error("");
 			}
+
+			const entries = response.message as ParticipantEntriesType;
 
 			const groups: GroupedOption[] = [
 				{
@@ -108,16 +98,17 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 				},
 				{
 					label: "የእኔ ደንበኞች",
-					options: contacts.message,
+					options: entries.contacts,
 				},
 				{
 					label: "የመንግስት ድርጅቶች",
-					options: enterprises.message,
+					options: entries.enterprises,
 				},
 			];
 
 			return groups;
 		}
+
 		default:
 			throw new Error("Invalid participant scope");
 	}
@@ -154,14 +145,14 @@ export const isOptionType = (option: any): option is OptionType => {
 	return option.id ? true : false;
 };
 
-export const isUserType = (option: any): option is UserType => {
-	return option.job_title ? true : false;
+export const isMemberType = (option: any): option is MemberListType => {
+	return option.member_profile.job_title ? true : false;
 };
 
 export const isUserParticipantType = (
 	participant: ParticipantDetailType
-): participant is ParticipantDetailType & { user: UserType } => {
-	return participant.participant_type === "user";
+): participant is ParticipantDetailType & { user: MemberListType } => {
+	return participant.participant_type === "member";
 };
 
 export const isEnterpriseType = (option: any): option is EnterpriseType => {
@@ -177,12 +168,12 @@ export const participantSerializer = (
 	role: RoleEnum
 ): ParticipantDetailType => {
 	const id = uuidv4.v4();
-	if (isUserType(option)) {
+	if (isMemberType(option)) {
 		return {
 			id,
 			role,
-			user: option,
-			participant_type: "user",
+			member: option,
+			participant_type: "member",
 		};
 	} else if (isEnterpriseType(option)) {
 		return {
@@ -208,10 +199,10 @@ export const getLabel = (
 	language: LanguageEnum
 ): string => {
 	if (isOptionType(option)) {
-		if (isUserType(option)) {
+		if (isMemberType(option)) {
 			return language === LanguageEnum.English
-				? option.job_title.title_en
-				: option.job_title.title_am;
+				? option.member_profile.job_title.title_en
+				: option.member_profile.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -228,10 +219,10 @@ export const getValue = (
 	language: LanguageEnum
 ): string => {
 	if (isOptionType(option)) {
-		if (isUserType(option)) {
+		if (isMemberType(option)) {
 			return language === LanguageEnum.English
-				? option.job_title.title_en
-				: option.job_title.title_am;
+				? option.member_profile.job_title.title_en
+				: option.member_profile.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -251,8 +242,8 @@ export const getDefaultValue = (
 	return participants
 		.filter((participant) => participant.role === role)
 		.map((participant) => {
-			if (participant.participant_type === "user") {
-				return participant.user;
+			if (participant.participant_type === "member") {
+				return participant.member;
 			} else if (participant.participant_type === "enterprise") {
 				return participant.enterprise;
 			} else if (participant.participant_type === "contact") {
@@ -268,8 +259,8 @@ export const isOptionDisabled = (
 	participants: ParticipantDetailType[]
 ): boolean => {
 	return participants.some((participant) => {
-		if (participant.participant_type === "user") {
-			return participant.user.id === option.id;
+		if (participant.participant_type === "member") {
+			return participant.member.id === option.id;
 		} else if (participant.participant_type === "enterprise") {
 			return participant.enterprise.id === option.id;
 		} else if (participant.participant_type === "contact") {
@@ -283,12 +274,12 @@ export const generateDraftParticipant = (
 	participants: ParticipantDetailType[]
 ): ParticipantDraftType[] => {
 	return participants.map((participant) => {
-		if (participant.participant_type === "user") {
+		if (participant.participant_type === "member") {
 			return {
 				id: participant.id,
 				role: participant.role,
-				user_id: participant.user.id,
-				participant_type: "user",
+				member_id: participant.member.id,
+				participant_type: "member",
 			};
 		} else if (participant.participant_type === "enterprise") {
 			return {

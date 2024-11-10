@@ -37,8 +37,12 @@ export default function TwoFactorSetupDialog() {
 		queryFn: async () => {
 			try {
 				const data = await getMyProfile();
-				setCurrentUser(data.my_profile);
-				return data.my_profile as CurrentUserType;
+
+				setCurrentUser(data.member);
+
+				console.log("🚀 ~ queryFn: ~ data.member:", data.member);
+
+				return data.member as CurrentUserType;
 			} catch (error: any) {
 				toast.error(error.message);
 			}
@@ -70,7 +74,7 @@ export default function TwoFactorSetupDialog() {
 	useEffect(() => {
 		if (!myProfile) return;
 
-		if (!myProfile.is_2fa_enabled) {
+		if (!myProfile.member_settings.is_2fa_enabled) {
 			setIsDialogOpen(true);
 			requestQRCodeMutate();
 		}

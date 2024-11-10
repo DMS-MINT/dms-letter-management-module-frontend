@@ -1,7 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import type { CurrentUserType } from "@/types/user_module";
+import { useUserStore } from "@/lib/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MailCheck, Tag, UserCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,8 @@ const profileSchema = z.object({
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
 
-const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
+const ProfileDetail = () => {
+	const currentUser = useUserStore((state) => state.currentUser);
 	const {
 		register,
 		handleSubmit,
@@ -27,8 +28,8 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 	} = useForm<ProfileFormData>({
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
-			email: myProfile?.email || "",
-			phone_number: myProfile?.phone_number || 0,
+			email: currentUser.email || "",
+			phone_number: currentUser.member_profile.phone_number || 0,
 		},
 	});
 
@@ -54,7 +55,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.first_name_am}
+							value={currentUser.member_profile.first_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -65,7 +66,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name_am}
+							value={currentUser.member_profile.last_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -76,7 +77,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name_am}
+							value={currentUser.member_profile.last_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -89,7 +90,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.first_name_en}
+							value={currentUser.member_profile.first_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -100,7 +101,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.middle_name_en}
+							value={currentUser.member_profile.middle_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -111,7 +112,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.last_name_en}
+							value={currentUser.member_profile.last_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -166,7 +167,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.department_name_am}
+							value={currentUser.member_profile.department.department_name_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -177,7 +178,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.job_title.title_am}
+							value={currentUser.member_profile.job_title.title_am}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -190,7 +191,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.department.department_name_en}
+							value={currentUser.member_profile.department.department_name_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>
@@ -201,7 +202,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						</label>
 						<Input
 							type="text"
-							value={myProfile.job_title.title_en}
+							value={currentUser.member_profile.job_title.title_en}
 							disabled={true}
 							className="mt-1 block w-full"
 						/>

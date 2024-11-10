@@ -2,9 +2,16 @@
 
 import axiosInstance from "@/actions/axiosInstance";
 import type { ProfileFormData } from "@/components/UserProfile/ProfileDetail/ProfileDetail";
+import type { ParticipantEntriesType } from "@/types/letter_module";
 import type { NewContactType } from "@/types/user_module";
 import getErrorMessage from "../getErrorMessage";
 import { userErrorMessages } from "./errorMessages";
+
+export type MemberEntriesFilterType =
+	| "all"
+	| "admin"
+	| "staff"
+	| "staff_and_admin";
 
 export async function getMyProfile() {
 	try {
@@ -15,11 +22,29 @@ export async function getMyProfile() {
 	}
 }
 
-export async function getUsers(is_staff: boolean = false) {
+export async function getParticipantEntries(
+	params: [MemberEntriesFilterType, boolean, boolean]
+) {
 	try {
-		const response = await axiosInstance.get(`users/?is_staff=${is_staff}`);
+		const [members, enterprises, contacts] = params;
 
-		return { ok: true, message: response.data.users };
+		const response = await axiosInstance.get(
+			`participants/entries?members=${members}&enterprises=${enterprises}&contacts=${contacts}`
+		);
+
+		return { ok: true, message: response.data.entries as ParticipantEntriesType };
+	} catch (error: any) {
+		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
+	}
+}
+
+export async function getUsers(filter: string) {
+	try {
+		const response = await axiosInstance.get(
+			`members?filter=${filter}&include_current_user=false`
+		);
+
+		return { ok: true, message: response.data.members };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}
