@@ -27,7 +27,7 @@ const MyProfileTopBar = () => {
 	return isSuccess && myProfile ? (
 		<section className="flex w-full items-center justify-between">
 			<span className="flex items-center gap-2">
-				<h1 className="text-xl font-bold">{myProfile.full_name_am}</h1>
+				<h1 className="text-xl font-bold">{myProfile.user_profile.full_name_am}</h1>
 
 				<Badge className="flex items-center justify-start bg-green-100 text-green-500">
 					{" "}

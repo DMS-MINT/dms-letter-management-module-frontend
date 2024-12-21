@@ -104,13 +104,13 @@ function ParticipantSelector({
 						<OptionItem
 							primaryText={
 								language === LanguageEnum.English
-									? data.job_title.title_en
-									: data.job_title.title_am
+									? data.user_profile.job_title.title_en
+									: data.user_profile.job_title.title_am
 							}
 							secondaryText={
 								language === LanguageEnum.English
-									? data.full_name_en
-									: data.full_name_am
+									? data.user_profile.full_name_en
+									: data.user_profile.full_name_am
 							}
 						/>
 					) : null}

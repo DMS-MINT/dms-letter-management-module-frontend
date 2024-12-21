@@ -220,21 +220,21 @@ function ShareLetterDialog({ owner }: Props) {
 										<AvatarFallback>
 											{getInitials(
 												language === LanguageEnum.English
-													? owner.full_name_en
-													: owner.full_name_am
+													? owner.user_profile.full_name_en
+													: owner.user_profile.full_name_am
 											)}
 										</AvatarFallback>
 									</Avatar>
 									<p className="flex flex-col">
 										<span>
 											{language === LanguageEnum.English
-												? owner.job_title.title_en
-												: owner.job_title.title_am}
+												? owner.user_profile.job_title.title_en
+												: owner.user_profile.job_title.title_am}
 										</span>
 										<span className="text-sm text-gray-600">
 											{language === LanguageEnum.English
-												? owner.full_name_en
-												: owner.full_name_am}
+												? owner.user_profile.full_name_en
+												: owner.user_profile.full_name_am}
 										</span>
 									</p>
 									<p className="ml-auto text-gray-400">ባለቤት</p>
@@ -260,21 +260,21 @@ function ShareLetterDialog({ owner }: Props) {
 													<AvatarFallback>
 														{getInitials(
 															language === LanguageEnum.English
-																? collaborator.user.full_name_en
-																: collaborator.user.full_name_am
+																? collaborator.user.user_profile.full_name_en
+																: collaborator.user.user_profile.full_name_am
 														)}
 													</AvatarFallback>
 												</Avatar>
 												<p className="flex flex-col">
 													<span>
 														{language === LanguageEnum.English
-															? collaborator.user.job_title.title_en
-															: collaborator.user.job_title.title_am}
+															? collaborator.user.user_profile.job_title.title_en
+															: collaborator.user.user_profile.job_title.title_am}
 													</span>
 													<span className="text-sm text-gray-600">
 														{language === LanguageEnum.English
-															? collaborator.user.full_name_en
-															: collaborator.user.full_name_am}
+															? collaborator.user.user_profile.full_name_en
+															: collaborator.user.user_profile.full_name_am}
 													</span>
 												</p>
 												<TooltipProvider>

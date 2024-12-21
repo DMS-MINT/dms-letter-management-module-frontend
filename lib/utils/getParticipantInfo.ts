@@ -8,7 +8,7 @@ const getParticipantInfo = (
 		.filter((participant) => participant.role === role)
 		.map((participant) => {
 			if (participant.participant_type === "user") {
-				return participant.user.job_title.title_am;
+				return participant.user.user_profile.job_title.title_am;
 			} else if (participant.participant_type === "enterprise") {
 				return participant.enterprise.name_en;
 			} else if (participant.participant_type === "contact") {

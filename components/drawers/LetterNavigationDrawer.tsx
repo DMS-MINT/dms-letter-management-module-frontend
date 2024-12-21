@@ -66,7 +66,7 @@ export default function LetterNavigationDrawer() {
 
 	return (
 		<nav className="flex h-full w-full flex-col justify-between gap-2">
-			{currentUser.is_staff ? (
+			{currentUser.users_permissions.is_staff ? (
 				<div>
 					{staffRoutes.map(({ id, name, icon, path }) => (
 						<Link key={id} href={path}>

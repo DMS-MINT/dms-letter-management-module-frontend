@@ -52,8 +52,8 @@ export default function LetterDetail({
 					current_state: data.letter.current_state,
 					department:
 						data.letter.language === "English"
-							? data.letter.owner.department.abbreviation_en
-							: data.letter.owner.department.abbreviation_am,
+							? data.letter.owner.user_profile.department.abbreviation_en
+							: data.letter.owner.user_profile.department.abbreviation_am,
 					year: "2017",
 				};
 
