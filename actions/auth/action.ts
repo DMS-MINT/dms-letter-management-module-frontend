@@ -52,7 +52,7 @@ export async function get_session() {
 export async function signIn(credentials: ICredentials) {
 	try {
 		const response = await axiosInstance.post("auth/login/", credentials);
-
+		console.log("response", response);
 		const sessionId = response.data.session;
 
 		const expires = Date.now() + 24 * 60 * 60 * 1000;
