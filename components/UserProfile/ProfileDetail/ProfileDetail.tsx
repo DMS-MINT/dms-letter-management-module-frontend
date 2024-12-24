@@ -13,40 +13,27 @@ import { updateProfile } from "@/actions/user_module/action";
 import { useMutation } from "@tanstack/react-query";
 
 const profileSchema = z.object({
-	email: z.string().email("Invalid email address"),
 	first_name_en: z.string().optional(),
 	middle_name_en: z.string().optional(),
 	last_name_en: z.string().optional(),
 	first_name_am: z.string().optional(),
 	middle_name_am: z.string().optional(),
 	last_name_am: z.string().optional(),
-	phone_number: z.string().refine(
-		(val) => /^2519\d{8}$/.test(val), // digits starting with 2519 and must be 12 digits
-		"Phone number must start with 2519 and be 12 digits long"
-	),
-
 	use_email: z.boolean(),
 	use_sms: z.boolean(),
 });
 
 export type ProfileFormData = z.infer<typeof profileSchema>;
 const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
-	const {
-		register,
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<ProfileFormData>({
+	const { register, control, handleSubmit } = useForm<ProfileFormData>({
 		resolver: zodResolver(profileSchema),
 		defaultValues: {
-			email: myProfile?.email,
 			first_name_en: myProfile?.user_profile.first_name_en,
 			middle_name_en: myProfile?.user_profile.middle_name_en,
 			last_name_en: myProfile?.user_profile.last_name_en,
 			first_name_am: myProfile?.user_profile.first_name_am,
 			middle_name_am: myProfile?.user_profile.middle_name_am,
 			last_name_am: myProfile?.user_profile.last_name_am,
-			phone_number: myProfile?.user_profile.phone_number?.toString(),
 			use_email: myProfile?.user_preferences.use_email,
 			use_sms: myProfile?.user_preferences.use_sms,
 		},
@@ -157,7 +144,7 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 			<span className="flex items-center gap-2 text-sm text-muted-foreground">
 				<MailCheck size={18} />
 				<p>አድራሻ</p>
-				<Badge>የሚለወጥ</Badge>
+				<Badge className="bg-red-400 text-secondary-foreground">የማይለወጥ</Badge>
 			</span>
 			<div className="space-y-4 rounded-md border-2 p-4">
 				{/* Email and Phone */}
@@ -166,23 +153,23 @@ const ProfileDetail = ({ myProfile }: { myProfile: CurrentUserType }) => {
 						<label className="block text-sm font-medium text-muted-foreground">
 							ኢሜል - Email
 						</label>
-						<Input type="text" {...register("email")} className="mt-1 block w-full" />
-						{errors.email && (
-							<p className="text-sm text-red-500">{errors.email.message}</p>
-						)}
+						<Input
+							type="text"
+							value={myProfile.email}
+							disabled={true}
+							className="mt-1 block w-full"
+						/>
 					</div>
 					<div className="col-span-2 space-y-2 md:col-span-1">
 						<label className="block text-sm font-medium text-muted-foreground">
 							ስልክ ቁጥር - Phone Number
 						</label>
 						<Input
-							type="tel"
-							{...register("phone_number")}
+							type="number"
+							value={myProfile.user_profile.phone_number ?? undefined}
+							disabled={true}
 							className="mt-1 block w-full"
 						/>
-						{errors.phone_number && (
-							<p className="text-sm text-red-500">{errors.phone_number.message}</p>
-						)}
 					</div>
 				</div>
 			</div>
