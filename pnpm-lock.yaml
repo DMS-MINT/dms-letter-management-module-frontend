@@ -359,6 +359,9 @@ importers:
    husky:
     specifier: ^9.0.11
     version: 9.1.7
+   jest-worker:
+    specifier: ^29.7.0
+    version: 29.7.0
    pinst:
     specifier: ^3.0.0
     version: 3.0.0
@@ -891,6 +894,20 @@ packages:
     integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==,
    }
   engines: { node: ">=12" }
+
+ "@jest/schemas@29.6.3":
+  resolution:
+   {
+    integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==,
+   }
+  engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
+
+ "@jest/types@29.6.3":
+  resolution:
+   {
+    integrity: sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw==,
+   }
+  engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
 
  "@jridgewell/gen-mapping@0.3.8":
   resolution:
@@ -1769,6 +1786,12 @@ packages:
     integrity: sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A==,
    }
 
+ "@sinclair/typebox@0.27.8":
+  resolution:
+   {
+    integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==,
+   }
+
  "@socket.io/component-emitter@3.1.2":
   resolution:
    {
@@ -2246,6 +2269,24 @@ packages:
     integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==,
    }
 
+ "@types/istanbul-lib-coverage@2.0.6":
+  resolution:
+   {
+    integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==,
+   }
+
+ "@types/istanbul-lib-report@3.0.3":
+  resolution:
+   {
+    integrity: sha512-NQn7AHQnk/RSLOxrBbGyJM/aVQ+pjj5HCgasFxc0K/KhoATfQ/47AyUl15I2yBUpihjmas+a+VJBOqecrFH+uA==,
+   }
+
+ "@types/istanbul-reports@3.0.4":
+  resolution:
+   {
+    integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==,
+   }
+
  "@types/json5@0.0.29":
   resolution:
    {
@@ -2350,6 +2391,18 @@ packages:
   resolution:
    {
     integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==,
+   }
+
+ "@types/yargs-parser@21.0.3":
+  resolution:
+   {
+    integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==,
+   }
+
+ "@types/yargs@17.0.33":
+  resolution:
+   {
+    integrity: sha512-WpxBCKWPLr4xSsHgz511rFJAM+wS28w2zEO1QDNY5zM/S8ok70NNfztH0xwhqKyaK0OHCbN98LDAZuy1ctxDkA==,
    }
 
  "@typescript-eslint/eslint-plugin@7.18.0":
@@ -2925,6 +2978,13 @@ packages:
     integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==,
    }
   engines: { node: ">= 8.10.0" }
+
+ ci-info@3.9.0:
+  resolution:
+   {
+    integrity: sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==,
+   }
+  engines: { node: ">=8" }
 
  class-variance-authority@0.7.1:
   resolution:
@@ -4472,6 +4532,20 @@ packages:
    {
     integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==,
    }
+
+ jest-util@29.7.0:
+  resolution:
+   {
+    integrity: sha512-z6EbKajIpqGKU56y5KBUgy1dt1ihhQJgWzUlZHArA/+X2ad7Cb5iF+AK1EWVL/Bo7Rz9uurpqw6SiBCefUbCGA==,
+   }
+  engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
+
+ jest-worker@29.7.0:
+  resolution:
+   {
+    integrity: sha512-eIz2msL/EzL9UFTFFx7jBTkeZfku0yUAyZZZmJ93H2TYEiroIx2PQjEXcwYtYl8zXCxb+PAmA2hLIt/6ZEkPHw==,
+   }
+  engines: { node: ^14.15.0 || ^16.10.0 || >=18.0.0 }
 
  jiti@1.21.7:
   resolution:
@@ -6355,6 +6429,13 @@ packages:
    }
   engines: { node: ">=8" }
 
+ supports-color@8.1.1:
+  resolution:
+   {
+    integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==,
+   }
+  engines: { node: ">=10" }
+
  supports-preserve-symlinks-flag@1.0.0:
   resolution:
    {
@@ -7303,6 +7384,19 @@ snapshots:
    wrap-ansi: 8.1.0
    wrap-ansi-cjs: wrap-ansi@7.0.0
 
+ "@jest/schemas@29.6.3":
+  dependencies:
+   "@sinclair/typebox": 0.27.8
+
+ "@jest/types@29.6.3":
+  dependencies:
+   "@jest/schemas": 29.6.3
+   "@types/istanbul-lib-coverage": 2.0.6
+   "@types/istanbul-reports": 3.0.4
+   "@types/node": 20.17.12
+   "@types/yargs": 17.0.33
+   chalk: 4.1.2
+
  "@jridgewell/gen-mapping@0.3.8":
   dependencies:
    "@jridgewell/set-array": 1.2.1
@@ -7956,6 +8050,8 @@ snapshots:
 
  "@rushstack/eslint-patch@1.10.5": {}
 
+ "@sinclair/typebox@0.27.8": {}
+
  "@socket.io/component-emitter@3.1.2": {}
 
  "@swc/helpers@0.5.2":
@@ -8269,6 +8365,16 @@ snapshots:
   dependencies:
    "@types/unist": 3.0.3
 
+ "@types/istanbul-lib-coverage@2.0.6": {}
+
+ "@types/istanbul-lib-report@3.0.3":
+  dependencies:
+   "@types/istanbul-lib-coverage": 2.0.6
+
+ "@types/istanbul-reports@3.0.4":
+  dependencies:
+   "@types/istanbul-lib-report": 3.0.3
+
  "@types/json5@0.0.29": {}
 
  "@types/linkify-it@5.0.0": {}
@@ -8319,6 +8425,12 @@ snapshots:
  "@types/use-sync-external-store@0.0.6": {}
 
  "@types/uuid@9.0.8": {}
+
+ "@types/yargs-parser@21.0.3": {}
+
+ "@types/yargs@17.0.33":
+  dependencies:
+   "@types/yargs-parser": 21.0.3
 
  "@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.2.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3)":
   dependencies:
@@ -8728,6 +8840,8 @@ snapshots:
    readdirp: 3.6.0
   optionalDependencies:
    fsevents: 2.3.3
+
+ ci-info@3.9.0: {}
 
  class-variance-authority@0.7.1:
   dependencies:
@@ -9773,6 +9887,22 @@ snapshots:
    "@isaacs/cliui": 8.0.2
   optionalDependencies:
    "@pkgjs/parseargs": 0.11.0
+
+ jest-util@29.7.0:
+  dependencies:
+   "@jest/types": 29.6.3
+   "@types/node": 20.17.12
+   chalk: 4.1.2
+   ci-info: 3.9.0
+   graceful-fs: 4.2.11
+   picomatch: 2.3.1
+
+ jest-worker@29.7.0:
+  dependencies:
+   "@types/node": 20.17.12
+   jest-util: 29.7.0
+   merge-stream: 2.0.0
+   supports-color: 8.1.1
 
  jiti@1.21.7: {}
 
@@ -10917,6 +11047,10 @@ snapshots:
    ts-interface-checker: 0.1.13
 
  supports-color@7.2.0:
+  dependencies:
+   has-flag: 4.0.0
+
+ supports-color@8.1.1:
   dependencies:
    has-flag: 4.0.0
 
