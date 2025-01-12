@@ -43,11 +43,29 @@ export async function createLetter(formData: FormData) {
 	}
 }
 
+// export async function createAndSubmitLetter(formData: FormData) {
+// 	console.log(formData);
+// 	try {
+// 		const response = await axiosInstance.post(
+// 			"letters/create_and_submit/",
+// 			formData,
+// 			{
+// 				headers: {
+// 					"Content-Type": "multipart/form-data",
+// 				},
+// 			}
+// 		);
+
+// 		return { ok: true, message: response.data };
+// 	} catch (error: any) {
+// 		return { ok: false, message: getErrorMessage(curdErrorMessages, error) };
+// 	}
+// }
 export async function createAndSubmitLetter(formData: FormData) {
 	console.log(formData);
 	try {
 		const response = await axiosInstance.post(
-			"letters/create_and_submit/",
+			"letters/create_and_submit_pad/",
 			formData,
 			{
 				headers: {

@@ -59,7 +59,7 @@ export default function IncomingLetterTemplate({
 				prefix={language === LanguageEnum.English ? "To" : "ለ"}
 				isDisabled={isLetterReadOnly}
 				name={RoleEnum["PRIMARY RECIPIENT"]}
-				placeholder="እባክዎን ደብዳቤው ለማን እንደተላከ ያስገቡ"
+				placeholder="እባክዎን ደብዳቤው ለማን እንደሚላክ ይምረጡ"
 				participantScope="all"
 				participants={participants}
 				addParticipant={addParticipant}

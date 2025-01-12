@@ -5,19 +5,13 @@ import {
 	createAndSubmitLetter,
 } from "@/actions/letter_module/crudActions";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import { LINKS } from "@/constants";
 import { useOTP } from "@/hooks";
-import { useDraftAttachmentStore, useDraftLetterStore } from "@/lib/stores";
+import { useSTPadServerConnection } from "@/hooks/useSTPadServerConnection";
+import {
+	type LetterStoreType,
+	useDraftAttachmentStore,
+	useDraftLetterStore,
+} from "@/lib/stores";
 import canSubmitLetter from "@/lib/utils/canSubmitLetter";
 import { generateDraftParticipant } from "@/lib/utils/participantUtils";
 import type {
@@ -26,11 +20,11 @@ import type {
 } from "@/types/letter_module";
 import { useMutation } from "@tanstack/react-query";
 import { Send } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { OTPInputForm } from "../forms";
+import { shallow } from "zustand/shallow";
+import { SignatureAlertDialog } from "../module/stpads/Alert-dialog";
 import {
 	Tooltip,
 	TooltipContent,
@@ -50,6 +44,13 @@ export default function SubmitLetterDialog({
 }: {
 	actionType: ActionType;
 }) {
+	const { isConnected, isLoading, reconnect } = useSTPadServerConnection();
+
+	// Use shallow comparison for efficient state updates
+	// const { isConnected, isLoading } = useSTPadStore();
+	// const isConnected = true;
+	// const isLoading = false;
+	// const {isConnected, isLoading} = useSTPadServerConnection();
 	const {
 		subject,
 		body,
@@ -60,22 +61,29 @@ export default function SubmitLetterDialog({
 		current_state,
 		department,
 		year,
-	} = useDraftLetterStore((state) => ({
-		subject: state.subject,
-		body: state.body,
-		letter_type: state.letter_type,
-		language: state.language,
-		participants: state.participants,
-		id: state.id,
-		current_state: state.current_state,
-		department: state.department,
-		year: state.year,
-	}));
+	} = useDraftLetterStore(
+		(state: LetterStoreType) => ({
+			subject: state.subject,
+			body: state.body,
+			letter_type: state.letter_type,
+			language: state.language,
+			participants: state.participants,
+			id: state.id,
+			current_state: state.current_state,
+			department: state.department,
+			year: state.year,
+		}),
+		shallow
+	);
+
 	const { newAttachments } = useDraftAttachmentStore();
-
 	const { form, getOTP, handleInputChange } = useOTP();
+	const [OpenSignatureAlertDialog, setOpenSignatureAlertDialog] =
+		useState(false);
 	const router = useRouter();
+	const [signatureImage, setSignatureImage] = useState<string | null>(null);
 
+	// Action dispatcher for submitting or publishing a letter
 	const actionDispatcher = async ({
 		actionType,
 		formData,
@@ -90,6 +98,7 @@ export default function SubmitLetterDialog({
 		}
 	};
 
+	// Mutation for handling the form submission
 	const { mutate, isPending } = useMutation({
 		mutationKey: ["createLetter"],
 		mutationFn: async (action: LetterActionProps) => {
@@ -104,22 +113,32 @@ export default function SubmitLetterDialog({
 			toast.loading("ደብዳቤ በመፍጠር ላይ፣ እባክዎ ይጠብቁ...");
 		},
 		onSuccess: (data) => {
-			console.log("Letter data:", data);
 			toast.dismiss();
 			toast.success("ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
 			router.push(`/letters/draft/${data.letter.id}`);
 		},
 		onError: (error: any) => {
 			toast.dismiss();
-			toast.error(error.message);
+			// toast.success("ፊርማዎ ተመሳሳይ ነው፡፡ ደብዳቤ በተሳካ ሁኔታ ተፈጥሯል!");
+			toast.error(
+				"Signature verification failed. Please Try again or contact support."
+			);
 		},
 	});
 
+	// Memoize draft participants to avoid unnecessary recalculations
 	const draft_participants = useMemo(() => {
 		return generateDraftParticipant(participants);
 	}, [participants]);
 
-	const onContinue = (otp: string) => {
+	// Handle form submission
+
+	const resetSignature = () => {
+		reconnect();
+		setSignatureImage(null);
+	};
+
+	const onContinue = (signatureImage: string) => {
 		const formData = new FormData();
 		const letter: DraftLetterType = {
 			subject,
@@ -129,13 +148,12 @@ export default function SubmitLetterDialog({
 			participants: draft_participants,
 		};
 		formData.append("letter", JSON.stringify(letter));
+		formData.append("signature", signatureImage);
 
 		newAttachments.forEach((attachment, index) => {
 			formData.append(`attachments[${index}].file`, attachment.file);
 			formData.append(`attachments[${index}].description`, attachment.description);
 		});
-
-		formData.append("otp", JSON.stringify(otp));
 
 		const action: LetterActionProps = {
 			actionType,
@@ -144,76 +162,56 @@ export default function SubmitLetterDialog({
 		mutate(action);
 	};
 
+	const uploadSignatureImage = (signatureImage: string) => {
+		console.log(signatureImage);
+		setSignatureImage(signatureImage);
+		onContinue(signatureImage);
+	};
+
 	return (
-		<Dialog>
+		<>
 			<TooltipProvider>
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<DialogTrigger asChild>
-							<Button
-								type="button"
-								disabled={
-									!canSubmitLetter({
-										subject,
-										body,
-										letter_type,
-										language,
-										participants,
-										id,
-										current_state,
-										department,
-										year,
-									})
-								}
-								onClick={() => {
-									form.reset();
-								}}
-							>
-								<Send size={15} />
-							</Button>
-						</DialogTrigger>
+						<Button
+							type="button"
+							disabled={
+								!canSubmitLetter({
+									subject,
+									body,
+									letter_type,
+									language,
+									participants,
+									id,
+									current_state,
+									department,
+									year,
+								})
+							}
+							onClick={() => {
+								form.reset();
+
+								setOpenSignatureAlertDialog(true);
+							}}
+						>
+							<Send size={15} />
+						</Button>
 					</TooltipTrigger>
 					<TooltipContent side="bottom" align="center">
 						<p>ወደ መዝገብ ቢሮ አስተላልፍ</p>
 					</TooltipContent>
 				</Tooltip>
 			</TooltipProvider>
-			<DialogContent>
-				<DialogHeader className="gap-2">
-					<DialogTitle>ማንነትዎን ያረጋግጡ</DialogTitle>
-					<DialogDescription>
-						ይህን ደብዳቤ ደህንነቱ በተጠበቀ መልኩ ለመፈረም፣ እባክዎ በእርስዎ
-						{
-							<Link
-								href={LINKS.google_authenticator}
-								className="text-blue-800"
-								target="_blank"
-							>
-								{" Google Authenticator "}
-							</Link>
-						}
-						መተግበሪያ የመነጨውን የአንድ ጊዜ የይለፍ ቃል ያስገቡ።
-					</DialogDescription>
-				</DialogHeader>
-				<div className="px-2">
-					<OTPInputForm showLabel={true} form={form} onChange={handleInputChange} />
-				</div>
-				<DialogFooter>
-					<DialogClose asChild>
-						<Button variant="outline">ሰርዝ</Button>
-					</DialogClose>
-					<Button
-						disabled={getOTP()?.toString().length !== 6 || isPending}
-						type="submit"
-						onClick={() => {
-							const otp = getOTP();
-							onContinue(otp);
-						}}
-					>
-						ቀጥል
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+
+			<SignatureAlertDialog
+				open={OpenSignatureAlertDialog}
+				setOpen={setOpenSignatureAlertDialog}
+				isConnected={isConnected}
+				isLoading={isLoading}
+				uploadSignatureImage={uploadSignatureImage}
+				resetSignature={resetSignature}
+				reconnect={reconnect}
+			/>
+		</>
 	);
 }

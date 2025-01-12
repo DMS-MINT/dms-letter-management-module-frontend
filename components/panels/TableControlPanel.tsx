@@ -26,6 +26,7 @@ export default function TableControlPanel() {
 	const params = useParams();
 	const router = useRouter();
 	const category: string = params.category as string;
+
 	const updateLetterField = useDraftLetterStore(
 		(state) => state.updateLetterField
 	);

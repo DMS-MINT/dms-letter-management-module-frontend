@@ -270,7 +270,7 @@ export default function FileUploadDialog({
 					</div>
 				)}
 				{/* Kiosk Modal */}
-				{isKioskVisible && (
+				{/* {isKioskVisible && (
 					<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
 						<div className="w-3/2 relative rounded-lg bg-white p-4">
 							<Button
@@ -284,7 +284,7 @@ export default function FileUploadDialog({
 							<KioskDisplayPanel onSendFiles={handleKioskFileSend} />
 						</div>
 					</div>
-				)}
+				)} */}
 				{editable ? (
 					<DialogFooter>
 						<Button

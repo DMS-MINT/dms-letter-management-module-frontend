@@ -28,4 +28,5 @@ export const FILE_ICON = Object.freeze({
 	plain: "/icons/text.png",
 	png: "/icons/png.png",
 	ppt: "/icons/ppt.png",
+	folder: "/icons/folder.png",
 });

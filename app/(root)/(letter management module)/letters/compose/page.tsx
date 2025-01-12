@@ -10,6 +10,7 @@ import {
 } from "@/components/templates";
 import type { TemplateProps } from "@/components/templates/types";
 import useBlockEditor from "@/hooks/useBlockEditor";
+import { useSTPadServerConnection } from "@/hooks/useSTPadServerConnection";
 import { useDraftLetterStore } from "@/lib/stores";
 import { useMemo } from "react";
 

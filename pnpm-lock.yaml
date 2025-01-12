@@ -283,6 +283,9 @@ importers:
    shadcn-ui:
     specifier: ^0.8.0
     version: 0.8.0(typescript@5.7.2)
+   signotec-stpad-server:
+    specifier: link:lib\signotec-stpad-server
+    version: link:lib/signotec-stpad-server
    socket.io:
     specifier: ^4.7.5
     version: 4.8.1
