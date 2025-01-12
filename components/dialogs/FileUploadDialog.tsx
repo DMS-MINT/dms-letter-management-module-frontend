@@ -301,14 +301,14 @@ export default function FileUploadDialog({
 							style={{ display: "none" }}
 							onChange={handleFileChange}
 						/>
-						<Button
+						{/* <Button
 							type="button"
 							className="flex w-full justify-center gap-2 bg-blue-500 text-white"
 							onClick={openKiosk}
 						>
 							<Plus size={20} />
 							ፋይል አያይዝ (ከኪዮስክ)
-						</Button>
+						</Button> */}
 					</DialogFooter>
 				) : null}
 			</DialogContent>
