@@ -17,10 +17,11 @@ export async function shareLetter(params: [string, ShareLetterRequestType]) {
 	}
 }
 
-export async function submitLetter({ id, otp }: ParamsType) {
+export async function submitLetter({ id, otp, signature }: ParamsType) {
 	try {
-		await axiosInstance.put(`letters/${id}/submit/`, {
+		await axiosInstance.put(`letters/${id}/submit_pad/`, {
 			otp,
+			signature,
 		});
 
 		return { ok: true, message: "ደብዳቤው በተሳካ ሁኔታ ወደ መዝገብ ቤት ገብቷል።" };

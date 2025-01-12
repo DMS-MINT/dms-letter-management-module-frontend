@@ -37,6 +37,7 @@ export type ParamsType = {
 	message?: string;
 	reference_number?: string;
 	published_at?: string;
+	signature?: string | null;
 };
 
 export type PropType = {
@@ -94,6 +95,7 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 			return await submitLetter({
 				id: params.id,
 				otp: params.otp,
+				signature: params.signature,
 			});
 		case "trash_letter":
 			return await moveToTrash(ids[0]);

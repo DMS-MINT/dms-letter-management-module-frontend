@@ -3,7 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/stores";
 import clsx from "clsx";
-import { CheckCheck, FileText, Inbox, Loader, Send, Trash } from "lucide-react";
+import {
+	CheckCheck,
+	FileText,
+	FolderDown,
+	Inbox,
+	Loader,
+	Send,
+	Trash,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as uuidv4 from "uuid";
@@ -35,6 +43,12 @@ export default function LetterNavigationDrawer() {
 			icon: <CheckCheck size={ICON_SIZE} color={ICON_COLOR} />,
 			path: "/letters/published",
 		},
+		// {
+		// 	id: uuidv4.v4(),
+		// 	name: "የገቡ ደብዳቤዎች",
+		// 	icon: <FolderDown size={ICON_SIZE} color={ICON_COLOR} />,
+		// 	path: "/ledger/list",
+		// },
 	];
 
 	const routes: RouteType[] = [
@@ -66,7 +80,7 @@ export default function LetterNavigationDrawer() {
 
 	return (
 		<nav className="flex h-full w-full flex-col justify-between gap-2">
-			{currentUser.is_staff ? (
+			{currentUser.users_permissions.is_staff ? (
 				<div>
 					{staffRoutes.map(({ id, name, icon, path }) => (
 						<Link key={id} href={path}>

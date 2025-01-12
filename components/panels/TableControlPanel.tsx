@@ -26,10 +26,13 @@ export default function TableControlPanel() {
 	const params = useParams();
 	const router = useRouter();
 	const category: string = params.category as string;
+
 	const updateLetterField = useDraftLetterStore(
 		(state) => state.updateLetterField
 	);
-	const is_staff = useUserStore((state) => state.currentUser.is_staff);
+	const is_staff = useUserStore(
+		(state) => state.currentUser.users_permissions.is_staff
+	);
 
 	const isValidCategory = useMemo(
 		() => whitelist.includes(category),

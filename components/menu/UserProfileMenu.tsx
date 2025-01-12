@@ -75,7 +75,7 @@ export default function UserProfileMenu() {
 		setVideoDialogOpen(false);
 	};
 
-	const fullName = myProfile?.full_name_am;
+	const fullName = myProfile?.user_profile.full_name_am;
 	const initials = fullName ? getInitials(fullName) : "";
 
 	return isSuccess && myProfile ? (
@@ -90,8 +90,10 @@ export default function UserProfileMenu() {
 
 				<DropdownMenuContent className="mr-5 min-w-[20rem] max-w-[20rem]">
 					<DropdownMenuLabel className="flex flex-col items-start">
-						<p>{myProfile.full_name_am}</p>
-						<p className="text-sm text-gray-600">{myProfile.job_title.title_am}</p>
+						<p>{myProfile.user_profile.full_name_am}</p>
+						<p className="text-sm text-gray-600">
+							{myProfile.user_profile.job_title.title_am}
+						</p>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onClick={() => router.push("/myaccount")}>

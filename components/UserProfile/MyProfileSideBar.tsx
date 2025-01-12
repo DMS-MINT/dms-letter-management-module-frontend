@@ -5,7 +5,7 @@ import { Badge } from "../ui/badge";
 
 const MyProfileSideBar = ({ myProfile }: { myProfile: CurrentUserType }) => {
 	// const hasProfileImage = !!myProfile.image;
-	const fullName = myProfile.full_name_am;
+	const fullName = myProfile.user_profile.full_name_am;
 	const initials = getInitials(fullName);
 
 	return (
@@ -19,14 +19,14 @@ const MyProfileSideBar = ({ myProfile }: { myProfile: CurrentUserType }) => {
 					<p className="text-gray-600">Department</p>
 				</div>
 				<Badge className="mb-2 h-10 rounded-sm bg-gray-200 text-sm font-normal text-gray-900">
-					{myProfile.department.department_name_am}
+					{myProfile.user_profile.department.department_name_am}
 				</Badge>
 				<div className="flex items-center gap-2">
 					<BriefcaseBusiness size={20} className="text-gray-600" />
 					<p className="text-gray-600">Job Title</p>
 				</div>
 				<Badge className="mb-2 h-10 rounded-sm bg-gray-200 text-sm font-normal text-gray-900">
-					{myProfile.job_title.title_am}
+					{myProfile.user_profile.job_title.title_am}
 				</Badge>
 			</div>
 		</section>

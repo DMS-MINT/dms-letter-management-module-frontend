@@ -70,7 +70,7 @@ export default function TwoFactorSetupDialog() {
 	useEffect(() => {
 		if (!myProfile) return;
 
-		if (!myProfile.is_2fa_enabled) {
+		if (!myProfile.user_settings.is_2fa_enabled) {
 			setIsDialogOpen(true);
 			requestQRCodeMutate();
 		}

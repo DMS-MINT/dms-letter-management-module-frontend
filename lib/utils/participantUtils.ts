@@ -35,7 +35,7 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 	switch (scope) {
 		case "all": {
 			const [users, enterprises, contacts] = await Promise.all([
-				getUsers(),
+				getUsers("all"),
 				getEnterprises(),
 				getContacts(),
 			]);
@@ -66,7 +66,7 @@ export const actionDispatcher = async (scope: ParticipantScopeType) => {
 			return groups;
 		}
 		case "internal_staff": {
-			const response = await getUsers();
+			const response = await getUsers("all");
 
 			if (!response.ok) throw response;
 
@@ -155,7 +155,7 @@ export const isOptionType = (option: any): option is OptionType => {
 };
 
 export const isUserType = (option: any): option is UserType => {
-	return option.job_title ? true : false;
+	return option.user_profile.job_title ? true : false;
 };
 
 export const isUserParticipantType = (
@@ -210,8 +210,8 @@ export const getLabel = (
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
 			return language === LanguageEnum.English
-				? option.job_title.title_en
-				: option.job_title.title_am;
+				? option.user_profile.job_title.title_en
+				: option.user_profile.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -230,8 +230,8 @@ export const getValue = (
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
 			return language === LanguageEnum.English
-				? option.job_title.title_en
-				: option.job_title.title_am;
+				? option.user_profile.job_title.title_en
+				: option.user_profile.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {

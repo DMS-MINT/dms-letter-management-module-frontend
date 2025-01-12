@@ -2,14 +2,16 @@
 
 import type { ActionType } from "@/hooks";
 import { useWorkflowDispatcher } from "@/hooks";
+import { useSTPadServerConnection } from "@/hooks/useSTPadServerConnection";
 import { useLetterRevisionStore } from "@/lib/stores";
 import type { PermissionsType } from "@/types/letter_module";
 import type { UserType } from "@/types/user_module";
 import { Send, Trash } from "lucide-react";
-import React, { memo, useCallback, useMemo, useRef } from "react";
+import React, { memo, useCallback, useMemo, useRef, useState } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
 import type { ActionConfirmModalRef } from "../dialogs/ActionConfirmModal";
+import { SignatureAlertDialog } from "../module/stpads/Alert-dialog";
 import { Button } from "../ui/button";
 import ActionDropDown from "./ActionDropDown";
 import SaveUpdatedLetter from "./SaveUpdatedLetter";
@@ -36,19 +38,26 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 	const { letter_type, id, reference_number, published_at, department, year } =
 		useLetterRevisionStore();
 	const modelRef = useRef<ActionConfirmModalRef>(null);
+	const [OpenSignatureAlertDialog, setOpenSignatureAlertDialog] =
+		useState(false);
+	const [signature, setSignatureImage] = useState<string | null>(null);
 	const { mutate } = useWorkflowDispatcher();
+	const [flag, setFlag] = useState<boolean>(false);
+
+	const { isConnected, isLoading, reconnect } = useSTPadServerConnection();
 
 	const handleAction = useCallback(
 		(
 			actionType: ActionType,
 			otp?: string,
+			signature?: string | null,
 			message?: string,
 			reference_number?: string,
 			published_at?: string
 		) => {
 			mutate({
 				actionType,
-				params: { id, otp, message, reference_number, published_at },
+				params: { id, otp, signature, message, reference_number, published_at },
 			});
 		},
 		[mutate, id]
@@ -118,11 +127,7 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
-						onConfirm={() => {
-							const otp: string | undefined = modelRef.current?.getOTP();
-							if (!otp) return;
-							handleAction("submit_letter", otp);
-						}}
+						onConfirm={() => handleSubmitDraft()}
 						requiresAuth={true}
 					/>
 				),
@@ -240,9 +245,41 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 		permissions.can_trash_letter,
 		permissions.can_update_letter,
 	]);
+	const [otp, setOTP] = useState<string>("");
+	const uploadSignatureImage = (signatureImage: string) => {
+		setSignatureImage(signatureImage);
+		setFlag(true);
+		const signature = signatureImage;
+		// console.log("submitting data", "submit_letter", otp, signatureImage);
+		handleAction("submit_letter", otp, signature);
+	};
+
+	const handleSubmitDraft = async () => {
+		const otp: string | undefined = modelRef.current?.getOTP();
+		if (!otp) return;
+		setOTP(otp);
+		await setOpenSignatureAlertDialog(true);
+
+		// Simulate async operations such as an API call
+		// handleAction("submit_letter", otp, signature);
+	};
+
+	const resetSignature = () => {
+		reconnect();
+		setSignatureImage(null);
+	};
 
 	return (
 		<>
+			<SignatureAlertDialog
+				open={OpenSignatureAlertDialog}
+				setOpen={setOpenSignatureAlertDialog}
+				isConnected={isConnected}
+				isLoading={isLoading}
+				uploadSignatureImage={uploadSignatureImage}
+				resetSignature={resetSignature}
+				reconnect={reconnect}
+			/>
 			{buttonConfigs
 				.filter((action) => action.isVisible === true)
 				.map(({ id, label, icon, variant, size, style, action, component }) =>

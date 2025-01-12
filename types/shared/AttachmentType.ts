@@ -16,3 +16,15 @@ export type NewAttachmentType = {
 	file: File;
 	description: string;
 };
+
+export type IFiletype = "file" | "folder";
+export interface IFileItem {
+	id: string;
+	name: string;
+	type: IFiletype;
+	size: number;
+	modified: Date;
+}
+
+export type SortOption = "name" | "size" | "modified";
+export type ViewOption = "list" | "grid";

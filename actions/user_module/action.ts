@@ -1,7 +1,6 @@
 "use server";
 
 import axiosInstance from "@/actions/axiosInstance";
-import type { ProfileFormData } from "@/components/UserProfile/ProfileDetail/ProfileDetail";
 import type { NewContactType } from "@/types/user_module";
 import getErrorMessage from "../getErrorMessage";
 import { userErrorMessages } from "./errorMessages";
@@ -15,9 +14,11 @@ export async function getMyProfile() {
 	}
 }
 
-export async function getUsers(is_staff: boolean = false) {
+export async function getUsers(filter: string) {
 	try {
-		const response = await axiosInstance.get(`users/?is_staff=${is_staff}`);
+		const response = await axiosInstance.get(
+			`users/?filter=${filter}&include_current_user=false`
+		);
 
 		return { ok: true, message: response.data.users };
 	} catch (error: any) {
@@ -82,11 +83,14 @@ export async function DeleteContacts(id: string) {
 	}
 }
 
-export async function updateProfile(data: ProfileFormData) {
+export async function updateProfile(params: Record<string, any>) {
 	try {
-		const response = await axiosInstance.patch("users/profile/", data);
-
-		return { ok: true, message: response.data };
+		const response = await axiosInstance.post("users/update/", params, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		return { ok: true, message: "ለውጦችን በተሳካ ሁኔታ ተቀምጠዋል።", data: response.data };
 	} catch (error: any) {
 		return { ok: false, message: getErrorMessage(userErrorMessages, error) };
 	}

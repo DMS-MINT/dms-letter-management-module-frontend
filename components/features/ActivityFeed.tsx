@@ -120,10 +120,10 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 						<div className="flex items-center gap-4">
 							<Avatar className="h-11 w-11">
 								<AvatarFallback>
-									{currentUser.full_name_am.substring(0, 2)}
+									{currentUser.user_profile.full_name_am.substring(0, 2)}
 								</AvatarFallback>
 							</Avatar>
-							<h4 className="text-base font-semibold">{`${currentUser.full_name_am} - ${currentUser.job_title.title_am}`}</h4>
+							<h4 className="text-base font-semibold">{`${currentUser.user_profile.full_name_am} - ${currentUser.user_profile.job_title.title_am}`}</h4>
 							<div className="ml-auto flex gap-1">
 								<Button
 									variant="ghost"
@@ -178,10 +178,12 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 						<div className="flex items-center gap-4">
 							<Avatar className="h-11 w-11">
 								<AvatarFallback>
-									{author.full_name_am ? author.full_name_am.substring(0, 2) : ""}
+									{author.user_profile.full_name_am
+										? author.user_profile.full_name_am.substring(0, 2)
+										: ""}
 								</AvatarFallback>
 							</Avatar>
-							<h4 className="text-base font-semibold">{`${author.full_name_am} - ${author.job_title.title_am}`}</h4>
+							<h4 className="text-base font-semibold">{`${author.user_profile.full_name_am} - ${author.user_profile.job_title.title_am}`}</h4>
 							{author.id === currentUser.id ? (
 								<div className="ml-auto flex gap-1">
 									{selectedCommentId === id ? (
@@ -259,7 +261,7 @@ export default function ActivityFeed({ letter }: { letter: LetterDetailType }) {
 				</div>
 				<div className="flex items-center px-1">
 					<p className="text-gray-700">
-						{`${letter.owner.full_name_am} ይህን ደብዳቤ 
+						{`${letter.owner.user_profile.full_name_am} ይህን ደብዳቤ 
             ${convertToEthiopianDate(letter.created_at)} ፈጥረዋል።`}
 					</p>
 				</div>

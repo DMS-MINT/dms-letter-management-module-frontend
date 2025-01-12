@@ -4,6 +4,7 @@ import { TopBar } from "@/components/layouts";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import { Toaster } from "sonner";
 
 // const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
@@ -27,6 +28,7 @@ export default function RootLayout({
 	return (
 		<html lang="am">
 			<body className={myFont.className}>
+				<Script src="/lib/STPadServerLib-3.4.0.js" strategy="beforeInteractive" />
 				<Providers>
 					<RequireAuth>
 						<div className="flex h-full flex-col">

@@ -18,12 +18,12 @@ import { filesize } from "filesize";
 import { Dot, Eye, Plus, RotateCcw, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import * as uuidv4 from "uuid";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-
+import { KioskDisplayPanel } from "@/components/panels";
 type Props = {
 	editable: boolean;
 	newAttachments: NewAttachmentType[];
@@ -46,6 +46,7 @@ export default function FileUploadDialog({
 	removeUploadedAttachment,
 }: Props) {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	const [isKioskVisible, setIsKioskVisible] = useState(false);
 
 	const triggerFileUpload = () => {
 		fileInputRef.current?.click();
@@ -87,6 +88,26 @@ export default function FileUploadDialog({
 
 	const isDeleted = (id: string) => {
 		return removedAttachmentsIds.some((removedId) => removedId === id);
+	};
+
+	const handleKioskFileSend = (files: { id: string; name: string }[]) => {
+		files.forEach((file) => {
+			const newAttachment: NewAttachmentType = {
+				id: uuidv4.v4(),
+				file: new File([], file.name), // Use File API to create a mock file object
+				description: "",
+			};
+			addNewAttachment(newAttachment);
+		});
+		setIsKioskVisible(false); // Close the kiosk after sending files
+	};
+
+	const openKiosk = () => {
+		setIsKioskVisible(true);
+	};
+
+	const closeKiosk = () => {
+		setIsKioskVisible(false);
 	};
 
 	return (
@@ -248,6 +269,22 @@ export default function FileUploadDialog({
 						/>
 					</div>
 				)}
+				{/* Kiosk Modal */}
+				{/* {isKioskVisible && (
+					<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-75">
+						<div className="w-3/2 relative rounded-lg bg-white p-4">
+							<Button
+								type="button"
+								className="absolute right-3 top-2 text-black "
+								onClick={closeKiosk}
+							>
+								x
+							</Button>
+							<h2 className="mb-4 text-xl font-bold">Kiosk Uploader</h2>
+							<KioskDisplayPanel onSendFiles={handleKioskFileSend} />
+						</div>
+					</div>
+				)} */}
 				{editable ? (
 					<DialogFooter>
 						<Button
@@ -264,6 +301,14 @@ export default function FileUploadDialog({
 							style={{ display: "none" }}
 							onChange={handleFileChange}
 						/>
+						{/* <Button
+							type="button"
+							className="flex w-full justify-center gap-2 bg-blue-500 text-white"
+							onClick={openKiosk}
+						>
+							<Plus size={20} />
+							ፋይል አያይዝ (ከኪዮስክ)
+						</Button> */}
 					</DialogFooter>
 				) : null}
 			</DialogContent>

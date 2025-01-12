@@ -4,7 +4,7 @@
 	"private": true,
 	"engines": {
 		"node": ">=v18.17.0",
-		"pnpm": ">=9.12.0",
+		"pnpm": ">9.12.0",
 		"yarn": "🚫 Please use pnpm instead of yarn to install dependencies. 🚫",
 		"npm": "🚫 Please use pnpm instead of npm to install dependencies. 🚫"
 	},
@@ -13,7 +13,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"prepare": "husky install",
+		"prepare": "husky",
 		"check-types": "tsc --pretty --noEmit",
 		"check-format": "prettier --check .",
 		"format": "prettier --write .",
@@ -139,6 +139,7 @@
 		"eslint": "^8",
 		"eslint-config-next": "14.2.4",
 		"husky": "^9.0.11",
+		"jest-worker": "^29.7.0",
 		"pinst": "^3.0.0",
 		"postcss": "^8",
 		"prettier": "^3.3.3",
