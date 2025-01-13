@@ -106,18 +106,16 @@ export default function RefNoAndDate({
 	return (
 		<div className="my-4 mr-2 flex flex-col self-end">
 			{letter_type === "incoming" ? (
-								<>
-								</>
-							) : (
-			<div className="flex">
-				<span>
-					<span className="block">ቁጥር</span>
-					<span>Ref.No.</span>
-				</span>
-				<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
-					{publishable ? (
-						<>
-
+				<></>
+			) : (
+				<div className="flex">
+					<span>
+						<span className="block">ቁጥር</span>
+						<span>Ref.No.</span>
+					</span>
+					<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
+						{publishable ? (
+							<>
 								<>
 									<div className="-mb-1 flex w-full flex-row gap-x-1 text-xl">
 										<label>{department}</label>
@@ -136,23 +134,24 @@ export default function RefNoAndDate({
 										<hr className="border-black" />
 									</div>
 								</>
-						</>
-					) : (
-						<>
-							{published_at ? (
-								<>
-									<span className="text-center">{reference_number || ""}</span>
-									<hr className="border-black" />
-								</>
-							) : (
-								<div className="w-full">
-									<hr className="border-black" />
-								</div>
-							)}
-						</>
-					)}
+							</>
+						) : (
+							<>
+								{published_at ? (
+									<>
+										<span className="text-center">{reference_number || ""}</span>
+										<hr className="border-black" />
+									</>
+								) : (
+									<div className="w-full">
+										<hr className="border-black" />
+									</div>
+								)}
+							</>
+						)}
+					</div>
 				</div>
-			</div>)}
+			)}
 
 			<div className="flex">
 				<span>
