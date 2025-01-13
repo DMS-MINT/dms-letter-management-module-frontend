@@ -1,13 +1,13 @@
 "use client";
 
-import { getDepartments } from "@/actions/user_module/action";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+// import { getDepartments } from "@/actions/user_module/action";
+// import {
+// 	Select,
+// 	SelectContent,
+// 	SelectItem,
+// 	SelectTrigger,
+// 	SelectValue,
+// } from "@/components/ui/select";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -21,10 +21,10 @@ import {
 import { useLetterRevisionStore } from "@/lib/stores";
 import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
 import { LanguageEnum } from "@/types/shared";
-import type { DepartmentAbbrType } from "@/types/user_module";
-import { useQuery } from "@tanstack/react-query";
+// import type { DepartmentAbbrType } from "@/types/user_module";
+// import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { Input } from "../ui/input";
 import React from "react";
 export default function RefNoAndDate({
@@ -46,22 +46,22 @@ export default function RefNoAndDate({
 		(state) => state.updateLetterField
 	);
 
-	const { isSuccess, data: departments } = useQuery({
-		queryKey: ["department_abbr"],
-		queryFn: async () => {
-			try {
-				const response = await getDepartments();
+	// const { isSuccess, data: departments } = useQuery({
+	// 	queryKey: ["department_abbr"],
+	// 	queryFn: async () => {
+	// 		try {
+	// 			const response = await getDepartments();
 
-				if (!response.ok) throw response;
+	// 			if (!response.ok) throw response;
 
-				return response.message as DepartmentAbbrType[];
-			} catch (error: any) {
-				toast.dismiss();
-				toast.error(error.message);
-			}
-		},
-		staleTime: Infinity,
-	});
+	// 			return response.message as DepartmentAbbrType[];
+	// 		} catch (error: any) {
+	// 			toast.dismiss();
+	// 			toast.error(error.message);
+	// 		}
+	// 	},
+	// 	staleTime: Infinity,
+	// });
 
 	const [date, setDate] = React.useState<Date>();
 	useEffect(() => {
@@ -105,6 +105,10 @@ export default function RefNoAndDate({
 
 	return (
 		<div className="my-4 mr-2 flex flex-col self-end">
+			{letter_type === "incoming" ? (
+								<>
+								</>
+							) : (
 			<div className="flex">
 				<span>
 					<span className="block">ቁጥር</span>
@@ -113,67 +117,7 @@ export default function RefNoAndDate({
 				<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
 					{publishable ? (
 						<>
-							{letter_type === "incoming" ? (
-								<>
-									<div className="-mb-2 flex h-8 w-full flex-row gap-1 text-xl">
-										<Select
-											value={department}
-											onValueChange={(e) => {
-												updateLetterField("department", e);
-											}}
-										>
-											<SelectTrigger className="h-6 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
-												<SelectValue placeholder="Dep">{department || "Dep"} </SelectValue>
-											</SelectTrigger>
-											<SelectContent>
-												{isSuccess &&
-													departments?.map((department) => (
-														<SelectItem
-															key={department.id}
-															value={
-																language === LanguageEnum.English
-																	? department.abbreviation_en
-																	: department.abbreviation_am
-															}
-														>
-															{language === LanguageEnum.English
-																? department.department_name_en
-																: department.department_name_am}
-														</SelectItem>
-													))}
-											</SelectContent>
-										</Select>
 
-										<Input
-											type="text"
-											className="h-6 cursor-pointer border-none bg-inherit p-0 text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
-											onChange={(e) =>
-												updateLetterField("reference_number", e.target.value)
-											}
-										/>
-
-										<Select
-											onValueChange={(e) => {
-												updateLetterField("year", e);
-											}}
-										>
-											<SelectTrigger className="h-6 border-none p-0 text-xl outline-none ring-offset-0 focus:ring-0 focus:ring-offset-0">
-												<SelectValue placeholder="Year" />
-											</SelectTrigger>
-											<SelectContent>
-												{language === LanguageEnum.English ? (
-													<SelectItem value="2024">2024</SelectItem>
-												) : (
-													<SelectItem value="2017">2017</SelectItem>
-												)}
-											</SelectContent>
-										</Select>
-									</div>
-									<div className="w-full">
-										<hr className="border-black" />
-									</div>
-								</>
-							) : (
 								<>
 									<div className="-mb-1 flex w-full flex-row gap-x-1 text-xl">
 										<label>{department}</label>
@@ -192,7 +136,6 @@ export default function RefNoAndDate({
 										<hr className="border-black" />
 									</div>
 								</>
-							)}
 						</>
 					) : (
 						<>
@@ -209,7 +152,7 @@ export default function RefNoAndDate({
 						</>
 					)}
 				</div>
-			</div>
+			</div>)}
 
 			<div className="flex">
 				<span>

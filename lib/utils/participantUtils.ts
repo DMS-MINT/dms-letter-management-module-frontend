@@ -155,7 +155,7 @@ export const isOptionType = (option: any): option is OptionType => {
 };
 
 export const isUserType = (option: any): option is UserType => {
-	return option.user_profile.job_title ? true : false;
+	return option.user_profile?.job_title ? true : false;
 };
 
 export const isUserParticipantType = (
