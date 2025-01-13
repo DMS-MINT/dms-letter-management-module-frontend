@@ -6,6 +6,9 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /usr/src/app
 
+# Install pnpm globally
+RUN npm install -g pnpm
+
 # Stage 1: Install dependencies
 FROM base AS deps
 
@@ -29,7 +32,7 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
 # Run the build process
-RUN yarn build
+RUN pnpm build
 
 # Stage 3: Production image
 FROM base AS runner
@@ -45,10 +48,3 @@ COPY --from=builder /usr/src/app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/static
 
-# Switch to non-root user
-USER nextjs
-
-EXPOSE ${PORT}
-
-# Start the application
-CMD ["node", "server.js"]

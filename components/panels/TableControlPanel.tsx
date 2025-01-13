@@ -1,12 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useDraftLetterStore, useUserStore } from "@/lib/stores";
 import { letterCategoryTranslations } from "@/types/letter_module";
 import { Plus } from "lucide-react";
@@ -58,7 +52,14 @@ export default function TableControlPanel() {
 	return (
 		<section className="flex w-full items-center justify-between">
 			<h1 className="page-title">{categoryTitle}</h1>
-			<div className="flex items-center gap-4">
+			<Button
+				className="flex w-fit items-center gap-1"
+				onClick={() => handleClick("internal")}
+			>
+				<Plus size={19} />
+				አዲስ ደብዳቤ
+			</Button>
+			{/* <div className="flex items-center gap-4">
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button className="flex w-fit items-center gap-1">
@@ -80,7 +81,7 @@ export default function TableControlPanel() {
 						) : null}
 					</DropdownMenuContent>
 				</DropdownMenu>
-			</div>
+			</div> */}
 		</section>
 	);
 }
