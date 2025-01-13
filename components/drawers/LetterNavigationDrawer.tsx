@@ -3,17 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/stores";
 import clsx from "clsx";
-import {
-	CheckCheck,
-	FileText,
-	FolderDown,
-	Inbox,
-	Loader,
-	Send,
-	Trash,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { CheckCheck, FileText, Inbox, Loader, Send, Trash } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import * as uuidv4 from "uuid";
 
 type RouteType = {
@@ -29,6 +20,7 @@ const ICON_COLOR: string = "#2DA4FF";
 export default function LetterNavigationDrawer() {
 	const currentUser = useUserStore((state) => state.currentUser);
 	const pathname = usePathname();
+	const router = useRouter();
 
 	const staffRoutes: RouteType[] = [
 		{
@@ -83,25 +75,9 @@ export default function LetterNavigationDrawer() {
 			{currentUser.users_permissions.is_staff ? (
 				<div>
 					{staffRoutes.map(({ id, name, icon, path }) => (
-						<Link key={id} href={path}>
-							<Button
-								className={clsx(
-									"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",
-									{ "bg-gray-200": path === pathname }
-								)}
-							>
-								{icon}
-								{name}
-							</Button>
-						</Link>
-					))}
-				</div>
-			) : null}
-
-			<div>
-				{routes.map(({ id, name, icon, path }) => (
-					<Link key={id} href={path}>
 						<Button
+							key={id}
+							onClick={() => router.push(path)}
 							className={clsx(
 								"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",
 								{ "bg-gray-200": path === pathname }
@@ -110,7 +86,23 @@ export default function LetterNavigationDrawer() {
 							{icon}
 							{name}
 						</Button>
-					</Link>
+					))}
+				</div>
+			) : null}
+
+			<div>
+				{routes.map(({ id, name, icon, path }) => (
+					<Button
+						key={id}
+						onClick={() => router.push(path)}
+						className={clsx(
+							"flex w-full justify-start gap-2 bg-transparent px-2 text-gray-900 hover:bg-gray-200",
+							{ "bg-gray-200": path === pathname }
+						)}
+					>
+						{icon}
+						{name}
+					</Button>
 				))}
 			</div>
 		</nav>
