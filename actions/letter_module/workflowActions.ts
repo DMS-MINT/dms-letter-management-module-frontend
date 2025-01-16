@@ -17,10 +17,10 @@ export async function shareLetter(params: [string, ShareLetterRequestType]) {
 	}
 }
 
-export async function submitLetter({ id, otp, signature }: ParamsType) {
+export async function submitLetter({ id, signature }: ParamsType) {
 	try {
+		console.log("submit letter console log:", signature);
 		await axiosInstance.put(`letters/${id}/submit_pad/`, {
-			otp,
 			signature,
 		});
 

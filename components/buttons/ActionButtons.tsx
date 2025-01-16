@@ -40,24 +40,23 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 	const modelRef = useRef<ActionConfirmModalRef>(null);
 	const [OpenSignatureAlertDialog, setOpenSignatureAlertDialog] =
 		useState(false);
-	const [signature, setSignatureImage] = useState<string | null>(null);
+	// const [signature, setSignatureImage] = useState<string | null>(null);
 	const { mutate } = useWorkflowDispatcher();
-	const [flag, setFlag] = useState<boolean>(false);
 
 	const { isConnected, isLoading, reconnect } = useSTPadServerConnection();
 
 	const handleAction = useCallback(
 		(
 			actionType: ActionType,
-			otp?: string,
 			signature?: string | null,
+			otp?: string,
 			message?: string,
 			reference_number?: string,
 			published_at?: string
 		) => {
 			mutate({
 				actionType,
-				params: { id, otp, signature, message, reference_number, published_at },
+				params: { id, signature, otp, message, reference_number, published_at },
 			});
 		},
 		[mutate, id]
@@ -101,7 +100,7 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						onConfirm={() => {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
-							handleAction("permanently_delete", otp);
+							handleAction("permanently_delete", undefined, otp);
 						}}
 						requiresAuth={true}
 					/>
@@ -127,8 +126,8 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						dialogDescription="እርግጠኛ ኖት ደብዳቤውን ወደ መዝገብ ቢሮ ማስገባት ይፈልጋሉ? እባክዎ ለመቀጠል ውሳኔዎን ያረጋግጡ።"
 						cancelButtonText="አይ"
 						confirmButtonText="አዎ"
-						onConfirm={() => handleSubmitDraft()}
-						requiresAuth={true}
+						onConfirm={() => setOpenSignatureAlertDialog(true)}
+						requiresAuth={false}
 					/>
 				),
 			},
@@ -147,7 +146,7 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 						onConfirm={() => {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							if (!otp) return;
-							handleAction("retract_letter", otp);
+							handleAction("retract_letter", undefined, otp);
 						}}
 						requiresAuth={true}
 					/>
@@ -169,7 +168,7 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 							const otp: string | undefined = modelRef.current?.getOTP();
 							const message: string | undefined = modelRef.current?.message;
 							if (!otp || !message) return;
-							handleAction("reject_letter", otp, message);
+							handleAction("reject_letter", undefined, otp, message);
 						}}
 						requiresAuth={true}
 						requiresMessage={true}
@@ -182,7 +181,15 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
-						disabledButton={reference_number && published_at ? false : true}
+						disabledButton={
+							letter_type === "incoming"
+								? published_at
+									? false
+									: true
+								: reference_number && published_at
+									? false
+									: true
+						}
 						triggerButtonText="ደብዳቤውን አከፋፍል"
 						triggerButtonVariant="third"
 						dialogTitle="ደብዳቤውን አከፋፍል"
@@ -195,7 +202,14 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 
 							const newRefNo = `${department}-${reference_number}-${year}`;
 
-							handleAction("publish_letter", otp, undefined, newRefNo, published_at);
+							handleAction(
+								"publish_letter",
+								undefined,
+								otp,
+								undefined,
+								newRefNo,
+								published_at
+							);
 						}}
 						requiresAuth={true}
 						requiresMessage={false}
@@ -245,28 +259,20 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 		permissions.can_trash_letter,
 		permissions.can_update_letter,
 	]);
-	const [otp, setOTP] = useState<string>("");
+	// const [otp, setOTP] = useState<string>("");
+
 	const uploadSignatureImage = (signatureImage: string) => {
-		setSignatureImage(signatureImage);
-		setFlag(true);
+		// setSignatureImage(signatureImage);
+		// setFlag(true);
 		const signature = signatureImage;
+		console.log("signature", signature);
 		// console.log("submitting data", "submit_letter", otp, signatureImage);
-		handleAction("submit_letter", otp, signature);
-	};
-
-	const handleSubmitDraft = async () => {
-		const otp: string | undefined = modelRef.current?.getOTP();
-		if (!otp) return;
-		setOTP(otp);
-		await setOpenSignatureAlertDialog(true);
-
-		// Simulate async operations such as an API call
-		// handleAction("submit_letter", otp, signature);
+		handleAction("submit_letter", signature);
 	};
 
 	const resetSignature = () => {
 		reconnect();
-		setSignatureImage(null);
+		// setSignatureImage(null);
 	};
 
 	return (

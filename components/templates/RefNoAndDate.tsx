@@ -8,9 +8,6 @@
 // 	SelectTrigger,
 // 	SelectValue,
 // } from "@/components/ui/select";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -19,14 +16,17 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { useLetterRevisionStore } from "@/lib/stores";
+import { cn } from "@/lib/utils";
 import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
 import { LanguageEnum } from "@/types/shared";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 // import type { DepartmentAbbrType } from "@/types/user_module";
 // import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 // import { toast } from "sonner";
-import { Input } from "../ui/input";
 import React from "react";
+import { Input } from "../ui/input";
 export default function RefNoAndDate({
 	reference_number,
 	published_at,
@@ -105,53 +105,49 @@ export default function RefNoAndDate({
 
 	return (
 		<div className="my-4 mr-2 flex flex-col self-end">
-			{letter_type === "incoming" ? (
-				<></>
-			) : (
-				<div className="flex">
-					<span>
-						<span className="block">ቁጥር</span>
-						<span>Ref.No.</span>
-					</span>
-					<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
-						{publishable ? (
+			<div className="flex">
+				<span>
+					<span className="block">ቁጥር</span>
+					<span>Ref.No.</span>
+				</span>
+				<div className="mb-1.5 ml-1 flex w-52 flex-col self-end">
+					{publishable && letter_type !== "incoming" ? (
+						<>
 							<>
+								<div className="-mb-1 flex w-full flex-row gap-x-1 text-xl">
+									<label>{department}</label>
+									<p>-</p>
+									<Input
+										type="text"
+										className="h-7 w-full cursor-pointer border-none bg-inherit p-0 text-center text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
+										onChange={(e) =>
+											updateLetterField("reference_number", e.target.value)
+										}
+									/>
+									<p>-</p>
+									<label>{year}</label>
+								</div>
+								<div className="w-full">
+									<hr className="border-black" />
+								</div>
+							</>
+						</>
+					) : (
+						<>
+							{published_at && letter_type !== "incoming" ? (
 								<>
-									<div className="-mb-1 flex w-full flex-row gap-x-1 text-xl">
-										<label>{department}</label>
-										<p>-</p>
-										<Input
-											type="text"
-											className="h-7 w-full cursor-pointer border-none bg-inherit p-0 text-center text-xl ring-offset-0 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-1"
-											onChange={(e) =>
-												updateLetterField("reference_number", e.target.value)
-											}
-										/>
-										<p>-</p>
-										<label>{year}</label>
-									</div>
-									<div className="w-full">
-										<hr className="border-black" />
-									</div>
+									<span className="text-center">{reference_number || ""}</span>
+									<hr className="border-black" />
 								</>
-							</>
-						) : (
-							<>
-								{published_at ? (
-									<>
-										<span className="text-center">{reference_number || ""}</span>
-										<hr className="border-black" />
-									</>
-								) : (
-									<div className="w-full">
-										<hr className="border-black" />
-									</div>
-								)}
-							</>
-						)}
-					</div>
+							) : (
+								<div className="w-full">
+									<hr className="border-black" />
+								</div>
+							)}
+						</>
+					)}
 				</div>
-			)}
+			</div>
 
 			<div className="flex">
 				<span>

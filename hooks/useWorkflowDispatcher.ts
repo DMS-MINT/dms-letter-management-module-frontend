@@ -94,8 +94,8 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 		case "submit_letter":
 			return await submitLetter({
 				id: params.id,
-				otp: params.otp,
 				signature: params.signature,
+				// otp: params.otp,
 			});
 		case "trash_letter":
 			return await moveToTrash(ids[0]);
