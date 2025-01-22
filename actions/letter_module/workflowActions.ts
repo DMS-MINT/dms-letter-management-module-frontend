@@ -92,3 +92,16 @@ export async function reopenLetter(id: string) {
 		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
 	}
 }
+
+export async function sendEmail(id: string) {
+	try {
+		console.log("send");
+		await axiosInstance.post(`letters/${id}/email/`);
+
+		return { ok: true, message: "ኢሜል በተሳካ ሁኔታ ተልኳል።" };
+	} catch (error: any) {
+		console.log("error", error);
+		console.log("workflowErrorMessages", workflowErrorMessages);
+		return { ok: false, message: getErrorMessage(workflowErrorMessages, error) };
+	}
+}

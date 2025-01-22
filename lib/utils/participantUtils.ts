@@ -210,8 +210,8 @@ export const getLabel = (
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
 			return language === LanguageEnum.English
-				? option.user_profile.job_title.title_en
-				: option.user_profile.job_title.title_am;
+				? option.user_profile?.job_title.title_en
+				: option.user_profile?.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {
@@ -230,8 +230,8 @@ export const getValue = (
 	if (isOptionType(option)) {
 		if (isUserType(option)) {
 			return language === LanguageEnum.English
-				? option.user_profile.job_title.title_en
-				: option.user_profile.job_title.title_am;
+				? option.user_profile?.job_title.title_en
+				: option.user_profile?.job_title.title_am;
 		} else if (isEnterpriseType(option)) {
 			return language === LanguageEnum.English ? option.name_en : option.name_am;
 		} else if (isContactType(option)) {

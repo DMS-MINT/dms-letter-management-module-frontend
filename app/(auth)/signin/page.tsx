@@ -199,9 +199,15 @@ export default function SignIn() {
 
 				<div className="flex items-center gap-2 self-center">
 					<p className="text-gray-800">የቴክኒክ ድጋፍ ለማግኘት </p>
-					<Button variant="link" className="h-fit p-0 text-base">
-						እኛን ያነጋግሩን
-					</Button>
+					<Link
+						href="https://www.gdop.gov.et/request-support"
+						tabIndex={4}
+						target="_blank"
+					>
+						<Button variant="link" className="h-fit p-0 text-base">
+							እኛን ያነጋግሩን
+						</Button>
+					</Link>
 				</div>
 			</section>
 		</main>

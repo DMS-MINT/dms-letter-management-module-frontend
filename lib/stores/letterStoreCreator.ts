@@ -96,7 +96,7 @@ export const createLetterStore = () =>
 				subject: "",
 				body: "",
 				letter_type: "internal",
-				language: LanguageEnum.English,
+				language: LanguageEnum.አማርኛ,
 			}),
 
 		initializeParticipants: (participants) =>
