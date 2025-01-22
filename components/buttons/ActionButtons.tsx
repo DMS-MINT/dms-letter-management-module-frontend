@@ -5,7 +5,7 @@ import { useWorkflowDispatcher } from "@/hooks";
 import { useLetterRevisionStore } from "@/lib/stores";
 import type { PermissionsType } from "@/types/letter_module";
 import type { UserType } from "@/types/user_module";
-import { Send, MailIcon, Trash } from "lucide-react";
+import { Send, Trash, MailIcon } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
