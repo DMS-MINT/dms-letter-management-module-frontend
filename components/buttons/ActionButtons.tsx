@@ -5,7 +5,7 @@ import { useWorkflowDispatcher } from "@/hooks";
 import { useLetterRevisionStore } from "@/lib/stores";
 import type { PermissionsType } from "@/types/letter_module";
 import type { UserType } from "@/types/user_module";
-import { Send, Trash } from "lucide-react";
+import { Send, MailIcon, Trash } from "lucide-react";
 import React, { memo, useCallback, useMemo, useRef } from "react";
 import * as uuidv4 from "uuid";
 import { ActionConfirmModal, ShareLetterDialog } from "../dialogs";
@@ -98,6 +98,29 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 					/>
 				),
 			},
+			{
+				id: uuidv4.v4(),
+				isVisible: permissions.can_close_letter,
+				component: (
+					<ActionConfirmModal
+						ref={modelRef}
+						triggerButtonText=""
+						triggerButtonTooltip="Email"
+						triggerButtonIcon={<MailIcon size={20} />}
+						triggerButtonSize="icon"
+						triggerButtonVariant="default"
+						dialogTitle="send email"
+						dialogDescription="Are you sure you want to send this email"
+						cancelButtonText="cancel"
+						confirmButtonText="send"
+						requiresAuth={false}
+						onConfirm={() => {
+							handleAction("send_email");
+						}}
+					/>
+				),
+			},
+
 			{
 				id: uuidv4.v4(),
 				isVisible: permissions.can_share_letter,

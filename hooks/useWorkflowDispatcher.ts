@@ -13,6 +13,7 @@ import {
 	reopenLetter,
 	retractLetter,
 	submitLetter,
+	sendEmail,
 } from "@/actions/letter_module/workflowActions";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -29,7 +30,8 @@ export type ActionType =
 	| "submit_letter"
 	| "moveToTrash_batch"
 	| "restoreFromTrash_batch"
-	| "permanently_delete_batch";
+	| "permanently_delete_batch"
+	| "send_email";
 
 export type ParamsType = {
 	id: string | string[]; // Adjusted to handle both single and multiple reference numbers
@@ -50,6 +52,8 @@ const actionDispatcher = async ({ actionType, params }: PropType) => {
 	switch (actionType) {
 		case "close_letter":
 			return await closeLetter(ids[0]);
+		case "send_email":
+			return await sendEmail(ids[0]);
 		case "publish_letter":
 			return await publishLetter({
 				id: ids[0],
