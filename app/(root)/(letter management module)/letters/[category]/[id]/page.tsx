@@ -51,10 +51,14 @@ export default function LetterDetail({
 					id: data.letter.id,
 					current_state: data.letter.current_state,
 					department:
-						data.letter.language === "English"
-							? data.letter.owner.user_profile.department.abbreviation_en
-							: data.letter.owner.user_profile.department.abbreviation_am,
-					year: "2017",
+						data.letter.letter_type === "outgoing"
+							? data.letter.language === "English"
+								? "MINT"
+								: "ኢቴሚ "
+							: data.letter.language === "English"
+								? data.letter.owner.user_profile.department.abbreviation_en
+								: data.letter.owner.user_profile.department.abbreviation_am,
+					year: data.letter.language === "English" ? "2024" : "2017",
 				};
 
 				initializeContent(content);
