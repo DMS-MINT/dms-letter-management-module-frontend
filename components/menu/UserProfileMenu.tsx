@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut } from "@/actions/auth/action";
+import { handleLogout } from "@/actions/auth/remeberme";
 import { getMyProfile } from "@/actions/user_module/action";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -26,12 +27,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import NotificationPopover from "../drawers/NotificationDrawer";
 import { VideoDialog } from "./VideoDialog";
-import { handleLogout } from "@/actions/auth/remeberme";
 
 export default function UserProfileMenu() {
 	const router = useRouter();
 	const [isVideoDialogOpen, setVideoDialogOpen] = useState(false);
 	const setCurrentUser = useUserStore((state) => state.setCurrentUser);
+	const { clear } = useUserStore();
 
 	const { isSuccess, data: myProfile } = useQuery({
 		queryKey: ["getMyProfile"],
@@ -57,6 +58,7 @@ export default function UserProfileMenu() {
 		onSuccess: () => {
 			handleLogout();
 			router.push("/signin");
+			clear();
 		},
 		onError: (errorMessage: string) => {
 			toast.dismiss();

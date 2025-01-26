@@ -1,0 +1,56 @@
+import "@/app/globals.css";
+import { LetterNavigationDrawer } from "@/components/drawers";
+import { RequireAuth } from "@/components/hoc";
+import { Drawer, Subheader, TopBar } from "@/components/layouts";
+import Providers from "@/providers/Providers";
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { Toaster } from "sonner";
+
+// const noto_serif_ethiopic = Noto_Serif_Ethiopic({ subsets: ["latin"] });
+const myFont = localFont({
+	src: "../../../public/fonts/NotoSerifEthiopic-VariableFont_wdth,wght.ttf",
+});
+
+export const metadata: Metadata = {
+	title: "የደብዳቤ አስተዳደር ሞጁል",
+	description: "Efficiently manage and organize your letters.",
+	icons: {
+		icon: "/icons/favicon.ico",
+	},
+};
+
+export default function RootLayout({
+	children,
+}: Readonly<{
+	children: React.ReactNode;
+}>) {
+	return (
+		<html lang="am">
+			<body className={myFont.className}>
+				<Providers>
+					<RequireAuth>
+						<div className="flex h-full flex-col">
+							<div className="absolute">
+								<Toaster richColors position="top-center" />
+							</div>
+							<TopBar />
+							<section className="flex h-full flex-col">
+								<Subheader>
+									የመዝገብ ማስተዳደሪያ
+									{/* <DetailControlPanel data={data} /> */}
+								</Subheader>
+								<section className="mt-2 flex flex-1 gap-6 px-5">
+									<Drawer>
+										<LetterNavigationDrawer />
+									</Drawer>
+									<section className="flex-1 pb-5">{children}</section>
+								</section>
+							</section>
+						</div>
+					</RequireAuth>
+				</Providers>
+			</body>
+		</html>
+	);
+}

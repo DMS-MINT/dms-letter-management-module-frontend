@@ -6,23 +6,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DocumentInfo } from "./DocumentInfo";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { ledgerType } from "@/types/ledger";
+import { LedgerDetail } from "@/types/ledger";
 import { CarrierInfo } from "./CarrierInfo";
 import { MetadataInfo } from "./MetadataInfo";
 
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { documentPages } from "@/constants/ledgermockdata";
-import { DocumentThumbnail } from "./DocumentThumbnail";
+import { Paperclip } from "lucide-react";
+import FileDisplayList from "./FileDisplay";
 
-// Mock document pages for demonstration
-// const documentPages = [
-//   "/docs/user-manual.pdf",  // Replace with actual image paths
-//   "/path/to/page2.jpg",
-//   "/path/to/page3.jpg"
-// ];
-export const DocumentDetail: React.FC<{ data: ledgerType }> = ({ data }) => {
+export type filePreviewType = {
+	files: string[];
+	attachements: string[];
+	fileType: string;
+	fileName: string;
+};
+export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 	const [activeTab, setActiveTab] = useState("document");
-	const [selectedPage, setSelectedPage] = useState(0);
+
+	const [showletter, setShowLetter] = useState(true);
+	const [showAttachement, setShowAttachement] = useState(false);
+
+	const handleChangeShow = (value: string) => {
+		if (value === "letter") {
+			setShowLetter(true);
+			setShowAttachement(false);
+		} else if (value === "attachement") {
+			setShowAttachement(true);
+			setShowLetter(false);
+		}
+	};
+
+	const fileView: filePreviewType = {
+		files: data?.letter,
+		attachements: data?.attachment,
+		fileType: data?.metadata_file_type,
+		fileName: data?.ledger_subject,
+	};
 
 	return (
 		<div className="container mx-auto p-4">
@@ -46,35 +66,42 @@ export const DocumentDetail: React.FC<{ data: ledgerType }> = ({ data }) => {
 					</Tabs>
 				</div>
 				<div className="col-span-1">
-					{/* {activeTab === "document" && (
-						<Card>
-							<CardContent className="p-4">
-								<h2 className="mb-4 text-xl font-semibold">Document Preview</h2>
-								<div className="aspect-w-3 aspect-h-4 overflow-hidden rounded-lg bg-gray-200">
-									<img
-										src="/placeholder.svg?height=400&width=300"
-										alt="Document Preview"
-										className="h-full w-full object-cover"
-									/>
-								</div>
-							</CardContent>
-						</Card>
-					)} */}
-					{/* <DocumentPreviewCard fileType="pdf" fileName="Sample Document.pdf" /> */}
 					<Card>
 						<CardContent className="p-4">
 							<h2 className="mb-4 text-xl font-semibold">Document Pages</h2>
 							<ScrollArea className="h-[600px] pr-4">
 								<div className="grid grid-cols-1 gap-2">
-									{documentPages.map((page, index) => (
-										<DocumentThumbnail
-											key={index}
-											pageNumber={index + 1}
-											imageUrl={page}
-											isSelected={selectedPage === index}
-											onClick={() => setSelectedPage(index)}
-										/>
-									))}
+									<div className="flex-1">
+										<div className="flex-1">
+											{showletter ? (
+												<div>
+													<FileDisplayList files={fileView || []} />
+												</div>
+											) : (
+												<Button onClick={() => handleChangeShow("letter")}>
+													Show Letter Preview
+												</Button>
+											)}
+										</div>
+										{data.attachment && data.attachment?.length > 0 && (
+											<div className="flex-1">
+												{showAttachement ? (
+													<div>
+														<FileDisplayList files={fileView || []} />
+													</div>
+												) : (
+													<div className="flex justify-end">
+														<Button
+															onClick={() => handleChangeShow("attachement")}
+															size={"sm"}
+														>
+															<Paperclip size={15} className="mr-2" /> Show Attachement Preview
+														</Button>
+													</div>
+												)}
+											</div>
+										)}
+									</div>
 								</div>
 							</ScrollArea>
 						</CardContent>

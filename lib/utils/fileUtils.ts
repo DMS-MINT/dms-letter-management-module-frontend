@@ -25,20 +25,28 @@ export const formatFileSize = (bytes: number): string => {
 	const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString());
 	return Math.round(bytes / Math.pow(1024, i)) + " " + sizes[i];
 };
-
 export const sortLedgerFiles = (
-	files: ILedger[],
+	files: ILedger[] = [],
 	sortBy: SortOption
 ): ILedger[] => {
+	// Ensure files is always an array
+	if (!Array.isArray(files)) {
+		return [];
+	}
+
 	return [...files].sort((a, b) => {
 		switch (sortBy) {
 			case "name":
-				return a.ledger_subject?.localeCompare(b.ledger_subject);
+				// Ensure ledger_subject is a string; fallback to an empty string if undefined
+				return (a.ledger_subject || "").localeCompare(b.ledger_subject || "");
 			case "size":
-				return a.size - b.size;
+				// Convert document_date to a string for comparison; fallback to an empty string
+				return (a.document_date || "").localeCompare(b.document_date || "");
 			case "modified":
-				return b.lastModified?.getTime() - a.lastModified?.getTime();
+				// Convert created_at to a string for comparison; fallback to an empty string
+				return (a.created_at || "").localeCompare(b.created_at || "");
 			default:
+				// Default case ensures a valid number is returned
 				return 0;
 		}
 	});
