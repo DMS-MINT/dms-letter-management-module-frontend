@@ -39,7 +39,7 @@ export default function LetterNavigationDrawer() {
 		},
 		{
 			id: uuidv4.v4(),
-			name: "የጸደቁ ደብዳቤዎች",
+			name: "ወጪ የተደረጉ ደብዳቤዎች",
 			icon: <CheckCheck size={ICON_SIZE} color={ICON_COLOR} />,
 			path: "/letters/published",
 		},
