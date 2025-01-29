@@ -110,7 +110,7 @@ function ActionButtons({ owner, current_state, permissions }: Props) {
 			},
 			{
 				id: uuidv4.v4(),
-				isVisible: permissions.can_close_letter && is_staff,
+				isVisible: letter_type === "incoming" && permissions.can_close_letter && is_staff,
 				component: (
 					<ActionConfirmModal
 						ref={modelRef}
