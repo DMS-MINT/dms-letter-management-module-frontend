@@ -333,7 +333,7 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 										<SelectLabel>የMINT ሰራተኞች</SelectLabel>
 										{options?.message.map((option: UserType) => (
 											<SelectItem key={option.id} value={option.id}>
-												{option.user_profile.full_name_am}
+												{option.user_profile?.full_name_am}
 											</SelectItem>
 										))}
 									</SelectGroup>

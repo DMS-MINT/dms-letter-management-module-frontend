@@ -29,7 +29,7 @@ function FileDisplay({ files, initialIndex }: FileDisplayProps) {
 		if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
 	};
 
-	const isPreviewable = fileType === "pdf" || fileType.startsWith("image/");
+	const isPreviewable = fileType === "pdf" || fileType === "image/jpeg" || fileType === "image/png" || fileType === "image/jpg";
 
 	return (
 		<div className="flex flex-col items-center justify-center">
