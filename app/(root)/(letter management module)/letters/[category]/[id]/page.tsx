@@ -51,8 +51,8 @@ export default function LetterDetail({
 					id: data.letter.id,
 					current_state: data.letter.current_state,
 					department:
-						data.letter.letter_type === "outgoing"?
-							"ሚ/ዴ/"+data.letter.owner.user_profile.department.abbreviation_am
+						data.letter.letter_type === "outgoing"
+							? "ሚ/ዴ/" + data.letter.owner.user_profile.department.abbreviation_am
 							: data.letter.language === "English"
 								? data.letter.owner.user_profile.department.abbreviation_en
 								: data.letter.owner.user_profile.department.abbreviation_am,

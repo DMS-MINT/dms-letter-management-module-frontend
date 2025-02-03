@@ -16,11 +16,10 @@ import { Paperclip } from "lucide-react";
 import FileDisplayList from "./FileDisplay";
 
 export type filePreviewType = {
-	files: string[];
-	attachements: string[];
-	fileType: string;
-	fileName: string;
+	files: { fileUrl: string; fileType: string; fileName: string }[];
+	attachments: { fileUrl: string; fileType: string; fileName: string }[];
 };
+
 export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 	const [activeTab, setActiveTab] = useState("document");
 
@@ -38,10 +37,16 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 	};
 
 	const fileView: filePreviewType = {
-		files: data?.letter,
-		attachements: data?.attachment,
-		fileType: data?.metadata_file_type,
-		fileName: data?.ledger_subject,
+		files: data.letter.map((file) => ({
+			fileUrl: `http://localhost:8000${file.file}`,
+			fileType: file.file_type,
+			fileName: file.file_name,
+		})),
+		attachments: data.attachment.map((file) => ({
+			fileUrl: `http://localhost:8000${file.file}`,
+			fileType: file.file_type,
+			fileName: file.file_name,
+		})),
 	};
 
 	return (
@@ -75,7 +80,7 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 										<div className="flex-1">
 											{showletter ? (
 												<div>
-													<FileDisplayList files={fileView || []} />
+													<FileDisplayList files={fileView.files || []} />
 												</div>
 											) : (
 												<Button onClick={() => handleChangeShow("letter")}>
@@ -87,7 +92,7 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 											<div className="flex-1">
 												{showAttachement ? (
 													<div>
-														<FileDisplayList files={fileView || []} />
+														<FileDisplayList files={fileView.attachments || []} />
 													</div>
 												) : (
 													<div className="flex justify-end">

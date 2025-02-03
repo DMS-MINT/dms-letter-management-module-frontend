@@ -15,7 +15,7 @@ export const DocumentInfo: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 					<dl className="grid grid-cols-2 gap-2">
 						<dt className="font-semibold">Letter Subject:</dt>
 						<dd>{data.ledger_subject}</dd>
-						<dt className="font-semibold">Created Date:</dt>
+						<dt className="font-semibold">Received Date:</dt>
 						<dd>
 							{data.created_at ? convertToEthiopianDate(data.created_at) : "N/A"}
 						</dd>

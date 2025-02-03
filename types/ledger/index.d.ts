@@ -1,3 +1,5 @@
+import type { UploadedAttachmentType } from "../shared";
+
 export interface FileItem {
 	id: string;
 	name: string;
@@ -99,6 +101,6 @@ export type LedgerDetail = {
 	ledger_pdf: string | null;
 	job_title: string;
 	department: string;
-	letter: string[];
-	attachment: string[];
+	letter: UploadedAttachmentType[];
+	attachment: UploadedAttachmentType[];
 };

@@ -206,7 +206,7 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 						<TableRow>
 							<TableHead>File Name</TableHead>
 							<TableHead>Sender Name</TableHead>
-							<TableHead>Recieved At</TableHead>
+							<TableHead>Written At</TableHead>
 							<TableHead>Recipient Name</TableHead>
 							<TableHead>department</TableHead>
 							<TableHead>Priority</TableHead>
