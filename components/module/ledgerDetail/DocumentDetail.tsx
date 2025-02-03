@@ -38,12 +38,12 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 
 	const fileView: filePreviewType = {
 		files: data.letter.map((file) => ({
-			fileUrl: `http://localhost:8000${file.file}`,
+			fileUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}${file.file}`,
 			fileType: file.file_type,
 			fileName: file.file_name,
 		})),
 		attachments: data.attachment.map((file) => ({
-			fileUrl: `http://localhost:8000${file.file}`,
+			fileUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}${file.file}`,
 			fileType: file.file_type,
 			fileName: file.file_name,
 		})),

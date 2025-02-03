@@ -19,7 +19,7 @@ function FileDisplay({ files, initialIndex }: FileDisplayProps) {
 		? files[currentIndex]
 		: {
 				...files[currentIndex],
-				fileUrl: `http://localhost:8000${files[currentIndex].fileUrl}`,
+				fileUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}${files[currentIndex].fileUrl}`,
 			};
 
 	const isPreviewable = [
