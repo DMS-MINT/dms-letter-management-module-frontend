@@ -6,6 +6,7 @@ import {
 	shareLedger,
 } from "@/actions/ledger/action";
 import { getUsers } from "@/actions/user_module/action";
+import LedgerPagination from "@/components/tables/LedgerPagination";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -20,13 +21,19 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+	Command,
+	CommandInput,
+	CommandGroup,
+	CommandItem,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
+	// SelectGroup,
 	SelectItem,
-	SelectLabel,
+	// SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
@@ -42,10 +49,11 @@ import {
 import { FILE_ICON } from "@/constants";
 import { useUserStore } from "@/lib/stores/userStore";
 import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
-import { sortLedgerFiles } from "@/lib/utils/fileUtils";
+// import { sortLedgerFiles } from "@/lib/utils/fileUtils";
 import type { ILedger, ILedgerMyListItem, ViewMode } from "@/types/ledger";
 import type { SortOption } from "@/types/shared";
 import type { UserType } from "@/types/user_module";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import {
 	LayoutGrid,
@@ -53,7 +61,9 @@ import {
 	MoreHorizontal,
 	RefreshCw,
 	Share2,
+	X,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -65,12 +75,26 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 	const router = useRouter();
 	const participantScope = "internal_staff";
 	const [openShare, setOpenShare] = useState(false);
-	const [selectedUser, setSelectedUser] = useState("");
+	// const [selectedUser, setSelectedUser] = useState("");
 	const [selectedLedgerID, setSelectedLedgerID] = useState("");
 	const currentUserPermission = useUserStore(
 		(state) => state.currentUser.users_permissions
 	);
 
+	const [selectedUsers, setSelectedUsers] = useState<UserType[]>([]);
+	const [searchTerm, setSearchTerm] = useState("");
+
+	const toggleUserSelection = (user: UserType) => {
+		setSelectedUsers(
+			(prev) =>
+				prev.some((u) => u.id === user.id)
+					? prev.filter((u) => u.id !== user.id) // Remove if already selected
+					: [...prev, user] // Add if not selected
+		);
+	};
+	// const [sortBy, setSortBy] = useState<SortOption>("name");
+	const [page, setPage] = useState(0);
+	const [itemsPerPage] = useState(10);
 	const { data: options } = useQuery({
 		queryKey: ["users", { participantScope }],
 		queryFn: async () => {
@@ -118,7 +142,7 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 		},
 	});
 
-	const sortedFiles = sortLedgerFiles(files, sortBy);
+	// const sortedFiles = sortLedgerFiles(files, sortBy);
 
 	const handleRefresh = () => {
 		refetch();
@@ -143,11 +167,17 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 	}
 
 	const handleSubmit = async () => {
-		const response = await shareLedger(selectedLedgerID, selectedUser);
-		if (response.ok) {
-			toast.success(response.message);
-			setOpenShare(false);
+		for (const userId of selectedUsers) {
+			const response = await shareLedger(selectedLedgerID, userId.id);
+			if (response.ok) {
+				toast.success(response.message);
+			} else {
+				toast.error(
+					`Failed to share with user ${userId.user_profile.full_name_am}`
+				);
+			}
 		}
+		setOpenShare(false);
 	};
 
 	return (
@@ -201,71 +231,79 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 			</div>
 
 			{viewMode === "list" ? (
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>File Name</TableHead>
-							<TableHead>Sender Name</TableHead>
-							<TableHead>Written At</TableHead>
-							<TableHead>Recipient Name</TableHead>
-							<TableHead>department</TableHead>
-							<TableHead>Priority</TableHead>
-							<TableHead>Tracking No</TableHead>
-							<TableHead>Status</TableHead>
-							<TableHead className="text-right">Actions</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{files &&
-							files.map((file: ILedger) => (
-								<TableRow key={file.id}>
-									<TableCell className="font-medium">
-										<div className="flex items-center gap-2">
-											<span>
-												<Image src={FILE_ICON.folder} alt="icons" width={20} height={20} />
-											</span>
-											{file.ledger_subject || "N/A"}
-										</div>
-									</TableCell>
-									<TableCell>{file.sender_name || "N/A"}</TableCell>
-									<TableCell>
-										{file.created_at ? convertToEthiopianDate(file.created_at) : "N/A"}
-									</TableCell>
-									<TableCell>{file.recipient_name || "N/A"}</TableCell>
-									<TableCell>{file.department || "N/A"}</TableCell>
-									<TableCell>{file.priority || "N/A"}</TableCell>
-									<TableCell>{file.tracking_number || "N/A"}</TableCell>
-									<TableCell>{file.ledger_status || "N/A"}</TableCell>
-									<TableCell className="text-right">
-										<div className="flex justify-end gap-2">
-											<Button
-												variant="ghost"
-												size="icon"
-												onClick={() => handleShare(file)}
-											>
-												<Share2 className="h-4 w-4" />
-											</Button>
-											<DropdownMenu>
-												<DropdownMenuTrigger asChild>
-													<Button variant="ghost" size="icon">
-														<MoreHorizontal className="h-4 w-4" />
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align="end">
-													<DropdownMenuItem onClick={() => handleDetail(file.id)}>
-														Details
-													</DropdownMenuItem>
-													{/* <DropdownMenuItem>Download</DropdownMenuItem>
+				<>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>File Name</TableHead>
+								<TableHead>Sender Name</TableHead>
+								<TableHead>Written At</TableHead>
+								<TableHead>Recipient Name</TableHead>
+								<TableHead>department</TableHead>
+								<TableHead>Priority</TableHead>
+								<TableHead>Tracking No</TableHead>
+								<TableHead>Status</TableHead>
+								<TableHead className="text-right">Actions</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{files &&
+								files.map((file: ILedger) => (
+									<TableRow key={file.id}>
+										<TableCell className="font-medium">
+											<div className="flex items-center gap-2">
+												<span>
+													<Image src={FILE_ICON.folder} alt="icons" width={20} height={20} />
+												</span>
+												{file.ledger_subject || "N/A"}
+											</div>
+										</TableCell>
+										<TableCell>{file.sender_name || "N/A"}</TableCell>
+										<TableCell>
+											{file.created_at ? convertToEthiopianDate(file.created_at) : "N/A"}
+										</TableCell>
+										<TableCell>{file.recipient_name || "N/A"}</TableCell>
+										<TableCell>{file.department || "N/A"}</TableCell>
+										<TableCell>{file.priority || "N/A"}</TableCell>
+										<TableCell>{file.tracking_number || "N/A"}</TableCell>
+										<TableCell>{file.ledger_status || "N/A"}</TableCell>
+										<TableCell className="text-right">
+											<div className="flex justify-end gap-2">
+												<Button
+													variant="ghost"
+													size="icon"
+													onClick={() => handleShare(file)}
+												>
+													<Share2 className="h-4 w-4" />
+												</Button>
+												<DropdownMenu>
+													<DropdownMenuTrigger asChild>
+														<Button variant="ghost" size="icon">
+															<MoreHorizontal className="h-4 w-4" />
+														</Button>
+													</DropdownMenuTrigger>
+													<DropdownMenuContent align="end">
+														<DropdownMenuItem onClick={() => handleDetail(file.id)}>
+															Details
+														</DropdownMenuItem>
+														{/* <DropdownMenuItem>Download</DropdownMenuItem>
 												<DropdownMenuItem>Rename</DropdownMenuItem>
 												<DropdownMenuItem>Delete</DropdownMenuItem> */}
-												</DropdownMenuContent>
-											</DropdownMenu>
-										</div>
-									</TableCell>
-								</TableRow>
-							))}
-					</TableBody>
-				</Table>
+													</DropdownMenuContent>
+												</DropdownMenu>
+											</div>
+										</TableCell>
+									</TableRow>
+								))}
+						</TableBody>
+					</Table>
+					<LedgerPagination
+						totalItems={files.length}
+						pageSize={itemsPerPage} // Change from itemsPerPage to pageSize
+						pageIndex={page} // Change from currentPage to pageIndex
+						onPageChange={setPage}
+					/>
+				</>
 			) : (
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
 					{files &&
@@ -323,23 +361,44 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 							ይህን ደብዳቤ ልታጋራቸው የምትፈልጋቸውን ሰዎች ምረጥ፣ ፈቃዶቻቸውን አዘጋጅ እና ከደብዳቤው ጋር የሚላክ መልእክት
 							ጻፍ።
 						</DialogDescription>
+						{/* Selected Users Display */}
+						<div className="my-4 flex flex-wrap gap-2">
+							{selectedUsers.map((user) => (
+								<Badge key={user.id} className="flex items-center">
+									{user.user_profile?.full_name_am}
+									<X
+										className="ml-2 h-4 w-4 cursor-pointer"
+										onClick={() => toggleUserSelection(user)}
+									/>
+								</Badge>
+							))}
+						</div>
 						<div className="my-6 flex flex-col items-end">
-							<Select onValueChange={setSelectedUser}>
-								<SelectTrigger className="my-6 w-full">
-									<SelectValue placeholder="ደብዳቤውን የሚያጋሩትን ተጠቃሚ ይምረጡ" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel>የMINT ሰራተኞች</SelectLabel>
-										{options?.message.map((option: UserType) => (
-											<SelectItem key={option.id} value={option.id}>
-												{option.user_profile?.full_name_am}
-											</SelectItem>
-										))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-
+							<Command>
+								<CommandInput
+									placeholder="ተጠቃሚ ይፈልጉ..."
+									onValueChange={setSearchTerm}
+								/>
+								<ScrollArea className="h-60">
+									<CommandGroup>
+										{options?.message
+											.filter((option: UserType) =>
+												option.user_profile?.full_name_am.includes(searchTerm)
+											)
+											.map((option: UserType) => (
+												<CommandItem
+													key={option.id}
+													value={option.id}
+													onSelect={() => toggleUserSelection(option)}
+												>
+													{option.user_profile?.full_name_am}
+												</CommandItem>
+											))}
+									</CommandGroup>
+								</ScrollArea>
+							</Command>
+						</div>
+						<div>
 							<Button className="flex gap-4 bg-green-500 px-4" onClick={handleSubmit}>
 								<Share2 className="h-4 w-4" />
 								አጋራ

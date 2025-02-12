@@ -24,9 +24,9 @@ export default function TableControlPanel() {
 	const updateLetterField = useDraftLetterStore(
 		(state) => state.updateLetterField
 	);
-	const is_staff = useUserStore(
-		(state) => state.currentUser.users_permissions.is_staff
-	);
+	// const is_staff = useUserStore(
+	// 	(state) => state.currentUser.users_permissions.is_staff
+	// );
 
 	const isValidCategory = useMemo(
 		() => whitelist.includes(category),
