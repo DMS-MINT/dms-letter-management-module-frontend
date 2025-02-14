@@ -39,13 +39,13 @@ export default function LetterNavigationDrawer() {
 		},
 		{
 			id: uuidv4.v4(),
-			name: "ወጪ የተደረጉ ደብዳቤዎች",
+			name: "የወጡ ደብዳቤዎች",
 			icon: <CheckCheck size={ICON_SIZE} color={ICON_COLOR} />,
 			path: "/letters/published",
 		},
 		{
 			id: uuidv4.v4(),
-			name: "የመዝገብ ደብዳቤዎች",
+			name: "የገቡ ደብዳቤዎች",
 			icon: <FolderDown size={ICON_SIZE} color={ICON_COLOR} />,
 			path: "/ledger/list",
 		},
@@ -72,7 +72,7 @@ export default function LetterNavigationDrawer() {
 		},
 		{
 			id: uuidv4.v4(),
-			name: "የመዝገብ ደብዳቤዎች",
+			name: "የገቡ ደብዳቤዎች",
 			icon: <FolderDown size={ICON_SIZE} color={ICON_COLOR} />,
 			path: "/ledger/list",
 		},

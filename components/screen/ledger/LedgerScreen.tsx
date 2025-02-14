@@ -21,12 +21,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-	Command,
-	CommandInput,
-	CommandGroup,
-	CommandItem,
-} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -53,7 +47,6 @@ import { convertToEthiopianDate } from "@/lib/utils/convertToEthiopianDate";
 import type { ILedger, ILedgerMyListItem, ViewMode } from "@/types/ledger";
 import type { SortOption } from "@/types/shared";
 import type { UserType } from "@/types/user_module";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import {
 	LayoutGrid,
@@ -61,9 +54,8 @@ import {
 	MoreHorizontal,
 	RefreshCw,
 	Share2,
-	X,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import ReactSelect from "react-select";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -75,26 +67,26 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 	const router = useRouter();
 	const participantScope = "internal_staff";
 	const [openShare, setOpenShare] = useState(false);
-	// const [selectedUser, setSelectedUser] = useState("");
 	const [selectedLedgerID, setSelectedLedgerID] = useState("");
 	const currentUserPermission = useUserStore(
 		(state) => state.currentUser.users_permissions
 	);
 
 	const [selectedUsers, setSelectedUsers] = useState<UserType[]>([]);
-	const [searchTerm, setSearchTerm] = useState("");
+	// const [searchTerm, setSearchTerm] = useState("");
 
-	const toggleUserSelection = (user: UserType) => {
-		setSelectedUsers(
-			(prev) =>
-				prev.some((u) => u.id === user.id)
-					? prev.filter((u) => u.id !== user.id) // Remove if already selected
-					: [...prev, user] // Add if not selected
-		);
-	};
-	// const [sortBy, setSortBy] = useState<SortOption>("name");
 	const [page, setPage] = useState(0);
-	const [itemsPerPage] = useState(10);
+	const [itemsPerPage, setItemsPerPage] = useState(10);
+
+	const handlePageChange = (newPage: number, newSize?: number) => {
+		if (newSize) {
+			setItemsPerPage(newSize); // Update the items per page
+			setPage(0); // Reset to first page when size changes
+		} else {
+			setPage(newPage); // Only update the page if size remains the same
+		}
+	};
+
 	const { data: options } = useQuery({
 		queryKey: ["users", { participantScope }],
 		queryFn: async () => {
@@ -118,9 +110,9 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 		queryFn: async () => {
 			let response;
 
-			console.log("value of is_staff:", currentUserPermission.is_staff);
+			console.log("value of is_staff:", currentUserPermission?.is_staff);
 
-			if (currentUserPermission.is_staff) {
+			if (currentUserPermission?.is_staff) {
 				// Staff case: fetch all ledgers
 				const res = await getListofLedger();
 				response = res.message.map((item: ILedger) => item);
@@ -141,6 +133,11 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 			return response;
 		},
 	});
+
+	const paginatedFiles = files.slice(
+		page * itemsPerPage,
+		(page + 1) * itemsPerPage
+	);
 
 	// const sortedFiles = sortLedgerFiles(files, sortBy);
 
@@ -248,7 +245,7 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 						</TableHeader>
 						<TableBody>
 							{files &&
-								files.map((file: ILedger) => (
+								paginatedFiles.map((file: ILedger) => (
 									<TableRow key={file.id}>
 										<TableCell className="font-medium">
 											<div className="flex items-center gap-2">
@@ -299,59 +296,67 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 					</Table>
 					<LedgerPagination
 						totalItems={files.length}
-						pageSize={itemsPerPage} // Change from itemsPerPage to pageSize
-						pageIndex={page} // Change from currentPage to pageIndex
-						onPageChange={setPage}
+						pageSize={itemsPerPage}
+						pageIndex={page}
+						onPageChange={handlePageChange}
 					/>
 				</>
 			) : (
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-					{files &&
-						files.map((file: ILedger) => (
-							<div
-								key={file.id}
-								className="rounded-lg border p-4 transition-colors hover:bg-accent"
-							>
-								<div className="flex items-start justify-between">
-									<div className="flex items-center gap-2">
-										<span className="text-2xl">
-											<Image src={FILE_ICON.folder} alt="icons" width={30} height={30} />
-										</span>
-										<div>
-											<p className="font-medium">{file.ledger_subject || "N/A"}</p>
-											<p className="text-sm text-muted-foreground">
-												{file.sender_name || "N/A"}
-											</p>
+				<>
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+						{files &&
+							paginatedFiles.map((file: ILedger) => (
+								<div
+									key={file.id}
+									className="rounded-lg border p-4 transition-colors hover:bg-accent"
+								>
+									<div className="flex items-start justify-between">
+										<div className="flex items-center gap-2">
+											<span className="text-2xl">
+												<Image src={FILE_ICON.folder} alt="icons" width={30} height={30} />
+											</span>
+											<div>
+												<p className="font-medium">{file.ledger_subject || "N/A"}</p>
+												<p className="text-sm text-muted-foreground">
+													{file.sender_name || "N/A"}
+												</p>
+											</div>
 										</div>
-									</div>
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Button variant="ghost" size="icon">
-												<MoreHorizontal className="h-4 w-4" />
-											</Button>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end">
-											<DropdownMenuItem onClick={() => handleDetail(file.id)}>
-												Details
-											</DropdownMenuItem>
-											<DropdownMenuItem onClick={() => handleShare(file)}>
-												Share
-											</DropdownMenuItem>
-											{/* <DropdownMenuItem>Download</DropdownMenuItem>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button variant="ghost" size="icon">
+													<MoreHorizontal className="h-4 w-4" />
+												</Button>
+											</DropdownMenuTrigger>
+											<DropdownMenuContent align="end">
+												<DropdownMenuItem onClick={() => handleDetail(file.id)}>
+													Details
+												</DropdownMenuItem>
+												<DropdownMenuItem onClick={() => handleShare(file)}>
+													Share
+												</DropdownMenuItem>
+												{/* <DropdownMenuItem>Download</DropdownMenuItem>
 										<DropdownMenuItem>Rename</DropdownMenuItem>
 										<DropdownMenuItem>Delete</DropdownMenuItem> */}
-										</DropdownMenuContent>
-									</DropdownMenu>
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</div>
+									<div className="mt-4">
+										<p className="text-sm text-muted-foreground">
+											{file.created_at ? convertToEthiopianDate(file.created_at) : "N/A"}
+										</p>
+										<p className="text-sm text-muted-foreground">{file.ledger_subject}</p>
+									</div>
 								</div>
-								<div className="mt-4">
-									<p className="text-sm text-muted-foreground">
-										{file.created_at ? convertToEthiopianDate(file.created_at) : "N/A"}
-									</p>
-									<p className="text-sm text-muted-foreground">{file.ledger_subject}</p>
-								</div>
-							</div>
-						))}
-				</div>
+							))}
+					</div>
+					<LedgerPagination
+						totalItems={files.length}
+						pageSize={itemsPerPage}
+						pageIndex={page}
+						onPageChange={handlePageChange}
+					/>
+				</>
 			)}
 			<Dialog open={openShare} onOpenChange={setOpenShare}>
 				<DialogContent>
@@ -361,42 +366,24 @@ export function LedgerScreen({ permission }: { permission: boolean }) {
 							ይህን ደብዳቤ ልታጋራቸው የምትፈልጋቸውን ሰዎች ምረጥ፣ ፈቃዶቻቸውን አዘጋጅ እና ከደብዳቤው ጋር የሚላክ መልእክት
 							ጻፍ።
 						</DialogDescription>
-						{/* Selected Users Display */}
-						<div className="my-4 flex flex-wrap gap-2">
-							{selectedUsers.map((user) => (
-								<Badge key={user.id} className="flex items-center">
-									{user.user_profile?.full_name_am}
-									<X
-										className="ml-2 h-4 w-4 cursor-pointer"
-										onClick={() => toggleUserSelection(user)}
-									/>
-								</Badge>
-							))}
-						</div>
-						<div className="my-6 flex flex-col items-end">
-							<Command>
-								<CommandInput
-									placeholder="ተጠቃሚ ይፈልጉ..."
-									onValueChange={setSearchTerm}
-								/>
-								<ScrollArea className="h-60">
-									<CommandGroup>
-										{options?.message
-											.filter((option: UserType) =>
-												option.user_profile?.full_name_am.includes(searchTerm)
-											)
-											.map((option: UserType) => (
-												<CommandItem
-													key={option.id}
-													value={option.id}
-													onSelect={() => toggleUserSelection(option)}
-												>
-													{option.user_profile?.full_name_am}
-												</CommandItem>
-											))}
-									</CommandGroup>
-								</ScrollArea>
-							</Command>
+						{/* React-Select Dropdown */}
+						<div className="my-6 w-full">
+							<ReactSelect
+								isMulti
+								isClearable
+								options={options?.message}
+								getOptionLabel={(option: UserType) =>
+									option.user_profile?.full_name_am?.normalize("NFC")
+								}
+								getOptionValue={(option) => option.id}
+								onChange={(selected) => setSelectedUsers(selected as UserType[])}
+								isOptionDisabled={(option) =>
+									selectedUsers.some((user) => user.id === option.id)
+								}
+								placeholder="ተጠቃሚ ይፈልጉ..."
+								className="w-full"
+								classNamePrefix="participant_selector"
+							/>
 						</div>
 						<div>
 							<Button className="flex gap-4 bg-green-500 px-4" onClick={handleSubmit}>

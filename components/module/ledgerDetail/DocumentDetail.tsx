@@ -23,17 +23,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { shareLedger } from "@/actions/ledger/action";
 import { getUsers } from "@/actions/user_module/action";
+import ReactSelect from "react-select";
 
 export type filePreviewType = {
 	files: { fileUrl: string; fileType: string; fileName: string }[];
@@ -48,7 +40,7 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 
 	const participantScope = "internal_staff";
 	const [openShare, setOpenShare] = useState(false);
-	const [selectedUser, setSelectedUser] = useState("");
+	const [selectedUser, setSelectedUser] = useState<UserType[]>([]);
 	const [selectedLedgerID, setSelectedLedgerID] = useState("");
 
 	const { data: options } = useQuery({
@@ -71,13 +63,18 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 	};
 
 	const handleSubmit = async () => {
-		const response = await shareLedger(selectedLedgerID, selectedUser);
-		if (response.ok) {
-			toast.success(response.message);
-			setOpenShare(false);
+		for (const userId of selectedUser) {
+			const response = await shareLedger(selectedLedgerID, userId.id);
+			if (response.ok) {
+				toast.success(response.message);
+			} else {
+				toast.error(
+					`Failed to share with user ${userId.user_profile.full_name_am}`
+				);
+			}
 		}
+		setOpenShare(false);
 	};
-
 	const handleChangeShow = (value: string) => {
 		if (value === "letter") {
 			setShowLetter(true);
@@ -178,23 +175,26 @@ export const DocumentDetail: React.FC<{ data: LedgerDetail }> = ({ data }) => {
 							ይህን ደብዳቤ ልታጋራቸው የምትፈልጋቸውን ሰዎች ምረጥ፣ ፈቃዶቻቸውን አዘጋጅ እና ከደብዳቤው ጋር የሚላክ መልእክት
 							ጻፍ።
 						</DialogDescription>
-						<div className="my-6 flex flex-col items-end">
-							<Select onValueChange={setSelectedUser}>
-								<SelectTrigger className="my-6 w-full">
-									<SelectValue placeholder="ደብዳቤውን የሚያጋሩትን ተጠቃሚ ይምረጡ" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel>የMINT ሰራተኞች</SelectLabel>
-										{options?.message.map((option: UserType) => (
-											<SelectItem key={option.id} value={option.id}>
-												{option.user_profile?.full_name_am}
-											</SelectItem>
-										))}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-
+						{/* React-Select Dropdown */}
+						<div className="my-6 w-full">
+							<ReactSelect
+								isMulti
+								isClearable
+								options={options?.message}
+								getOptionLabel={(option: UserType) =>
+									option.user_profile?.full_name_am?.normalize("NFC")
+								}
+								getOptionValue={(option) => option.id}
+								onChange={(selected) => setSelectedUser(selected as UserType[])}
+								isOptionDisabled={(option) =>
+									selectedUser.some((user) => user.id === option.id)
+								}
+								placeholder="ተጠቃሚ ይፈልጉ..."
+								className="w-full"
+								classNamePrefix="participant_selector"
+							/>
+						</div>
+						<div>
 							<Button className="flex gap-4 bg-green-500 px-4" onClick={handleSubmit}>
 								<Share2 className="h-4 w-4" />
 								አጋራ
